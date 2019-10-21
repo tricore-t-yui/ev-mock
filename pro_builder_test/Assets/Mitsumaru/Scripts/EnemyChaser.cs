@@ -16,6 +16,19 @@ public class EnemyChaser : MonoBehaviour
     [SerializeField]
     Transform player = default;
 
+    // 移動スピード
+    [SerializeField]
+    float moveSpeed = default;
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    void OnEnable()
+    {
+        // 移動スピードをセット
+        navMeshAgent.speed = moveSpeed;
+    }
+
     /// <summary>
     /// 更新
     /// </summary>
