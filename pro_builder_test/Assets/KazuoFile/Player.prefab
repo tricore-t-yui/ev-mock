@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 8887682650819577491}
   playerController: {fileID: 8887682650819577489}
+  brethController: {fileID: 8887682650819577488}
   sideSpeed: 2
   forwardSpeed: 1.5
   backSpeed: 1.5
@@ -88,7 +89,8 @@ MonoBehaviour:
   jumpPower: 3
   dashSpeedLimit: 2
   squatSpeedLimit: 0.5
-  brethHoldSpeedLimit: 0.5
+  stealthSpeedLimit: 0.5
+  breathlessnessSpeedLimit: 0.5
 --- !u!114 &8887682650819577489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,12 +105,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 8887682650819577491}
   collider: {fileID: 8887682650819577494}
-  brethController: {fileID: 8887682650819577488}
   dashKey: 306
   squatKey: 308
-  brethHoldKey: 304
   hidedKey: 13
   jumpKey: 32
+  stealthKey: 304
 --- !u!114 &8887682650819577488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,9 +124,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 8887682650819577489}
   ReductionKey: 113
+  RecoveryAmount: 0.5
   holdDecrement: 0.15
   patienceDecrement: 0.25
-  buttonPatienceDecrement: 0
+  buttonPatienceDecrement: 0.1
+  durationPlus: 5
 --- !u!114 &2803309074286008425
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -28,13 +28,17 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField]
     KeyCode squatKey = default;             // しゃがみキー
     [SerializeField]
-    KeyCode hidedKey = default;             // 息止めキー
+    KeyCode hidedKey = default;             // 隠れるキー
     [SerializeField]
     KeyCode jumpKey = default;              // ジャンプキー
+    [SerializeField]
+    KeyCode stealthKey = default;             // 隠れるキー
 
     public bool IsDash { get; private set; } = false;           // ダッシュフラグ
     public bool IsSquat { get; private set; } = false;          // しゃがみフラグ
+    public bool IsStealth { get; private set; } = false;        // 忍び歩きフラグ
     public bool IsHide { get; private set; } = false;           // 隠れるフラグ
+    public bool IsWarning { get; private set; } = false;        // 警戒フラグ
 
     bool[] isJump = new bool[(int)JumpState.LENGHT];            // ジャンプフラグ
 
@@ -47,6 +51,8 @@ public class PlayerMoveController : MonoBehaviour
         IsDash = false;
         IsSquat = false;
         IsHide = false;
+        IsWarning = false;
+        IsStealth = false;
 
         for (int i = 0; i < (int)JumpState.LENGHT; i++)
         {
@@ -55,17 +61,44 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     /// <summary>
+    /// トリガーに当たった時
+    /// </summary>
+    /// <param name="other">当たったコライダー</param>
+    void OnTriggerEnter(Collider other)
+    {
+        if(LayerMask.LayerToName(other.gameObject.layer) == "WarningArea")
+        {
+            IsWarning = true;
+        }
+    }
+
+    /// <summary>
+    /// トリガーから離れた時
+    /// </summary>
+    /// <param name="other">離れたコライダー</param>
+    void OnTriggerExit(Collider other)
+    {
+        if (LayerMask.LayerToName(other.gameObject.layer) == "WarningArea")
+        {
+            IsWarning = false;
+        }
+    }
+
+    /// <summary>
     /// 更新処理
     /// </summary>
     void Update()
     {
-        // 各処理の検知
+        // 隠れる検知
         Hide();
 
+        // 隠れていなかったら(動ける状態なら)
         if (!IsHide)
         {
-            Dash();
+            // 各移動処理の検知
+            Stealth();
             Squat();
+            Dash();
             Jump();
         }
     }
@@ -82,6 +115,14 @@ public class PlayerMoveController : MonoBehaviour
             if (!IsHide)
             {
                 IsHide = true;
+
+                // 動かないので移動系のフラグの初期化
+                IsDash = false;
+                IsSquat = false;
+                for (int i = 0; i < (int)JumpState.LENGHT; i++)
+                {
+                    isJump[i] = false;
+                }
             }
             else
             {
@@ -92,12 +133,30 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     /// <summary>
+    /// 忍び歩き検知処理
+    /// </summary>
+    void Stealth()
+    {
+        // 忍び歩きキーが押されたら
+        if (Input.GetKey(stealthKey))
+        {
+            // 忍び歩き開始
+            IsStealth = true;
+        }
+        else
+        {
+            // 忍び歩き終了
+            IsStealth = false;
+        }
+    }
+
+    /// <summary>
     /// ダッシュ検知処理
     /// </summary>
     void Dash()
     {
         // ダッシュキーが押されたら
-        if (!IsSquat && Input.GetKey(dashKey))
+        if (!IsStealth && !IsSquat && Input.GetKey(dashKey))
         {
             // ダッシュ開始
             IsDash = true;
@@ -115,7 +174,7 @@ public class PlayerMoveController : MonoBehaviour
     void Squat()
     {
         // しゃがみキーが押されたら
-        if (!IsDash && Input.GetKey(squatKey))
+        if (Input.GetKey(squatKey))
         {
             // コライダーをずらして、しゃがみ開始
             collider.height = 0.7f;
@@ -159,7 +218,7 @@ public class PlayerMoveController : MonoBehaviour
     /// <summary>
     /// ジャンプ処理の開始フラグの受け渡し処理
     /// </summary>
-    public bool IsJump()
+    public bool IsJumpStart()
     {
         if(isJump[(int)JumpState.START] && !isJump[(int)JumpState.WAIT] && !isJump[(int)JumpState.JUMP])
         {

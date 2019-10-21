@@ -42,7 +42,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField]
     float squatSpeedLimit = 0.5f;           // しゃがみ時の移動速度の限界
     [SerializeField]
-    float brethHoldSpeedLimit = 0.5f;       // 息止め時の移動速度の限界
+    float stealthSpeedLimit = 0.5f;       // 忍び歩き時の移動速度の限界
     [SerializeField]
     float breathlessnessSpeedLimit = 0.5f;  // 息切れ時の移動速度の限界
 
@@ -60,29 +60,49 @@ public class PlayerMover : MonoBehaviour
             // 移動キーが１つでも押されていたら
             if (IsDirectionKey())
             {
-                //　移動速度計算
-                SpeedCalculation();
-
-                // 移動速度(歩く、ダッシュのみ)の限界を超えるまで力をくわえ続ける
-                float walkSpeed = new Vector3(rigid.velocity.x, 0, rigid.velocity.z).magnitude;
-                if (walkSpeed <= speedLimit)
-                {
-                    rigid.AddForce(moveSpeed * speedMagnification);
-                }
+                // 座標移動
+                Move();
             }
 
-            // ジャンプ
-            if (playerController.IsJump())
+            // ジャンプが開始されたなら
+            if (playerController.IsJumpStart())
             {
-                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                // ジャンプ
+                Jump();
             }
         }
     }
 
     /// <summary>
+    /// 座標移動
+    /// </summary>
+    void Move()
+    {
+        //　移動速度計算
+        SpeedCalculation();
+
+        // 移動速度の上限の計算
+        SpeedLimitCalculation();
+
+        // 移動速度(歩く、ダッシュのみ)の限界を超えるまで力をくわえ続ける
+        float walkSpeed = new Vector3(rigid.velocity.x, 0, rigid.velocity.z).magnitude;
+        if (walkSpeed <= speedLimit)
+        {
+            rigid.AddForce(moveSpeed * speedMagnification);
+        }
+    }
+
+    /// <summary>
+    /// ジャンプ
+    /// </summary>
+    void Jump()
+    {
+        rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+    }
+
+    /// <summary>
     /// 移動速度の計算
     /// </summary>
-    /// <returns></returns>
     void SpeedCalculation()
     {
         // 計算前の初期化
@@ -112,16 +132,22 @@ public class PlayerMover : MonoBehaviour
             moveSpeed += Vector3.Cross(Vector3.up, transform.forward);
             speedLimit = sideSpeed;
         }
+    }
 
+    /// <summary>
+    /// 移動速度の上限の計算
+    /// </summary>
+    void SpeedLimitCalculation()
+    {
         // しゃがんでいるときは移動速度の上限を下げる
-        if(playerController.IsSquat)
+        if (playerController.IsSquat)
         {
             speedLimit = speedLimit * squatSpeedLimit;
         }
         // 息止めている時は移動速度の上限を下げる
-        if (brethController.IsBrethHold)
+        if (playerController.IsStealth)
         {
-            speedLimit = speedLimit * brethHoldSpeedLimit;
+            speedLimit = speedLimit * stealthSpeedLimit;
         }
         // 息切れている時は移動速度の上限を下げる
         if (brethController.IsBreathlessness)
