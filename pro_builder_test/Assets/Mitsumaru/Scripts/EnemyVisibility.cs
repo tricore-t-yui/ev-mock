@@ -32,15 +32,6 @@ public class EnemyVisibility : MonoBehaviour
     {
         // 境界ベクトルを作成
         CreateBorderVector();
-
-        if (IsPlayerDiscover())
-        {
-            Debug.Log("AAA");
-        }
-        else
-        {
-            Debug.Log("BBB");
-        }
     }
 
     /// <summary>
