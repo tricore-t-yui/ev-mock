@@ -24,7 +24,9 @@ public class PlayerBrethController : MonoBehaviour
     KeyCode ReductionKey = KeyCode.Q;       // 息の消費軽減キー
 
     [SerializeField]
-    float RecoveryAmount = 0.5f;            // 息の回復量
+    float RecoveryAmount = 0.5f;            // 通常の息の回復量
+    [SerializeField]
+    float BreathlessnessRecovery = 0.2f;    // 息切れ時の息の回復量
     [SerializeField]
     float holdDecrement = 0.15f;            // 息止め時の息消費量
     [SerializeField]
@@ -37,7 +39,7 @@ public class PlayerBrethController : MonoBehaviour
     int duration = 0;                       // 連打処理の継続フレーム (詳細は165行のNOTE)
 
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
-    public float ResidualAmount { get; private set; } = 100;    //　息の残量
+    public float ResidualAmount { get; private set; } = 100;    // 息の残量
 
     /// <summary>
     /// 開始処理
@@ -54,15 +56,30 @@ public class PlayerBrethController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        //　息切れした時か、息を使っていない時は
-        if (IsBreathlessness || (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning)))
+        // 息回復処理
+        Recovery();
+
+        // 息消費処理
+        BreathConsumption();
+    }
+
+    /// <summary>
+    /// 息回復処理
+    /// </summary>
+    void Recovery()
+    {
+        //　息切れした時
+        if (IsBreathlessness)
+        {
+            // 息の回復
+            ResidualAmount += BreathlessnessRecovery;
+        }
+        // 息を使っていない時
+        if (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning)))
         {
             // 息の回復
             ResidualAmount += RecoveryAmount;
         }
-
-        // 息消費処理
-        BreathConsumption();
     }
 
     /// <summary>
