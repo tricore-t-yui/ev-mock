@@ -21,16 +21,18 @@ public class PlayerMover : MonoBehaviour
         LENGHT,
     }
     [SerializeField]
-    Rigidbody rigid = default;              // リジットボディ
+    Rigidbody rigid = default;                       // リジットボディ
+    [SerializeField]
+    CapsuleCollider collider = default;              // コライダー
     [SerializeField]
     PlayerMoveController playerController = default; // プレイヤーの状態クラス
     [SerializeField]
     PlayerBrethController brethController = default; // プレイヤーの息管理クラス
 
     [SerializeField]
-    float sideSpeed = 2f;                   // 横移動時のスピード
-    [SerializeField]
     float forwardSpeed = 2f;                // 前移動時のスピード
+    [SerializeField]
+    float sideSpeed = 2f;                   // 横移動時のスピード
     [SerializeField]
     float backSpeed = 1.5f;                 // 後ろ移動時のスピード
     [SerializeField]
@@ -45,6 +47,11 @@ public class PlayerMover : MonoBehaviour
     float stealthSpeedLimit = 0.5f;       // 忍び歩き時の移動速度の限界
     [SerializeField]
     float breathlessnessSpeedLimit = 0.5f;  // 息切れ時の移動速度の限界
+
+    [SerializeField, Range(0,180)]
+    float stepAngle = 60;                   // 横移動時のスピード
+    [SerializeField]
+    float stepUpPower = 1.45f;              // 段差に当たった時に加える上方向の力
 
     float speedLimit = 0;                   // 移動速度の限界
     Vector3 moveSpeed = Vector3.zero;       // 移動速度
@@ -132,6 +139,12 @@ public class PlayerMover : MonoBehaviour
             moveSpeed += Vector3.Cross(Vector3.up, transform.forward);
             speedLimit = sideSpeed;
         }
+
+        // 段差に当たったら上方向に力を加え登らせる
+        if(!DiagonalDirectionRay() && MoveDirectionRay())
+        {
+            moveSpeed += Vector3.up * stepUpPower;
+        }
     }
 
     /// <summary>
@@ -192,5 +205,55 @@ public class PlayerMover : MonoBehaviour
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 移動方向のRaycast
+    /// </summary>
+    /// <returns>移動方向でオブジェクトに衝突したかどうか</returns>
+    bool MoveDirectionRay()
+    {
+        Vector3 start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
+        Vector3 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z);
+        float distance = collider.radius + 0.1f;
+
+        Ray ray = new Ray(start, dir);
+        RaycastHit hit;
+
+        Debug.DrawLine(start, start + (dir * distance), Color.red);
+
+        if (Physics.Raycast(ray, out hit, distance,1 << 9))
+        {
+            return true; 
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 移動方向の斜め上のRaycast
+    /// </summary>
+    /// <returns>移動方向でオブジェクトに衝突したかどうか</returns>
+    bool DiagonalDirectionRay()
+    {
+        Vector3 start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
+        Vector3 dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z);
+        float distance = collider.radius + 0.1f;
+
+        Ray ray = new Ray(start, dir);
+        RaycastHit hit;
+
+        Debug.DrawLine(start, start + (dir * distance), Color.red);
+
+        if (Physics.Raycast(ray, out hit, distance, 1 << 9))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

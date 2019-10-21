@@ -24,15 +24,15 @@ public class PlayerMoveController : MonoBehaviour
     CapsuleCollider collider = default;     // コライダー
 
     [SerializeField]
-    KeyCode dashKey = default;              // ダッシュキー
+    KeyCode dashKey = KeyCode.LeftControl;  // ダッシュキー
     [SerializeField]
-    KeyCode squatKey = default;             // しゃがみキー
+    KeyCode squatKey = KeyCode.LeftAlt;     // しゃがみキー
     [SerializeField]
-    KeyCode hidedKey = default;             // 隠れるキー
+    KeyCode hidedKey = KeyCode.Return;      // 隠れるキー
     [SerializeField]
-    KeyCode jumpKey = default;              // ジャンプキー
+    KeyCode jumpKey = KeyCode.Space;        // ジャンプキー
     [SerializeField]
-    KeyCode stealthKey = default;             // 隠れるキー
+    KeyCode stealthKey = KeyCode.LeftShift; // 隠れるキー
 
     public bool IsDash { get; private set; } = false;           // ダッシュフラグ
     public bool IsSquat { get; private set; } = false;          // しゃがみフラグ
