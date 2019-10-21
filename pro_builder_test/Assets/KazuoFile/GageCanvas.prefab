@@ -33,8 +33,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2425445514201190007
 GameObject:
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3843492999882751780}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -288,8 +288,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3843493000918148759
 GameObject:
@@ -326,7 +326,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3843493000918148756
 CanvasRenderer:
@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 3843493001073311928}
   - component: {fileID: 3843493001073311929}
   - component: {fileID: 3843493001073311930}
+  - component: {fileID: 1043960740}
   m_Layer: 5
   m_Name: GageCanvas
   m_TagString: Untagged
@@ -500,6 +501,25 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &1043960740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3843493001073311931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4404a48dd42c43ac9f061cfb1b6e6d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brethController: {fileID: 0}
+  healthController: {fileID: 0}
+  brethSlider: {fileID: 3843493001755384558}
+  healthSlider: {fileID: 7371071482335061006}
+  brethSliderBlink: {fileID: 845266863}
+  healthSliderBlink: {fileID: 1916190153}
+  blinkPercent: 0.25
 --- !u!1 &3843493001755384552
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +530,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3843493001755384559}
   - component: {fileID: 3843493001755384558}
-  - component: {fileID: 3843493001755384557}
+  - component: {fileID: 845266864}
+  - component: {fileID: 845266863}
   m_Layer: 5
   m_Name: BreathSlider
   m_TagString: Untagged
@@ -537,7 +558,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -179.5, y: -276.5}
+  m_AnchoredPosition: {x: -90, y: -204.5}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3843493001755384558
@@ -590,20 +611,40 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3843493001755384557
-MonoBehaviour:
+--- !u!95 &845266864
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3843493001755384552}
   m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c56e0f21bef6e4700a56fa2d24e41870, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &845266863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3843493001755384552}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4404a48dd42c43ac9f061cfb1b6e6d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 624eba8c6e85245909e6729163f22f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brethController: {fileID: 0}
-  slider: {fileID: 0}
+  image: {fileID: 3843493000918148757}
+  brinkAnim: {fileID: 845266864}
+  type: 0
 --- !u!1 &4811611375143889782
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,7 +680,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7879812330910041302
 CanvasRenderer:
@@ -687,7 +728,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8631814243910039894}
   - component: {fileID: 7371071482335061006}
-  - component: {fileID: 221271505792414974}
+  - component: {fileID: 1916190154}
+  - component: {fileID: 1916190153}
   m_Layer: 5
   m_Name: HealthSlider
   m_TagString: Untagged
@@ -714,7 +756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -179.5, y: -228}
+  m_AnchoredPosition: {x: -90, y: -156}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7371071482335061006
@@ -767,20 +809,40 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &221271505792414974
-MonoBehaviour:
+--- !u!95 &1916190154
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4953316069382879752}
   m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c56e0f21bef6e4700a56fa2d24e41870, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1916190153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4953316069382879752}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b129247df1f94ff2ad9d6be4fbf56c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 624eba8c6e85245909e6729163f22f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthController: {fileID: 0}
-  slider: {fileID: 0}
+  image: {fileID: 6295510493848987174}
+  brinkAnim: {fileID: 1916190154}
+  type: 1
 --- !u!1 &5735144079302814701
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +895,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5735144079302814701}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
