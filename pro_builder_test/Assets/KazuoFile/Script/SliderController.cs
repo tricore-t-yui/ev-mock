@@ -33,7 +33,7 @@ public class SliderController : MonoBehaviour
     GageBlink healthSliderBlink = default;              // 体力ゲージの点滅クラス
 
     [SerializeField, Range(0, 1)]
-    float blinkPercent = 0;         // 点滅させる基準
+    float blinkPercent = 0.25f;                         // この値以下になったら点滅
 
     /// <summary>
     /// 更新処理

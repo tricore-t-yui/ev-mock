@@ -21,20 +21,20 @@ public class PlayerBrethController : MonoBehaviour
     PlayerMoveController playerController = default; // プレイヤーの状態管理クラス
 
     [SerializeField]
-    KeyCode ReductionKey = default;     // 息の消費軽減キー
+    KeyCode ReductionKey = KeyCode.Q;       // 息の消費軽減キー
 
     [SerializeField]
-    float RecoveryAmount = 0;           // 息の回復量
+    float RecoveryAmount = 0.5f;            // 息の回復量
     [SerializeField]
-    float holdDecrement = 0;            // 息止め時の息消費量
+    float holdDecrement = 0.15f;            // 息止め時の息消費量
     [SerializeField]
-    float patienceDecrement = 0;        // 息我慢時(連打なし)の息消費量
+    float patienceDecrement = 0.25f;        // 息我慢時(連打なし)の息消費量
     [SerializeField]
-    float buttonPatienceDecrement = 0;  // 息我慢時(連打あり)の息消費量
+    float buttonPatienceDecrement = 0.1f;   // 息我慢時(連打あり)の息消費量
     [SerializeField]
-    int durationPlus = 5;               // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
+    int durationPlus = 5;                   // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
 
-    int duration = 0;                   // 連打処理の継続フレーム (詳細は165行のNOTE)
+    int duration = 0;                       // 連打処理の継続フレーム (詳細は165行のNOTE)
 
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
     public float ResidualAmount { get; private set; } = 100;    //　息の残量
