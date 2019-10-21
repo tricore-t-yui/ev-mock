@@ -13,8 +13,8 @@ public class PlayerBrethController : MonoBehaviour
     /// </summary>
     public enum ConsumeType
     {
-        HOLD,
-        PATIENCE,
+        HOLD,       // 息止め 
+        PATIENCE,   // 隠れる
     }
 
     [SerializeField]
@@ -22,28 +22,31 @@ public class PlayerBrethController : MonoBehaviour
 
     [SerializeField]
     KeyCode ReductionKey = default;     // 息の消費軽減キー
-    [SerializeField]
-    KeyCode brethHoldKey = default;         // 息止めキー
 
+    [SerializeField]
+    float RecoveryAmount = 0;           // 息の回復量
     [SerializeField]
     float holdDecrement = 0;            // 息止め時の息消費量
     [SerializeField]
     float patienceDecrement = 0;        // 息我慢時(連打なし)の息消費量
     [SerializeField]
     float buttonPatienceDecrement = 0;  // 息我慢時(連打あり)の息消費量
+    [SerializeField]
+    int durationPlus = 5;               // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
 
-    public bool IsBrethHold { get; private set; } = false;      // 息止めフラグ
+    int duration = 0;                   // 連打処理の継続フレーム (詳細は165行のNOTE)
+
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
-
-    public float ResidualAmount { get; private set; } = 100;               //　息の残量
+    public float ResidualAmount { get; private set; } = 100;    //　息の残量
 
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
-        // 息残量の初期化
+        // 初期化
         ResidualAmount = 100;
+        duration = 0;
     }
 
     /// <summary>
@@ -52,10 +55,10 @@ public class PlayerBrethController : MonoBehaviour
     void Update()
     {
         //　息切れした時か、息を使っていない時は
-        if (IsBreathlessness || (!IsBrethHold && !playerController.IsHide))
+        if (IsBreathlessness || (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning)))
         {
             // 息の回復
-            ResidualAmount++;
+            ResidualAmount += RecoveryAmount;
         }
 
         // 息消費処理
@@ -67,54 +70,53 @@ public class PlayerBrethController : MonoBehaviour
     /// </summary>
     void BreathConsumption()
     {
-        // 息止め検知処理
-        BrathHold();
+        // 息切れ検知
+        Breathlessness();
 
-        // 隠れている間は息消費
-        if (playerController.IsHide)
+        // 息切れしていない状態で、息止めキーが押されたら
+        if (!IsBreathlessness && playerController.IsStealth)
         {
-            ConsumeBreath(ConsumeType.PATIENCE);
+            // 息止め処理
+            BrathHold();
+        }
+
+        // 隠れている時
+        if (playerController.IsHide && playerController.IsWarning)
+        {
+            // 隠れる処理
+            Hide();
         }
 
         // 値補正
         ResidualAmount = clamp(ResidualAmount, 0, 100);
-
-        // 息切れ検知処理
-        Breathlessness();
     }
 
     /// <summary>
-    /// 息止め検知処理
-    /// </summary>
-    void BrathHold()
-    {
-        // 息止めキーが押されたら
-        if (!playerController.IsDash && Input.GetKey(brethHoldKey))
-        {
-            // 息止め開始
-            IsBrethHold = true;
-            ConsumeBreath(ConsumeType.HOLD);
-        }
-        else
-        {
-            // 息止め終了
-            IsBrethHold = false;
-        }
-    }
-
-    /// <summary>
-    /// 息切れ検知処理
+    /// 息切れ検知
     /// </summary>
     void Breathlessness()
     {
+        // まだ息切れ状態になっていないが、息の残量が0になったら
         if (!IsBreathlessness && ResidualAmount <= 0)
         {
+            // 息切れ開始
             IsBreathlessness = true;
         }
+        // 息切れ状態時に息が100まで回復したら
         else if (ResidualAmount >= 100)
         {
+            // 息切れ解除
             IsBreathlessness = false;
         }
+    }
+
+    /// <summary>
+    /// 息止め処理
+    /// </summary>
+    void BrathHold()
+    {
+        // 息消費(息止め)
+        ConsumeBreath(ConsumeType.HOLD);
     }
 
     /// <summary>
@@ -130,18 +132,54 @@ public class PlayerBrethController : MonoBehaviour
 
             // 息我慢時
             case ConsumeType.PATIENCE:
-                // ボタン連打
-                if (Input.GetKeyDown(ReductionKey))
+
+                // 連打処理の継続時間続いている間
+                if (duration > 0)
                 {
                     ResidualAmount -= buttonPatienceDecrement;
                 }
-                // 何も押さない
+                // 続いていなかったら
                 else
                 {
                     ResidualAmount -= patienceDecrement;
                 }
                 break;
         }
+    }
+
+    /// <summary>
+    /// 隠れる処理
+    /// </summary>
+    void Hide()
+    {
+        // 連打処理
+        StrikeButtonRepeatedly();
+
+        // 息消費(隠れる)
+        ConsumeBreath(ConsumeType.PATIENCE);
+    }
+
+    /// <summary>
+    /// ボタン連打処理
+    /// </summary>
+    /// NOTE:k.oishi
+    ///      GetKeyDownのみでやると、GetKeyDownに入らなさすぎて全然息消費が軽減されないので、
+    ///      連打処理の継続時間(duration)を用意し、キーを押すと値(durationPlus)がプラスされ、
+    ///      継続時間が残っている限り、息消費を軽減し続けるようにしました。
+    void StrikeButtonRepeatedly()
+    {
+        // 消費軽減キーを押したら
+        if (Input.GetKeyDown(ReductionKey))
+        {
+            // 連打処理の継続時間にプラス
+            duration += durationPlus;
+        }
+
+        // 継続時間をマイナス
+        duration--;
+
+        // 値が0以下ににならないように補正
+        duration = (int)clamp(duration, 0, 100);
     }
 
     /// <summary>
