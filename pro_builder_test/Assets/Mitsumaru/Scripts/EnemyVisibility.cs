@@ -32,6 +32,15 @@ public class EnemyVisibility : MonoBehaviour
     {
         // 境界ベクトルを作成
         CreateBorderVector();
+
+        if (IsPlayerDiscover())
+        {
+            Debug.Log("AAA");
+        }
+        else
+        {
+            Debug.Log("BBB");
+        }
     }
 
     /// <summary>
@@ -56,10 +65,20 @@ public class EnemyVisibility : MonoBehaviour
     /// <returns>発見中かどうかのフラグ</returns>
     public bool IsPlayerDiscover()
     {
-        // プレイヤーとエネミーとのベクトルを算出
-        Vector3 playerToEnemy = player.transform.position - transform.position;
-        // 算出したベクトルとプレイヤーの向きベクトルの角度を算出
-        float dot = Vector3.Angle(transform.forward, playerToEnemy.normalized);
+        // エネミーからプレイヤーに向かってレイを飛ばす
+        Ray ray = new Ray(transform.position,(player.transform.position - transform.position).normalized);
+        // レイにヒットしたコライダーの情報
+        RaycastHit raycastHit;
+
+        // レイにオブジェクトが当たったか
+        // 当たっていなければ判定終了
+        if (!Physics.Raycast(ray,out raycastHit)) { return false; }
+        // 当たったオブジェクトが障害物かどうか
+        // 障害物だった場合は判定終了
+        if (raycastHit.collider.name != player.name) { return false; }
+
+        // レイの向きベクトルとプレイヤーの向きベクトルの角度を算出
+        float dot = Vector3.Angle(transform.forward, ray.direction);
 
         // [条件１]
         // 算出した角度が左右の境界ベクトルよりも傾いているかどうか
@@ -67,7 +86,7 @@ public class EnemyVisibility : MonoBehaviour
         // [条件２]
         // プレイヤーとエネミーの距離が視界の距離よりも離れているかどうか
         // memo : 離れている→視界の範囲外　離れていない→視界の範囲内
-        if (dot < (angle * 0.5f) && playerToEnemy.sqrMagnitude < distance * distance)
+        if (dot < (angle * 0.5f) && raycastHit.distance < distance)
         {
             // プレイヤーを見つけた
             return true;
