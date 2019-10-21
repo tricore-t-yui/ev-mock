@@ -16,14 +16,20 @@ public class EnemyMover : MonoBehaviour
     [SerializeField]
     List<Vector3> targetPositions = default;
 
+    // 移動スピード
+    [SerializeField]
+    float moveSpeed = default;
+
     // 現在の目標位置のリスト番号
     int currentIndex = 0;
 
     /// <summary>
     /// 開始
     /// </summary>
-    void Start()
+    void OnEnable()
     {
+        // 移動スピードをセット
+        navMeshAgent.speed = moveSpeed;
         // 一番最初の位置を設定
         navMeshAgent.SetDestination(GetNextTargetPos());
     }
