@@ -135,6 +135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 108899794}
+  - component: {fileID: 108899795}
   m_Layer: 0
   m_Name: Behavior
   m_TagString: Untagged
@@ -159,6 +160,21 @@ Transform:
   m_Father: {fileID: 283617944}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &108899795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108899793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61a2f36f1b383fd48af463a2ca61d7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyVisibility: {fileID: 283617941}
+  move: {fileID: 1355318079}
+  chaser: {fileID: 756798315}
 --- !u!1 &126985832 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 938179186347872562, guid: 8b9192f355793c2438107ca19a4a26ee,
@@ -245,8 +261,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1971433529}
-  angle: 45
-  distance: 3.5
+  angle: 120
+  distance: 10
 --- !u!23 &283617942
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -319,7 +335,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.38
-  m_Speed: 3.5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -494,6 +510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMeshAgent: {fileID: 283617947}
   player: {fileID: 1971433529}
+  moveSpeed: 7
 --- !u!1001 &873186042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1080,7 +1097,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355318079}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75163a55b13402b4aab05c288152c845, type: 3}
   m_Name: 
@@ -1092,6 +1109,7 @@ MonoBehaviour:
   - {x: -17.71, y: 0, z: 11.71}
   - {x: -14, y: 0, z: 2.8}
   - {x: 3.75, y: 0, z: 9.07}
+  moveSpeed: 4
 --- !u!1 &1731916098 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 938179186347872562, guid: f8a563e2f9aa4864d9db25e6b2fcaae8,
