@@ -20,6 +20,16 @@ public class PlayerMover : MonoBehaviour
         NOINPUT,
         LENGHT,
     }
+
+    /// <summary>
+    /// レイのタイプ
+    /// </summary>
+    enum RayType
+    {
+        MOVEDIRECTION,
+        DIAGONALDIRECTION,
+    }
+
     [SerializeField]
     Rigidbody rigid = default;                       // リジットボディ
     [SerializeField]
@@ -141,7 +151,7 @@ public class PlayerMover : MonoBehaviour
         }
 
         // 段差に当たったら上方向に力を加え登らせる
-        if(!DiagonalDirectionRay() && MoveDirectionRay())
+        if (!DirectionRay(RayType.DIAGONALDIRECTION) && DirectionRay(RayType.MOVEDIRECTION))
         {
             moveSpeed += Vector3.up * stepUpPower;
         }
@@ -208,46 +218,46 @@ public class PlayerMover : MonoBehaviour
     }
 
     /// <summary>
-    /// 移動方向のRaycast
+    /// 移動方向のRayTypeに対応した向きのRaycast
     /// </summary>
-    /// <returns>移動方向でオブジェクトに衝突したかどうか</returns>
-    bool MoveDirectionRay()
+    /// <returns>オブジェクトに当たっているかどうか</returns>
+    bool DirectionRay(RayType type)
     {
-        Vector3 start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
-        Vector3 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z);
-        float distance = collider.radius + 0.1f;
+        // レイのスタート位置
+        Vector3 start = Vector3.zero;
 
+        // レイの向き
+        Vector3 dir = Vector3.zero;
+
+        // レイの距離
+        // NOTE:k.oishi 0.1f足しているのはレイがコライダーに埋まって判定できなくなるのを防ぐため
+        float distance = collider.radius + 0.25f;
+
+        // レイヤーマスク(プレイヤーからレイが伸びているので除外)
+        int layerMask = (1 << LayerMask.NameToLayer("Player"));
+        layerMask = ~layerMask;
+
+        // レイのタイプによって向き変更
+        switch (type)
+        {
+            case RayType.MOVEDIRECTION    :
+                // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.01f)), transform.position.z);
+                dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
+            case RayType.DIAGONALDIRECTION:
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
+                dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
+        }
+
+        // レイ作成
         Ray ray = new Ray(start, dir);
-        RaycastHit hit;
+        RaycastHit hit = default;
 
+        // デバック用ライン
         Debug.DrawLine(start, start + (dir * distance), Color.red);
 
-        if (Physics.Raycast(ray, out hit, distance,1 << 9))
-        {
-            return true; 
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// 移動方向の斜め上のRaycast
-    /// </summary>
-    /// <returns>移動方向でオブジェクトに衝突したかどうか</returns>
-    bool DiagonalDirectionRay()
-    {
-        Vector3 start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
-        Vector3 dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z);
-        float distance = collider.radius + 0.1f;
-
-        Ray ray = new Ray(start, dir);
-        RaycastHit hit;
-
-        Debug.DrawLine(start, start + (dir * distance), Color.red);
-
-        if (Physics.Raycast(ray, out hit, distance, 1 << 9))
+        // レイに当たったらtrue、外れていたらfalse
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
             return true;
         }

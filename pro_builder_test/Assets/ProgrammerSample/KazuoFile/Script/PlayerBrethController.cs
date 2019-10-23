@@ -75,7 +75,7 @@ public class PlayerBrethController : MonoBehaviour
             ResidualAmount += BreathlessnessRecovery;
         }
         // 息を使っていない時
-        if (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning)))
+        if (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning))
         {
             // 息の回復
             ResidualAmount += RecoveryAmount;
