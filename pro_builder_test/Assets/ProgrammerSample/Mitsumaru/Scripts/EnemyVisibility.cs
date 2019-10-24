@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 敵の視界の処理を行う
@@ -25,6 +26,11 @@ public class EnemyVisibility : MonoBehaviour
     // 視界の右側の境界
     Vector3 rightBorder = Vector3.zero;
 
+    // プレイヤーを発見したか
+    bool isDiscover = false;
+    // プレイヤーを発見したか（前フレーム）
+    bool isPrevDiscover = false;
+
     /// <summary>
     /// 更新
     /// </summary>
@@ -32,6 +38,10 @@ public class EnemyVisibility : MonoBehaviour
     {
         // 境界ベクトルを作成
         CreateBorderVector();
+
+        // 発見中かどうかのフラグを現在と前フレームで入れ替える
+        isPrevDiscover = isDiscover;
+        isDiscover = IsPlayerDiscover();
     }
 
     /// <summary>
@@ -54,7 +64,7 @@ public class EnemyVisibility : MonoBehaviour
     /// プレイヤーを発見しているかどうか
     /// </summary>
     /// <returns>発見中かどうかのフラグ</returns>
-    public bool IsPlayerDiscover()
+    bool IsPlayerDiscover()
     {
         // エネミーからプレイヤーに向かってレイを飛ばす
         Ray ray = new Ray(transform.position,(player.transform.position - transform.position).normalized);
@@ -81,6 +91,52 @@ public class EnemyVisibility : MonoBehaviour
         {
             // プレイヤーを見つけた
             return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 発見した瞬間かどうか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsPlayerDiscoverMoment()
+    {
+        if (!isPrevDiscover)
+        {
+            if(isDiscover)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 発見中かどうか
+    /// </summary>
+    public bool IsPlayerDiscoverStay()
+    {
+        if (isPrevDiscover)
+        {
+            if (isDiscover)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 見失った瞬間
+    /// </summary>
+    public bool IsPlayerDiscoverExit()
+    {
+        if (isPrevDiscover)
+        {
+            if (!isDiscover)
+            {
+                return true;
+            }
         }
         return false;
     }
