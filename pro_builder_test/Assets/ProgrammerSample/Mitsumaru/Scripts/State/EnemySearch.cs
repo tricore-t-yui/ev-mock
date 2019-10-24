@@ -19,7 +19,7 @@ public class EnemySearch : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 一番近いポイントを取得
-        ReturnPointData returnPointData = enemyReturnPointList.GetNearReturnPoint(animator.gameObject.transform);
+        ReturnPointData returnPointData = enemyReturnPointList.GetNearReturnPoint();
         // 目標位置をそこに設定
         navMeshAgent.SetDestination(returnPointData.position);
     }
