@@ -21,7 +21,7 @@ public class EnemyChaser : StateMachineBehaviour
     float moveSpeed = default;
 
     /// <summary>
-    /// 開始
+    /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
@@ -30,7 +30,7 @@ public class EnemyChaser : StateMachineBehaviour
     }
 
     /// <summary>
-    /// 更新
+    /// ステートの更新
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
