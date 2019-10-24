@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// 徘徊に戻るポイントの情報
 [System.Serializable]
 public class ReturnPointData
 {
-    public Vector3 position;
+    public Vector3 position;       // 位置
     [HideInInspector]
-    public float distanceToEnemy;
+    public float distanceToEnemy;  // エネミーとの距離
 }
 
 /// <summary>
@@ -46,17 +47,5 @@ public class EnemyReturnPointList : MonoBehaviour
         int index = returnPointDatas.Select((val, idx) => new { V = val, I = idx }).Aggregate((max, working) => (max.V.distanceToEnemy < working.V.distanceToEnemy) ? max : working).I;
         // 一番近いポイントのデータを返す
         return returnPointDatas[index];
-    }
-
-    /// <summary>
-    /// デバッグ表示
-    /// </summary>
-   　void OnDrawGizmos()
-    {
-        // 各ポイントに白い球体を表示
-        foreach(ReturnPointData data in returnPointDatas)
-        {
-            Gizmos.DrawWireSphere(data.position,0.3f);
-        }
     }
 }
