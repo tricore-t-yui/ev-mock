@@ -21,6 +21,14 @@ public class EnemyVisibility : MonoBehaviour
     [SerializeField]
     float distance = 0;
 
+    // プレイヤーを見つけた瞬間
+    [SerializeField]
+    UnityEvent onPlayerDiscoverMoment = default;
+
+    // プレイヤーを見失った瞬間
+    [SerializeField]
+    UnityEvent onPlayerLoseMoment = default;
+
     // 視界の左側の境界
     Vector3 leftBorder = Vector3.zero;
     // 視界の右側の境界
@@ -36,18 +44,27 @@ public class EnemyVisibility : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // 境界ベクトルを作成
-        CreateBorderVector();
+        // 境界ベクトルを更新
+        UpdateBorderVector();
 
         // 発見中かどうかのフラグを現在と前フレームで入れ替える
         isPrevDiscover = isDiscover;
         isDiscover = IsPlayerDiscover();
+
+        if (IsPlayerDiscoverMoment())
+        {
+            onPlayerDiscoverMoment.Invoke();
+        }
+        else if (IsPlayerLoseMoment())
+        {
+            onPlayerLoseMoment.Invoke();
+        }
     }
 
     /// <summary>
-    /// 視界の境界ベクトルを作成
+    /// 視界の境界ベクトルを更新
     /// </summary>
-    void CreateBorderVector()
+    void UpdateBorderVector()
     {
         // 左側の境界ベクトル
         Vector3 leftVec = Quaternion.Euler(0, -angle * 0.5f, 0) * transform.forward;
@@ -96,27 +113,12 @@ public class EnemyVisibility : MonoBehaviour
     }
 
     /// <summary>
-    /// 発見した瞬間かどうか
+    /// プレイヤーを発見した瞬間
     /// </summary>
     /// <returns></returns>
-    public bool IsPlayerDiscoverMoment()
+    bool IsPlayerDiscoverMoment()
     {
         if (!isPrevDiscover)
-        {
-            if(isDiscover)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// 発見中かどうか
-    /// </summary>
-    public bool IsPlayerDiscoverStay()
-    {
-        if (isPrevDiscover)
         {
             if (isDiscover)
             {
@@ -127,9 +129,9 @@ public class EnemyVisibility : MonoBehaviour
     }
 
     /// <summary>
-    /// 見失った瞬間
+    /// プレイヤーを見失った
     /// </summary>
-    public bool IsPlayerDiscoverExit()
+    bool IsPlayerLoseMoment()
     {
         if (isPrevDiscover)
         {
@@ -146,8 +148,8 @@ public class EnemyVisibility : MonoBehaviour
     /// </summary>
     void OnDrawGizmos()
     {
-        // 境界ベクトルを作成
-        CreateBorderVector();
+        // 境界ベクトルを更新
+        UpdateBorderVector();
         // デバッグ用に境界ベクトルを表示する
         Debug.DrawRay(transform.position, leftBorder, Color.green);
         Debug.DrawRay(transform.position, rightBorder, Color.green);
