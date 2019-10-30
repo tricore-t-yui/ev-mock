@@ -1,229 +1,177 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
-/// プレイヤーの動き管理クラス
+/// プレイヤー座標移動クラス
 /// </summary>
 public class PlayerMoveController : MonoBehaviour
 {
     /// <summary>
-    /// ジャンプの状態
+    /// 移動方向
     /// </summary>
-    enum JumpState
+    public enum MoveDirection
     {
-        START,
-        WAIT,
-        JUMP,
-        LENGHT,
-    }
-
-    [SerializeField]
-    Rigidbody rigidbody = default;          // リジットボディ
-    [SerializeField]
-    CapsuleCollider collider = default;     // コライダー
-
-    [SerializeField]
-    KeyCode dashKey = KeyCode.LeftControl;  // ダッシュキー
-    [SerializeField]
-    KeyCode squatKey = KeyCode.LeftAlt;     // しゃがみキー
-    [SerializeField]
-    KeyCode hidedKey = KeyCode.Return;      // 隠れるキー
-    [SerializeField]
-    KeyCode jumpKey = KeyCode.Space;        // ジャンプキー
-    [SerializeField]
-    KeyCode stealthKey = KeyCode.LeftShift; // 隠れるキー
-
-    public bool IsDash { get; private set; } = false;           // ダッシュフラグ
-    public bool IsSquat { get; private set; } = false;          // しゃがみフラグ
-    public bool IsStealth { get; private set; } = false;        // 忍び歩きフラグ
-    public bool IsHide { get; private set; } = false;           // 隠れるフラグ
-    public bool IsWarning { get; private set; } = false;        // 警戒フラグ
-
-    bool[] isJump = new bool[(int)JumpState.LENGHT];            // ジャンプフラグ
-
-    /// <summary>
-    /// 開始処理
-    /// </summary>
-    void Start()
-    {
-        // 各要素の初期化
-        IsDash = false;
-        IsSquat = false;
-        IsHide = false;
-        IsWarning = false;
-        IsStealth = false;
-
-        for (int i = 0; i < (int)JumpState.LENGHT; i++)
-        {
-            isJump[i] = false;
-        }
+        FORWARD,
+        BACK,
+        LEFT,
+        RIGHT,
     }
 
     /// <summary>
-    /// トリガーに当たった時
+    /// 移動速度上限のタイプ
     /// </summary>
-    /// <param name="other">当たったコライダー</param>
-    void OnTriggerEnter(Collider other)
+    public enum SpeedLimitType
     {
-        if(LayerMask.LayerToName(other.gameObject.layer) == "WarningArea")
-        {
-            IsWarning = true;
-        }
+        WALK,
+        DASH,
+        SQUAT,
+        STEALTH,
+        BREATHLESSNESS,
     }
 
     /// <summary>
-    /// トリガーから離れた時
+    /// レイのタイプ
     /// </summary>
-    /// <param name="other">離れたコライダー</param>
-    void OnTriggerExit(Collider other)
+    enum RayType
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "WarningArea")
-        {
-            IsWarning = false;
-        }
+        MOVEDIRECTION,
+        DIAGONALDIRECTION,
     }
+
+    [SerializeField]
+    Rigidbody rigid = default;                       // リジットボディ
+    [SerializeField]
+    CapsuleCollider collider = default;              // コライダー
+
+    [SerializeField]
+    float forwardSpeed = 2f;                // 前移動時のスピード
+    [SerializeField]
+    float sideSpeed = 2f;                   // 横移動時のスピード
+    [SerializeField]
+    float backSpeed = 1.5f;                 // 後ろ移動時のスピード
+    [SerializeField]
+    float speedMagnification = 10;          // 移動速度の倍率
+
+    [SerializeField]
+    float walkSpeedLimit = 0.75f;              // 歩き時の移動速度の限界
+    [SerializeField]
+    float dashSpeedLimit = 1.5f;              // ダッシュ時の移動速度の限界
+    [SerializeField]
+    float squatSpeedLimit = 0.25f;           // しゃがみ時の移動速度の限界
+    [SerializeField]
+    float stealthSpeedLimit = 0.25f;         // 忍び歩き時の移動速度の限界
+    [SerializeField]
+    float breathlessnessSpeedLimit = 0.25f;  // 息切れ時の移動速度の限界
+
+    [SerializeField, Range(0,180)]
+    float stepAngle = 60;                   // 段差の許容角度
+    [SerializeField]
+    float stepUpPower = 1.45f;              // 段差に当たった時に加える上方向の力
+
+    float moveTypeSpeedLimit = 0;           // 移動タイプによる移動速度の限界
+    float dirTypeSpeedLimit = 0;            // 移動方向による移動速度の限界
+    Vector3 moveSpeed = Vector3.zero;       // 移動速度
 
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()
+    public void Move()
     {
-        // 隠れる検知
-        Hide();
+        //　移動速度計算
+        SpeedCalculation();
 
-        // 隠れていなかったら(動ける状態なら)
-        if (!IsHide)
+        // 移動速度の限界を超えるまで力をくわえ続ける
+        float walkSpeed = new Vector3(rigid.velocity.x, 0, rigid.velocity.z).magnitude;
+        if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit)
         {
-            // 各移動処理の検知
-            Stealth();
-            Squat();
-            Dash();
-            Jump();
+            rigid.AddForce(moveSpeed * speedMagnification);
         }
     }
 
     /// <summary>
-    /// 隠れる処理
+    /// 移動速度の計算
     /// </summary>
-    void Hide()
+    void SpeedCalculation()
     {
-        // 隠れるキーが押されたら
-        if (Input.GetKeyDown(hidedKey))
-        {
-            // 隠れる開始
-            if (!IsHide)
-            {
-                IsHide = true;
+        // 計算前の初期化
+        moveSpeed = Vector3.zero;
 
-                // 動かないので移動系のフラグの初期化
-                IsDash = false;
-                IsSquat = false;
-                for (int i = 0; i < (int)JumpState.LENGHT; i++)
-                {
-                    isJump[i] = false;
-                }
-            }
-            else
-            {
-                // 隠れる終了
-                IsHide = false;
-            }          
+        // 前移動の移動量計算
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveSpeed += transform.forward;
+            dirTypeSpeedLimit = forwardSpeed;
+        }
+        // 後ろ移動
+        else if (Input.GetKey(KeyCode.S))
+        {
+            moveSpeed -= transform.forward;
+            dirTypeSpeedLimit = backSpeed;
+        }
+
+        // 左移動
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveSpeed -= Vector3.Cross(Vector3.up, transform.forward);
+            dirTypeSpeedLimit = sideSpeed;
+        }
+        // 右移動
+        else if (Input.GetKey(KeyCode.D))
+        {
+            moveSpeed += Vector3.Cross(Vector3.up, transform.forward);
+            dirTypeSpeedLimit = sideSpeed;
+        }
+
+        // 段差に当たったら上方向に力を加え登らせる
+        if (!DirectionRay(RayType.DIAGONALDIRECTION) && DirectionRay(RayType.MOVEDIRECTION))
+        {
+            moveSpeed += Vector3.up * stepUpPower;
         }
     }
 
     /// <summary>
-    /// 忍び歩き検知処理
+    /// 移動方向のRayTypeに対応した向きのRaycast
     /// </summary>
-    void Stealth()
+    /// <returns>オブジェクトに当たっているかどうか</returns>
+    bool DirectionRay(RayType type)
     {
-        // 忍び歩きキーが押されたら
-        if (Input.GetKey(stealthKey))
-        {
-            // 忍び歩き開始
-            IsStealth = true;
-        }
-        else
-        {
-            // 忍び歩き終了
-            IsStealth = false;
-        }
-    }
+        // レイのスタート位置
+        Vector3 start = Vector3.zero;
 
-    /// <summary>
-    /// ダッシュ検知処理
-    /// </summary>
-    void Dash()
-    {
-        // ダッシュキーが押されたら
-        if (!IsStealth && !IsSquat && Input.GetKey(dashKey))
-        {
-            // ダッシュ開始
-            IsDash = true;
-        }
-        else
-        {
-            // ダッシュ終了
-            IsDash = false;
-        }
-    }
+        // レイの向き
+        Vector3 dir = Vector3.zero;
 
-    /// <summary>
-    /// しゃがみ検知処理
-    /// </summary>
-    void Squat()
-    {
-        // しゃがみキーが押されたら
-        if (Input.GetKey(squatKey))
-        {
-            // コライダーをずらして、しゃがみ開始
-            collider.height = 0.7f;
-            IsSquat = true;
-        }
-        else
-        {
-            // コライダーを戻して、しゃがみ終了
-            collider.height = 1.4f;
-            IsSquat = false;
-        }
-    }
+        // レイの距離
+        float distance = collider.radius * 2;
 
-    /// <summary>
-    /// ジャンプ検知処理
-    /// </summary>
-    void Jump()
-    {
-        // ジャンプキーが押されたら
-        if (Input.GetKeyDown(jumpKey) && IsGround() && !isJump[(int)JumpState.START] && !isJump[(int)JumpState.WAIT] && !isJump[(int)JumpState.JUMP])
+        // レイヤーマスク(プレイヤーからレイが伸びているので除外)
+        int layerMask = (1 << LayerMask.NameToLayer("Player"));
+        layerMask = ~layerMask;
+
+        // レイのタイプによって向き変更
+        switch (type)
         {
-            // ジャンプ処理開始
-            isJump[(int)JumpState.START] = true;
+            case RayType.MOVEDIRECTION:
+                // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.01f)), transform.position.z);
+                dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
+            case RayType.DIAGONALDIRECTION:
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
+                dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
         }
 
-        // ジャンプし始めたらジャンプ開始フラグを立てる
-        if (isJump[(int)JumpState.WAIT] && rigidbody.velocity.y > 0)
-        {
-            isJump[(int)JumpState.JUMP] = true;
-        }
+        // レイ作成
+        Ray ray = new Ray(start, dir);
+        RaycastHit hit = default;
 
-        // ジャンプしている状態で地面に着いたらジャンプ終了
-        if (IsGround() && isJump[(int)JumpState.JUMP])
-        {
-            isJump[(int)JumpState.START] = false;
-            isJump[(int)JumpState.WAIT] = false;
-            isJump[(int)JumpState.JUMP] = false;
-        }
-    }
+        // デバック用ライン
+        Debug.DrawLine(start, start + (dir * distance), Color.red);
 
-    /// <summary>
-    /// ジャンプ処理の開始フラグの受け渡し処理
-    /// </summary>
-    public bool IsJumpStart()
-    {
-        if(isJump[(int)JumpState.START] && !isJump[(int)JumpState.WAIT] && !isJump[(int)JumpState.JUMP])
+        // レイに当たったらtrue、外れていたらfalse
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
-            isJump[(int)JumpState.START] = false;
-            isJump[(int)JumpState.WAIT] = true;
             return true;
         }
         else
@@ -233,20 +181,34 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     /// <summary>
-    /// 地面に接ししているか
+    /// 移動キーが入力されたかどうか
     /// </summary>
-    bool IsGround()
+    /// <returns></returns>
+    bool GetDirectionKey()
     {
-        // rayの距離
-        // NOTE:0.1fは、コライダーのなかにrayが入り込んでしまうのを防ぐための誤差
-        float maxDistance = collider.height / 2 + 0.1f;
-        if (Physics.Raycast(transform.position, Vector3.down, maxDistance))
+        if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
         {
             return true;
         }
         else
         {
             return false;
+        }
+    }
+
+    /// <summary>
+    /// 移動速度上限の変更
+    /// </summary>
+    /// <param name="type">移動タイプ</param>
+    public void ChangeSpeedLimit(SpeedLimitType type)
+    {
+        switch (type)
+        {
+            case SpeedLimitType.WALK: moveTypeSpeedLimit = walkSpeedLimit; break;
+            case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
+            case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
+            case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
+            case SpeedLimitType.BREATHLESSNESS: moveTypeSpeedLimit = breathlessnessSpeedLimit; break;
         }
     }
 }

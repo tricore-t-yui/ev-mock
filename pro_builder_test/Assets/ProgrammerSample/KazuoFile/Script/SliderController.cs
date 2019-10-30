@@ -41,7 +41,7 @@ public class SliderController : MonoBehaviour
     void Update()
     {
         // 値がが0 ~ 100なので、100で割って0.00 ~ 1.00に変換して値を更新
-        brethSlider.value = brethController.ResidualAmount / 100;
+        brethSlider.value = brethController.NowAmount / 100;
         healthSlider.value = healthController.Health / 100;
 
         // 点滅処理
@@ -64,7 +64,7 @@ public class SliderController : MonoBehaviour
         }
 
         // 息ゲージは息切れ時も点滅させる、それ以外は同じ
-        if (brethController.IsBreathlessness)
+        if (brethController.NowState == PlayerBrethController.BrethState.BREATHLESSNESS)
         {
             brethSliderBlink.enabled = true;
         }
