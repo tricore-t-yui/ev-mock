@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 敵の視界の処理を行う
@@ -20,24 +21,50 @@ public class EnemyVisibility : MonoBehaviour
     [SerializeField]
     float distance = 0;
 
+    // プレイヤーを見つけた瞬間
+    [SerializeField]
+    UnityEvent onPlayerDiscoverMoment = default;
+
+    // プレイヤーを見失った瞬間
+    [SerializeField]
+    UnityEvent onPlayerLoseMoment = default;
+
     // 視界の左側の境界
     Vector3 leftBorder = Vector3.zero;
     // 視界の右側の境界
     Vector3 rightBorder = Vector3.zero;
+
+    // プレイヤーを発見したか
+    bool isDiscover = false;
+    // プレイヤーを発見したか（前フレーム）
+    bool isPrevDiscover = false;
 
     /// <summary>
     /// 更新
     /// </summary>
     void Update()
     {
-        // 境界ベクトルを作成
-        CreateBorderVector();
+        // 境界ベクトルを更新
+        UpdateBorderVector();
+
+        // 発見中かどうかのフラグを現在と前フレームで入れ替える
+        isPrevDiscover = isDiscover;
+        isDiscover = IsPlayerDiscover();
+
+        if (IsPlayerDiscoverMoment())
+        {
+            onPlayerDiscoverMoment.Invoke();
+        }
+        else if (IsPlayerLoseMoment())
+        {
+            onPlayerLoseMoment.Invoke();
+        }
     }
 
     /// <summary>
-    /// 視界の境界ベクトルを作成
+    /// 視界の境界ベクトルを更新
     /// </summary>
-    void CreateBorderVector()
+    void UpdateBorderVector()
     {
         // 左側の境界ベクトル
         Vector3 leftVec = Quaternion.Euler(0, -angle * 0.5f, 0) * transform.forward;
@@ -54,7 +81,7 @@ public class EnemyVisibility : MonoBehaviour
     /// プレイヤーを発見しているかどうか
     /// </summary>
     /// <returns>発見中かどうかのフラグ</returns>
-    public bool IsPlayerDiscover()
+    bool IsPlayerDiscover()
     {
         // エネミーからプレイヤーに向かってレイを飛ばす
         Ray ray = new Ray(transform.position,(player.transform.position - transform.position).normalized);
@@ -86,12 +113,43 @@ public class EnemyVisibility : MonoBehaviour
     }
 
     /// <summary>
+    /// プレイヤーを発見した瞬間
+    /// </summary>
+    /// <returns></returns>
+    bool IsPlayerDiscoverMoment()
+    {
+        if (!isPrevDiscover)
+        {
+            if (isDiscover)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// プレイヤーを見失った
+    /// </summary>
+    bool IsPlayerLoseMoment()
+    {
+        if (isPrevDiscover)
+        {
+            if (!isDiscover)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Sceneビューのみに表示
     /// </summary>
     void OnDrawGizmos()
     {
-        // 境界ベクトルを作成
-        CreateBorderVector();
+        // 境界ベクトルを更新
+        UpdateBorderVector();
         // デバッグ用に境界ベクトルを表示する
         Debug.DrawRay(transform.position, leftBorder, Color.green);
         Debug.DrawRay(transform.position, rightBorder, Color.green);
