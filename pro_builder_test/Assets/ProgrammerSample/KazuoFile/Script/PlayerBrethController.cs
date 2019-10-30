@@ -9,171 +9,145 @@ using UnityEngine.UI;
 public class PlayerBrethController : MonoBehaviour
 {
     /// <summary>
-    /// 息の消費タイプ
+    /// 息の状態
     /// </summary>
-    public enum ConsumeType
+    public enum BrethState
     {
-        HOLD,       // 息止め 
-        PATIENCE,   // 隠れる
+        WAIT,                   // 何もしていない状態
+        WALK,                   // 歩いている状態
+        DASH,                   // ダッシュしている状態
+        STEALTH,                // 忍び歩きしている状態
+        HIDE,                   // 隠れている状態
+        DEEPBREATH,             // 深呼吸している状態
+        BREATHLESSNESS,         // 息切れしている状態
+        BREATHLESSNESSRECOVERY, // 息切れ回復している状態
     }
 
     [SerializeField]
-    PlayerMoveController playerController = default; // プレイヤーの状態管理クラス
+    KeyCode ReductionKey = KeyCode.Q;               // 息の消費軽減キー
+    [SerializeField]
+    PlayerHideController hideController = default;  // 隠れるクラス
 
     [SerializeField]
-    KeyCode ReductionKey = KeyCode.Q;       // 息の消費軽減キー
+    float normalRecoveryAmount = 0.5f;              // 通常の息の回復量
+    [SerializeField]
+    float breathlessnessRecoveryAmount = 0.2f;      // 息切れ時の息の回復量
+    [SerializeField]
+    float holdDecrement = 0.15f;                    // 息止め時の息消費量
+    [SerializeField]
+    float patienceDecrement = 0.25f;                // 息我慢時(連打なし)の息消費量
+    [SerializeField]
+    float buttonPatienceDecrement = 0.1f;           // 息我慢時(連打あり)の息消費量
+    [SerializeField]
+    int durationPlus = 5;                           // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
 
-    [SerializeField]
-    float RecoveryAmount = 0.5f;            // 通常の息の回復量
-    [SerializeField]
-    float BreathlessnessRecovery = 0.2f;    // 息切れ時の息の回復量
-    [SerializeField]
-    float holdDecrement = 0.15f;            // 息止め時の息消費量
-    [SerializeField]
-    float patienceDecrement = 0.25f;        // 息我慢時(連打なし)の息消費量
-    [SerializeField]
-    float buttonPatienceDecrement = 0.1f;   // 息我慢時(連打あり)の息消費量
-    [SerializeField]
-    int durationPlus = 5;                   // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
+    int duration = 0;                               // 連打処理の継続フレーム (詳細は165行のNOTE)
 
-    int duration = 0;                       // 連打処理の継続フレーム (詳細は165行のNOTE)
+    public float NowAmount { get; private set; } = 100;             // 息の残量
 
-    public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
-    public float ResidualAmount { get; private set; } = 100;    // 息の残量
+    public BrethState NowState { get; private set; } = BrethState.WAIT;// 現在の息の状態
 
     /// <summary>
-    /// 開始処理
+    /// 各ステートに合わせた処理
     /// </summary>
-    void Start()
+    public void StateUpdate()
     {
-        // 初期化
-        ResidualAmount = 100;
-        duration = 0;
-    }
-
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update()
-    {
-        // 息回復処理
-        Recovery();
-
-        // 息消費処理
-        BreathConsumption();
-    }
-
-    /// <summary>
-    /// 息回復処理
-    /// </summary>
-    void Recovery()
-    {
-        //　息切れした時
-        if (IsBreathlessness)
+        // 息切れ回復中じゃなかったら
+        if (NowState != BrethState.BREATHLESSNESSRECOVERY)
         {
-            // 息の回復
-            ResidualAmount += BreathlessnessRecovery;
-        }
-        // 息を使っていない時
-        if (!playerController.IsStealth && !(playerController.IsHide && playerController.IsWarning))
-        {
-            // 息の回復
-            ResidualAmount += RecoveryAmount;
+            // 各ステートに合わせた処理を実行
+            switch (NowState)
+            {
+                case BrethState.WAIT: NowAmount += normalRecoveryAmount; break;
+                case BrethState.WALK: NowAmount += normalRecoveryAmount; break;
+                case BrethState.DASH: break;
+                case BrethState.STEALTH: StealthConsumeBreath(); break;
+                case BrethState.HIDE: HideConsumeBreath(); break;
+                case BrethState.DEEPBREATH: NowAmount += normalRecoveryAmount * 2; break;
+                case BrethState.BREATHLESSNESS: BreathlessnessRecovery(); break;
+                case BrethState.BREATHLESSNESSRECOVERY: break;
+                default: break;
+            }
         }
     }
 
     /// <summary>
-    /// 息消費処理
+    /// ステート変更クラス
     /// </summary>
-    void BreathConsumption()
+    public void ChangeState(BrethState state)
     {
-        // 息切れ検知
-        Breathlessness();
+        NowState = state;
+    }
 
-        // 息切れしていない状態で、息止めキーが押されたら
-        if (!IsBreathlessness && playerController.IsStealth)
+    /// <summary>
+    /// 息切れ時の息の回復
+    /// </summary>
+    public void BreathlessnessRecovery()
+    {
+        // 息切れ回復状態へ
+        ChangeState(BrethState.BREATHLESSNESSRECOVERY);
+
+        // 息回復のコルーチン開始
+        StartCoroutine(RecoveryCoroutine());
+
+        // 一旦待機状態へ
+        ChangeState(BrethState.WAIT);
+    }
+
+    /// <summary>
+    /// 息回復コルーチン
+    /// </summary>
+    IEnumerator RecoveryCoroutine()
+    {
+        NowAmount += breathlessnessRecoveryAmount;
+
+        // 息が回復しきったら
+        if(NowAmount >= 100)
         {
-            // 息止め処理
-            BrathHold();
+            // 100を代入し、コルーチン終了
+            NowAmount = 100;
+            yield break;
         }
 
-        // 隠れている時
-        if (playerController.IsHide && playerController.IsWarning)
-        {
-            // 隠れる処理
-            Hide();
-        }
+        yield return null;
+    }
+
+    /// <summary>
+    /// 忍び歩き時の息消費
+    /// </summary>
+    public void StealthConsumeBreath()
+    {
+        NowAmount -= holdDecrement;
 
         // 値補正
-        ResidualAmount = clamp(ResidualAmount, 0, 100);
+        NowAmount = Mathf.Clamp(NowAmount, 0, 100);
     }
 
     /// <summary>
-    /// 息切れ検知
+    /// 隠れている最中の息消費
     /// </summary>
-    void Breathlessness()
+    public void HideConsumeBreath()
     {
-        // まだ息切れ状態になっていないが、息の残量が0になったら
-        if (!IsBreathlessness && ResidualAmount <= 0)
+        // 警戒状態じゃなかったら
+        if (hideController.IsWarning)
         {
-            // 息切れ開始
-            IsBreathlessness = true;
+            // 連打処理
+            StrikeButtonRepeatedly();
+
+            // 連打処理の継続時間続いている間
+            if (duration > 0)
+            {
+                NowAmount -= buttonPatienceDecrement;
+            }
+            // 続いていなかったら
+            else
+            {
+                NowAmount -= patienceDecrement;
+            }
+
+            // 値補正
+            NowAmount = Mathf.Clamp(NowAmount, 0, 100);
         }
-        // 息切れ状態時に息が100まで回復したら
-        else if (ResidualAmount >= 100)
-        {
-            // 息切れ解除
-            IsBreathlessness = false;
-        }
-    }
-
-    /// <summary>
-    /// 息止め処理
-    /// </summary>
-    void BrathHold()
-    {
-        // 息消費(息止め)
-        ConsumeBreath(ConsumeType.HOLD);
-    }
-
-    /// <summary>
-    /// 息消費
-    /// </summary>
-    /// <param name="type">息の消費タイプ</param>
-    public void ConsumeBreath(ConsumeType type)
-    {
-        switch(type)
-        {
-            // 息止め時
-            case ConsumeType.HOLD: ResidualAmount -= holdDecrement; break;
-
-            // 息我慢時
-            case ConsumeType.PATIENCE:
-
-                // 連打処理の継続時間続いている間
-                if (duration > 0)
-                {
-                    ResidualAmount -= buttonPatienceDecrement;
-                }
-                // 続いていなかったら
-                else
-                {
-                    ResidualAmount -= patienceDecrement;
-                }
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 隠れる処理
-    /// </summary>
-    void Hide()
-    {
-        // 連打処理
-        StrikeButtonRepeatedly();
-
-        // 息消費(隠れる)
-        ConsumeBreath(ConsumeType.PATIENCE);
     }
 
     /// <summary>
@@ -196,18 +170,6 @@ public class PlayerBrethController : MonoBehaviour
         duration--;
 
         // 値が0以下ににならないように補正
-        duration = (int)clamp(duration, 0, 100);
-    }
-
-    /// <summary>
-    /// 上限、下限補正
-    /// </summary>
-    /// <param name="value">補正する値</param>
-    /// <param name="min">下限値</param>
-    /// <param name="max">上限値</param>
-    /// <returns>補正した値</returns>
-    float clamp(float value, float min, float max)
-    {
-        return Mathf.Min(Mathf.Max(value, min),max);
+        duration = Mathf.Clamp(duration, 0, 100);
     }
 }
