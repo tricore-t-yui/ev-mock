@@ -13,6 +13,7 @@ public class PlayerEventCaller : MonoBehaviour
     /// </summary>
     public enum EventType
     {
+        WAIT,       // 待機時
         MOVE,       // 移動時
         WALK,       // 歩く時
         DASH,       // ダッシュ時
@@ -21,7 +22,9 @@ public class PlayerEventCaller : MonoBehaviour
         DOOR,       // ドア時
         HIDE,       // 隠れる時
         DEEPBREATH, // 深呼吸時
+        BREATHLESSNESS,//息切れ時
 
+        WAITEND,        // 待機終了時
         MOVEEND,        // 移動終了時
         WALKEND,        // 歩く終了時
         DASHEND,        // ダッシュ終了時
@@ -30,8 +33,11 @@ public class PlayerEventCaller : MonoBehaviour
         DOOREND,        // ドア終了時
         HIDEEND,        // 隠れる終了時
         DEEPBREATHEND,  // 深呼吸終了時
+        BREATHLESSNESSEND,//息切れ終了時
     }
 
+    [SerializeField]
+    UnityEvent wait = new UnityEvent();         // 待機イベント
     [SerializeField]
     UnityEvent move = new UnityEvent();         // 移動イベント
     [SerializeField]
@@ -48,7 +54,11 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent hide = new UnityEvent();         // 隠れるイベント
     [SerializeField]
     UnityEvent deepBreath = new UnityEvent();   // 深呼吸イベント
+    [SerializeField]
+    UnityEvent brethressness = new UnityEvent();         // 息切れイベント
 
+    [SerializeField]
+    UnityEvent waitEnd = new UnityEvent();         // 待機終了イベント
     [SerializeField]
     UnityEvent moveEnd = new UnityEvent();      // 移動終了イベント
     [SerializeField]
@@ -65,6 +75,8 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent hideEnd = new UnityEvent();      // 隠れる終了イベント
     [SerializeField]
     UnityEvent deepBreathEnd = new UnityEvent();// 深呼吸イベント
+    [SerializeField]
+    UnityEvent brethressnessEnd = new UnityEvent();         // 息切れ終了イベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -74,6 +86,7 @@ public class PlayerEventCaller : MonoBehaviour
     {
         switch(type)
         {
+            case EventType.WAIT: wait.Invoke(); break;
             case EventType.MOVE:       move.Invoke();       break;
             case EventType.WALK:       walk.Invoke();       break;
             case EventType.DASH:       dash.Invoke();       break;
@@ -82,7 +95,9 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DOOR:       doorOpen.Invoke();   break;
             case EventType.HIDE:       hide.Invoke();       break;
             case EventType.DEEPBREATH: deepBreath.Invoke(); break;
+            case EventType.BREATHLESSNESS: brethressness.Invoke(); break;
 
+            case EventType.WAITEND: waitEnd.Invoke(); break;
             case EventType.MOVEEND:       moveEnd.Invoke();       break;
             case EventType.WALKEND:       walkEnd.Invoke();       break;
             case EventType.DASHEND:       dashEnd.Invoke();       break;
@@ -91,6 +106,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DOOREND:       doorOpenEnd.Invoke();   break;
             case EventType.HIDEEND:       hideEnd.Invoke();       break;
             case EventType.DEEPBREATHEND: deepBreathEnd.Invoke(); break;
+            case EventType.BREATHLESSNESSEND: brethressnessEnd.Invoke(); break;
         }
     }
 }

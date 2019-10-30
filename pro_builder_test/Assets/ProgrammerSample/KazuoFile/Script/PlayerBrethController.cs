@@ -20,7 +20,6 @@ public class PlayerBrethController : MonoBehaviour
         HIDE,                   // 隠れている状態
         DEEPBREATH,             // 深呼吸している状態
         BREATHLESSNESS,         // 息切れしている状態
-        BREATHLESSNESSRECOVERY, // 息切れ回復している状態
     }
 
     [SerializeField]
@@ -33,7 +32,9 @@ public class PlayerBrethController : MonoBehaviour
     [SerializeField]
     float breathlessnessRecoveryAmount = 0.2f;      // 息切れ時の息の回復量
     [SerializeField]
-    float holdDecrement = 0.15f;                    // 息止め時の息消費量
+    float DashDecrement = 0.2f;                    // 息止め時の息消費量
+    [SerializeField]
+    float stealthDecrement = 0.15f;                    // 息止め時の息消費量
     [SerializeField]
     float patienceDecrement = 0.25f;                // 息我慢時(連打なし)の息消費量
     [SerializeField]
@@ -45,109 +46,58 @@ public class PlayerBrethController : MonoBehaviour
 
     public float NowAmount { get; private set; } = 100;             // 息の残量
 
-    public BrethState NowState { get; private set; } = BrethState.WAIT;// 現在の息の状態
-
     /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
-    public void StateUpdate()
+    public void StateUpdate(BrethState state)
     {
-        // 息切れ回復中じゃなかったら
-        if (NowState != BrethState.BREATHLESSNESSRECOVERY)
+        // 各ステートに合わせた処理を実行
+        switch (state)
         {
-            // 各ステートに合わせた処理を実行
-            switch (NowState)
-            {
-                case BrethState.WAIT: NowAmount += normalRecoveryAmount; break;
-                case BrethState.WALK: NowAmount += normalRecoveryAmount; break;
-                case BrethState.DASH: break;
-                case BrethState.STEALTH: StealthConsumeBreath(); break;
-                case BrethState.HIDE: HideConsumeBreath(); break;
-                case BrethState.DEEPBREATH: NowAmount += normalRecoveryAmount * 2; break;
-                case BrethState.BREATHLESSNESS: BreathlessnessRecovery(); break;
-                case BrethState.BREATHLESSNESSRECOVERY: break;
-                default: break;
-            }
+            case BrethState.WAIT: NowAmount += normalRecoveryAmount; break;
+            case BrethState.WALK: NowAmount += normalRecoveryAmount; break;
+            case BrethState.DASH: ConsumeBreath(state); break;
+            case BrethState.STEALTH: ConsumeBreath(state); break;
+            case BrethState.HIDE: ConsumeBreath(state); break;
+            case BrethState.DEEPBREATH: NowAmount += normalRecoveryAmount * 2; break;
+            case BrethState.BREATHLESSNESS: NowAmount += breathlessnessRecoveryAmount; break;
+            default: break;
         }
     }
 
     /// <summary>
-    /// ステート変更クラス
+    /// 息消費
     /// </summary>
-    public void ChangeState(BrethState state)
+    public void ConsumeBreath(BrethState state)
     {
-        NowState = state;
-    }
-
-    /// <summary>
-    /// 息切れ時の息の回復
-    /// </summary>
-    public void BreathlessnessRecovery()
-    {
-        // 息切れ回復状態へ
-        ChangeState(BrethState.BREATHLESSNESSRECOVERY);
-
-        // 息回復のコルーチン開始
-        StartCoroutine(RecoveryCoroutine());
-
-        // 一旦待機状態へ
-        ChangeState(BrethState.WAIT);
-    }
-
-    /// <summary>
-    /// 息回復コルーチン
-    /// </summary>
-    IEnumerator RecoveryCoroutine()
-    {
-        NowAmount += breathlessnessRecoveryAmount;
-
-        // 息が回復しきったら
-        if(NowAmount >= 100)
+        switch (state)
         {
-            // 100を代入し、コルーチン終了
-            NowAmount = 100;
-            yield break;
+            case BrethState.DASH: NowAmount -= DashDecrement; break;
+            case BrethState.STEALTH:NowAmount -= stealthDecrement;break;
+            case BrethState.HIDE:
+                // 警戒状態じゃなかったら
+                if (hideController.IsWarning)
+                {
+                    // 連打処理
+                    StrikeButtonRepeatedly();
+
+                    // 連打処理の継続時間続いている間
+                    if (duration > 0)
+                    {
+                        NowAmount -= buttonPatienceDecrement;
+                    }
+                    // 続いていなかったら
+                    else
+                    {
+                        NowAmount -= patienceDecrement;
+                    }
+                }
+                break;
+            default: break;
         }
-
-        yield return null;
-    }
-
-    /// <summary>
-    /// 忍び歩き時の息消費
-    /// </summary>
-    public void StealthConsumeBreath()
-    {
-        NowAmount -= holdDecrement;
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
-    }
-
-    /// <summary>
-    /// 隠れている最中の息消費
-    /// </summary>
-    public void HideConsumeBreath()
-    {
-        // 警戒状態じゃなかったら
-        if (hideController.IsWarning)
-        {
-            // 連打処理
-            StrikeButtonRepeatedly();
-
-            // 連打処理の継続時間続いている間
-            if (duration > 0)
-            {
-                NowAmount -= buttonPatienceDecrement;
-            }
-            // 続いていなかったら
-            else
-            {
-                NowAmount -= patienceDecrement;
-            }
-
-            // 値補正
-            NowAmount = Mathf.Clamp(NowAmount, 0, 100);
-        }
     }
 
     /// <summary>

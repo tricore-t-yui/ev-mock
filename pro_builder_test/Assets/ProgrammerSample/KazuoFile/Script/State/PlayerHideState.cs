@@ -21,6 +21,11 @@ public class PlayerHideState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         eventCaller.Invoke(PlayerEventCaller.EventType.HIDE);
+
+        if(animator.GetBool("Brethlessness"))
+        {
+            //ゲームオーバー
+        }
     }
 
     /// <summary>
