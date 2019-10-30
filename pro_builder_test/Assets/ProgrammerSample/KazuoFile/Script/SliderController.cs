@@ -63,12 +63,8 @@ public class SliderController : MonoBehaviour
             healthSliderBlink.enabled = false;
         }
 
-        // 息ゲージは息切れ時も点滅させる、それ以外は同じ
-        if (brethController.NowState == PlayerBrethController.BrethState.BREATHLESSNESS)
-        {
-            brethSliderBlink.enabled = true;
-        }
-        else if(brethSlider.value <= blinkPercent)
+        // 息ゲージも点滅
+        if(brethSlider.value <= blinkPercent)
         {
             brethSliderBlink.enabled = true;
         }

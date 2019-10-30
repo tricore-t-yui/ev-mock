@@ -55,40 +55,43 @@ public class PlayerStateController : StateMachineBehaviour
         }
 
         // 息が切れているときはダッシュと忍び歩きができない
-        if (brethController.NowState != PlayerBrethController.BrethState.BREATHLESSNESS)
+        if (brethController.NowAmount <= 0)
         {
-            // 方向キーが押されている時の
-            if (GetDirectionKey())
+            animator.SetBool("Brethlessness", true);
+        }
+
+        // 息切れ状態じゃなかったら
+        if(!animator.GetBool("Brethlessness"))
+        {
+            animator.SetBool("Brethlessness",false);
+            // 忍び歩き時
+            if (Input.GetKey(stealthKey))
             {
-                // 忍び歩き時
-                if (Input.GetKey(stealthKey))
-                {
-                    animator.SetBool("Stealth", true);
-                    animator.SetBool("BrethConsume", true);
-                }
-                else
-                {
-                    animator.SetBool("Stealth", false);
-                    animator.SetBool("BrethConsume", false);
-                }
+                animator.SetBool("Stealth", true);
+                animator.SetBool("BrethConsume", true);
+            }
+            else
+            {
+                animator.SetBool("Stealth", false);
+                animator.SetBool("BrethConsume", false);
+            }
 
-                // ダッシュ時
-                if (Input.GetKey(dashKey))
-                {
-                    animator.SetBool("Dash", true);
-                    animator.SetBool("StandUp", true);
+            // ダッシュ時
+            if (Input.GetKey(dashKey))
+            {
+                animator.SetBool("Dash", true);
+                animator.SetBool("StandUp", true);
 
-                    animator.SetBool("Squat", false);
-                    animator.SetBool("Stealth", false);
-                }
-                else
-                {
-                    animator.SetBool("Dash", false);
-                }
+                animator.SetBool("Squat", false);
+                animator.SetBool("Stealth", false);
+            }
+            else
+            {
+                animator.SetBool("Dash", false);
             }
 
             // 深呼吸
-            if(Input.GetKey(deepBreathKey))
+            if (Input.GetKey(deepBreathKey))
             {
                 animator.SetBool("DeepBreath", true);
             }
@@ -111,7 +114,7 @@ public class PlayerStateController : StateMachineBehaviour
                 }
             }
             // 隠れるポイントがあるなら隠れるアクション開始
-            else if (ObjectLayer() == LayerMask.NameToLayer("Hide") && brethController.NowState != PlayerBrethController.BrethState.BREATHLESSNESS)
+            else if (ObjectLayer() == LayerMask.NameToLayer("Hide") && animator.GetBool("Brethlessness"))
             {
                 if (!animator.GetBool("Hide"))
                 {

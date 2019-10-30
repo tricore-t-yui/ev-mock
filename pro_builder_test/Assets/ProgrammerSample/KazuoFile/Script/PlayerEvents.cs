@@ -17,20 +17,17 @@ public class PlayerEvents : MonoBehaviour
     PlayerDoorController doorController = default;      // ドア開閉クラス
 
     /// <summary>
-    /// 移動
+    /// 待機
     /// </summary>
-    public void Move()
+    public void Wait()
     {
-        moveController.Move();
+        brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
     }
 
     /// <summary>
-    /// 移動終了
+    /// 待機終了
     /// </summary>
-    public void MoveEnd()
-    {
-        brethController.ChangeState(PlayerBrethController.BrethState.WAIT);
-    }
+    public void WaitEnd() { }
 
     /// <summary>
     /// 歩く
@@ -38,13 +35,17 @@ public class PlayerEvents : MonoBehaviour
     public void Walk()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.WALK);
-        brethController.ChangeState(PlayerBrethController.BrethState.WALK);
+        brethController.StateUpdate(PlayerBrethController.BrethState.WALK);
+        moveController.Move();
     }
 
     /// <summary>
     /// 歩く終了
     /// </summary>
-    public void WalkEnd(){}
+    public void WalkEnd()
+    {
+        brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
+    }
 
     /// <summary>
     /// ダッシュ
@@ -52,7 +53,8 @@ public class PlayerEvents : MonoBehaviour
     public void Dash()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.DASH);
-        brethController.ChangeState(PlayerBrethController.BrethState.DASH);
+        brethController.StateUpdate(PlayerBrethController.BrethState.DASH);
+        moveController.Move();
     }
 
     /// <summary>
@@ -86,8 +88,8 @@ public class PlayerEvents : MonoBehaviour
     public void Stealth()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.STEALTH);
-        brethController.ChangeState(PlayerBrethController.BrethState.STEALTH);
-        brethController.StealthConsumeBreath();
+        brethController.StateUpdate(PlayerBrethController.BrethState.STEALTH);
+        moveController.Move();
     }
 
     /// <summary>
@@ -99,17 +101,30 @@ public class PlayerEvents : MonoBehaviour
     }
 
     /// <summary>
-    /// 忍び歩き時
+    /// 深呼吸
     /// </summary>
     public void DeepBreath()
     {
-        brethController.ChangeState(PlayerBrethController.BrethState.DEEPBREATH);
+        brethController.StateUpdate(PlayerBrethController.BrethState.DEEPBREATH);
     }
 
     /// <summary>
-    /// 忍び歩き終了
+    /// 深呼吸
     /// </summary>
     public void DeepBreathEnd(){}
+
+    /// <summary>
+    /// 息切れ
+    /// </summary>
+    public void Brethlessness()
+    {
+        brethController.StateUpdate(PlayerBrethController.BrethState.BREATHLESSNESS);
+    }
+
+    /// <summary>
+    /// 息切れ終了
+    /// </summary>
+    public void BrethlessnessEnd() { }
 
     /// <summary>
     /// ドア開閉時
@@ -126,13 +141,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        brethController.ChangeState(PlayerBrethController.BrethState.HIDE);
-
-        // 息が切れてしまったらゲームオーバー
-        if (brethController.NowState != PlayerBrethController.BrethState.BREATHLESSNESS)
-        {
-            // ゲームオーバー
-        }
+        brethController.StateUpdate(PlayerBrethController.BrethState.HIDE);
     }
 
     /// <summary>

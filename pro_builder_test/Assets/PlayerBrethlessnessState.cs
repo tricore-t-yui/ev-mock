@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 移動ステート
+/// 息切れ時のステート
 /// </summary>
-public class PlayerMoveState : StateMachineBehaviour
+public class PlayerBrethlessnessState : StateMachineBehaviour
 {
     [SerializeField]
     PlayerEventCaller eventCaller = default;    // プレイヤーのイベント呼び出しクラス
+    [SerializeField]
+    PlayerBrethController brethController = default;    // プレイヤーのイベント呼び出しクラス
 
     /// <summary>
     /// ステートに入った瞬間
@@ -20,14 +22,20 @@ public class PlayerMoveState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (animator.GetBool("Move"))
+        eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESS);
+
+        // マックスまで回復したら
+        if(brethController.NowAmount >= 100)
         {
-            eventCaller.Invoke(PlayerEventCaller.EventType.MOVE);
+            animator.SetBool("Brethlessness", false);
         }
     }
 
     /// <summary>
     /// ステートに出た瞬間
     /// </summary>
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex){}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESSEND);
+    }
 }
