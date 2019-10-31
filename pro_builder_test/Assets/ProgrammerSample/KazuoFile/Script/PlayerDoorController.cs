@@ -18,10 +18,6 @@ public class PlayerDoorController : MonoBehaviour
     }
 
     [SerializeField]
-    Rigidbody rigid = default;                          // リジットボディ
-    [SerializeField]
-    CameraController camera = default;                  // カメラクラス
-    [SerializeField]
     Animator playerAnim = default;                      // アニメーター
     [SerializeField]
     InteractController interactController = default;    // インタラクト用関数クラス
