@@ -8,6 +8,12 @@ using UnityEngine.AI;
 /// </summary>
 public class EnemyChaser : StateMachineBehaviour
 {
+    [SerializeField]
+    EnemyVisibility enemyVisibility = default;
+
+    [SerializeField]
+    EnemyParameterIdList enemyParameterIdList = default;
+
     // ナビメッシュ
     [SerializeField]
     NavMeshAgent navMeshAgent = default;
@@ -19,6 +25,15 @@ public class EnemyChaser : StateMachineBehaviour
     // 移動スピード
     [SerializeField]
     float moveSpeed = default;
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    private void Awake()
+    {
+        // デリゲートをセットする
+        enemyVisibility.SetOnLoseMomentDelegate(OnPlayerLoseMoment);
+    }
 
     /// <summary>
     /// ステートの開始
@@ -36,5 +51,14 @@ public class EnemyChaser : StateMachineBehaviour
     {
         // 追跡対象の位置をセット
         navMeshAgent.SetDestination(player.position);
+    }
+
+    /// <summary>
+    /// プレイヤーを見失った時のコールバック
+    /// </summary>
+    void OnPlayerLoseMoment()
+    {
+        enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerDiscover, false);
+        enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerSearching, true);
     }
 }

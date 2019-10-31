@@ -9,6 +9,9 @@ using UnityEngine.AI;
 public class EnemySearch : StateMachineBehaviour
 {
     [SerializeField]
+    EnemyParameterIdList enemyParameterIdList = default;
+
+    [SerializeField]
     NavMeshAgent navMeshAgent = default;
 
     [SerializeField]
@@ -16,6 +19,7 @@ public class EnemySearch : StateMachineBehaviour
 
     /// <summary>
     /// ステート開始
+    /// <summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 一番近いポイントを取得
@@ -32,7 +36,10 @@ public class EnemySearch : StateMachineBehaviour
     /// <param name="layerIndex"></param>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        // 捜索終了ポイントまでの距離
-        animator.SetFloat("SearchEndPosDistance", navMeshAgent.remainingDistance);
+        // チェックポイントまできたら捜索を諦めて徘徊に戻る
+        if (navMeshAgent.remainingDistance < 0.5f)
+        {
+            enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerSearching, false);
+        }
     }
 }
