@@ -66,6 +66,7 @@ public class DoorOpenState : StateMachineBehaviour
         // プレイヤーだったら初期化を始める
         if (type == Type.PLAYER)
         {
+            animator.SetBool("Reverse", false);
             doorController.EndAction();
         }
     }

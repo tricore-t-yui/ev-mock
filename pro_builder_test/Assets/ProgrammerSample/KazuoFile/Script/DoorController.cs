@@ -1,23 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DirType = InteractController.DirType;
 
 /// <summary>
 /// ドア管理クラス
 /// </summary>
 public class DoorController : MonoBehaviour
 {
-    /// <summary>
-    /// ドアの開ける方向のタイプ
-    /// </summary>
-    public enum DirType
-    {
-        FORWARD,
-        BACK,
-        LEFT,
-        RIGHT,
-    }
-
     [SerializeField]
     Transform player = default;                 // プレイヤー
     [SerializeField]
@@ -40,8 +30,9 @@ public class DoorController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        // 開始時のドアのタイプを取っておく
+        // 開始時のドアのタイプを取っておき、閉められている状態にする
         firstType = type;
+        isAutoClose = true;
     }
 
     /// <summary>
@@ -98,14 +89,11 @@ public class DoorController : MonoBehaviour
     /// </summary>
     public void RotationStart(PlayerDoorController.OpenType type)
     {
-        // 歩いて開けたなら通常、ダッシュしながら開けたならダッシュ用
-        if (type == PlayerDoorController.OpenType.WALK)
+        // タイプに合わせてトリガーオン
+        switch (type)
         {
-            doorAnim.SetTrigger("Open");
-        }
-        else
-        {
-            doorAnim.SetTrigger("DashOpen");
+            case PlayerDoorController.OpenType.NORMAL: doorAnim.SetTrigger("Open"); break;
+            case PlayerDoorController.OpenType.DASH: doorAnim.SetTrigger("DashOpen"); break;
         }
 
         isAutoClose = false;
@@ -172,7 +160,7 @@ public class DoorController : MonoBehaviour
     /// <summary>
     /// ドアのタイプ
     /// </summary>
-    public DirType GetDoorType()
+    public DirType GetDirType()
     {
         return type;
     }

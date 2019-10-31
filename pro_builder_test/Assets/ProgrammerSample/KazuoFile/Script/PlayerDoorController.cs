@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DirType = InteractController.DirType;
 
 /// <summary>
 /// プレイヤーのドア開閉クラス
@@ -12,59 +13,56 @@ public class PlayerDoorController : MonoBehaviour
     /// </summary>
     public enum OpenType
     {
-        WALK,
+        NORMAL,
         DASH,
     }
 
     [SerializeField]
-    Rigidbody rigid = default;              // プレイヤーの座標移動クラス
+    Rigidbody rigid = default;                          // リジットボディ
     [SerializeField]
-    CameraController camera = default;      // カメラクラス
+    CameraController camera = default;                  // カメラクラス
     [SerializeField]
-    Animator playerAnim = default;          // アニメーター
+    Animator playerAnim = default;                      // アニメーター
+    [SerializeField]
+    InteractController interactController = default;    // インタラクト用関数クラス
 
-    DoorController door = default;          // ドアの管理クラス
-    GameObject targetObj = default;         // 回転対象のドア
+    DoorController door = default;                      // ドアの管理クラス
+    GameObject targetObj = default;                     // 回転対象のドア
+    OpenType openType = OpenType.NORMAL;                // 開けるタイプ
 
     // 仮の部屋番号
     // NOTE:k.oishi 仮のプレイヤーの部屋番号なので、この変数が使われているところをあとで変える必要があります。
     [SerializeField]
-    int roomNum = 0; 
+    int roomNum = 0;
 
     /// <summary>
     /// 起動処理
     /// </summary>
     void OnEnable()
     {
-        // アニメーション設定
-        playerAnim.enabled = true;
+        // ドアに合わせたポジション合わせ
+        transform.position = interactController.InitPosition(door.GetDirType(),transform, targetObj.transform);
+        transform.rotation = interactController.InitRotation(door.GetDirType());
 
-        // 重力を切る
-        rigid.useGravity = false;
-
-        // カメラをアニメーションに固定させる
-        camera.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        camera.enabled = false;
+        interactController.CommonInit();
     }
 
     /// <summary>
     /// ドア情報の登録
     /// </summary>
-    public void SetInfo(GameObject doorObj, bool isDash)
+    public void SetInfo(GameObject doorObj, OpenType type)
     {
         // レイキャストに当たったドアの情報をもらう
         targetObj = doorObj;
         door = targetObj.GetComponent<DoorController>();
 
-        // ダッシュなら自動ドア
-        if (isDash)
+        openType = type;
+
+        // タイプに合わせてトリガーオン
+        switch (openType)
         {
-            playerAnim.SetTrigger("DashOpen");
-        }
-        // ダッシュじゃなかったら普通の開閉
-        else
-        {
-            playerAnim.SetTrigger("Open");
+            case OpenType.NORMAL: playerAnim.SetTrigger("Open"); break;
+            case OpenType.DASH: playerAnim.SetTrigger("DashOpen"); break;
         }
 
         // 触れるドアが逆なら逆向きのアニメーション開始
@@ -73,46 +71,17 @@ public class PlayerDoorController : MonoBehaviour
             playerAnim.SetBool("Reverse",true);
         }
 
-        // ドアに合わせたポジション合わせ
-        InitPosition(door.GetDoorType());
-
-        // 登録したらドア開閉開始
         enabled = true;
     }
 
-    /// <summary>
-    /// ドアのタイプに合わせたポジション合わせ
-    /// </summary>
-    /// <param name="type">ドアのタイプ</param>
-    void InitPosition(DoorController.DirType type)
-    {
-        switch (type)
-        {
-            case DoorController.DirType.FORWARD:
-                transform.position = new Vector3(targetObj.transform.position.x, transform.position.y, targetObj.transform.position.z - 0.84f);
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                break;
-            case DoorController.DirType.BACK:
-                transform.position = new Vector3(targetObj.transform.position.x, transform.position.y, targetObj.transform.position.z + 0.84f);
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-                break;
-            case DoorController.DirType.RIGHT:
-                transform.position = new Vector3(targetObj.transform.position.x - 0.84f, transform.position.y, targetObj.transform.position.z);
-                transform.rotation = Quaternion.Euler(0, 90, 0);
-                break;
-            case DoorController.DirType.LEFT:
-                transform.position = new Vector3(targetObj.transform.position.x + 0.84f, transform.position.y, targetObj.transform.position.z);
-                transform.rotation = Quaternion.Euler(0, 270, 0);
-                break;
-        }
-    }
+
 
     /// <summary>
     /// ドアの開閉アニメーション開始
     /// </summary>
-    public void DoorOpenStart(OpenType type)
+    public void DoorOpenStart()
     {
-        door.RotationStart(type);
+        door.RotationStart(openType);
     }
 
     /// <summary>
@@ -120,10 +89,7 @@ public class PlayerDoorController : MonoBehaviour
     /// </summary>
     public void EndAction()
     {
-        camera.enabled = true;
-        rigid.useGravity = true;
-        playerAnim.SetBool("Reverse", false);
-        playerAnim.enabled = false;
+        interactController.CommonEndAction();
         enabled = false;
     }
 }
