@@ -14,7 +14,6 @@ public class PlayerEventCaller : MonoBehaviour
     public enum EventType
     {
         WAIT,       // 待機時
-        MOVE,       // 移動時
         WALK,       // 歩く時
         DASH,       // ダッシュ時
         SQUAT,      // しゃがみ時
@@ -25,7 +24,6 @@ public class PlayerEventCaller : MonoBehaviour
         BREATHLESSNESS,//息切れ時
 
         WAITEND,        // 待機終了時
-        MOVEEND,        // 移動終了時
         WALKEND,        // 歩く終了時
         DASHEND,        // ダッシュ終了時
         SQUATEND,       // しゃがみ終了時
@@ -38,8 +36,6 @@ public class PlayerEventCaller : MonoBehaviour
 
     [SerializeField]
     UnityEvent wait = new UnityEvent();         // 待機イベント
-    [SerializeField]
-    UnityEvent move = new UnityEvent();         // 移動イベント
     [SerializeField]
     UnityEvent walk = new UnityEvent();         // 歩きイベント
     [SerializeField]
@@ -59,8 +55,6 @@ public class PlayerEventCaller : MonoBehaviour
 
     [SerializeField]
     UnityEvent waitEnd = new UnityEvent();         // 待機終了イベント
-    [SerializeField]
-    UnityEvent moveEnd = new UnityEvent();      // 移動終了イベント
     [SerializeField]
     UnityEvent walkEnd = new UnityEvent();      // 歩き終了イベント
     [SerializeField]
@@ -87,7 +81,6 @@ public class PlayerEventCaller : MonoBehaviour
         switch(type)
         {
             case EventType.WAIT: wait.Invoke(); break;
-            case EventType.MOVE:       move.Invoke();       break;
             case EventType.WALK:       walk.Invoke();       break;
             case EventType.DASH:       dash.Invoke();       break;
             case EventType.SQUAT:      squat.Invoke();      break;
@@ -98,7 +91,6 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.BREATHLESSNESS: brethressness.Invoke(); break;
 
             case EventType.WAITEND: waitEnd.Invoke(); break;
-            case EventType.MOVEEND:       moveEnd.Invoke();       break;
             case EventType.WALKEND:       walkEnd.Invoke();       break;
             case EventType.DASHEND:       dashEnd.Invoke();       break;
             case EventType.SQUATEND:      squatEnd.Invoke();      break;
