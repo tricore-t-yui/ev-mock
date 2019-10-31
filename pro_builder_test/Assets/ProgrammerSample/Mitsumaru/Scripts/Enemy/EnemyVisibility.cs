@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public delegate void OnDiscoverMomentDelegate();
+public delegate void OnLoseMomentDelegate();
+
 /// <summary>
 /// 敵の視界の処理を行う
 /// </summary
@@ -22,12 +25,10 @@ public class EnemyVisibility : MonoBehaviour
     float distance = 0;
 
     // プレイヤーを見つけた瞬間
-    [SerializeField]
-    UnityEvent onPlayerDiscoverMoment = default;
+    OnDiscoverMomentDelegate onDiscoverMoment;
 
     // プレイヤーを見失った瞬間
-    [SerializeField]
-    UnityEvent onPlayerLoseMoment = default;
+    OnLoseMomentDelegate onLoseMoment;
 
     // 視界の左側の境界
     Vector3 leftBorder = Vector3.zero;
@@ -53,12 +54,30 @@ public class EnemyVisibility : MonoBehaviour
 
         if (IsPlayerDiscoverMoment())
         {
-            onPlayerDiscoverMoment.Invoke();
+            onDiscoverMoment();
         }
         else if (IsPlayerLoseMoment())
         {
-            onPlayerLoseMoment.Invoke();
+            onLoseMoment();
         }
+    }
+
+    /// <summary>
+    /// 発見したときのデリゲートをセット
+    /// </summary>
+    /// <param name="set"></param>
+    public void SetOnDiscoverMomentDelegate(OnDiscoverMomentDelegate set)
+    {
+        onDiscoverMoment = set;
+    }
+
+    /// <summary>
+    /// 見失ったときデリゲートをセットする
+    /// </summary>
+    /// <param name="set"></param>
+    public void SetOnLoseMomentDelegate(OnLoseMomentDelegate set)
+    {
+        onLoseMoment = set;
     }
 
     /// <summary>

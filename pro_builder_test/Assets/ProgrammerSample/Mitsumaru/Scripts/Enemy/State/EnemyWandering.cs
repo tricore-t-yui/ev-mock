@@ -7,12 +7,17 @@ using UnityEditor;
 /// <summary>
 /// エネミーの徘徊（決められた複数の座標をリストの順番に移動し続ける）
 /// </summary>
-[ExecuteInEditMode]
 public class EnemyWandering : StateMachineBehaviour
 {
     // ナビメッシュ
     [SerializeField]
     NavMeshAgent navMeshAgent = default;
+
+    [SerializeField]
+    EnemyVisibility enemyVisibility = default;
+
+    [SerializeField]
+    EnemyParameterIdList enemyParameterIdList = default;
 
     // 移動スピード
     [SerializeField]
@@ -24,6 +29,15 @@ public class EnemyWandering : StateMachineBehaviour
 
     // 現在の目標位置のリスト番号
     int currentIndex = 0;
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    private void Awake()
+    {
+        // デリゲートをセットする
+        enemyVisibility.SetOnDiscoverMomentDelegate(OnPlayerDiscoverMoment);
+    }
 
     /// <summary>
     /// ステート開始
@@ -42,7 +56,7 @@ public class EnemyWandering : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 移動が完了したら次の目標位置を設定する
-        if (navMeshAgent.remainingDistance < 0.1f)
+        if (navMeshAgent.remainingDistance < 0.5f)
         {
             // 次の目標位置を取得
             Vector3 nextTargetPos = GetNextTargetPos();
@@ -69,5 +83,13 @@ public class EnemyWandering : StateMachineBehaviour
 
         // 次の目標位置を返す
         return targetPositions[currentIndex];
+    }
+
+    /// <summary>
+    /// プレイヤーを発見した時のコールバック
+    /// </summary>
+    void OnPlayerDiscoverMoment()
+    {
+        enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerDiscover, true);
     }
 }
