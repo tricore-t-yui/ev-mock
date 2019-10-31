@@ -13,8 +13,6 @@ public class PlayerEvents : MonoBehaviour
     PlayerMoveController moveController = default;      // プレイヤーの移動クラス
     [SerializeField]
     PlayerBrethController brethController = default;    // 息管理クラス
-    [SerializeField]
-    PlayerDoorController doorController = default;      // ドア開閉クラス
 
     /// <summary>
     /// 待機

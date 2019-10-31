@@ -38,6 +38,7 @@ public class DashDoorOpenState : StateMachineBehaviour
     {
         // それぞれのトリガーをリセット
         animator.ResetTrigger("DashOpen");
+        animator.SetBool("Reverse", false);
 
         // プレイヤーだったら初期化を始める
         if (type == Type.PLAYER)

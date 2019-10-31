@@ -22,13 +22,7 @@ public class CameraController : MonoBehaviour
     {
         float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
-
         player.transform.Rotate(0, X_Rotation, 0);
-
-        if ((transform.localEulerAngles.x >= 0 && transform.localEulerAngles.x <= 40) || (transform.localEulerAngles.x >= 320 && transform.localEulerAngles.x <= 360))
-        {
-            transform.Rotate(-Y_Rotation, 0, 0);
-            Debug.Log(transform.localEulerAngles.x);
-        }
+        transform.Rotate(-Y_Rotation, 0, 0);
     }
 }
