@@ -163,15 +163,16 @@ public class PlayerStateSwitcher : MonoBehaviour
     /// </summary>
     void CheckHideState()
     {
-        if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Hide"))
+        if (Input.GetMouseButton(0) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
         {
             if (!stateAnimator.GetBool("Hide"))
             {
-                hideController.Init(rayObject);
+                hideController.SetInfo(rayObject);
                 stateAnimator.SetBool("Hide", true);
             }
         }
-        else
+
+        if (!hideController.enabled && stateAnimator.GetBool("Hide"))
         {
             stateAnimator.SetBool("Hide", false);
         }
@@ -186,7 +187,15 @@ public class PlayerStateSwitcher : MonoBehaviour
         {
             if (!stateAnimator.GetBool("DoorOpen"))
             {
-                doorController.SetInfo(rayObject, stateAnimator.GetBool("Dash"));
+                if(stateAnimator.GetBool("Dash"))
+                {
+                    doorController.SetInfo(rayObject, PlayerDoorController.OpenType.DASH);
+                }
+                else
+                {
+                    doorController.SetInfo(rayObject, PlayerDoorController.OpenType.NORMAL);
+                }
+
                 stateAnimator.SetBool("DoorOpen", true);
             }
         }
