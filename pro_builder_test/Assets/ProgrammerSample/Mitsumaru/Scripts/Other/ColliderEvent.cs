@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CallbackUnityEvent : UnityEvent<Transform,Transform> { }
+public class CallbackUnityEvent : UnityEvent<Transform,Collider> { }
 
 /// <summary>
 /// コライダーとの衝突でUnityEventを呼ぶ汎用クラス
@@ -24,7 +24,7 @@ public class ColliderEvent : MonoBehaviour
     /// Enter時のコールバック追加
     /// </summary>
     /// <param name="call"></param>
-    public void AddEnterListener(UnityAction<Transform, Transform> call)
+    public void AddEnterListener(UnityAction<Transform, Collider> call)
     {
         onTriggerEnter.AddListener(call);
     }
@@ -33,7 +33,7 @@ public class ColliderEvent : MonoBehaviour
     /// Stay時のコールバック追加
     /// </summary>
     /// <param name="call"></param>
-    public void AddStayListener(UnityAction<Transform, Transform> call)
+    public void AddStayListener(UnityAction<Transform, Collider> call)
     {
         onTriggerStay.AddListener(call);
     }
@@ -42,7 +42,7 @@ public class ColliderEvent : MonoBehaviour
     /// Exit時のコールバック追加
     /// </summary>
     /// <param name="call"></param>
-    public void AddExitListener(UnityAction<Transform, Transform> call)
+    public void AddExitListener(UnityAction<Transform, Collider> call)
     {
         onTriggerExit.AddListener(call);
     }
@@ -54,7 +54,7 @@ public class ColliderEvent : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {
-        onTriggerEnter.Invoke(transform, other.transform);
+        onTriggerEnter.Invoke(transform, other);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class ColliderEvent : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerStay(Collider other)
     {
-        onTriggerStay.Invoke(transform, other.transform);
+        onTriggerStay.Invoke(transform, other);
     }
 
     /// <summary>
@@ -72,6 +72,6 @@ public class ColliderEvent : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerExit(Collider other)
     {
-        onTriggerExit.Invoke(transform, other.transform);
+        onTriggerExit.Invoke(transform, other);
     }
 }
