@@ -19,6 +19,9 @@ public class EnemyWandering : StateMachineBehaviour
     [SerializeField]
     EnemyParameterIdList enemyParameterIdList = default;
 
+    [SerializeField]
+    ColliderEvent enemyHearColliderEvent = default;
+
     // 移動スピード
     [SerializeField]
     float moveSpeed = default;
@@ -48,6 +51,8 @@ public class EnemyWandering : StateMachineBehaviour
         navMeshAgent.speed = moveSpeed;
         // 一番最初の位置を設定
         navMeshAgent.SetDestination(GetNextTargetPos());
+
+        enemyHearColliderEvent.AddEnterListener(OnListenPlayerNise);
     }
 
     /// <summary>
@@ -83,6 +88,16 @@ public class EnemyWandering : StateMachineBehaviour
 
         // 次の目標位置を返す
         return targetPositions[currentIndex];
+    }
+
+    /// <summary>
+    /// プレイヤーの物音を聴いたとき
+    /// </summary>
+    /// note : 引数はUnityEventのエラー回避のため使わない。
+    void OnListenPlayerNise(Transform self, Collider other)
+    {
+        // 捜索フラグをオンにする
+        enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerSearching, true);
     }
 
     /// <summary>

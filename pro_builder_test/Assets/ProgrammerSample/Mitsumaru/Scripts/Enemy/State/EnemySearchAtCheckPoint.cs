@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-/// プレイヤーを見失ったあと探す
+/// 近くのチェックポイントに向かいながらプレイヤーを捜索
 /// </summary>
-public class EnemySearch : StateMachineBehaviour
+public class EnemySearchAtCheckPoint : StateMachineBehaviour
 {
     [SerializeField]
     EnemyParameterIdList enemyParameterIdList = default;
