@@ -20,7 +20,21 @@ public class HideObjectOutState : StateMachineBehaviour
     /// <summary>
     /// ステートに入った瞬間
     /// </summary>
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        // ベットだったらベットの外まで座標移動
+        if (type == ObjectType.BED)
+        {
+            // 座標移動はベッドの向きに応じて決める
+            switch (hideController.HideObjDir)
+            {
+                case InteractFunction.DirType.FORWARD: player.rotation = Quaternion.Euler(90, 0, -180);  break;
+                case InteractFunction.DirType.BACK: player.rotation = Quaternion.Euler(90, 0, 0); break;
+                case InteractFunction.DirType.RIGHT: player.rotation = Quaternion.Euler(90, 0, -90); break;
+                case InteractFunction.DirType.LEFT: player.rotation = Quaternion.Euler(90, 0, -270); break;
+            }
+        }
+    }
 
     /// <summary>
     /// ステートに入っている間
