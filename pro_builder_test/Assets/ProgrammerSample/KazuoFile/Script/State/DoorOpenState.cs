@@ -19,11 +19,11 @@ public class DoorOpenState : StateMachineBehaviour
     [SerializeField]
     PlayerDoorController doorController = default;  // ドア開閉クラス
     [SerializeField]
-    Type type = default;        // オブジェクトタイプ
+    Type type = default;                            // オブジェクトタイプ
     [SerializeField]
-    float openFrame = 15;       // ドアが自動で開くフレーム
+    float openFrame = 15;                           // ドアが自動で開くフレーム
 
-    float flame = 0;            // アニメーションのフレーム
+    float flame = 0;                                // アニメーションのフレーム
 
     /// <summary>
     /// ステートに入った瞬間

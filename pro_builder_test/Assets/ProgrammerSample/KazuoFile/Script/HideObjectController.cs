@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DirType = InteractController.DirType;
+using DirType = InteractFunction.DirType;
 
 /// <summary>
 /// 隠れるオブジェクトクラス
@@ -20,11 +20,11 @@ public class HideObjectController : MonoBehaviour
 	[SerializeField]
     Animator lockerAnim = default;                  // ロッカーのアニメーション
     [SerializeField]
-    BoxCollider collider = default;
+    BoxCollider collider = default;                 // コライダー
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
     [SerializeField]
-    DirType dirType = default; // 隠れるオブジェクトの向きのタイプ
+    DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
 
     /// <summary>
     /// アニメーション開始
