@@ -76,7 +76,7 @@ public class PlayerBrethController : MonoBehaviour
             case BrethState.STEALTH:NowAmount -= stealthDecrement;break;
             case BrethState.HIDE:
                 // 警戒状態じゃなかったら
-                if (hideController.IsWarning && hideController.IsHide)
+                if (hideController.IsWarning && hideController.IsHideLocker && hideController.IsHideBed)
                 {
                     // 連打処理
                     StrikeButtonRepeatedly();

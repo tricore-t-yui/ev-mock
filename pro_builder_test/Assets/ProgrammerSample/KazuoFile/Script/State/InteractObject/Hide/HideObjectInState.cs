@@ -26,7 +26,7 @@ public class HideObjectInState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // ベットだったらベットの下まで座標移動
-        if (!hideController.IsHide && type == ObjectType.BED)
+        if (!hideController.IsHideBed && type == ObjectType.BED)
         {
             // 座標移動はベッドの向きに応じて決める
             switch(hideController.HideObjDir)

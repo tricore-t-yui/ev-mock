@@ -7,19 +7,10 @@ using UnityEngine;
 /// </summary>
 public class DashDoorOpenState : StateMachineBehaviour
 {
-    /// <summary>
-    /// オブジェクトタイプ
-    /// </summary>
-    enum Type
-    {
-        DOOR,
-        PLAYER,
-    }
-
     [SerializeField]
     PlayerDoorController doorController = default;  // ドア開閉クラス
     [SerializeField]
-    Type type = default;        // オブジェクトタイプ
+    bool isPlayer = default;                        // プレイヤーかどうか
 
     /// <summary>
     /// ステートに入った瞬間
@@ -38,11 +29,11 @@ public class DashDoorOpenState : StateMachineBehaviour
     {
         // それぞれのトリガーをリセット
         animator.ResetTrigger("DashOpen");
-        animator.SetBool("Reverse", false);
 
-        // プレイヤーだったら初期化を始める
-        if (type == Type.PLAYER)
+        //　プレイヤーなら反転フラグをリセットして初期化
+        if (isPlayer)
         {
+            animator.SetBool("Reverse", false);
             doorController.EndAction();
         }
     }
