@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public delegate void OnDiscoverMomentDelegate();
+public delegate void OnLoseMomentDelegate();
+
 /// <summary>
 /// 敵の視界の処理を行う
 /// </summary
@@ -22,17 +25,19 @@ public class EnemyVisibility : MonoBehaviour
     float distance = 0;
 
     // プレイヤーを見つけた瞬間
-    [SerializeField]
-    UnityEvent onPlayerDiscoverMoment = default;
+    OnDiscoverMomentDelegate onDiscoverMoment;
 
     // プレイヤーを見失った瞬間
-    [SerializeField]
-    UnityEvent onPlayerLoseMoment = default;
+    OnLoseMomentDelegate onLoseMoment;
 
     // 視界の左側の境界
     Vector3 leftBorder = Vector3.zero;
     // 視界の右側の境界
     Vector3 rightBorder = Vector3.zero;
+    // 視界の上側の境界
+    Vector3 upBorder = Vector3.zero;
+    // 視界の下側の境界
+    Vector3 downBorder = Vector3.zero;
 
     // プレイヤーを発見したか
     bool isDiscover = false;
@@ -53,12 +58,30 @@ public class EnemyVisibility : MonoBehaviour
 
         if (IsPlayerDiscoverMoment())
         {
-            onPlayerDiscoverMoment.Invoke();
+            onDiscoverMoment();
         }
         else if (IsPlayerLoseMoment())
         {
-            onPlayerLoseMoment.Invoke();
+            onLoseMoment();
         }
+    }
+
+    /// <summary>
+    /// 発見したときのデリゲートをセット
+    /// </summary>
+    /// <param name="set"></param>
+    public void SetOnDiscoverMomentDelegate(OnDiscoverMomentDelegate set)
+    {
+        onDiscoverMoment = set;
+    }
+
+    /// <summary>
+    /// 見失ったときデリゲートをセットする
+    /// </summary>
+    /// <param name="set"></param>
+    public void SetOnLoseMomentDelegate(OnLoseMomentDelegate set)
+    {
+        onLoseMoment = set;
     }
 
     /// <summary>
@@ -67,14 +90,13 @@ public class EnemyVisibility : MonoBehaviour
     void UpdateBorderVector()
     {
         // 左側の境界ベクトル
-        Vector3 leftVec = Quaternion.Euler(0, -angle * 0.5f, 0) * transform.forward;
-        // 視界の距離だけベクトルを伸ばす
-        leftBorder = leftVec * distance;
-
+        leftBorder = (Quaternion.AngleAxis(angle * 0.5f,transform.right * -1) * transform.forward) * distance;
         // 右側の境界ベクトル
-        Vector3 rightVec = Quaternion.Euler(0, angle * 0.5f, 0) * transform.forward;
-        // 視界の距離だけベクトルを伸ばす
-        rightBorder = rightVec * distance;
+        rightBorder = (Quaternion.AngleAxis(angle * 0.5f,transform.right) * transform.forward) * distance;
+        // 上側の境界ベクトル
+        upBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.up) * transform.forward) * distance;
+        // 下側の境界ベクトル
+        downBorder = (Quaternion.AngleAxis(angle * 0.5f,transform.up * -1) * transform.forward) * distance;
     }
 
     /// <summary>
@@ -153,5 +175,7 @@ public class EnemyVisibility : MonoBehaviour
         // デバッグ用に境界ベクトルを表示する
         Debug.DrawRay(transform.position, leftBorder, Color.green);
         Debug.DrawRay(transform.position, rightBorder, Color.green);
+        Debug.DrawRay(transform.position, upBorder, Color.green);
+        Debug.DrawRay(transform.position, downBorder, Color.green);
     }
 }
