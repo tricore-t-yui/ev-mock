@@ -38,6 +38,7 @@ MonoBehaviour:
   enemyParameterIdList: {fileID: 0}
   navMeshAgent: {fileID: 0}
   player: {fileID: 0}
+  attackRangeColliderEvent: {fileID: 0}
   moveSpeed: 3
 --- !u!114 &-8389160096648493737
 MonoBehaviour:
@@ -312,7 +313,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3871776584470021863}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -2043882179732988459}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -321,7 +323,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 0}
+  m_Motion: {fileID: 7400000, guid: de559bbb071ebfd40ab5af80881e75e8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -395,7 +397,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: attackStart
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4211112596067193618}
   m_Solo: 0
@@ -405,11 +410,24 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.57865167
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-2043882179732988459
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c63ad95fb4d6d4eb3ba9a33fa03075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 0}
 --- !u!1109 &-2035748515498311887
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -560,6 +578,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: isPlayerSearching
     m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: attackStart
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -726,7 +750,7 @@ AnimatorStateMachine:
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 590, y: -40, z: 0}
   m_EntryPosition: {x: 310, y: -40, z: 0}
-  m_ExitPosition: {x: 590, y: 420, z: 0}
+  m_ExitPosition: {x: 850, y: 220, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -7175478252942131278}
 --- !u!1102 &2579723137198500185
@@ -751,7 +775,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 0}
+  m_Motion: {fileID: 7400000, guid: b1a5e04ae51004842aba06704a6c2903, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1061,6 +1085,7 @@ MonoBehaviour:
   enemyParameterIdList: {fileID: 0}
   navMeshAgent: {fileID: 0}
   player: {fileID: 0}
+  attackRangeColliderEvent: {fileID: 0}
   moveSpeed: 4
 --- !u!1101 &5522679207578307363
 AnimatorStateTransition:
