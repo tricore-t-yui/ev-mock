@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DirType = InteractController.DirType;
+using DirType = InteractFunction.DirType;
 
 /// <summary>
 /// ドア管理クラス
@@ -17,13 +17,13 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     Animator doorAnim = default;                // ドアのアニメーター
 
+    bool isAutoClose = false;                   // 自動でドアを閉めるフラグ
+    DirType firstType = default;                // 開始時のドアのタイプ
+
     // ドアを逆に開けることができる部屋番号
     // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開くことになる部屋番号を入力してください
     [SerializeField]
     int reverseRoomNum = default;               
-
-    bool isAutoClose = false;                   // 自動でドアを閉めるフラグ
-    DirType firstType = default;                // 開始時のドアのタイプ
 
     /// <summary>
     /// 開始処理
@@ -158,7 +158,7 @@ public class DoorController : MonoBehaviour
     }
 
     /// <summary>
-    /// ドアのタイプ
+    /// ドアの向きタイプのゲット関数
     /// </summary>
     public DirType GetDirType()
     {

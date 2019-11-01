@@ -5,10 +5,8 @@ using UnityEngine;
 /// <summary>
 /// インタラクト用共通部分関数クラス
 /// </summary>
-public class InteractController : MonoBehaviour
+public class InteractFunction : MonoBehaviour
 {
-    [SerializeField]
-    Rigidbody rigid = default;          // リジットボディ
     [SerializeField]
     CameraController camera = default;  // カメラクラス
     [SerializeField]
@@ -33,9 +31,6 @@ public class InteractController : MonoBehaviour
         // アニメーション設定
         playerAnim.enabled = true;
 
-        // 重力を切る
-        rigid.useGravity = false;
-
         // カメラをアニメーションに固定させる
         camera.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
         camera.enabled = false;
@@ -47,7 +42,6 @@ public class InteractController : MonoBehaviour
     public void CommonEndAction()
     {
         camera.enabled = true;
-        rigid.useGravity = true;
         playerAnim.enabled = false;
     }
 

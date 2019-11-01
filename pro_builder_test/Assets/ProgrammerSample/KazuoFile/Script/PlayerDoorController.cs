@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DirType = InteractController.DirType;
 
 /// <summary>
 /// プレイヤーのドア開閉クラス
@@ -20,10 +19,10 @@ public class PlayerDoorController : MonoBehaviour
     [SerializeField]
     Animator playerAnim = default;                      // アニメーター
     [SerializeField]
-    InteractController interactController = default;    // インタラクト用関数クラス
+    InteractFunction interactController = default;      // インタラクト用関数クラス
 
     DoorController door = default;                      // ドアの管理クラス
-    GameObject targetObj = default;                     // 回転対象のドア
+    GameObject doorObj = default;                       // 回転対象のドア
     OpenType openType = OpenType.NORMAL;                // 開けるタイプ
 
     // 仮の部屋番号
@@ -37,24 +36,24 @@ public class PlayerDoorController : MonoBehaviour
     void OnEnable()
     {
         // ドアに合わせたポジション合わせ
-        transform.position = interactController.InitPosition(door.GetDirType(),transform, targetObj.transform);
+        transform.position = interactController.InitPosition(door.GetDirType(),transform, doorObj.transform);
         transform.rotation = interactController.InitRotation(door.GetDirType());
 
+        // 初期化
         interactController.CommonInit();
     }
 
     /// <summary>
     /// ドア情報の登録
     /// </summary>
-    public void SetInfo(GameObject doorObj, OpenType type)
+    public void SetInfo(GameObject targetObj, OpenType type)
     {
         // レイキャストに当たったドアの情報をもらう
-        targetObj = doorObj;
-        door = targetObj.GetComponent<DoorController>();
-
+        doorObj = targetObj;
+        door = doorObj.GetComponent<DoorController>();
         openType = type;
 
-        // タイプに合わせてトリガーオン
+        // タイプに合わせたアニメーションを再生
         switch (openType)
         {
             case OpenType.NORMAL: playerAnim.SetTrigger("Open"); break;
@@ -67,14 +66,14 @@ public class PlayerDoorController : MonoBehaviour
             playerAnim.SetBool("Reverse",true);
         }
 
+        // ドア開け開始
         enabled = true;
     }
-
-
 
     /// <summary>
     /// ドアの開閉アニメーション開始
     /// </summary>
+    /// NOTE:k.oishi アニメーションイベント用関数
     public void DoorOpenStart()
     {
         door.RotationStart(openType);
@@ -83,6 +82,7 @@ public class PlayerDoorController : MonoBehaviour
     /// <summary>
     /// 各アクションの終了
     /// </summary>
+    /// NOTE:k.oishi アニメーションイベント用関数
     public void EndAction()
     {
         interactController.CommonEndAction();
