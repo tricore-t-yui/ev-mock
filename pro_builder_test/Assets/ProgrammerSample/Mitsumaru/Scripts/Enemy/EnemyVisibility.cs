@@ -34,6 +34,10 @@ public class EnemyVisibility : MonoBehaviour
     Vector3 leftBorder = Vector3.zero;
     // 視界の右側の境界
     Vector3 rightBorder = Vector3.zero;
+    // 視界の上側の境界
+    Vector3 upBorder = Vector3.zero;
+    // 視界の下側の境界
+    Vector3 downBorder = Vector3.zero;
 
     // プレイヤーを発見したか
     bool isDiscover = false;
@@ -94,6 +98,16 @@ public class EnemyVisibility : MonoBehaviour
         Vector3 rightVec = Quaternion.Euler(0, angle * 0.5f, 0) * transform.forward;
         // 視界の距離だけベクトルを伸ばす
         rightBorder = rightVec * distance;
+
+        // 上側の境界ベクトル
+        Vector3 upVec = Quaternion.Euler(-angle * 0.5f, 0, 0) * transform.forward;
+        // 視界の距離だけベクトルを伸ばす
+        upBorder = upVec * distance;
+
+        // 下側の境界ベクトル
+        Vector3 downVec = Quaternion.Euler(angle * 0.5f, 0, 0) * transform.forward;
+        // 視界の距離だけベクトルを伸ばす
+        downBorder = downVec * distance;
     }
 
     /// <summary>
@@ -172,5 +186,7 @@ public class EnemyVisibility : MonoBehaviour
         // デバッグ用に境界ベクトルを表示する
         Debug.DrawRay(transform.position, leftBorder, Color.green);
         Debug.DrawRay(transform.position, rightBorder, Color.green);
+        Debug.DrawRay(transform.position, upBorder, Color.green);
+        Debug.DrawRay(transform.position, downBorder, Color.green);
     }
 }
