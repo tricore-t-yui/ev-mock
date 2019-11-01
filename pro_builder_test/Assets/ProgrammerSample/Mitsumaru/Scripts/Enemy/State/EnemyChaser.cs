@@ -22,6 +22,9 @@ public class EnemyChaser : StateMachineBehaviour
     [SerializeField]
     Transform player = default;
 
+    [SerializeField]
+    ColliderEvent attackRangeColliderEvent = default;
+
     // 移動スピード
     [SerializeField]
     float moveSpeed = default;
@@ -33,6 +36,7 @@ public class EnemyChaser : StateMachineBehaviour
     {
         // デリゲートをセットする
         enemyVisibility.SetOnLoseMomentDelegate(OnPlayerLoseMoment);
+        attackRangeColliderEvent.AddEnterListener(OnAttack);
     }
 
     /// <summary>
@@ -60,5 +64,17 @@ public class EnemyChaser : StateMachineBehaviour
     {
         enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerDiscover, false);
         enemyParameterIdList.SetBool(EnemyParameterIdList.ParameterType.IsPlayerSearching, true);
+    }
+
+    /// <summary>
+    /// プレイヤーに攻撃した時
+    /// </summary>
+    void OnAttack(Transform self,Collider other)
+    {
+        // プレイヤーに当たったとき
+        if (other.transform.GetHashCode() == player.transform.GetHashCode())
+        {
+            enemyParameterIdList.SetTrigger(EnemyParameterIdList.ParameterType.AttackStart);
+        }
     }
 }

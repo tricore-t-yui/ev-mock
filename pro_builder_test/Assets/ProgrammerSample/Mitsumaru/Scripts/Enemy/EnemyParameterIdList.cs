@@ -15,6 +15,7 @@ public class EnemyParameterIdList : MonoBehaviour
     {
         IsPlayerDiscover,
         IsPlayerSearching,
+        AttackStart,
         IsAlert,
         IsFrenzy,
     }
@@ -55,5 +56,13 @@ public class EnemyParameterIdList : MonoBehaviour
         int paramId = IdList[type];
         // パラメーターにフラグをセットする
         animator.SetBool(paramId, value);
+    }
+
+    public void SetTrigger(ParameterType type)
+    {
+        // リストからパラメータIDを取得
+        int paramId = IdList[type];
+        // パラメーターにフラグをセットする
+        animator.SetTrigger(paramId);
     }
 }
