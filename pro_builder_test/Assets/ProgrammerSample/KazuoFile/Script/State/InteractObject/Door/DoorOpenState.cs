@@ -7,21 +7,12 @@ using UnityEngine;
 /// </summary>
 public class DoorOpenState : StateMachineBehaviour
 {
-    /// <summary>
-    /// オブジェクトタイプ
-    /// </summary>
-    enum Type
-    {
-        DOOR,
-        PLAYER,
-    }
-
     [SerializeField]
     PlayerDoorController doorController = default;  // ドア開閉クラス
     [SerializeField]
-    Type type = default;                            // オブジェクトタイプ
-    [SerializeField]
     float openFrame = 15;                           // ドアが自動で開くフレーム
+    [SerializeField]
+    bool isPlayer = default;                        // プレイヤーかどうか
 
     float flame = 0;                                // アニメーションのフレーム
 
@@ -64,7 +55,7 @@ public class DoorOpenState : StateMachineBehaviour
         animator.ResetTrigger("Open");
 
         // プレイヤーだったら初期化を始める
-        if (type == Type.PLAYER)
+        if (isPlayer)
         {
             animator.SetBool("Reverse", false);
             doorController.EndAction();

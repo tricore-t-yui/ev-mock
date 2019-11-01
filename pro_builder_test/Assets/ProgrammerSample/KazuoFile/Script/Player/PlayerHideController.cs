@@ -21,12 +21,15 @@ public class PlayerHideController : MonoBehaviour
     Animator playerAnim = default;                              // アニメーター
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
+    [SerializeField]
+    CameraController camra = default;                   // カメラクラス
 
     GameObject hideObj = default;                               // 回転対象のドア
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
     public bool IsWarning { get; private set; } = false;        // 警戒フラグ
-    public bool IsHide { get; private set; } = false;           // 隠れているかどうかのフラグ
+    public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
+    public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
 
     /// <summary>
@@ -101,7 +104,16 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void ExitHideObject()
     {
-        IsHide = false;
+        // オブジェクトに合わせたフラグを切る
+        switch (LayerMask.LayerToName(hideObj.layer))
+        {
+            case "Locker":
+                IsHideLocker = false; break;
+            case "Bed":
+                IsHideBed = false; break;
+        }
+
+        camra.enabled = false;
     }
 
     /// <summary>
@@ -110,7 +122,16 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void HideObject()
     {
-        IsHide = true;
+        // オブジェクトに合わせたフラグを立てる
+        switch (LayerMask.LayerToName(hideObj.layer))
+        {
+            case "Locker":
+                IsHideLocker = true; break;
+            case "Bed":
+                IsHideBed = true; break;
+        }
+
+        camra.enabled = true;
     }
 
     /// <summary>
