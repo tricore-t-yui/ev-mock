@@ -8,8 +8,8 @@ using UnityEngine.Events;
 /// </summary>
 public class AreaEnterWatcher : MonoBehaviour
 {
-    // 隣接しているエリアの名のハッシュ
-    int adjacentAreaNameHash;
+    // 隣接しているエリアの名
+    string adjacentAreaName;
 
     // デリゲート
     OnEnterDelegate onEnterDelegate;
@@ -27,11 +27,11 @@ public class AreaEnterWatcher : MonoBehaviour
         // 互いのエリアの子オブジェクト番号を取得
         if (transform.GetSiblingIndex() == 0) { childIndex = 1; }
         else                                  { childIndex = 0; }
+
         // 相手の子オブジェクトを取得
         Transform adjacentChild = parent.GetChild(childIndex);
-        // 子オブジェクトの名のハッシュを取得
-        adjacentAreaNameHash = adjacentChild.name.GetHashCode();
-
+        // 子オブジェクトの名を取得
+        adjacentAreaName = adjacentChild.name;
     }
 
     /// <summary>
@@ -56,12 +56,8 @@ public class AreaEnterWatcher : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {
-        // エリア名とキャラクター名のハッシュ値を取得
-        int areaNameHash = name.GetHashCode();
-        int charaNameHash = other.name.GetHashCode();
-
         // デリゲートからコールバック関数を呼ぶ
-        onExitDelegate(adjacentAreaNameHash, charaNameHash);
-        onEnterDelegate(areaNameHash, charaNameHash);
+        onExitDelegate(adjacentAreaName, other.name);
+        onEnterDelegate(name, other.name);
     }
 }

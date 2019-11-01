@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public delegate void OnEnterDelegate(int areaNameHash, int charaNameHash);
-public delegate void OnExitDelegate(int areaNameHash, int charaNameHash);
+public delegate void OnEnterDelegate(string areaName, string charaName);
+public delegate void OnExitDelegate(string areaName, string charaName);
 
 /// <summary>
 /// エリアマネージャー（仮）
@@ -15,8 +16,8 @@ public class AreaManager : MonoBehaviour
     List<string> areaNameList = default;
 
     // 各エリアのキャラクター
-    Dictionary<int, List<int>> areaExistCharacters = new Dictionary<int, List<int>>();
-    
+    Dictionary<string, List<string>> areaExistCharacters = new Dictionary<string, List<string>>();
+
     /// <summary>
     /// 開始
     /// </summary>
@@ -24,11 +25,8 @@ public class AreaManager : MonoBehaviour
     {
         foreach(string areaName in areaNameList)
         {
-            // エリア名からハッシュ値を取得
-            // note : オブジェクト名がそのままエリア名になる
-            int areaHash = areaName.GetHashCode();
             // ハッシュ値をキーとしてDictionaryに追加
-            areaExistCharacters.Add(areaHash, new List<int>());
+            areaExistCharacters.Add(areaName, new List<string>());
         }
 
         // 各コールバック関数を渡す
@@ -45,22 +43,38 @@ public class AreaManager : MonoBehaviour
     /// <summary>
     /// エリアに入った時のコールバック
     /// </summary>
-    /// <param name="areaName">入ったエリア名のハッシュ</param>
-    /// <param name="characterName">入ったキャラクター名のハッシュ</param>
-    public void OnEnter(int areaNameHash, int charaNameHash)
+    public void OnEnter(string areaName, string charaName)
     {
         // エリアIDの要素にキャラクターを追加
-        areaExistCharacters[areaNameHash].Add(charaNameHash);
+        areaExistCharacters[areaName].Add(charaName);
     }
 
     /// <summary>
     /// エリアから出たときのコールバック
     /// </summary>
-    /// <param name="areaName">入ったエリア名のハッシュ</param>
-    /// <param name="characterName">入ったキャラクター名のハッシュ</param>
-    public void OnExit(int areaNameHash, int charaNameHash)
+    public void OnExit(string areaName, string charaName)
     {
         // エリアIDの要素からキャラクターを削除
-        areaExistCharacters[areaNameHash].Remove(charaNameHash);
+        Debug.Log(areaExistCharacters[areaName].RemoveAll(x => x == charaName)) ;
+    }
+
+    /// <summary>
+    /// 指定したキャラクターがどのエリアにいるか調べる
+    /// </summary>
+    public string GetExistAreaToCharacter(string charaNameHash)
+    {
+        foreach(string areaName in areaExistCharacters.Keys)
+        {
+            // 指定のキャラクターがいるか検索
+            if (areaExistCharacters[areaName].Find(x => x == charaNameHash) != default)
+            {
+                // エリアを返す
+                return areaName;
+            }
+        }
+
+        // 見つからなかったらintの規定値を返す
+        Debug.Log("character not found");
+        return default;
     }
 }
