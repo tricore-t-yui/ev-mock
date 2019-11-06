@@ -23,8 +23,23 @@ public class HideObjectController : MonoBehaviour
     BoxCollider collider = default;                 // コライダー
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
-    [SerializeField]
+    
     DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        // 角度によって向きタイプを決める
+        switch (transform.eulerAngles.y)
+        {
+            case 0: dirType = DirType.FORWARD; break;
+            case 90: dirType = DirType.RIGHT; break;
+            case 180: dirType = DirType.BACK; break;
+            case 270: dirType = DirType.LEFT; break;
+        }
+    }
 
     /// <summary>
     /// アニメーション開始

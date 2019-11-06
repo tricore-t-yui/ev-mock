@@ -183,8 +183,8 @@ public class PlayerHideController : MonoBehaviour
                 {
                     case DirType.FORWARD: exitRotation = Quaternion.Euler(90, 0, -180); break;
                     case DirType.BACK: exitRotation = Quaternion.Euler(90, 0, 0); break;
-                    case DirType.RIGHT: exitRotation = Quaternion.Euler(90, 0, -90); break;
-                    case DirType.LEFT: exitRotation = Quaternion.Euler(90, 0, -270); break;
+                    case DirType.RIGHT: exitRotation = Quaternion.Euler(90, 0, -270); break;
+                    case DirType.LEFT: exitRotation = Quaternion.Euler(90, 0, -90); break;
                 }
                 IsHideBed = false;
                 break;
