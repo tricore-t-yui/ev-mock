@@ -13,12 +13,12 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     CapsuleCollider playerCollider = default;   // プレイヤー
     [SerializeField]
-    DirType type = default;                     // ドアの開ける方向のタイプ
-    [SerializeField]
     Animator doorAnim = default;                // ドアのアニメーター
 
     bool isAutoClose = false;                   // 自動でドアを閉めるフラグ
-    DirType firstType = default;                // 開始時のドアのタイプ
+
+    DirType type = default;                     // 現在のドアの開ける方向のタイプ
+    DirType firstType = default;                // 開始時のドアの開ける方向のタイプ
 
     // ドアを逆に開けることができる部屋番号
     // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開くことになる部屋番号を入力してください
@@ -30,6 +30,15 @@ public class DoorController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // ドアの角度によって開けるタイプを決める
+        switch(transform.eulerAngles.y)
+        {
+            case 0: type = DirType.FORWARD; break;
+            case 90: type = DirType.RIGHT; break;
+            case 180: type = DirType.BACK; break;
+            case 270: type = DirType.LEFT; break;
+        }
+
         // 開始時のドアのタイプを取っておき、閉められている状態にする
         firstType = type;
         isAutoClose = true;

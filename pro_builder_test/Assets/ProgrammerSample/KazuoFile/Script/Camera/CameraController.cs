@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DirType = InteractFunction.DirType;
 
 /// <summary>
 /// カメラクラス
@@ -13,6 +14,11 @@ public class CameraController : MonoBehaviour
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
     [SerializeField]
     float sensitivity = default;                    // カメラの感度
+
+    [SerializeField]
+    float bedRotationLimit = 50;
+    [SerializeField]
+    float lockerRotationLimit = 20;
 
     /// <summary>
     /// 起動処理
@@ -28,19 +34,35 @@ public class CameraController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // 回転量を求める
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
         float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
 
         // ベッドに隠れている時の視点移動
-        if (hideController.IsHideBed || hideController.IsHideLocker)
+        if (hideController.IsHideBed)
         {
             player.transform.Rotate(0, 0, -X_Rotation);
         }
-        // それ以外の視点移動
+        // ロッカーに隠れている時の視点移動
+        else if (hideController.IsHideLocker)
+        {
+            player.transform.Rotate(0, X_Rotation, 0);
+        }
+        // 通常時の視点移動
         else
         {
             player.transform.Rotate(0, X_Rotation, 0);
             transform.Rotate(-Y_Rotation, 0, 0);
+
+            // 上限設定
+            if (transform.localEulerAngles.x >= 30 && transform.localEulerAngles.x < 180)
+            {
+                transform.localEulerAngles = new Vector3(30, transform.localEulerAngles.y, transform.localEulerAngles.z);
+            }
+            if (transform.localEulerAngles.x <= 330 && transform.localEulerAngles.x > 180)
+            {
+                transform.localEulerAngles = new Vector3(330, transform.localEulerAngles.y, transform.localEulerAngles.z);
+            }
         }
     }
 }
