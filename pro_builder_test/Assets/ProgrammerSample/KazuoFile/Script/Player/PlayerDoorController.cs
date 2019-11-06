@@ -65,6 +65,10 @@ public class PlayerDoorController : MonoBehaviour
         {
             playerAnim.SetBool("Reverse",true);
         }
+        else
+        {
+            playerAnim.SetBool("Reverse", false);
+        }
 
         // ドア開け開始
         enabled = true;
@@ -83,9 +87,14 @@ public class PlayerDoorController : MonoBehaviour
     /// 各アクションの終了
     /// </summary>
     /// NOTE:k.oishi アニメーションイベント用関数
-    public void EndAction()
+    public void EndDoorAction()
     {
-        interactController.CommonEndAction();
-        enabled = false;
+        // 閉じられていたら終了処理
+        if (playerAnim.GetBool("DoorEnd"))
+        {
+            playerAnim.SetBool("DoorEnd", false);
+            interactController.CommonEndAction();
+            enabled = false;
+        }
     }
 }

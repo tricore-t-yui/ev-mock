@@ -8,8 +8,6 @@ using UnityEngine;
 public class DashDoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    PlayerDoorController doorController = default;  // ドア開閉クラス
-    [SerializeField]
     bool isPlayer = default;                        // プレイヤーかどうか
 
     /// <summary>
@@ -27,14 +25,10 @@ public class DashDoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // それぞれのトリガーをリセット
-        animator.ResetTrigger("DashOpen");
-
         //　プレイヤーなら反転フラグをリセットして初期化
         if (isPlayer)
         {
             animator.SetBool("Reverse", false);
-            doorController.EndAction();
         }
     }
 }

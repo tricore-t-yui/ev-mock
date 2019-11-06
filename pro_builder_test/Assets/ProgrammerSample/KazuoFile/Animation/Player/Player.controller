@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9407d0733ee4a4ba99e884be49636346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
   type: 1
 --- !u!1102 &-8109782728382875951
 AnimatorState:
@@ -58,7 +56,7 @@ AnimatorStateMachine:
     m_Position: {x: 300, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 538108256338246393}
-    m_Position: {x: 400, y: -10, z: 0}
+    m_Position: {x: 550, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 66313502702468828}
     m_Position: {x: 530, y: -70, z: 0}
@@ -67,7 +65,7 @@ AnimatorStateMachine:
     m_Position: {x: 270, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -852326875475317403}
-    m_Position: {x: 400, y: 90, z: 0}
+    m_Position: {x: 560, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8109782728382875951}
     m_Position: {x: 530, y: 160, z: 0}
@@ -92,7 +90,7 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -550, y: 20, z: 0}
-  m_EntryPosition: {x: -370, y: 120, z: 0}
+  m_EntryPosition: {x: -350, y: 310, z: 0}
   m_ExitPosition: {x: -570, y: 70, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 909656099359102740}
@@ -158,8 +156,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2535904027805039309}
-  m_StateMachineBehaviours:
-  - {fileID: 5559529625499240040}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -186,10 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0164cc296c3bc478fa84681e8e59b2b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
-  type: 1
-  exitRotationSpeed: 2
   isPlayer: 1
 --- !u!1102 &-4810759709449340564
 AnimatorState:
@@ -258,9 +251,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 0.37908292
   m_TransitionOffset: 0
-  m_ExitTime: 0
+  m_ExitTime: 0.9031112
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -278,11 +271,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0164cc296c3bc478fa84681e8e59b2b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
-  type: 0
-  exitRotationSpeed: 5
   isPlayer: 0
+--- !u!1101 &-3696808647178274321
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75409836
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &-3570701072891944161
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -330,6 +341,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &-3219862813904045744
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 909656099359102740}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &-2620332620313515423
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -347,9 +380,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 0.19770765
   m_TransitionOffset: 0
-  m_ExitTime: 0
+  m_ExitTime: 0.8985326
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -386,7 +419,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Exit
+    m_ConditionEvent: AutoClose
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 909656099359102740}
@@ -484,7 +517,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a0012fc8e9664698838b9c7cfb5b88f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorController: {fileID: 0}
   openFrame: 15
   isPlayer: 1
 --- !u!1101 &-23378264007286729
@@ -523,55 +555,67 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Speed
     m_Type: 1
-    m_DefaultFloat: 1
+    m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Exit
+    m_Controller: {fileID: 0}
+  - m_Name: AutoClose
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: DashOpen
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Reverse
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: LockerIn
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: LockerOut
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: BedIn
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: BedOut
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: HideEnd
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: DoorEnd
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -685,8 +729,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 8967152918087447720}
-  m_StateMachineBehaviours:
-  - {fileID: 4167117341646572346}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -713,8 +756,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9407d0733ee4a4ba99e884be49636346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
   type: 0
 --- !u!1101 &1983645173626085022
 AnimatorStateTransition:
@@ -835,20 +876,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &4167117341646572346
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48d71dc14e25642d989e8498ddf20cfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doorController: {fileID: 0}
-  isPlayer: 1
 --- !u!1101 &4603006693760707448
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -899,20 +926,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &5559529625499240040
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48d71dc14e25642d989e8498ddf20cfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doorController: {fileID: 0}
-  isPlayer: 1
 --- !u!1101 &5617589883939472663
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -972,7 +985,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Exit
+    m_ConditionEvent: AutoClose
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 909656099359102740}
@@ -1044,10 +1057,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0164cc296c3bc478fa84681e8e59b2b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
-  type: 0
-  exitRotationSpeed: 2
   isPlayer: 1
 --- !u!114 &8525705012638153314
 MonoBehaviour:
@@ -1061,7 +1070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a0012fc8e9664698838b9c7cfb5b88f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorController: {fileID: 0}
   openFrame: 15
   isPlayer: 1
 --- !u!1102 &8528972829143152942

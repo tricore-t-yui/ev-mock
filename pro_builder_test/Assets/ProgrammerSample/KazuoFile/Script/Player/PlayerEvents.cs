@@ -50,6 +50,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Dash()
     {
+        SquatEnd();
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.DASH);
         brethController.StateUpdate(PlayerBrethController.BrethState.DASH);
         moveController.Move();
