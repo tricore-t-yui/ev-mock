@@ -7,6 +7,7 @@ using UnityEditor;
 /// <summary>
 /// エネミーの徘徊（決められた複数の座標をリストの順番に移動し続ける）
 /// </summary>
+[CreateAssetMenu]
 public class EnemyWandering : StateMachineBehaviour
 {
     // ナビメッシュ
