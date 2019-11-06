@@ -15,6 +15,15 @@ public class CameraController : MonoBehaviour
     float sensitivity = default;                    // カメラの感度
 
     /// <summary>
+    /// 起動処理
+    /// </summary>
+    void OnEnable()
+    {
+        // 起動時はプレイヤーの正面を向く
+        transform.Rotate(0, 0, 0);
+    }
+
+    /// <summary>
     /// 更新処理
     /// </summary>
     void Update()
@@ -23,10 +32,9 @@ public class CameraController : MonoBehaviour
         float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
 
         // ベッドに隠れている時の視点移動
-        if (hideController.IsHideBed)
+        if (hideController.IsHideBed || hideController.IsHideLocker)
         {
             player.transform.Rotate(0, 0, -X_Rotation);
-            transform.Rotate(0, Y_Rotation, 0);
         }
         // それ以外の視点移動
         else

@@ -8,12 +8,9 @@ using UnityEngine;
 public class DoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    PlayerDoorController doorController = default;  // ドア開閉クラス
-    [SerializeField]
     float openFrame = 15;                           // ドアが自動で開くフレーム
     [SerializeField]
-    bool isPlayer = default;                        // プレイヤーかどうか
-
+    bool isPlayer = false;                          // このアニメーターの親がプレイヤーかどうか
     float flame = 0;                                // アニメーションのフレーム
 
     /// <summary>
@@ -32,17 +29,18 @@ public class DoorOpenState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // アニメーションの進んだフレームをプラス
-        flame += UpdateAnimationSpeed();
+        flame += UpdateAnimationSpeed(animator);
+
 
         // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
         if (flame < 0)
         {
             // ドアから離れる
-            animator.SetTrigger("Exit");
+            animator.SetTrigger("AutoClose");
         }
 
         // アニメーションにスピードを適用してドア開閉
-        animator.SetFloat("Speed", UpdateAnimationSpeed());
+        animator.SetFloat("Speed", UpdateAnimationSpeed(animator));
     }
 
     /// <summary>
@@ -50,22 +48,21 @@ public class DoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // それぞれのトリガーをリセット
-        animator.ResetTrigger("Exit");
+        // トリガーのリセット
         animator.ResetTrigger("Open");
+        animator.ResetTrigger("AutoClose");
 
-        // プレイヤーだったら初期化を始める
+        // プレイヤーだったら閉じたフラグを立てる
         if (isPlayer)
         {
-            animator.SetBool("Reverse", false);
-            doorController.EndAction();
+            animator.SetBool("DoorEnd", true);
         }
     }
 
     /// <summary>
     /// アニメーションを進める
     /// </summary>
-    float UpdateAnimationSpeed()
+    float UpdateAnimationSpeed(Animator animator)
     {
         // アニメーションの速度
         float animSpeed = 0;
