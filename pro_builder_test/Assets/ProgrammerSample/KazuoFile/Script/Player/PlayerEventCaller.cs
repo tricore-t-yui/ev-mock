@@ -13,64 +13,70 @@ public class PlayerEventCaller : MonoBehaviour
     /// </summary>
     public enum EventType
     {
-        WAIT,       // 待機時
-        WALK,       // 歩く時
-        DASH,       // ダッシュ時
-        SQUAT,      // しゃがみ時
-        STEALTH,    // 忍び歩き時
-        DOOR,       // ドア時
-        HIDE,       // 隠れる時
-        DEEPBREATH, // 深呼吸時
-        BREATHLESSNESS,//息切れ時
+        WAIT,               // 待機時
+        WALK,               // 歩く時
+        DASH,               // ダッシュ時
+        SQUAT,              // しゃがみ時
+        STEALTH,            // 忍び歩き時
+        DOOR,               // ドア時
+        HIDE,               // 隠れる時
+        DEEPBREATH,         // 深呼吸時
+        BREATHLESSNESS,     // 息切れ時
+        DAMAGE,             // ダメージ時
 
-        WAITEND,        // 待機終了時
-        WALKEND,        // 歩く終了時
-        DASHEND,        // ダッシュ終了時
-        SQUATEND,       // しゃがみ終了時
-        STEALTHEND,     // 忍び歩き終了時
-        DOOREND,        // ドア終了時
-        HIDEEND,        // 隠れる終了時
-        DEEPBREATHEND,  // 深呼吸終了時
-        BREATHLESSNESSEND,//息切れ終了時
+        WAITEND,            // 待機終了時
+        WALKEND,            // 歩く終了時
+        DASHEND,            // ダッシュ終了時
+        SQUATEND,           // しゃがみ終了時
+        STEALTHEND,         // 忍び歩き終了時
+        DOOREND,            // ドア終了時
+        HIDEEND,            // 隠れる終了時
+        DEEPBREATHEND,      // 深呼吸終了時
+        BREATHLESSNESSEND,  // 息切れ終了時
+        DAMAGEEND,          // ダメージ終了時
     }
 
     [SerializeField]
-    UnityEvent wait = new UnityEvent();         // 待機イベント
+    UnityEvent wait             = new UnityEvent();     // 待機イベント
     [SerializeField]
-    UnityEvent walk = new UnityEvent();         // 歩きイベント
+    UnityEvent walk             = new UnityEvent();     // 歩きイベント
     [SerializeField]
-    UnityEvent dash = new UnityEvent();         // ダッシュイベント
+    UnityEvent dash             = new UnityEvent();     // ダッシュイベント
     [SerializeField]
-    UnityEvent squat = new UnityEvent();        // しゃがみイベント
+    UnityEvent squat            = new UnityEvent();     // しゃがみイベント
     [SerializeField]
-    UnityEvent stealth = new UnityEvent();      // 忍び歩きイベント
+    UnityEvent stealth          = new UnityEvent();     // 忍び歩きイベント
     [SerializeField]
-    UnityEvent doorOpen = new UnityEvent();     // ドア開閉イベント
+    UnityEvent doorOpen         = new UnityEvent();     // ドア開閉イベント
     [SerializeField]
-    UnityEvent hide = new UnityEvent();         // 隠れるイベント
+    UnityEvent hide             = new UnityEvent();     // 隠れるイベント
     [SerializeField]
-    UnityEvent deepBreath = new UnityEvent();   // 深呼吸イベント
+    UnityEvent deepBreath       = new UnityEvent();     // 深呼吸イベント
     [SerializeField]
-    UnityEvent brethressness = new UnityEvent();         // 息切れイベント
+    UnityEvent brethressness    = new UnityEvent();     // 息切れイベント
+    [SerializeField]
+    UnityEvent damage           = new UnityEvent();     // ダメージイベント
 
     [SerializeField]
-    UnityEvent waitEnd = new UnityEvent();         // 待機終了イベント
+    UnityEvent waitEnd          = new UnityEvent();     // 待機終了イベント
     [SerializeField]
-    UnityEvent walkEnd = new UnityEvent();      // 歩き終了イベント
+    UnityEvent walkEnd          = new UnityEvent();     // 歩き終了イベント
     [SerializeField]
-    UnityEvent dashEnd = new UnityEvent();      // ダッシュ終了イベント
+    UnityEvent dashEnd          = new UnityEvent();     // ダッシュ終了イベント
     [SerializeField]
-    UnityEvent squatEnd = new UnityEvent();     // しゃがみ終了イベント
+    UnityEvent squatEnd         = new UnityEvent();     // しゃがみ終了イベント
     [SerializeField]
-    UnityEvent stealthEnd = new UnityEvent();   // 忍び歩き終了イベント
+    UnityEvent stealthEnd       = new UnityEvent();     // 忍び歩き終了イベント
     [SerializeField]
-    UnityEvent doorOpenEnd = new UnityEvent();  // ドア開閉終了イベント
+    UnityEvent doorOpenEnd      = new UnityEvent();     // ドア開閉終了イベント
     [SerializeField]
-    UnityEvent hideEnd = new UnityEvent();      // 隠れる終了イベント
+    UnityEvent hideEnd          = new UnityEvent();     // 隠れる終了イベント
     [SerializeField]
-    UnityEvent deepBreathEnd = new UnityEvent();// 深呼吸イベント
+    UnityEvent deepBreathEnd    = new UnityEvent();     // 深呼吸イベント
     [SerializeField]
-    UnityEvent brethressnessEnd = new UnityEvent();         // 息切れ終了イベント
+    UnityEvent brethressnessEnd = new UnityEvent();     // 息切れ終了イベント
+    [SerializeField]
+    UnityEvent damageEnd        = new UnityEvent();     // ダメージイベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -80,25 +86,27 @@ public class PlayerEventCaller : MonoBehaviour
     {
         switch(type)
         {
-            case EventType.WAIT: wait.Invoke(); break;
-            case EventType.WALK:       walk.Invoke();       break;
-            case EventType.DASH:       dash.Invoke();       break;
-            case EventType.SQUAT:      squat.Invoke();      break;
-            case EventType.STEALTH:    stealth.Invoke();    break;
-            case EventType.DOOR:       doorOpen.Invoke();   break;
-            case EventType.HIDE:       hide.Invoke();       break;
-            case EventType.DEEPBREATH: deepBreath.Invoke(); break;
-            case EventType.BREATHLESSNESS: brethressness.Invoke(); break;
+            case EventType.WAIT:              wait.Invoke();             break;
+            case EventType.WALK:              walk.Invoke();             break;
+            case EventType.DASH:              dash.Invoke();             break;
+            case EventType.SQUAT:             squat.Invoke();            break;
+            case EventType.STEALTH:           stealth.Invoke();          break;
+            case EventType.DOOR:              doorOpen.Invoke();         break;
+            case EventType.HIDE:              hide.Invoke();             break;
+            case EventType.DEEPBREATH:        deepBreath.Invoke();       break;
+            case EventType.BREATHLESSNESS:    brethressness.Invoke();    break;
+            case EventType.DAMAGE:            damage.Invoke();           break;
 
-            case EventType.WAITEND: waitEnd.Invoke(); break;
-            case EventType.WALKEND:       walkEnd.Invoke();       break;
-            case EventType.DASHEND:       dashEnd.Invoke();       break;
-            case EventType.SQUATEND:      squatEnd.Invoke();      break;
-            case EventType.STEALTHEND:    stealthEnd.Invoke();    break;
-            case EventType.DOOREND:       doorOpenEnd.Invoke();   break;
-            case EventType.HIDEEND:       hideEnd.Invoke();       break;
-            case EventType.DEEPBREATHEND: deepBreathEnd.Invoke(); break;
+            case EventType.WAITEND:           waitEnd.Invoke();          break;
+            case EventType.WALKEND:           walkEnd.Invoke();          break;
+            case EventType.DASHEND:           dashEnd.Invoke();          break;
+            case EventType.SQUATEND:          squatEnd.Invoke();         break;
+            case EventType.STEALTHEND:        stealthEnd.Invoke();       break;
+            case EventType.DOOREND:           doorOpenEnd.Invoke();      break;
+            case EventType.HIDEEND:           hideEnd.Invoke();          break;
+            case EventType.DEEPBREATHEND:     deepBreathEnd.Invoke();    break;
             case EventType.BREATHLESSNESSEND: brethressnessEnd.Invoke(); break;
+            case EventType.DAMAGEEND:         damageEnd.Invoke();        break;
         }
     }
 }

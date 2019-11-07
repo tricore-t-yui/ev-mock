@@ -60,6 +60,8 @@ public class BedOutState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 隠れる終了
+        animator.ResetTrigger("BedIn");
+        animator.ResetTrigger("BedOut");
         animator.SetBool("HideEnd", true);
     }
 

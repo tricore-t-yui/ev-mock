@@ -17,6 +17,7 @@ public class PlayerStateController : MonoBehaviour
         HIDE,           // 隠れる時
         DEEPBREATH,     // 深呼吸時
         BREATHLESSNESS, // 息切れ時
+        DAMAGE,         // ダメージ
     }
 
     GameObject rayObject = default;                     // レイに当たったオブジェクト
@@ -28,9 +29,11 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerBrethController brethController = default;    // 息管理クラス
     [SerializeField]
-    PlayerDoorController doorController = default;      // ドア管理クラス
+    PlayerDoorController doorController = default;      // ドアアクションクラス
     [SerializeField]
-    PlayerHideController hideController = default;      // 隠れる管理クラス
+    PlayerHideController hideController = default;      // 隠れるアクションクラス
+    [SerializeField]
+    PlayerDamageController damageController = default;  // ダメージリアクションクラス
     [SerializeField]
     PlayerEventCaller eventCaller = default;            // イベント呼び出しクラス
 
@@ -174,6 +177,17 @@ public class PlayerStateController : MonoBehaviour
             state = StateType.DOOROPEN;
         }
     }
+
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
+    public void ChangeDamageState(Vector3 enemyPos)
+    {
+        EventStop();
+        damageController.SetInfo(enemyPos);
+        state = StateType.DAMAGE;
+    }
     
     /// <summary>
     /// イベント再生
@@ -283,6 +297,20 @@ public class PlayerStateController : MonoBehaviour
                 // 息回復終了検知
                 CheckEndBrethRecovery();
                 break;
+            case StateType.DAMAGE:
+                // 各イベント処理
+                eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGE);
+
+                // ダメージリアクションクラスが停止しているなら終了し、各処理の検知
+                if (!damageController.enabled && state == StateType.HIDE)
+                {
+                    CheckWaitState();
+                    CheckWalkState();
+                    CheckDashState();
+                    CheckStealthState();
+                    CheckDeepBreathState();
+                }
+                break;
         }
     }
 
@@ -301,6 +329,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.HIDE: eventCaller.Invoke(PlayerEventCaller.EventType.HIDE); break;
             case StateType.DEEPBREATH: eventCaller.Invoke(PlayerEventCaller.EventType.DEEPBREATHEND); break;
             case StateType.BREATHLESSNESS: eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESSEND); break;
+            case StateType.DAMAGE: eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGE); break;
         }
     }
 

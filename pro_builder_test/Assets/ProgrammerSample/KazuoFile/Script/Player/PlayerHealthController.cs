@@ -7,26 +7,16 @@ using UnityEngine;
 /// </summary>
 public class PlayerHealthController : MonoBehaviour
 {
-    public float Health { get; private set; } = 0;  // 体力
+    public float Health { get; private set; } = 0;      // 体力
+    public bool IsDeath { get; private set; } = false;  // 死んでしまったかどうかのフラグ
 
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
+        IsDeath = false;
         Health = 100;
-    }
-
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update()
-    {
-        // 体力が0以下になったら
-        if (Health <= 0)
-        {
-            // ゲームオーバー
-        }
     }
 
     /// <summary>
@@ -35,5 +25,11 @@ public class PlayerHealthController : MonoBehaviour
     public void Damage(float damage)
     {
         Health -= damage;
+
+        // 体力が0以下になったら
+        if (Health <= 0)
+        {
+            IsDeath = true;
+        }
     }
 }
