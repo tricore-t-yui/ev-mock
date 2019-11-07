@@ -23,7 +23,7 @@ public class DoorController : MonoBehaviour
     // ドアを逆に開けることができる部屋番号
     // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開くことになる部屋番号を入力してください
     [SerializeField]
-    int reverseRoomNum = default;               
+    string reverseRoomName = null;
 
     /// <summary>
     /// 開始処理
@@ -121,10 +121,10 @@ public class DoorController : MonoBehaviour
     /// ドアが逆側に開くかどうか
     /// </summary>
     /// <param name="num">今の部屋番号</param>
-    public bool IsReverseOpen(int num)
+    public bool IsReverseOpen(string name)
     {
         // 今の部屋番号が逆の部屋番号と一致したなら
-        if(num == reverseRoomNum)
+        if(name == reverseRoomName)
         {
             // ドアのタイプを変えておく
             ChangeOpenType(true);
