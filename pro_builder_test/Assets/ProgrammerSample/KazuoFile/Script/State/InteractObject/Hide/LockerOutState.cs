@@ -39,16 +39,20 @@ public class LockerOutState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // 求めた脱出方向に向かって回転
-        if (animator.gameObject.transform.rotation != exitRotation && isRotation)
+        // プレイヤーだったら回転開始
+        if (isPlayer)
         {
-            Quaternion rotation = Quaternion.RotateTowards(animator.gameObject.transform.rotation, exitRotation, exitRotationSpeed);
-            animator.gameObject.transform.rotation = rotation;
-        }
-        // 回転し終わったらフラグを切る
-        else
-        {
-            isRotation = false;
+            // 求めた脱出方向に向かって回転
+            if (animator.gameObject.transform.rotation != exitRotation && isRotation)
+            {
+                Quaternion rotation = Quaternion.RotateTowards(animator.gameObject.transform.rotation, exitRotation, exitRotationSpeed);
+                animator.gameObject.transform.rotation = rotation;
+            }
+            // 回転し終わったらフラグを切る
+            else
+            {
+                isRotation = false;
+            }
         }
     }
 
