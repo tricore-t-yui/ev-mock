@@ -25,10 +25,8 @@ public class PlayerDoorController : MonoBehaviour
     GameObject doorObj = default;                       // 回転対象のドア
     OpenType openType = OpenType.NORMAL;                // 開けるタイプ
 
-    // 仮の部屋番号
-    // NOTE:k.oishi 仮のプレイヤーの部屋番号なので、この変数が使われているところをあとで変える必要があります。
     [SerializeField]
-    int roomNum = 0;
+    AreaManager areaManager = default;
 
     /// <summary>
     /// 起動処理
@@ -61,7 +59,8 @@ public class PlayerDoorController : MonoBehaviour
         }
 
         // 触れるドアが逆なら逆向きのアニメーション開始
-        if (door.IsReverseOpen(roomNum))
+        string areaName = areaManager.GetExistAreaToCharacter("Player");
+        if (door.IsReverseOpen(areaName))
         {
             playerAnim.SetBool("Reverse",true);
         }
