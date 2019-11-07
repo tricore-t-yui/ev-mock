@@ -75,6 +75,18 @@ public class PlayerMoveController : MonoBehaviour
     Vector3 moveSpeed = Vector3.zero;       // 移動速度
 
     /// <summary>
+    /// アニメーション移動
+    /// </summary>
+    //void OnAnimatorMove()
+    //{
+    //    // 座標移動をanimatorに任せる
+    //    transform.position = animator.rootPosition;
+    //
+    //    // 回転をanimatorに任せる
+    //    transform.rotation = animator.rootRotation;
+    //}
+
+    /// <summary>
     /// 更新処理
     /// </summary>
     public void Move()

@@ -14,7 +14,9 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerBrethController brethController = default;    // 息管理クラス
     [SerializeField]
-    CameraController camera = default;    // 息管理クラス
+    CameraController camera = default;                  // カメラクラス
+    [SerializeField]
+    PlayerDamageController damageController = default;  // カメラクラス
 
     /// <summary>
     /// 待機
@@ -150,4 +152,14 @@ public class PlayerEvents : MonoBehaviour
     /// 隠れる終了
     /// </summary>
     public void HideEnd() { }
+
+    /// <summary>
+    /// ダメージ時
+    /// </summary>
+    public void Damage() { }
+
+    /// <summary>
+    /// ダメージ終了
+    /// </summary>
+    public void DamageEnd() { }
 }

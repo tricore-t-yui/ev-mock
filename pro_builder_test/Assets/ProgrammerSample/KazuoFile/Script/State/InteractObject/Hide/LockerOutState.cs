@@ -27,11 +27,15 @@ public class LockerOutState : StateMachineBehaviour
         // 回転フラグを立てる
         isRotation = true;
 
-        // 隠れるアクションクラス取得
-        hideController = animator.gameObject.GetComponent<PlayerHideController>();
+        // プレイヤーだったら
+        if (isPlayer)
+        {
+            // 隠れるアクションクラス取得
+            hideController = animator.gameObject.GetComponent<PlayerHideController>();
 
-        // 脱出方向を求める
-        ExitRotation();
+            // 脱出方向を求める
+            ExitRotation();
+        }
     }
 
     /// <summary>
@@ -64,6 +68,8 @@ public class LockerOutState : StateMachineBehaviour
         // プレイヤーだったら初期化を始める
         if (isPlayer)
         {
+            animator.ResetTrigger("LockerIn");
+            animator.ResetTrigger("LockerOut");
             animator.SetBool("HideEnd", true);
         }
     }
