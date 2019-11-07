@@ -1,20 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8123508116712822697
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9407d0733ee4a4ba99e884be49636346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
-  type: 0
 --- !u!1101 &-4812344376228774512
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -65,6 +50,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-3795033888155182641
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367ada4d74fef49a89b3f06f8dd768b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayer: 0
 --- !u!1102 &-3478723257075858632
 AnimatorState:
   serializedVersion: 5
@@ -78,7 +76,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -4812344376228774512}
   m_StateMachineBehaviours:
-  - {fileID: -8123508116712822697}
+  - {fileID: 7568623078360916918}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -106,7 +104,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 6055644606644789142}
   m_StateMachineBehaviours:
-  - {fileID: 4405848885354818144}
+  - {fileID: -3795033888155182641}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -155,23 +153,6 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
---- !u!114 &4405848885354818144
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0164cc296c3bc478fa84681e8e59b2b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hideController: {fileID: 0}
-  player: {fileID: 0}
-  type: 0
-  exitRotationSpeed: 0
-  isPlayer: 0
 --- !u!1102 &5636210274314267118
 AnimatorState:
   serializedVersion: 5
@@ -249,3 +230,15 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 5636210274314267118}
+--- !u!114 &7568623078360916918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3cd71bfdcf348de93e0fab8a327af2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

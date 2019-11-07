@@ -56,20 +56,16 @@ public class InteractFunction : MonoBehaviour
         switch (type)
         {
             case DirType.FORWARD:
-                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z - 0.84f);
-                //position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z - target.localScale.z - (player.localScale.z / 2));
+                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z - target.localScale.z);
                 break;
             case DirType.BACK:
-                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z + 0.84f);
-                //position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z + target.localScale.z + (player.localScale.z / 2));
+                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z + target.localScale.z);
                 break;
             case DirType.RIGHT:
-                position = new Vector3(target.transform.position.x - 0.84f, player.position.y, target.transform.position.z);
-                //position = new Vector3(target.transform.position.x - target.localScale.x - (player.localScale.x / 2), player.position.y, target.transform.position.z);
+                position = new Vector3(target.transform.position.x - target.localScale.x, player.position.y, target.transform.position.z);
                 break;
             case DirType.LEFT:
-                position = new Vector3(target.transform.position.x + 0.84f, player.position.y, target.transform.position.z);
-                //position = new Vector3(target.transform.position.x + target.localScale.x + (player.localScale.x / 2), player.position.y, target.transform.position.z);
+                position = new Vector3(target.transform.position.x + target.localScale.x, player.position.y, target.transform.position.z);
                 break;
         }
 
