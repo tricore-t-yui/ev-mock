@@ -4,7 +4,7 @@ using UnityEngine;
 using DirType = InteractFunction.DirType;
 
 /// <summary>
-/// 隠れるオブジェクトクラス
+/// ロッカークラス
 /// </summary>
 public class HideObjectController : MonoBehaviour
 {
@@ -17,27 +17,65 @@ public class HideObjectController : MonoBehaviour
         BED,
     }
 
-	[SerializeField]
+    [SerializeField]
     Animator lockerAnim = default;                  // ロッカーのアニメーション
+    [SerializeField]
+    Transform player = default;                     // プレイヤー
     [SerializeField]
     BoxCollider collider = default;                 // コライダー
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
-    
+
+    [SerializeField]
     DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
+
+    Vector3 rightForward = default;                 // 位置による向きタイプ変更の基準となる右前の角の座標
+    Vector3 leftForward = default;                  // 位置による向きタイプ変更の基準となる左前の角の座標
 
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
-        // 角度によって向きタイプを決める
-        switch (transform.eulerAngles.y)
+        rightForward = new Vector3(transform.position.x - transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
+        leftForward = new Vector3(transform.position.x + transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
+    }
+
+    /// <summary>
+    /// 更新処理
+    /// </summary>
+    void Update()
+    {
+        // ベッドは入る場所によって向きのタイプを変える
+        if (objType == ObjectType.BED)
         {
-            case 0: dirType = DirType.FORWARD; break;
-            case 90: dirType = DirType.RIGHT; break;
-            case 180: dirType = DirType.BACK; break;
-            case 270: dirType = DirType.LEFT; break;
+            ChandeDirType();
+        }
+    }
+
+    /// <summary>
+    /// 位置によって向きタイプの変更
+    /// </summary>
+    void ChandeDirType()
+    {
+        if (rightForward.x <= player.position.x && leftForward.x >= player.position.x)
+        {
+            if (transform.position.z >= player.position.z)
+            {
+                dirType = DirType.FORWARD;
+            }
+            else
+            {
+                dirType = DirType.BACK;
+            }
+        }
+        else if (transform.position.x >= player.position.x)
+        {
+            dirType = DirType.RIGHT;
+        }
+        else
+        {
+            dirType = DirType.LEFT;
         }
     }
 
@@ -46,11 +84,7 @@ public class HideObjectController : MonoBehaviour
     /// </summary>
     public void AnimStart(string id)
     {
-        // ロッカーしかアニメーションは付いていないのでロッカーのみ再生
-        if (objType == ObjectType.LOCKER)
-        {
-            lockerAnim.SetTrigger(id);
-        }
+        lockerAnim.SetTrigger(id);
     }
 
     /// <summary>
@@ -76,3 +110,4 @@ public class HideObjectController : MonoBehaviour
         return dirType;
     }
 }
+        

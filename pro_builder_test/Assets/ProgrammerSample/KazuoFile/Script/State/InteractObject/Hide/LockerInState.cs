@@ -1,17 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using ObjectType = PlayerHideController.HideObjectType;
 
 /// <summary>
-/// 隠れている時のステート
+/// ロッカーに入る時のステート
 /// </summary>
-public class HideObjectInState : StateMachineBehaviour
+public class LockerInState : StateMachineBehaviour
 {
-    [SerializeField]
-    ObjectType type = default;                      // オブジェクトタイプ
-
     /// <summary>
     /// ステートに入った瞬間
     /// </summary>
@@ -21,15 +16,11 @@ public class HideObjectInState : StateMachineBehaviour
     /// ステートに入っている間
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    { 
+    {
         // マウスの入力が途切れたら隠れるのをやめる
         if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
-        { 
-            switch (type)
-            {
-                case ObjectType.LOCKER: animator.SetTrigger("LockerOut"); break;
-                case ObjectType.BED: animator.SetTrigger("BedOut"); break;
-            }
+        {
+            animator.SetTrigger("LockerOut");
         }
     }
 

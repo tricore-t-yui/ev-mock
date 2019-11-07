@@ -19,6 +19,8 @@ public class CameraController : MonoBehaviour
     float bedRotationLimit = 50;
     [SerializeField]
     float lockerRotationLimit = 20;
+    [SerializeField]
+    bool isShake = true;
 
     /// <summary>
     /// 起動処理
@@ -63,6 +65,18 @@ public class CameraController : MonoBehaviour
             {
                 transform.localEulerAngles = new Vector3(330, transform.localEulerAngles.y, transform.localEulerAngles.z);
             }
+        }
+    }
+
+    /// <summary>
+    /// 移動時のカメラの揺れ
+    /// </summary>
+    /// <param name="power">揺れの強さ</param>
+    public void MoveShake(float power)
+    {
+        if (isShake)
+        {
+            transform.position = new Vector3(transform.position.x, 1.65f + Mathf.PingPong(Time.time, power), transform.position.z);
         }
     }
 }

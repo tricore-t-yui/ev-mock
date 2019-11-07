@@ -13,12 +13,15 @@ public class PlayerEvents : MonoBehaviour
     PlayerMoveController moveController = default;      // プレイヤーの移動クラス
     [SerializeField]
     PlayerBrethController brethController = default;    // 息管理クラス
+    [SerializeField]
+    CameraController camera = default;    // 息管理クラス
 
     /// <summary>
     /// 待機
     /// </summary>
     public void Wait()
     {
+        camera.MoveShake(0.01f);
         brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
     }
 
@@ -116,7 +119,7 @@ public class PlayerEvents : MonoBehaviour
     /// 息切れ
     /// </summary>
     public void Brethlessness()
-    {
+    { 
         brethController.StateUpdate(PlayerBrethController.BrethState.BREATHLESSNESS);
     }
 
