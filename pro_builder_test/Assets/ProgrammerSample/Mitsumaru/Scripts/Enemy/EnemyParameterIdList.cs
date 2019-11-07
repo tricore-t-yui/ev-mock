@@ -65,4 +65,9 @@ public class EnemyParameterIdList : MonoBehaviour
         // パラメーターにフラグをセットする
         animator.SetTrigger(paramId);
     }
+
+    public AnimatorStateInfo GetCurrentAnimatorStateInfo(int layerIndex)
+    {
+        return animator.GetCurrentAnimatorStateInfo(layerIndex);
+    }
 }

@@ -6,28 +6,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine<T>
+public class StateMachine
 {
-    public StateMachine(Animator animator)
-    {
-       this.animator = animator;
-    }
-
-    Animator animator = default;
-
     /// <summary>
     /// ステート.
     /// </summary>
-    public class State
+    class State
     {
-        Action<Animator> EnterAct;  // 開始時に呼び出されるデリゲート.
-        Action<Animator> UpdateAct; // 更新時に呼び出されるデリゲート.
-        Action<Animator> ExitAct;   // 終了時に呼び出されるデリゲート.
+        readonly Action EnterAct;  // 開始時に呼び出されるデリゲート.
+        readonly Action UpdateAct; // 更新時に呼び出されるデリゲート.
+        readonly Action ExitAct;   // 終了時に呼び出されるデリゲート.
 
         /// <summary>
         /// コンストラクタ.
         /// </summary>
-        public State(Action<Animator> enterAct = null, Action<Animator> updateAct = null, Action<Animator> exitAct = null)
+        public State(Action enterAct = null, Action updateAct = null, Action exitAct = null)
         {
             EnterAct = enterAct ?? delegate { };
             UpdateAct = updateAct ?? delegate { };
@@ -37,58 +30,59 @@ public class StateMachine<T>
         /// <summary>
         /// 開始します.
         /// </summary>
-        public void Enter(Animator animator)
+        public void Enter()
         {
-            EnterAct(animator);
+            EnterAct();
         }
 
         /// <summary>
         /// 更新します.
         /// </summary>
-        public void Update(Animator animator)
+        public void Update()
         {
-            UpdateAct(animator);
+            UpdateAct();
         }
 
         /// <summary>
         /// 終了します.
         /// </summary>
-        public void Exit(Animator animator)
+        public void Exit()
         {
-            ExitAct(animator);
+            ExitAct();
         }
     }
 
-    Dictionary<T, State> StateTable = new Dictionary<T, State>();   // ステートのテーブル.
-    State CurrentState;                                             // 現在のステート.
-    T CurrentStateKey;                                              // 現在のステートキー.
+    Dictionary<int, State> StateTable = new Dictionary<int, State>();   // ステートのテーブル.
+    State CurrentState;                                                 // 現在のステート.
+    int CurrentStateKey;                                                // 現在のステートキー.
 
     /// <summary>
     /// ステートを追加します.
     /// </summary>
-    public void Add(T key, Action<Animator> enterAct = null, Action<Animator> updateAct = null, Action<Animator> exitAct = null)
+    public void Add(string key, Action enterAct = null, Action updateAct = null, Action exitAct = null)
     {
-        StateTable.Add(key, new State(enterAct, updateAct, exitAct));
+        int hash = Animator.StringToHash("Base Layer." + key);
+        StateTable.Add(hash, new State(enterAct, updateAct, exitAct));
     }
 
     /// <summary>
     /// 現在のステートを設定します.
     /// </summary>
-    public void SetState(T key)
+    public void SetState(int key)
     {
         if (CurrentState != null)
         {
-            CurrentState.Exit(animator);
+            CurrentState.Exit();
         }
         CurrentStateKey = key;
         CurrentState = StateTable[key];
-        CurrentState.Enter(animator);
+        CurrentState.Enter();
     }
 
     /// <summary>
     /// 現在のステートを取得します.
     /// </summary>
-    public T GetState()
+    public int GetState()
     {
         return CurrentStateKey;
     }
@@ -103,7 +97,7 @@ public class StateMachine<T>
         {
             return;
         }
-        CurrentState.Update(animator);
+        CurrentState.Update();
     }
 
     /// <summary>
