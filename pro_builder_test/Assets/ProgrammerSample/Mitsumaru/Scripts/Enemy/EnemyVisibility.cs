@@ -15,6 +15,13 @@ public class EnemyVisibility : MonoBehaviour
     [SerializeField]
     Transform player = default;
 
+    // レイに衝突する対象のレイヤー名
+    [SerializeField]
+    List<string> rayTargetLayer = default;
+
+    // レイヤーマスク
+    int layerMask = 0;
+
     // 視界の角度
     [SerializeField]
     [Range(0, 180)]
@@ -43,6 +50,15 @@ public class EnemyVisibility : MonoBehaviour
     bool isDiscover = false;
     // プレイヤーを発見したか（前フレーム）
     bool isPrevDiscover = false;
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    void Start()
+    {
+        // レイに衝突する対象のレイヤーを取得
+        layerMask = LayerMask.GetMask(rayTargetLayer.ToArray());
+    }
 
     /// <summary>
     /// 更新
@@ -112,7 +128,10 @@ public class EnemyVisibility : MonoBehaviour
 
         // レイにオブジェクトが当たったか
         // 当たっていなければ判定終了
-        if (!Physics.Raycast(ray,out raycastHit)) { return false; }
+        if (!Physics.Raycast(ray,out raycastHit, Mathf.Infinity, layerMask)) { return false; }
+
+        Debug.DrawLine(transform.position, raycastHit.point);
+
         // 当たったオブジェクトが障害物かどうか
         // 障害物だった場合は判定終了
         if (raycastHit.collider.name != player.name) { return false; }
