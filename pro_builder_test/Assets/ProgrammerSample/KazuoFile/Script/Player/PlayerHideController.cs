@@ -22,7 +22,7 @@ public class PlayerHideController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
-    CameraController camra = default;                           // カメラクラス
+    CameraController camera = default;                           // カメラクラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -31,6 +31,8 @@ public class PlayerHideController : MonoBehaviour
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
+
+    public bool IsAnimRotation { get; private set; } = true;   // 回転をアニメーションに任せるフラグ
 
     /// <summary>
     /// 起動処理
@@ -79,7 +81,7 @@ public class PlayerHideController : MonoBehaviour
     public void HideObject()
     {
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
-        camra.enabled = true;
+        camera.IsRotationCamera(true);
         switch (LayerMask.LayerToName(HideObj.layer))
         {
             // ロッカー
@@ -98,7 +100,7 @@ public class PlayerHideController : MonoBehaviour
     public void ExitHideObject()
     {
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
-        camra.enabled = false;
+        camera.IsRotationCamera(false);
         switch (LayerMask.LayerToName(HideObj.layer))
         {
             // ロッカー
@@ -113,7 +115,6 @@ public class PlayerHideController : MonoBehaviour
     /// <summary>
     /// 各アクションの終了
     /// </summary>
-    /// NOTE:k.oishi アニメーションイベント用関数
     public void EndHideAction()
     {
         // 閉じられていたら終了処理
@@ -127,9 +128,19 @@ public class PlayerHideController : MonoBehaviour
     }
 
     /// <summary>
+    /// 回転フラグのセット関数
+    /// </summary>
+    /// NOTE: k.oishi
+    ///      ステートマシンの方で脱出方向へ回転させているのですが、回転している間は回転をアニメーションに任せる処理を切らないといけません。
+    ///      なので、ステートマシンの方で回転が終わったらフラグを切れるように、フラグセット関数を用意しました。
+    public void SetIsAnimRotation(bool flag)
+    {
+        IsAnimRotation = flag;
+    }
+
+    /// <summary>
     /// 警戒状態のフラグセット関数
     /// </summary>
-    /// <param name="flag"></param>
     public void CheckWarning(bool flag)
     {
         IsWarning = flag;

@@ -28,7 +28,8 @@ public class DashDoorOpenState : StateMachineBehaviour
         //　プレイヤーなら反転フラグをリセットして初期化
         if (isPlayer)
         {
-            animator.SetBool("Reverse", false);
+            animator.SetBool("ReverseDoorOpen", false);
+            animator.SetBool("DoorEnd", true);
         }
     }
 }

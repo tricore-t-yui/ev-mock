@@ -78,7 +78,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWaitState()
     {
-        if (!GetDirectionKey() && !Input.GetKey(squatKey) && !Input.GetMouseButton(0))
+        if (!GetDirectionKey() && !Input.GetMouseButton(0))
         {
             EventStop();
             state = StateType.WAIT;

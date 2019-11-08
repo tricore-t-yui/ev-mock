@@ -35,6 +35,18 @@ public class PlayerDamageController : MonoBehaviour
     }
 
     /// <summary>
+    /// アニメーション中の移動
+    /// </summary>
+    public void OnAnimatorMove()
+    {
+        // 座標移動をanimatorに任せる
+        transform.position = playerAnim.rootPosition;
+
+        // 回転をanimatorに任せる
+        transform.rotation = playerAnim.rootRotation;
+    }
+
+    /// <summary>
     /// 敵座標の登録
     /// </summary>
     /// <param name="enemyPos"></param>
@@ -51,8 +63,7 @@ public class PlayerDamageController : MonoBehaviour
     /// <summary>
     /// 各アクションの終了
     /// </summary>
-    /// NOTE:k.oishi アニメーションイベント用関数
-    public void EndDoorAction()
+    public void EndDamageAction()
     {
         // 閉じられていたら終了処理
         if (playerAnim.GetBool("DamageEnd"))

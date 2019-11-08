@@ -17,21 +17,20 @@ public class LockerOutState : StateMachineBehaviour
     float exitRotationSpeed = 2;                    // 脱出方向へ向くスピード
 
     Quaternion exitRotation = default;              // 脱出方向
-    bool isRotation = false;                        // 脱出方向回転フラグ
 
     /// <summary>
     /// ステートに入った瞬間
     /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // 回転フラグを立てる
-        isRotation = true;
-
         // プレイヤーだったら
         if (isPlayer)
         {
             // 隠れるアクションクラス取得
             hideController = animator.gameObject.GetComponent<PlayerHideController>();
+
+            // アニメーション回転フラグを切る
+            hideController.SetIsAnimRotation(false);
 
             // 脱出方向を求める
             ExitRotation();
@@ -47,15 +46,15 @@ public class LockerOutState : StateMachineBehaviour
         if (isPlayer)
         {
             // 求めた脱出方向に向かって回転
-            if (animator.gameObject.transform.rotation != exitRotation && isRotation)
+            if (animator.gameObject.transform.rotation != exitRotation && hideController.IsAnimRotation)
             {
                 Quaternion rotation = Quaternion.RotateTowards(animator.gameObject.transform.rotation, exitRotation, exitRotationSpeed);
                 animator.gameObject.transform.rotation = rotation;
             }
-            // 回転し終わったらフラグを切る
+            // 回転し終わったらアニメーションに回転を任せる
             else
             {
-                isRotation = false;
+                hideController.SetIsAnimRotation(true);
             }
         }
     }

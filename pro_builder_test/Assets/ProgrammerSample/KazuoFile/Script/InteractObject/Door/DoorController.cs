@@ -52,7 +52,7 @@ public class DoorController : MonoBehaviour
         // 扉を閉めるラインを超えたら自動で閉める
         if (isCloseLine() && !isAutoClose)
         {
-            doorAnim.SetTrigger("Close");
+            doorAnim.SetTrigger("DoorClose");
             isAutoClose = true;
         }
     }
@@ -101,8 +101,8 @@ public class DoorController : MonoBehaviour
         // タイプに合わせてトリガーオン
         switch (type)
         {
-            case PlayerDoorController.OpenType.NORMAL: doorAnim.SetTrigger("Open"); break;
-            case PlayerDoorController.OpenType.DASH: doorAnim.SetTrigger("DashOpen"); break;
+            case PlayerDoorController.OpenType.NORMAL: doorAnim.SetTrigger("DoorOpen"); break;
+            case PlayerDoorController.OpenType.DASH: doorAnim.SetTrigger("DashDoorOpen"); break;
         }
 
         isAutoClose = false;
@@ -114,7 +114,7 @@ public class DoorController : MonoBehaviour
     /// <param name="speed">回転スピード</param>
     public void SetAnimSpeed(float speed)
     {
-        doorAnim.SetFloat("Speed", speed);
+        doorAnim.SetFloat("DoorOpenSpeed", speed);
     }
 
     /// <summary>
