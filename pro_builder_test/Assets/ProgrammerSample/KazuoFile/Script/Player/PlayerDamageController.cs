@@ -35,25 +35,13 @@ public class PlayerDamageController : MonoBehaviour
     }
 
     /// <summary>
-    /// アニメーション中の移動
-    /// </summary>
-    public void OnAnimatorMove()
-    {
-        // 座標移動をanimatorに任せる
-        transform.position = playerAnim.rootPosition;
-
-        // 回転をanimatorに任せる
-        transform.rotation = playerAnim.rootRotation;
-    }
-
-    /// <summary>
     /// 敵座標の登録
     /// </summary>
     /// <param name="enemyPos"></param>
     public void SetInfo(Vector3 enemyPos)
     {
         // 吹き飛ばしてアニメーション開始
-        rigidbody.AddForce((enemyPos - transform.position),ForceMode.Impulse);
+        rigidbody.AddForce((enemyPos - transform.position).normalized * 10, ForceMode.Impulse);
         playerAnim.SetTrigger("Damage");
 
         // 処理開始

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerHealthController : MonoBehaviour
 {
-    public float Health { get; private set; } = 0;      // 体力
+    public float Health { get; private set; } = 100;      // 体力
     public bool IsDeath { get; private set; } = false;  // 死んでしまったかどうかのフラグ
 
     /// <summary>

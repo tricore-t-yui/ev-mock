@@ -22,7 +22,7 @@ public class PlayerHideController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
-    CameraController camera = default;                           // カメラクラス
+    CameraController camera = default;                          // カメラクラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -32,7 +32,7 @@ public class PlayerHideController : MonoBehaviour
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
 
-    public bool IsAnimRotation { get; private set; } = true;   // 回転をアニメーションに任せるフラグ
+    public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
 
     /// <summary>
     /// 起動処理
