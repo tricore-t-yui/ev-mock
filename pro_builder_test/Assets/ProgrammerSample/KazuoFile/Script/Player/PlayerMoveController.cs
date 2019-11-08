@@ -44,6 +44,10 @@ public class PlayerMoveController : MonoBehaviour
     Rigidbody rigid = default;                       // リジットボディ
     [SerializeField]
     CapsuleCollider collider = default;              // コライダー
+    [SerializeField]
+    Animator playerAnim = default;                  // アニメーター
+    [SerializeField]
+    Transform camera = default;
 
     [SerializeField]
     float forwardSpeed = 2f;                // 前移動時のスピード
@@ -73,21 +77,31 @@ public class PlayerMoveController : MonoBehaviour
     float moveTypeSpeedLimit = 0;           // 移動タイプによる移動速度の限界
     float dirTypeSpeedLimit = 0;            // 移動方向による移動速度の限界
     Vector3 moveSpeed = Vector3.zero;       // 移動速度
+    bool isAnimPosition = false;            // アニメーションに座標移動をまかせるかどうか
+    bool isAnimRotation = false;            // アニメーションに回転をまかせるかどうか
 
     /// <summary>
-    /// アニメーション移動
+    /// アニメーション中の移動方法
     /// </summary>
-    //void OnAnimatorMove()
-    //{
-    //    // 座標移動をanimatorに任せる
-    //    transform.position = animator.rootPosition;
-    //
-    //    // 回転をanimatorに任せる
-    //    transform.rotation = animator.rootRotation;
-    //}
+    public void OnAnimatorMove()
+    {
+        // 各フラグが立ったら
+        if (isAnimPosition)
+        {
+            // 座標移動をanimatorに任せる
+            transform.position = playerAnim.rootPosition;
+            camera.transform.position = playerAnim.rootPosition;
+        }
+        if (isAnimRotation)
+        {
+            // 回転をanimatorに任せる
+            transform.rotation = playerAnim.rootRotation;
+            camera.transform.rotation = playerAnim.rootRotation;
+        }
+    }
 
     /// <summary>
-    /// 更新処理
+    /// 移動
     /// </summary>
     public void Move()
     {
@@ -100,6 +114,8 @@ public class PlayerMoveController : MonoBehaviour
         {
             rigid.AddForce(moveSpeed * speedMagnification);
         }
+
+        IsRootMotion(false, false);
     }
 
     /// <summary>
@@ -221,6 +237,32 @@ public class PlayerMoveController : MonoBehaviour
             case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
             case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
             case SpeedLimitType.BREATHLESSNESS: moveTypeSpeedLimit = breathlessnessSpeedLimit; break;
+        }
+    }
+
+    /// <summary>
+    /// RootMotionに移動、回転を任せるかどうか
+    /// </summary>
+    /// <param name="isPosition">移動を任せるかどうか</param>
+    /// <param name="isRotation">回転を任せるかどうか</param>
+    public void IsRootMotion(bool isPosition, bool isRotation)
+    {
+        if (isPosition)
+        {
+            isAnimPosition = true;
+        }
+        else
+        {
+            isAnimPosition = false;
+        }
+
+        if (isRotation)
+        {
+            isAnimRotation = true;
+        }
+        else
+        {
+            isAnimRotation = false;
         }
     }
 }

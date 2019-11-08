@@ -24,14 +24,17 @@ public class BedInState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // ベッドに向かって座標移動
-        Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
-        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.03f;
+        if (stateInfo.normalizedTime > 0.15f)
+        {
+            // ベッドに向かって座標移動
+            Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
+            animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.015f;
 
-        // マウスの入力が途切れたら隠れるのをやめる
-        if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
-        { 
-            animator.SetTrigger("BedOut");
+            // マウスの入力が途切れたら隠れるのをやめる
+            if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
+            {
+                animator.SetTrigger("BedOut");
+            }
         }
     }
 

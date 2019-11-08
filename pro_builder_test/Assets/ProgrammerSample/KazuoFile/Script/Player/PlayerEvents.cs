@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AnimType = PlayerAnimationContoller.AnimationType;
 
 /// <summary>
 /// 各イベント関数置き場
@@ -8,23 +9,29 @@ using UnityEngine;
 public class PlayerEvents : MonoBehaviour
 {
     [SerializeField]
-    CapsuleCollider collider = default;                 // プレイヤーのコライダー
+    CapsuleCollider collider = default;                     // コライダー
     [SerializeField]
-    PlayerMoveController moveController = default;      // プレイヤーの移動クラス
+    PlayerMoveController moveController = default;          // 移動クラス
     [SerializeField]
-    PlayerBrethController brethController = default;    // 息管理クラス
+    PlayerBrethController brethController = default;        // 息管理クラス
     [SerializeField]
-    CameraController camera = default;                  // カメラクラス
+    PlayerHideController hideController = default;          // 隠れるアクションクラス
     [SerializeField]
-    PlayerDamageController damageController = default;  // カメラクラス
+    PlayerDoorController doorController = default;          // 隠れるアクションクラス
+    [SerializeField]
+    CameraController camera = default;                      // カメラクラス
+    [SerializeField]
+    PlayerDamageController damageController = default;      // ダメージリアクションクラス
+    [SerializeField]
+    PlayerAnimationContoller animationContoller = default;  // アニメーションクラス
 
     /// <summary>
     /// 待機
     /// </summary>
     public void Wait()
     {
-        camera.MoveShake(0.01f);
         brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
@@ -40,6 +47,8 @@ public class PlayerEvents : MonoBehaviour
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.WALK);
         brethController.StateUpdate(PlayerBrethController.BrethState.WALK);
         moveController.Move();
+        animationContoller.AnimStart(AnimType.WALK);
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
@@ -48,6 +57,7 @@ public class PlayerEvents : MonoBehaviour
     public void WalkEnd()
     {
         brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
+        animationContoller.AnimStop(AnimType.WALK);
     }
 
     /// <summary>
@@ -59,6 +69,8 @@ public class PlayerEvents : MonoBehaviour
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.DASH);
         brethController.StateUpdate(PlayerBrethController.BrethState.DASH);
         moveController.Move();
+        animationContoller.AnimStart(AnimType.DASH);
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
@@ -67,6 +79,7 @@ public class PlayerEvents : MonoBehaviour
     public void DashEnd()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.WALK);
+        animationContoller.AnimStop(AnimType.DASH);
     }
 
     /// <summary>
@@ -76,6 +89,8 @@ public class PlayerEvents : MonoBehaviour
     {
         collider.height = 0.7f;
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.SQUAT);
+        animationContoller.AnimStart(AnimType.SQUAT);
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
@@ -84,6 +99,7 @@ public class PlayerEvents : MonoBehaviour
     public void SquatEnd()
     {
         collider.height = 1.4f;
+        animationContoller.AnimStop(AnimType.SQUAT);
     }
 
     /// <summary>
@@ -94,6 +110,8 @@ public class PlayerEvents : MonoBehaviour
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.STEALTH);
         brethController.StateUpdate(PlayerBrethController.BrethState.STEALTH);
         moveController.Move();
+        animationContoller.AnimStart(AnimType.STEALTH);
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
@@ -102,6 +120,7 @@ public class PlayerEvents : MonoBehaviour
     public void StealthEnd()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.WALK);
+        animationContoller.AnimStop(AnimType.STEALTH);
     }
 
     /// <summary>
@@ -109,7 +128,10 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
+        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.DEEPBREATH);
+        moveController.IsRootMotion(true, true);
+        camera.IsRotationCamera(false);
     }
 
     /// <summary>
@@ -121,19 +143,31 @@ public class PlayerEvents : MonoBehaviour
     /// 息切れ
     /// </summary>
     public void Brethlessness()
-    { 
+    {
+        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.BREATHLESSNESS);
+        moveController.IsRootMotion(true, true);
+        animationContoller.AnimStart(AnimType.BREATHLESSNESS);
+        camera.IsRotationCamera(false);
     }
 
     /// <summary>
     /// 息切れ終了
     /// </summary>
-    public void BrethlessnessEnd() { }
+    public void BrethlessnessEnd()
+    {
+        animationContoller.AnimStop(AnimType.BREATHLESSNESS);
+    }
 
     /// <summary>
     /// ドア開閉時
     /// </summary>
-    public void DoorOpen() { }
+    public void DoorOpen()
+    {
+        MoveAnimationEnd();
+        moveController.IsRootMotion(true, true);
+        doorController.EndDoorAction();
+    }
 
     /// <summary>
     /// ドア開閉終了
@@ -145,7 +179,34 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
+        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.HIDE);
+        hideController.EndHideAction();
+
+        switch (LayerMask.LayerToName(hideController.HideObj.layer))
+        {
+            case "Locker":
+                if (hideController.IsAnimRotation)
+                {
+                    moveController.IsRootMotion(true, true);
+                }
+                else
+                {
+                    moveController.IsRootMotion(true, false);
+                }
+                break;
+            case "Bed":
+                if (hideController.IsAnimRotation)
+                {
+                    moveController.IsRootMotion(false, true);
+                }
+                else
+                {
+                    moveController.IsRootMotion(false, false);
+                }
+                break;
+        }
+
     }
 
     /// <summary>
@@ -156,10 +217,26 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ダメージ時
     /// </summary>
-    public void Damage() { }
+    public void Damage()
+    {
+        MoveAnimationEnd();
+        moveController.IsRootMotion(true, true);
+        damageController.EndDamageAction();
+    }
 
     /// <summary>
     /// ダメージ終了
     /// </summary>
     public void DamageEnd() { }
+
+    /// <summary>
+    /// 移動アニメーション終了
+    /// </summary>
+    void MoveAnimationEnd()
+    {
+        animationContoller.AnimStop(AnimType.WALK);
+        animationContoller.AnimStop(AnimType.DASH);
+        animationContoller.AnimStop(AnimType.SQUAT);
+        animationContoller.AnimStop(AnimType.STEALTH);
+    }
 }

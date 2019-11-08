@@ -20,7 +20,7 @@ public class DoorOpenState : StateMachineBehaviour
     {
         // リセット
         flame = 0;
-        animator.SetFloat("Speed", 0);
+        animator.SetFloat("DoorOpenSpeed", 0);
     }
 
     /// <summary>
@@ -36,11 +36,11 @@ public class DoorOpenState : StateMachineBehaviour
         if (flame < 0)
         {
             // ドアから離れる
-            animator.SetTrigger("AutoClose");
+            animator.SetTrigger("AutoDoorClose");
         }
 
         // アニメーションにスピードを適用してドア開閉
-        animator.SetFloat("Speed", UpdateAnimationSpeed(animator));
+        animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed(animator));
     }
 
     /// <summary>
@@ -49,8 +49,8 @@ public class DoorOpenState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // トリガーのリセット
-        animator.ResetTrigger("Open");
-        animator.ResetTrigger("AutoClose");
+        animator.ResetTrigger("DoorOpen");
+        animator.ResetTrigger("AutoDoorClose");
 
         // プレイヤーだったら閉じたフラグを立てる
         if (isPlayer)

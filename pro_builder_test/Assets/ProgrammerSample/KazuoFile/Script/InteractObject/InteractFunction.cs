@@ -9,8 +9,6 @@ public class InteractFunction : MonoBehaviour
 {
     [SerializeField]
     CameraController camera = default;  // カメラクラス
-    [SerializeField]
-    Animator playerAnim = default;      // プレイヤーのアニメーター
 
     /// <summary>
     /// 各オブジェクトの向きタイプ
@@ -28,12 +26,8 @@ public class InteractFunction : MonoBehaviour
     /// </summary>
     public void CommonInit()
     {
-        // アニメーション設定
-        playerAnim.enabled = true;
-
-        // カメラをアニメーションに固定させる
-        camera.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        camera.enabled = false;
+        // カメラの回転終了
+        camera.IsRotationCamera(false);
     }
 
     /// <summary>
@@ -41,8 +35,8 @@ public class InteractFunction : MonoBehaviour
     /// </summary>
     public void CommonEndAction()
     {
-        camera.enabled = true;
-        playerAnim.enabled = false;
+        // カメラの回転開始
+        camera.IsRotationCamera(true);
     }
 
     /// <summary>
