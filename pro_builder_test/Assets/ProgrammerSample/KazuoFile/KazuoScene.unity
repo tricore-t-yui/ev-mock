@@ -588,6 +588,12 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 1309876696}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &493870831 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 2300820524824041356, guid: cb32f787f29f64ce9a651e1fbd2c9982,
+    type: 3}
+  m_PrefabInstance: {fileID: 2300820525220951355}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &510716844 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5503012296014143114, guid: 44d9456bc5d844e55b8dc123b5236486,
@@ -732,6 +738,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 672805515}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &720070847 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8978951856806216357, guid: 74037c40be2e44d568a241439d75c377,
+    type: 3}
+  m_PrefabInstance: {fileID: 8978951857406183106}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &722832183
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,11 +2259,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1125087521023189952, guid: d9c93e799392d4a27b27c3528733220d,
+    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
-      propertyPath: playerAnim
-      value: 
-      objectReference: {fileID: 1075800487}
+      propertyPath: m_Name
+      value: AnimationCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
     - target: {fileID: 1125087521836334049, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2317,6 +2339,11 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1125087522315089305}
+    - target: {fileID: 1125087521836334052, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 479710845}
     - target: {fileID: 1125087521836334053, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_Height
@@ -2351,6 +2378,11 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1775575213}
+    - target: {fileID: 1125087521023189952, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: playerAnim
+      value: 
+      objectReference: {fileID: 1075800487}
     - target: {fileID: 1125087521023189967, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -2496,21 +2528,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: m_Name
-      value: AnimationCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1125087521023189966, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: m_TagString
-      value: MainCamera
-      objectReference: {fileID: 0}
     - target: {fileID: 1125087521023189954, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: field of view
@@ -2601,6 +2618,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 479710841}
+    - target: {fileID: 1767205331, guid: cb32f787f29f64ce9a651e1fbd2c9982, type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 493870831}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb32f787f29f64ce9a651e1fbd2c9982, type: 3}
 --- !u!1001 &3843493000891841715
@@ -3022,5 +3043,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 479710841}
+    - target: {fileID: 8978951856806216358, guid: 74037c40be2e44d568a241439d75c377,
+        type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 720070847}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74037c40be2e44d568a241439d75c377, type: 3}
