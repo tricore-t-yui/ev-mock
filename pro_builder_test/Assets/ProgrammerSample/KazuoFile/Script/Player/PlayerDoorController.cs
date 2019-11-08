@@ -26,7 +26,7 @@ public class PlayerDoorController : MonoBehaviour
     OpenType openType = OpenType.NORMAL;                // 開けるタイプ
 
     [SerializeField]
-    AreaManager areaManager = default;
+    AreaManager areaManager = default;                  // エリアマネージャー
 
     /// <summary>
     /// 起動処理

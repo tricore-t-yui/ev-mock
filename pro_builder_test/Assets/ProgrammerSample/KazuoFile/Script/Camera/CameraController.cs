@@ -1,21 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DirType = InteractFunction.DirType;
 
 /// <summary>
 /// カメラクラス
 /// </summary>
+/// NOTE:k.oishi アニメーションにカメラが含まれていると回転しなくなってしまったので、アニメーション用と移動用のカメラに分けました。
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
-    GameObject animCamera = default;                // プレイヤー
+    GameObject animCamera = default;                // アニメーション用カメラ
     [SerializeField]
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
     [SerializeField]
-    float sensitivity = 2;                    // カメラの感度
+    float sensitivity = 2;                          // カメラの感度
 
     /// <summary>
     /// 起動処理

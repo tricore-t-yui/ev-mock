@@ -302,7 +302,7 @@ public class PlayerStateController : MonoBehaviour
                 eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGE);
 
                 // ダメージリアクションクラスが停止しているなら終了し、各処理の検知
-                if (!damageController.enabled && state == StateType.HIDE)
+                if (!damageController.enabled && state == StateType.DAMAGE)
                 {
                     CheckWaitState();
                     CheckWalkState();

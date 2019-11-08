@@ -206,7 +206,6 @@ public class PlayerEvents : MonoBehaviour
                 }
                 break;
         }
-
     }
 
     /// <summary>
@@ -222,6 +221,7 @@ public class PlayerEvents : MonoBehaviour
         MoveAnimationEnd();
         moveController.IsRootMotion(true, true);
         damageController.EndDamageAction();
+        camera.IsRotationCamera(false);
     }
 
     /// <summary>
