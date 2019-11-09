@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DirType = InteractFunction.DirType;
 
 /// <summary>
 /// カメラクラス
@@ -41,23 +42,27 @@ public class CameraController : MonoBehaviour
         // ベッドに隠れている時の視点移動
         if (hideController.IsHideBed)
         {
-            player.transform.Rotate(0, 0, -X_Rotation);
+            player.Rotate(0, 0, -X_Rotation);
             transform.parent.Rotate(0, 0, -X_Rotation);
         }
         // ロッカーに隠れている時の視点移動
         else if (hideController.IsHideLocker)
         {
-            player.transform.Rotate(0, X_Rotation, 0);
+            player.Rotate(0, X_Rotation, 0);
             transform.parent.Rotate(0, X_Rotation, 0);
+
+            // 回転制限
+            player.localEulerAngles = LockerRotationLimit();
+            transform.parent.localEulerAngles = LockerRotationLimit();
         }
         // 通常時の視点移動
         else
         {
-            player.transform.Rotate(0, X_Rotation, 0);
+            player.Rotate(0, X_Rotation, 0);
             transform.parent.Rotate(0, X_Rotation, 0);
             transform.Rotate(-Y_Rotation, 0, 0);
-        
-            // 上限設定
+
+            // 回転制限
             if (transform.localEulerAngles.x >= 30 && transform.localEulerAngles.x < 180)
             {
                 transform.localEulerAngles = new Vector3(30, transform.localEulerAngles.y, transform.localEulerAngles.z);
@@ -86,5 +91,64 @@ public class CameraController : MonoBehaviour
            gameObject.SetActive(false);
            animCamera.SetActive(true);
        }
+    }
+
+    /// <summary>
+    /// ロッカーに入っている時のカメラの回転制限
+    /// </summary>
+    Vector3 LockerRotationLimit()
+    {
+        // 回転値
+        Vector3 angle = transform.parent.localEulerAngles;
+
+        switch(hideController.HideObjDir)
+        {
+            case DirType.FORWARD:
+                // 上限設定
+                if (transform.parent.localEulerAngles.y >= 200)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 200, transform.parent.localEulerAngles.z);
+                }
+                if (transform.parent.localEulerAngles.y <= 160)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 160, transform.parent.localEulerAngles.z);
+                }
+                break;
+            case DirType.BACK:
+                // 上限設定
+                if (transform.parent.localEulerAngles.y >= 20 && transform.parent.localEulerAngles.y <= 180)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 20, transform.parent.localEulerAngles.z);
+                }
+                if (transform.parent.localEulerAngles.y <= 340 && transform.parent.localEulerAngles.y >= 180)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 340, transform.parent.localEulerAngles.z);
+                }
+                break;
+            case DirType.RIGHT:
+                // 上限設定
+                if (transform.parent.localEulerAngles.y >= 290)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 290, transform.parent.localEulerAngles.z);
+                }
+                if (transform.parent.localEulerAngles.y <= 250)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 250, transform.parent.localEulerAngles.z);
+                }
+                break;
+            case DirType.LEFT:
+                // 上限設定
+                if (transform.parent.localEulerAngles.y >= 110)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 110, transform.parent.localEulerAngles.z);
+                }
+                if (transform.parent.localEulerAngles.y <= 70)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 70, transform.parent.localEulerAngles.z);
+                }
+                break;
+        }
+
+        return angle;
     }
 }

@@ -46,7 +46,7 @@ public class LockerOutState : StateMachineBehaviour
         if (isPlayer)
         {
             // 求めた脱出方向に向かって回転
-            if (animator.gameObject.transform.rotation != exitRotation && hideController.IsAnimRotation)
+            if (animator.gameObject.transform.rotation != exitRotation && !hideController.IsAnimRotation)
             {
                 Quaternion rotation = Quaternion.RotateTowards(animator.gameObject.transform.rotation, exitRotation, exitRotationSpeed);
                 animator.gameObject.transform.rotation = rotation;
@@ -70,6 +70,7 @@ public class LockerOutState : StateMachineBehaviour
             animator.ResetTrigger("LockerIn");
             animator.ResetTrigger("LockerOut");
             animator.SetBool("HideEnd", true);
+            animator.SetBool("Stealth", false);
         }
     }
 

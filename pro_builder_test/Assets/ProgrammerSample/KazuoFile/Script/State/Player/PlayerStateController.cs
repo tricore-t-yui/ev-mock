@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AnimType = PlayerAnimationContoller.AnimationType;
 
 public class PlayerStateController : MonoBehaviour
 {
@@ -55,6 +56,11 @@ public class PlayerStateController : MonoBehaviour
     {
         // 各イベント処理再生
         EventPlay();
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            ChangeDamageState(transform.position + Vector3.forward);
+        }
     }
 
     /// <summary>
@@ -78,7 +84,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWaitState()
     {
-        if (!GetDirectionKey() && !Input.GetMouseButton(0))
+        if (!GetDirectionKey() && !Input.GetMouseButton(0) && !Input.GetKey(stealthKey) && !Input.GetKey(squatKey))
         {
             EventStop();
             state = StateType.WAIT;
@@ -115,7 +121,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthState()
     {
-        if (GetDirectionKey() && !Input.GetKey(dashKey) && Input.GetKey(stealthKey) && state != StateType.DEEPBREATH && state != StateType.BREATHLESSNESS)
+        if (Input.GetKey(stealthKey) && state != StateType.DEEPBREATH && state != StateType.BREATHLESSNESS)
         {
             EventStop();
             state = StateType.STEALTH;
@@ -153,6 +159,7 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
         {
+            EventStop();
             hideController.SetInfo(rayObject);
             state = StateType.HIDE;
         }
@@ -163,6 +170,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDoorOpenState()
     {
+        EventStop();
         if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Door"))
         {
             if (state == StateType.DASH)
@@ -263,6 +271,12 @@ public class PlayerStateController : MonoBehaviour
             case StateType.HIDE:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.HIDE);
+
+                // 隠れているオブジェクトがロッカーならしゃがみ検知
+                if (LayerMask.LayerToName(hideController.HideObj.layer) == "Locker")
+                {
+                    CheckSquatState();
+                }
 
                 // 隠れるアクションクラスが停止しているなら終了し、各処理の検知
                 if (!hideController.enabled && state == StateType.HIDE)

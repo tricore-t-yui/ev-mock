@@ -8,9 +8,10 @@ using UnityEngine;
 public class DoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    float openFrame = 15;                           // ドアが自動で開くフレーム
+    float openFrame = 30;                           // ドアが自動で開くフレーム
     [SerializeField]
     bool isPlayer = false;                          // このアニメーターの親がプレイヤーかどうか
+
     float flame = 0;                                // アニメーションのフレーム
 
     /// <summary>
@@ -30,7 +31,6 @@ public class DoorOpenState : StateMachineBehaviour
     {
         // アニメーションの進んだフレームをプラス
         flame += UpdateAnimationSpeed(animator);
-
 
         // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
         if (flame < 0)
@@ -67,32 +67,33 @@ public class DoorOpenState : StateMachineBehaviour
         // アニメーションの速度
         float animSpeed = 0;
 
-        // マウスを押している間はキー操作で
-        if (Input.GetMouseButton(0))
+        // 自動で開けるフレームを超えたら自動で開ける
+        if (flame >= openFrame)
         {
-            // 開ける
-            if (Input.GetKey(KeyCode.W))
-            {
-                animSpeed = 0.5f;
-            }
-            // 閉める
-            else if (Input.GetKey(KeyCode.S))
-            {
-                animSpeed = -0.5f;
-            }
-            // そのまま
-            else
-            {
-                animSpeed = 0;
-            }
+            animSpeed = 0.5f;
         }
-        // マウスが離れたら現在のフレーム数に合わせて自動で開閉
         else
         {
-            if (flame > openFrame)
+            // マウスを押している間はキー操作で
+            if (Input.GetMouseButton(0))
             {
-                animSpeed = 0.5f;
+                // 開ける
+                if (Input.GetKey(KeyCode.W))
+                {
+                    animSpeed = 0.5f;
+                }
+                // 閉める
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    animSpeed = -0.5f;
+                }
+                // そのまま
+                else
+                {
+                    animSpeed = 0;
+                }
             }
+            // マウスが離れたら自動で閉める
             else
             {
                 animSpeed = -0.5f;

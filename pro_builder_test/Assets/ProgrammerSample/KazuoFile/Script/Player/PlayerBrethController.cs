@@ -32,9 +32,9 @@ public class PlayerBrethController : MonoBehaviour
     [SerializeField]
     float breathlessnessRecoveryAmount = 0.2f;      // 息切れ時の息の回復量
     [SerializeField]
-    float DashDecrement = 0.2f;                    // 息止め時の息消費量
+    float DashDecrement = 0.2f;                     // 息止め時の息消費量
     [SerializeField]
-    float stealthDecrement = 0.15f;                    // 息止め時の息消費量
+    float stealthDecrement = 0.15f;                 // 息止め時の息消費量
     [SerializeField]
     float patienceDecrement = 0.25f;                // 息我慢時(連打なし)の息消費量
     [SerializeField]
@@ -76,7 +76,7 @@ public class PlayerBrethController : MonoBehaviour
             case BrethState.STEALTH:NowAmount -= stealthDecrement;break;
             case BrethState.HIDE:
                 // 警戒状態じゃなかったら
-                if (hideController.IsWarning && hideController.IsHideLocker && hideController.IsHideBed)
+                if (hideController.IsStealth && (hideController.IsHideLocker || hideController.IsHideBed))
                 {
                     // 連打処理
                     StrikeButtonRepeatedly();
@@ -91,6 +91,10 @@ public class PlayerBrethController : MonoBehaviour
                     {
                         NowAmount -= patienceDecrement;
                     }
+                }
+                else
+                {
+                    NowAmount += normalRecoveryAmount;
                 }
                 break;
             default: break;

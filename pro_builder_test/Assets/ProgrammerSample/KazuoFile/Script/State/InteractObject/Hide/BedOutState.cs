@@ -28,7 +28,7 @@ public class BedOutState : StateMachineBehaviour
         hideController.SetIsAnimRotation(false);
 
         // 脱出方向、座標を求める
-        ExitTransform();
+        ExitTransform(animator);
     }
 
     /// <summary>
@@ -61,30 +61,41 @@ public class BedOutState : StateMachineBehaviour
         // 隠れる終了
         animator.ResetTrigger("BedIn");
         animator.ResetTrigger("BedOut");
+        animator.SetBool("Stealth", false);
         animator.SetBool("HideEnd", true);
     }
 
     /// <summary>
     /// 脱出方向、座標を求める
     /// </summary>
-    void ExitTransform()
+    void ExitTransform(Animator animator)
     {
-        Transform target = hideController.HideObj.transform;
+        // 隠れているオブジェクト
+        Transform hideObj = hideController.HideObj.transform;
 
-        switch (hideController.HideObjDir)
+        // 今プレイヤーが向いている向き
+        Vector3 angle = animator.gameObject.transform.eulerAngles;
+
+        // 各向きに合わせて脱出方向、座標を求める
+        if ((angle.y >= 315 && angle.y <= 360) || (angle.y >= 0 && angle.y <= 45))
         {
-            case DirType.FORWARD:
-                exitPos = new Vector3(target.position.x, target.position.y, target.position.z - (target.localScale.z / 2 + 1));
-                exitRotation = Quaternion.Euler(90, 0, -180); break;
-            case DirType.BACK:
-                exitPos = new Vector3(target.position.x, target.position.y, target.position.z + (target.localScale.z / 2 + 1));
-                exitRotation = Quaternion.Euler(90, 0, 0); break;
-            case DirType.RIGHT:
-                exitPos = new Vector3(target.position.x - (target.localScale.x / 2 + 1), target.position.y, target.position.z);
-                exitRotation = Quaternion.Euler(90, 0, -270); break;
-            case DirType.LEFT:
-                exitPos = new Vector3(target.position.x + (target.localScale.z / 2 + 1), target.position.y, target.position.z);
-                exitRotation = Quaternion.Euler(90, 0, -90); break;
+            exitPos = new Vector3(hideObj.position.x, hideObj.position.y, hideObj.position.z + (hideObj.localScale.z / 2 + 1));
+            exitRotation = Quaternion.Euler(90, 0, 0);
+        }
+        else if (angle.y >= 135 && angle.y <= 225)
+        {
+            exitPos = new Vector3(hideObj.position.x, hideObj.position.y, hideObj.position.z - (hideObj.localScale.z / 2 + 1));
+            exitRotation = Quaternion.Euler(90, 0, -180);
+        }
+        else if(angle.y >= 180)
+        {
+            exitPos = new Vector3(hideObj.position.x - (hideObj.localScale.x / 2 + 1), hideObj.position.y, hideObj.position.z);
+            exitRotation = Quaternion.Euler(90, 0, -270);
+        }
+        else
+        {
+            exitPos = new Vector3(hideObj.position.x + (hideObj.localScale.z / 2 + 1), hideObj.position.y, hideObj.position.z);
+            exitRotation = Quaternion.Euler(90, 0, -90);
         }
     }
 }

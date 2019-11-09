@@ -16,13 +16,21 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
+    public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
+
     /// <summary>
     /// 障害物に当たったら
     /// </summary>
     /// <param name="collision"></param>
     void OnCollisionEnter(Collision collision)
     {
-        EndBlowAway();
+        // ダメージ処理に入っているなら
+        if (enabled)
+        {
+            // オブジェクトに当たったら倒れる
+            EndBlowAway();
+            IsObjHit = true;
+        }
     }
 
     /// <summary>
@@ -41,7 +49,7 @@ public class PlayerDamageController : MonoBehaviour
     public void SetInfo(Vector3 enemyPos)
     {
         // 吹き飛ばしてアニメーション開始
-        rigidbody.AddForce((enemyPos - transform.position).normalized * 10, ForceMode.Impulse);
+        rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
         playerAnim.SetTrigger("Damage");
 
         // 処理開始
@@ -75,7 +83,7 @@ public class PlayerDamageController : MonoBehaviour
         // 生きているなら立ち上がる
         else
         {
-            playerAnim.SetTrigger("StandUp");
+            playerAnim.SetBool("Death", false);
         }
     }
 }

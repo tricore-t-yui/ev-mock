@@ -87,7 +87,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Squat()
     {
-        collider.height = 0.7f;
+        collider.height = 0.4f;
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.SQUAT);
         animationContoller.AnimStart(AnimType.SQUAT);
         camera.IsRotationCamera(true);
@@ -128,7 +128,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
-        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.DEEPBREATH);
         moveController.IsRootMotion(true, true);
         camera.IsRotationCamera(false);
@@ -144,7 +143,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Brethlessness()
     {
-        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.BREATHLESSNESS);
         moveController.IsRootMotion(true, true);
         animationContoller.AnimStart(AnimType.BREATHLESSNESS);
@@ -164,7 +162,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DoorOpen()
     {
-        MoveAnimationEnd();
         moveController.IsRootMotion(true, true);
         doorController.EndDoorAction();
     }
@@ -179,7 +176,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        MoveAnimationEnd();
         brethController.StateUpdate(PlayerBrethController.BrethState.HIDE);
         hideController.EndHideAction();
 
@@ -218,7 +214,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Damage()
     {
-        MoveAnimationEnd();
         moveController.IsRootMotion(true, true);
         damageController.EndDamageAction();
         camera.IsRotationCamera(false);
@@ -228,15 +223,4 @@ public class PlayerEvents : MonoBehaviour
     /// ダメージ終了
     /// </summary>
     public void DamageEnd() { }
-
-    /// <summary>
-    /// 移動アニメーション終了
-    /// </summary>
-    void MoveAnimationEnd()
-    {
-        animationContoller.AnimStop(AnimType.WALK);
-        animationContoller.AnimStop(AnimType.DASH);
-        animationContoller.AnimStop(AnimType.SQUAT);
-        animationContoller.AnimStop(AnimType.STEALTH);
-    }
 }
