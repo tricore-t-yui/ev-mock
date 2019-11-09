@@ -28,6 +28,7 @@ public class PlayerHideController : MonoBehaviour
 
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
     public bool IsWarning { get; private set; } = false;        // 警戒フラグ
+    public bool IsStealth { get; private set; } = false;        // 息止めフラグ
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
@@ -130,12 +131,21 @@ public class PlayerHideController : MonoBehaviour
     /// <summary>
     /// 回転フラグのセット関数
     /// </summary>
-    /// NOTE: k.oishi
+    /// NOTE: k.oishi ステートマシン用関数
     ///      ステートマシンの方で脱出方向へ回転させているのですが、回転している間は回転をアニメーションに任せる処理を切らないといけません。
     ///      なので、ステートマシンの方で回転が終わったらフラグを切れるように、フラグセット関数を用意しました。
     public void SetIsAnimRotation(bool flag)
     {
         IsAnimRotation = flag;
+    }
+
+    /// <summary>
+    /// 息止めフラグのセット関数
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public void SetIsStealth(bool flag)
+    {
+        IsStealth = flag;
     }
 
     /// <summary>
