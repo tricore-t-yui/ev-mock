@@ -32,9 +32,9 @@ public class PlayerBrethController : MonoBehaviour
     [SerializeField]
     float breathlessnessRecoveryAmount = 0.2f;      // 息切れ時の息の回復量
     [SerializeField]
-    float DashDecrement = 0.2f;                    // 息止め時の息消費量
+    float DashDecrement = 0.2f;                     // 息止め時の息消費量
     [SerializeField]
-    float stealthDecrement = 0.15f;                    // 息止め時の息消費量
+    float stealthDecrement = 0.15f;                 // 息止め時の息消費量
     [SerializeField]
     float patienceDecrement = 0.25f;                // 息我慢時(連打なし)の息消費量
     [SerializeField]

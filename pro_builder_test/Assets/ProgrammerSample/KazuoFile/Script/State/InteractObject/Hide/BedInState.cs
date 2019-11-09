@@ -29,12 +29,6 @@ public class BedInState : StateMachineBehaviour
             // ベッドに向かって座標移動
             Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
             animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.015f;
-
-            // マウスの入力が途切れたら隠れるのをやめる
-            if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
-            {
-                animator.SetTrigger("BedOut");
-            }
         }
     }
 
