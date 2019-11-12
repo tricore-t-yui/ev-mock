@@ -23,6 +23,7 @@ public class KageAnimParameterList : MonoBehaviour
         otherActionKindId,
         loiteringOtherActionStart,
         loiteringBehaviorRate,
+        isVigilanceMode,
     }
 
     // アニメーター
