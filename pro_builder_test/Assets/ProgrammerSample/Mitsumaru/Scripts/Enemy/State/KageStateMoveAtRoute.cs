@@ -11,8 +11,7 @@ using ParameterType = KageAnimParameterList.ParameterType;
 public class KageStateMoveAtRoute : StateMachineBehaviour
 {
     // 移動チェックポイント
-    [SerializeField]
-    MoveCheckPointList checkPointList = default;
+    IReadOnlyList<Vector3> checkPointList = default;
 
     // 現在のチェックポイントのインデックス
     int currentCheckPointIndex = 0;
@@ -35,16 +34,23 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
+    // 影人間のステートのパラーメータを取得
+    KageStateParameter stateParameter = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // ステートパラメータを取得
+        stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
         // パラメータクラスを取得
-        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+        animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
+        // チェックポイントを取得
+        checkPointList = stateParameter.RouteCheckPointList;
 
         // ナビメッシュのコンポーネントを取得
-        navMesh = navMesh ?? animator.GetComponent<NavMeshAgent>();
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
         // 移動スピードを設定
         navMesh.speed = moveSpeed;

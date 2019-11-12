@@ -21,7 +21,7 @@ public class OtherActionRunning : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // ナビメッシュのコンポーネントを取得
-        navMesh = navMesh ?? animator.GetComponent<NavMeshAgent>();
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
         // 走るスピードを設定
         navMesh.speed = runSpeed;

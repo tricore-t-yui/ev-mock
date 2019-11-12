@@ -31,7 +31,7 @@ public class KageStateStanding : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // パラメータクラスを取得
-        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+        animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
         // モーションの個数分の値からランダムで決定
         int motionId = Random.Range(1, System.Enum.GetNames(typeof(MotionKind)).Length + 1);

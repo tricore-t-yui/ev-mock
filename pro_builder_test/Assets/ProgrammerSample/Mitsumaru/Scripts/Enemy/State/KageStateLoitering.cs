@@ -18,30 +18,40 @@ public class KageStateLoitering : StateMachineBehaviour
     }
 
     // 徘徊の種類
-    [SerializeField]
-    LoiteringKind loiteringKind = LoiteringKind.Route;
+    LoiteringKind loiteringType = LoiteringKind.Route;
 
-    // 移動タイプ：ルート
+    // 徘徊タイプ：ルート
     [SerializeField]
     KageStateMoveAtRoute loiteringMoveAtRoute = default;
+    // 徘徊タイプ：ランダム
+    [SerializeField]
+    KageStateMoveAtRandom loiteringMoveAtRandom = default;
 
     // 現在の移動タイプ
     StateMachineBehaviour currentLoiteringMove;
-    
-    /// <summary>
-    /// 起動処理
-    /// </summary>
-    void Awake()
-    {
-        // NOET : 現在はルートでの徘徊しか完成していないためそのままセット
-        currentLoiteringMove = loiteringMoveAtRoute;
-    }
+
+    // 影人間のステートのパラーメータを取得
+    KageStateParameter stateParameter = null;
 
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // ステートパラメータを取得
+        stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
+
+        // 徘徊のタイプによってクラスを分ける
+        if (stateParameter.StateLoiteringOfType == LoiteringKind.Route)
+        {
+            currentLoiteringMove = loiteringMoveAtRoute;
+        }
+        else
+        {
+            currentLoiteringMove = loiteringMoveAtRandom;
+        }
+
+        // ステートの開始
         currentLoiteringMove.OnStateEnter(animator, animatorStateInfo, layerIndex);
     }
     
@@ -50,6 +60,7 @@ public class KageStateLoitering : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // ステートの更新
         currentLoiteringMove.OnStateUpdate(animator, animatorStateInfo, layerIndex);
     }
 
@@ -58,6 +69,7 @@ public class KageStateLoitering : StateMachineBehaviour
     /// </summary>
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // ステートの終了
         currentLoiteringMove.OnStateExit(animator, animatorStateInfo, layerIndex);
     }
 }

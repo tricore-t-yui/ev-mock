@@ -36,7 +36,7 @@ public class KageLoiteringOtherAction : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // パラメータクラスを取得
-        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+        animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
         // デバッグ用の処理
         if (debugSettings.isDebug)
