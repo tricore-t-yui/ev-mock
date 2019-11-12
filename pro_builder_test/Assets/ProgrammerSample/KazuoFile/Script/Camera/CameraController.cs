@@ -25,6 +25,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
     [SerializeField]
+    PlayerHealthController healthController = default;  // 隠れるアクション管理クラス
+    [SerializeField]
     float sensitivity = 2;                          // カメラの感度
 
     /// <summary>
@@ -43,6 +45,20 @@ public class CameraController : MonoBehaviour
     {
         // プレイヤーの頭の位置に合わせる
         transform.parent.position = player.transform.position;
+
+        // 死んでしまったら回転させない
+        if(!healthController.IsDeath)
+        {
+            // 回転
+            Rotation();
+        }
+    }
+
+    /// <summary>
+    /// カメラの回転
+    /// </summary>
+    void Rotation()
+    {
 
         // 回転量を求める
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
@@ -82,7 +98,7 @@ public class CameraController : MonoBehaviour
                 transform.localEulerAngles = AngleLimit(AngleLimitType.NORMAL);
             }
         }
-    }    
+    }
 
     /// <summary>
     /// カメラ回転を使うかどうか

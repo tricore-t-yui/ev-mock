@@ -59,6 +59,11 @@ public class PlayerStateController : MonoBehaviour
     {
         // 各イベント処理再生
         EventPlay();
+
+        if(Input.GetKey(KeyCode.H))
+        {
+            ChangeDamageState(Vector3.zero, 50);
+        }
     }
 
     /// <summary>

@@ -12,7 +12,7 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     Rigidbody rigidbody = default;                          // リジットボディ
     [SerializeField]
-    PlayerHealthController healthController = default;      // HP管理クラス
+    PlayerHealthController healthController = default;      // 体力管理クラス
     [SerializeField]
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
