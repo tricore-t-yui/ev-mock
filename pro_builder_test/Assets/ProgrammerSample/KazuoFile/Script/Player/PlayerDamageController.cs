@@ -16,6 +16,10 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
+    [SerializeField]
+    float invincibleSecond = 2;                             // ダメージ処理後の無敵時間
+
+    bool isInvincible = false;                              // 無敵時間かどうか 
     public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
 
     /// <summary>
@@ -48,15 +52,36 @@ public class PlayerDamageController : MonoBehaviour
     /// <param name="enemyPos"></param>
     public void SetInfo(Vector3 enemyPos, float damage)
     {
-        // ダメージを食らう
-        healthController.Damage(damage);
+        // 無敵時間じゃなかったら処理開始
+        if (!isInvincible)
+        {
+            // ダメージを食らう
+            healthController.Damage(damage);
 
-        // 吹き飛ばしてアニメーション開始
-        rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
-        playerAnim.SetTrigger("Damage");
+            // 吹き飛ばしてアニメーション開始
+            rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
+            playerAnim.SetTrigger("Damage");
 
-        // 処理開始
-        enabled = true;
+            // 処理開始
+            enabled = true;
+        }
+    }
+
+    /// <summary>
+    /// 吹き飛び終了
+    /// </summary>
+    public void EndBlowAway()
+    {
+        // 死んでしまったなら死亡アニメーション
+        if (healthController.IsDeath)
+        {
+            playerAnim.SetBool("Death", true);
+        }
+        // 生きているなら立ち上がる
+        else
+        {
+            playerAnim.SetBool("Death", false);
+        }
     }
 
     /// <summary>
@@ -69,24 +94,22 @@ public class PlayerDamageController : MonoBehaviour
         {
             playerAnim.SetBool("DamageEnd", false);
             interactController.CommonEndAction();
+
+            // 無敵時間開始
+            isInvincible = true;
+            StartCoroutine(InvincibleCount());
+
+            // 処理終了
             enabled = false;
         }
     }
 
     /// <summary>
-    /// 吹き飛び終了
+    /// 無敵時間のコルーチン
     /// </summary>
-    public void EndBlowAway()
+    IEnumerator InvincibleCount()
     {
-        // 死んでしまったなら死亡アニメーション
-        if(healthController.IsDeath)
-        {
-            playerAnim.SetBool("Death",true);
-        }
-        // 生きているなら立ち上がる
-        else
-        {
-            playerAnim.SetBool("Death", false);
-        }
+        yield return new WaitForSeconds(invincibleSecond);
+        isInvincible = false;
     }
 }
