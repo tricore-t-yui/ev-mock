@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CallbackUnityEvent : UnityEvent<Transform,Collider> { }
+public class ColliderEvent : UnityEvent<Transform,Collider> { }
 
 /// <summary>
 /// コライダーとの衝突でUnityEventを呼ぶ汎用クラス
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class ColliderEvent : MonoBehaviour
+public class ColliderTriggerEvent : MonoBehaviour
 {
     // 衝突したとき
-    CallbackUnityEvent onTriggerEnter = new CallbackUnityEvent();
+    ColliderEvent onTriggerEnter = new ColliderEvent();
 
     // 衝突し続けている
-    CallbackUnityEvent onTriggerStay = new CallbackUnityEvent();
+    ColliderEvent onTriggerStay = new ColliderEvent();
 
     // 離れたとき
-    CallbackUnityEvent onTriggerExit = new CallbackUnityEvent();
+    ColliderEvent onTriggerExit = new ColliderEvent();
 
     /// <summary>
     /// Enter時のコールバック追加

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using ParameterType = KageAnimParameterList.ParameterType;
 
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型 / ルート移動
@@ -31,11 +32,17 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
     [SerializeField]
     int moveInterval = 0;
 
+    // 影人間のパラメータークラス
+    KageAnimParameterList animParameterList = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // パラメータクラスを取得
+        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+
         // ナビメッシュのコンポーネントを取得
         navMesh = navMesh ?? animator.GetComponent<NavMeshAgent>();
 
@@ -46,7 +53,7 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
 
         // 移動を開始する
-        animator.SetBool("isLoiteringMove", true);
+        animParameterList.SetBool(ParameterType.isLoiteringMove, true);
     }
 
     /// <summary>
@@ -68,7 +75,7 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         if (moveCount >= moveInterval)
         {
             // 移動を中断する
-            animator.SetBool("isLoiteringMove", false);
+            animParameterList.SetBool(ParameterType.isLoiteringMove, false);
             // カウンターをリセット
             moveCount = 0;
         }

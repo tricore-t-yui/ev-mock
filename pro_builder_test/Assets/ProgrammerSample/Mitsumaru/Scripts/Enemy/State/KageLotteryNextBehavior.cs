@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ParameterType = KageAnimParameterList.ParameterType;
 
 /// <summary>
 /// 影人間の徘徊中にそのまま徘徊を続けるかその他の行動に移行するかの抽選を行う
@@ -13,13 +14,19 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
     [Header("[move : other]")]
     float behaviourRate = 60;
 
+    // 影人間のパラメータークラス
+    KageAnimParameterList animParameterList = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // パラメータクラスを取得
+        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+
         // 抽選の割合をパラメータに渡す
-        animator.SetFloat("LoiteringBehaviorRate", behaviourRate);
+        animParameterList.SetFloat(ParameterType.loiteringBehaviorRate, behaviourRate);
 
         // ０～１００のランダム値を取得
         float num = Random.Range(0, 100);
@@ -28,7 +35,7 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
         if (num > behaviourRate)
         {
             // 徘徊中の専用のアクションを開始する
-            animator.SetTrigger("LoiteringOtherActionStart");
+            animParameterList.SetTrigger(ParameterType.loiteringOtherActionStart);
         }
     }
 }
