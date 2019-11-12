@@ -8,6 +8,16 @@ using UnityEngine.UI;
 /// </summary>
 public class ScreenEffectController : MonoBehaviour
 {
+    /// <summary>
+    /// イメージのタイプ
+    /// </summary>
+    enum ImageType
+    {
+        BREATH,
+        HEALTH,
+        FADEOUT,
+    }
+
     [SerializeField]
     PlayerBreathController breathController = default;    // 息管理クラス
 	[SerializeField]
@@ -16,7 +26,9 @@ public class ScreenEffectController : MonoBehaviour
     [SerializeField]
     Image breathEffect = default;   // 息の画面エフェクト
     [SerializeField]
-    Image heathEffect = default;    // 体力の画面エフェクト
+    Image healthEffect = default;    // 体力の画面エフェクト
+    [SerializeField]
+    Image fadeOut = default;        // フェードアウト用イメージ
 
     /// <summary>
     /// 更新処理
@@ -24,25 +36,40 @@ public class ScreenEffectController : MonoBehaviour
     void Update()
     {
         // 息、体力によってエフェクト表示
-        DisplayEffect();
+        breathEffect.color = DisplayEffect(ImageType.BREATH);
+        healthEffect.color = DisplayEffect(ImageType.HEALTH);
+
+        // 死んでしまったら
+        if (healthController.IsDeath)
+        {
+            breathEffect.color = DisplayEffect(ImageType.FADEOUT);
+        }
     }
 
     /// <summary>
     /// エフェクト表示
     /// </summary>
-    void DisplayEffect()
+    Color DisplayEffect(ImageType type)
     {
         // イメージのカラー
-        Color color = default;
+        Color color = new Color(0,0,0);
 
-        // 息
-        color = breathEffect.color;
-        color.a = 1.0f - (breathController.NowAmount / 100);
-        breathEffect.color = color;
+        switch(type)
+        {
+            case ImageType.BREATH:
+                color = breathEffect.color;
+                color.a = 1.0f - (breathController.NowAmount / 100);
+                break;
+            case ImageType.HEALTH:
+                color = healthEffect.color;
+                color.a = 1.0f - (healthController.NowAmount / 100);
+                break;
+            case ImageType.FADEOUT:
+                color = fadeOut.color;
+                color.a += 0.01f;
+                break;
+        }
 
-        // 体力
-        color = heathEffect.color;
-        color.a = 1.0f - (healthController.NowAmount / 100);
-        heathEffect.color = color;
+        return color;
     }
 }

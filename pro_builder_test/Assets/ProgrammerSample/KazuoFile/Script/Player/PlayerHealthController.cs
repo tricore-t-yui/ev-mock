@@ -43,7 +43,10 @@ public class PlayerHealthController : MonoBehaviour
     void Update()
     {
         // 回復
-        Recovery();
+        if (!IsDeath)
+        {
+            Recovery();
+        }
 
         // 体力の残量による音の発生
         HealthSound();
@@ -96,6 +99,7 @@ public class PlayerHealthController : MonoBehaviour
     /// </summary>
     public void Damage(float damage)
     {
+        damageFrame = 0;
         NowAmount -= damage;
 
         // 体力が0以下になったらゲームオーバー

@@ -46,8 +46,11 @@ public class PlayerDamageController : MonoBehaviour
     /// 敵座標の登録
     /// </summary>
     /// <param name="enemyPos"></param>
-    public void SetInfo(Vector3 enemyPos)
+    public void SetInfo(Vector3 enemyPos, float damage)
     {
+        // ダメージを食らう
+        healthController.Damage(damage);
+
         // 吹き飛ばしてアニメーション開始
         rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
         playerAnim.SetTrigger("Damage");
