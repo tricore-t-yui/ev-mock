@@ -9,6 +9,15 @@ using DirType = InteractFunction.DirType;
 /// NOTE:k.oishi アニメーションにカメラが含まれていると回転しなくなってしまったので、アニメーション用と移動用のカメラに分けました。
 public class CameraController : MonoBehaviour
 {
+    /// <summary>
+    /// 角度制限タイプ
+    /// </summary>
+    enum AngleLimitType
+    {
+        NORMAL,
+        HIDE,
+    }
+
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
@@ -17,6 +26,8 @@ public class CameraController : MonoBehaviour
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
     [SerializeField]
     float sensitivity = 2;                          // カメラの感度
+
+    float shakePower = 0;                           // カメラの揺れの大きさ
 
     /// <summary>
     /// 起動処理
@@ -38,38 +49,39 @@ public class CameraController : MonoBehaviour
         // 回転量を求める
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
         float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
-        
-        // ベッドに隠れている時の視点移動
-        if (hideController.IsHideBed)
-        {
-            player.Rotate(0, 0, -X_Rotation);
-            transform.parent.Rotate(0, 0, -X_Rotation);
-        }
-        // ロッカーに隠れている時の視点移動
-        else if (hideController.IsHideLocker)
-        {
-            player.Rotate(0, X_Rotation, 0);
-            transform.parent.Rotate(0, X_Rotation, 0);
 
-            // 回転制限
-            player.localEulerAngles = LockerRotationLimit();
-            transform.parent.localEulerAngles = LockerRotationLimit();
+        // 動かしていない状態ならゆっくり視点を上下に
+        if (!GetDirectionKey() && Y_Rotation == 0 && X_Rotation == 0)
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x + Mathf.Sin(Time.time) / 50, transform.eulerAngles.y, transform.eulerAngles.z);
         }
-        // 通常時の視点移動
         else
         {
-            player.Rotate(0, X_Rotation, 0);
-            transform.parent.Rotate(0, X_Rotation, 0);
-            transform.Rotate(-Y_Rotation, 0, 0);
-
-            // 回転制限
-            if (transform.localEulerAngles.x >= 30 && transform.localEulerAngles.x < 180)
+            // ベッドに隠れている時の視点移動
+            if (hideController.IsHideBed)
             {
-                transform.localEulerAngles = new Vector3(30, transform.localEulerAngles.y, transform.localEulerAngles.z);
+                player.Rotate(0, 0, -X_Rotation);
+                transform.parent.Rotate(0, 0, -X_Rotation);
             }
-            if (transform.localEulerAngles.x <= 330 && transform.localEulerAngles.x > 180)
+            // ロッカーに隠れている時の視点移動
+            else if (hideController.IsHideLocker)
             {
-                transform.localEulerAngles = new Vector3(330, transform.localEulerAngles.y, transform.localEulerAngles.z);
+                player.Rotate(0, X_Rotation, 0);
+                transform.parent.Rotate(0, X_Rotation, 0);
+
+                // 回転制限
+                player.localEulerAngles = AngleLimit(AngleLimitType.HIDE);
+                transform.parent.localEulerAngles = AngleLimit(AngleLimitType.HIDE);
+            }
+            // 通常時の視点移動
+            else
+            {
+                player.Rotate(0, X_Rotation, 0);
+                transform.parent.Rotate(0, X_Rotation, 0);
+                transform.Rotate(-Y_Rotation, 0, 0);
+
+                // 回転制限
+                transform.localEulerAngles = AngleLimit(AngleLimitType.NORMAL);
             }
         }
     }    
@@ -81,27 +93,61 @@ public class CameraController : MonoBehaviour
     {
        if(isUse)
        {
-           // カメラ切り替え
-           gameObject.SetActive(true);
-           animCamera.SetActive(false);
+            // カメラ切り替え
+            gameObject.SetActive(true);
+            transform.parent.position = player.transform.position;
+            animCamera.SetActive(false);
        }
        else
        {
-           // カメラ切り替え
-           gameObject.SetActive(false);
-           animCamera.SetActive(true);
+            // カメラ切り替え
+            gameObject.SetActive(false);
+            transform.parent.position = player.transform.position;
+            animCamera.SetActive(true);
        }
     }
 
     /// <summary>
-    /// ロッカーに入っている時のカメラの回転制限
+    /// 隠れている時のカメラの回転制限
     /// </summary>
-    Vector3 LockerRotationLimit()
+    Vector3 AngleLimit(AngleLimitType type)
+    {
+        // 回転値
+        Vector3 angle = Vector3.zero;
+
+        switch(type)
+        {
+            case AngleLimitType.NORMAL:
+                // 基準値設定
+                angle = transform.localEulerAngles;
+
+                // 上限設定
+                if (transform.localEulerAngles.x >= 30 && transform.localEulerAngles.x < 180)
+                {
+                    angle = new Vector3(30, transform.localEulerAngles.y, transform.localEulerAngles.z);
+                }
+                if (transform.localEulerAngles.x <= 330 && transform.localEulerAngles.x > 180)
+                {
+                    angle = new Vector3(330, transform.localEulerAngles.y, transform.localEulerAngles.z);
+                }
+                break;
+            case AngleLimitType.HIDE:
+                // 上限設定
+                angle = HideAngleLimit();
+                break;
+        }
+        return angle;
+    }
+
+    /// <summary>
+    /// 隠れている時のカメラの回転制限
+    /// </summary>
+    Vector3 HideAngleLimit()
     {
         // 回転値
         Vector3 angle = transform.parent.localEulerAngles;
 
-        switch(hideController.HideObjDir)
+        switch (hideController.HideObjDir)
         {
             case DirType.FORWARD:
                 // 上限設定
@@ -150,5 +196,21 @@ public class CameraController : MonoBehaviour
         }
 
         return angle;
+    }
+
+    /// <summary>
+    /// 移動キーが入力されたかどうか
+    /// </summary>
+    /// <returns></returns>
+    bool GetDirectionKey()
+    {
+        if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

@@ -11,13 +11,13 @@ public class PlayerStateController : MonoBehaviour
     public enum StateType
     {
         WAIT,           // 待機
-        WALK,           // 歩く時
-        DASH,           // ダッシュ時
-        STEALTH,        // 忍び歩き時
-        DOOROPEN,       // ドア時
-        HIDE,           // 隠れる時
-        DEEPBREATH,     // 深呼吸時
-        BREATHLESSNESS, // 息切れ時
+        WALK,           // 歩き
+        DASH,           // ダッシュ
+        STEALTH,        // 忍び歩き
+        DOOROPEN,       // ドア開閉
+        HIDE,           // 隠れる
+        DEEPBREATH,     // 深呼吸
+        BREATHLESSNESS, // 息切れ
         DAMAGE,         // ダメージ
     }
 
@@ -37,6 +37,8 @@ public class PlayerStateController : MonoBehaviour
     PlayerDamageController damageController = default;  // ダメージリアクションクラス
     [SerializeField]
     PlayerEventCaller eventCaller = default;            // イベント呼び出しクラス
+    [SerializeField]
+    SoundAreaController soundArea = default;            // 音管理クラス
 
     [SerializeField]
     KeyCode dashKey = KeyCode.LeftShift;                // ダッシュキー
@@ -48,6 +50,7 @@ public class PlayerStateController : MonoBehaviour
     KeyCode deepBreathKey = KeyCode.Space;              // 深呼吸キー
 
     StateType state = StateType.WAIT;                   // 現在の状態
+    bool isDashOpen = false;                            // ダッシュで開けたかどうか
 
     /// <summary>
     /// 更新処理
@@ -71,6 +74,7 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetKey(squatKey))
         {
+            soundArea.ChangeSoundLevel(-2);
             eventCaller.Invoke(PlayerEventCaller.EventType.SQUAT);
         }
         else
@@ -145,10 +149,22 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckBrethlessnessState()
     {
-        if (brethController.NowAmount <= 0)
+        if (brethController.IsBreathlessness)
         {
             EventStop();
             state = StateType.BREATHLESSNESS;
+        }
+    }
+
+    /// <summary>
+    /// 息回復終了検知
+    /// </summary>
+    void CheckEndBrethlessnessRecovery()
+    {
+        if (!brethController.IsBreathlessness)
+        {
+            EventStop();
+            state = StateType.WAIT;
         }
     }
 
@@ -170,16 +186,18 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDoorOpenState()
     {
-        EventStop();
         if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Door"))
         {
+            EventStop();
             if (state == StateType.DASH)
             {
                 doorController.SetInfo(rayObject, PlayerDoorController.OpenType.DASH);
+                isDashOpen = true;
             }
             else
             {
                 doorController.SetInfo(rayObject, PlayerDoorController.OpenType.NORMAL);
+                isDashOpen = false;
             }
 
             state = StateType.DOOROPEN;
@@ -207,6 +225,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.WAIT:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.WAIT);
+                soundArea.ChangeSoundLevel(1);
 
                 // 各処理の検知
                 CheckSquatState();
@@ -220,6 +239,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.WALK:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.WALK);
+                soundArea.ChangeSoundLevel(5);
 
                 // 各処理の検知
                 CheckSquatState();
@@ -232,6 +252,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.DASH:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.DASH);
+                soundArea.ChangeSoundLevel(7);
 
                 // 各処理の検知
                 CheckWaitState();
@@ -244,6 +265,14 @@ public class PlayerStateController : MonoBehaviour
             case StateType.STEALTH:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.STEALTH);
+                if(GetDirectionKey())
+                {
+                    soundArea.ChangeSoundLevel(3);
+                }
+                else
+                {
+                    soundArea.ChangeSoundLevel(-3);
+                }
 
                 // 各処理の検知
                 CheckSquatState();
@@ -257,6 +286,14 @@ public class PlayerStateController : MonoBehaviour
             case StateType.DOOROPEN:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.DOOR);
+                if(isDashOpen)
+                {
+                    soundArea.ChangeSoundLevel(3);
+                }
+                else
+                {
+                    soundArea.ChangeSoundLevel(0);
+                }
 
                 // ドアアクションクラスが停止しているなら終了し、各処理の検知
                 if (!doorController.enabled && state == StateType.DOOROPEN)
@@ -271,6 +308,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.HIDE:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.HIDE);
+                soundArea.ChangeSoundLevel(-2);
 
                 // 隠れているオブジェクトがロッカーならしゃがみ検知
                 if (LayerMask.LayerToName(hideController.HideObj.layer) == "Locker")
@@ -291,6 +329,7 @@ public class PlayerStateController : MonoBehaviour
             case StateType.DEEPBREATH:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.DEEPBREATH);
+                soundArea.ChangeSoundLevel(3);
 
                 // 各処理の検知
                 CheckWaitState();
@@ -302,14 +341,14 @@ public class PlayerStateController : MonoBehaviour
                 CheckHideState();
 
                 // 息回復終了検知
-                CheckEndBrethRecovery();
+                CheckEndBrethlessnessRecovery();
                 break;
             case StateType.BREATHLESSNESS:
                 // 各イベント処理
                 eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESS);
 
                 // 息回復終了検知
-                CheckEndBrethRecovery();
+                CheckEndBrethlessnessRecovery();
                 break;
             case StateType.DAMAGE:
                 // 各イベント処理
@@ -344,18 +383,6 @@ public class PlayerStateController : MonoBehaviour
             case StateType.DEEPBREATH: eventCaller.Invoke(PlayerEventCaller.EventType.DEEPBREATHEND); break;
             case StateType.BREATHLESSNESS: eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESSEND); break;
             case StateType.DAMAGE: eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGE); break;
-        }
-    }
-
-    /// <summary>
-    /// 息回復終了検知
-    /// </summary>
-    void CheckEndBrethRecovery()
-    {
-        if (brethController.NowAmount >= 100)
-        {
-            EventStop();
-            state = StateType.WAIT;
         }
     }
 

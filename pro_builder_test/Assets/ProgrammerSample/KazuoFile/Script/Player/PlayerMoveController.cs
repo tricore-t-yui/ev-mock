@@ -112,7 +112,7 @@ public class PlayerMoveController : MonoBehaviour
         float walkSpeed = new Vector3(rigid.velocity.x, 0, rigid.velocity.z).magnitude;
         if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit)
         {
-            rigid.AddForce(moveSpeed * speedMagnification);
+            rigid.AddForce(moveSpeed.normalized * speedMagnification);
         }
 
         IsRootMotion(false, false);
@@ -209,22 +209,6 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     /// <summary>
-    /// 移動キーが入力されたかどうか
-    /// </summary>
-    /// <returns></returns>
-    bool GetDirectionKey()
-    {
-        if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
     /// 移動速度上限の変更
     /// </summary>
     /// <param name="type">移動タイプ</param>
@@ -249,6 +233,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (isPosition)
         {
+            rigid.velocity = Vector3.zero;
             isAnimPosition = true;
         }
         else
