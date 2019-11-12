@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ParameterType = KageAnimParameterList.ParameterType;
 
 /// <summary>
 /// 影人間のステート：通常状態
@@ -20,12 +21,18 @@ public class KageStateNormal : StateMachineBehaviour
     [SerializeField]
     BehaviourKind behaviourKind = BehaviourKind.Standing;
 
+    // 影人間のパラメータークラス
+    KageAnimParameterList animParameterList = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // パラメータクラスを取得
+        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+
         // 指定された状態に変更
-        animator.SetInteger("NormalBehaviourKindId", (int)behaviourKind);
+        animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)behaviourKind);
     }
 }

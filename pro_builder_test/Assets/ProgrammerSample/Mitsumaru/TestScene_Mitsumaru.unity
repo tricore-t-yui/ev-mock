@@ -240,7 +240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &353476011
 Transform:
   m_ObjectHideFlags: 0
@@ -303,8 +303,8 @@ MonoBehaviour:
   positionOffset: {x: 0, y: -0.8, z: 0}
   rotationOffset: {x: 0.70710677, y: 0, z: 0, w: -0.70710677}
   player: {fileID: 1971433529}
-  angle: 53
-  debugOnlyDistance: 8.41
+  angle: 120
+  debugOnlyDistance: 1.84
   distances:
   - stateName: 
     distance: 0
@@ -1911,8 +1911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4534ff3dce383d249a7970562d11d6ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPositions: []
-  navMeshAgent: {fileID: 0}
 --- !u!1 &1796822674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2042,7 +2040,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aca08b7443c8bc34e81532faa24eb927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!23 &1971433527
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9181,6 +9178,7 @@ GameObject:
   - component: {fileID: 2472629378853271594}
   - component: {fileID: 913303986783025397}
   - component: {fileID: 913303987284416630}
+  - component: {fileID: 8819553395699461701}
   m_Layer: 0
   m_Name: Kage
   m_TagString: Untagged
@@ -9188,3 +9186,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8819553395699461701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8819553395699461700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f5ac6bd612064d45bf082f240d310b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 913303987284416630}
