@@ -11,7 +11,7 @@ public class EnemyRouteDrawer : MonoBehaviour
 #if UNITY_EDITOR
     // 目標位置のリスト
     [SerializeField]
-    List<Vector3> targetPositions = default;
+    List<MoveCheckPointList> targetPositions = default;
 
     [SerializeField]
     NavMeshAgent navMeshAgent = default;
@@ -22,42 +22,30 @@ public class EnemyRouteDrawer : MonoBehaviour
     void OnDrawGizmos()
     {
         // それぞれの目標位置を線で結ぶ
-        for (int i = 0; i < targetPositions.Count; i++)
+        foreach(MoveCheckPointList checkPoint in targetPositions)
         {
-            DrawLineToTargetPos(i);
+            DrawLineToTargetPos(checkPoint);
         }
-
-        Gizmos.DrawSphere(navMeshAgent.destination, 1);
     }
 
     /// <summary>
     /// 現在と次の目標位置を線でつなぐ
     /// </summary>
-    /// <param name="nextIndex">次の目標位置のリストの番号</param>
-    void DrawLineToTargetPos(int nextIndex)
+    void DrawLineToTargetPos(MoveCheckPointList checkPoint)
     {
-        Color lineColor;
-        // 最初の線だけ黄色にする
-        if (nextIndex == 0)
+        for (int i = 0; i < checkPoint.Count; i++)
         {
-            lineColor = Color.yellow;
-        }
-        // それ以外は赤にする
-        else
-        {
-            lineColor = Color.red;
-        }
-
-        // リストの末尾にきた場合は、末尾と先頭でつなぐ
-        if (nextIndex == targetPositions.Count - 1)
-        {
-            // 線を表示
-            Debug.DrawLine(targetPositions[nextIndex], targetPositions[0], lineColor);
-        }
-        else
-        {
-            // 線を表示
-            Debug.DrawLine(targetPositions[nextIndex], targetPositions[nextIndex + 1], lineColor);
+            // リストの末尾にきた場合は、末尾と先頭でつなぐ
+            if (i == checkPoint.Count - 1)
+            {
+                // 線を表示
+                Debug.DrawLine(checkPoint[i], checkPoint[0], Color.red);
+            }
+            else
+            {
+                // 線を表示
+                Debug.DrawLine(checkPoint[i], checkPoint[i + 1], Color.red);
+            }
         }
     }
 #endif
