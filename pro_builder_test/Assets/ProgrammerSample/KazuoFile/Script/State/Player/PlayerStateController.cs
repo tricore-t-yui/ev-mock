@@ -59,11 +59,6 @@ public class PlayerStateController : MonoBehaviour
     {
         // 各イベント処理再生
         EventPlay();
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            ChangeDamageState(transform.position + Vector3.forward);
-        }
     }
 
     /// <summary>
@@ -211,13 +206,13 @@ public class PlayerStateController : MonoBehaviour
     /// ダメージ処理
     /// </summary>
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
-    public void ChangeDamageState(Vector3 enemyPos)
+    public void ChangeDamageState(Vector3 enemyPos, float damage)
     {
         // ダメージ処理が開始されていないならダメージを食らう
         if (!damageController.enabled)
         {
             EventStop();
-            damageController.SetInfo(enemyPos);
+            damageController.SetInfo(enemyPos, damage);
             state = StateType.DAMAGE;
         }
     }
