@@ -18,7 +18,7 @@ public class SliderController : MonoBehaviour
     }
 
     [SerializeField]
-    PlayerBrethController brethController = default;    // 息管理クラス
+    PlayerBreathController breathController = default;    // 息管理クラス
     [SerializeField]
     PlayerHealthController healthController = default;  // 体力クラス
 
@@ -41,8 +41,8 @@ public class SliderController : MonoBehaviour
     void Update()
     {
         // 値がが0 ~ 100なので、100で割って0.00 ~ 1.00に変換して値を更新
-        brethSlider.value = brethController.NowAmount / 100;
-        healthSlider.value = healthController.Health / 100;
+        brethSlider.value = breathController.NowAmount / 100;
+        healthSlider.value = healthController.NowAmount / 100;
 
         // 点滅処理
         Blink();

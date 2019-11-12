@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// プレイヤーの息管理クラス
 /// </summary>
-public class PlayerBrethController : MonoBehaviour
+public class PlayerBreathController : MonoBehaviour
 {
     /// <summary>
     /// 息の状態
@@ -57,30 +57,27 @@ public class PlayerBrethController : MonoBehaviour
     public float NowAmount { get; private set; } = 100;         // 息の残量
 
     /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        IsBreathlessness = false;
+        NowAmount = 100;
+    }
+
+    /// <summary>
     /// 更新処理
     /// </summary>
     void Update()
     {
         // 息切れ検知
-        CheckBreathlessness();
-
-        // 息の残量による音の発生
-        BreathSound();
-    }
-
-    /// <summary>
-    /// 息切れ検知
-    /// </summary>
-    void CheckBreathlessness()
-    {
         if (!IsBreathlessness && NowAmount <= 0)
         {
             IsBreathlessness = true;
         }
-        else if (NowAmount >= 100)
-        {
-            IsBreathlessness = false;
-        }
+
+        // 息の残量による音の発生
+        BreathSound();
     }
 
     /// <summary>
@@ -110,6 +107,15 @@ public class PlayerBrethController : MonoBehaviour
     }
 
     /// <summary>
+    /// 息切れ解除
+    /// </summary>
+    /// NOTE:k.oishi アニメーション用関数
+    public void RecoveryBreathlessness()
+    {
+        IsBreathlessness = false;
+    }
+
+    /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
     public void StateUpdate(BrethState state)
@@ -126,6 +132,9 @@ public class PlayerBrethController : MonoBehaviour
             case BrethState.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
             default: break;
         }
+
+        // 値補正
+        NowAmount = Mathf.Clamp(NowAmount, 0, 100);
     }
 
     /// <summary>
@@ -162,9 +171,6 @@ public class PlayerBrethController : MonoBehaviour
                 break;
             default: break;
         }
-
-        // 値補正
-        NowAmount = Mathf.Clamp(NowAmount, 0, 100);
     }
 
     /// <summary>

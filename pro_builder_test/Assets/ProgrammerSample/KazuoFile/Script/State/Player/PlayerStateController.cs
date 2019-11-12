@@ -28,7 +28,7 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     CapsuleCollider collider = default;                 // プレイヤーのコライダー
     [SerializeField]
-    PlayerBrethController brethController = default;    // 息管理クラス
+    PlayerBreathController breathController = default;    // 息管理クラス
     [SerializeField]
     PlayerDoorController doorController = default;      // ドアアクションクラス
     [SerializeField]
@@ -125,7 +125,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthState()
     {
-        if (Input.GetKey(stealthKey) && state != StateType.DEEPBREATH && state != StateType.BREATHLESSNESS)
+        if (!Input.GetKey(dashKey) && Input.GetKey(stealthKey) && state != StateType.DEEPBREATH && state != StateType.BREATHLESSNESS)
         {
             EventStop();
             state = StateType.STEALTH;
@@ -137,7 +137,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDeepBreathState()
     {
-        if (!GetDirectionKey() && Input.GetKey(deepBreathKey) && brethController.NowAmount < 100)
+        if (!GetDirectionKey() && Input.GetKey(deepBreathKey) && breathController.NowAmount < 100)
         {
             EventStop();
             state = StateType.DEEPBREATH;
@@ -149,7 +149,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckBrethlessnessState()
     {
-        if (brethController.IsBreathlessness)
+        if (breathController.IsBreathlessness)
         {
             EventStop();
             state = StateType.BREATHLESSNESS;
@@ -161,10 +161,13 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckEndBrethlessnessRecovery()
     {
-        if (!brethController.IsBreathlessness)
+        if (breathController.NowAmount >= 100)
         {
             EventStop();
-            state = StateType.WAIT;
+            if (!breathController.IsBreathlessness)
+            {
+                state = StateType.WAIT;
+            }
         }
     }
 
@@ -210,9 +213,13 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
     public void ChangeDamageState(Vector3 enemyPos)
     {
-        EventStop();
-        damageController.SetInfo(enemyPos);
-        state = StateType.DAMAGE;
+        // ダメージ処理が開始されていないならダメージを食らう
+        if (!damageController.enabled)
+        {
+            EventStop();
+            damageController.SetInfo(enemyPos);
+            state = StateType.DAMAGE;
+        }
     }
     
     /// <summary>
