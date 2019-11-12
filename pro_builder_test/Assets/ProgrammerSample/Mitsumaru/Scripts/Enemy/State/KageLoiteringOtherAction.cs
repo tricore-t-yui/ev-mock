@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 影人間の徘徊中の「その他の行動」の抽選を行う
+/// </summary>
 public class KageLoiteringOtherAction : StateMachineBehaviour
 {
+    /// <summary>
+    /// デバッグ用の設定クラス
+    /// </summary>
     [System.Serializable]
     class DebugSettings
     {
@@ -31,6 +37,7 @@ public class KageLoiteringOtherAction : StateMachineBehaviour
             // 決定した行動に設定
             animator.SetInteger("OtherActionKindId", debugSettings.playActionId);
         }
+        // 通常処理
         else
         {
             // 徘徊中の行動の抽選割合を取得

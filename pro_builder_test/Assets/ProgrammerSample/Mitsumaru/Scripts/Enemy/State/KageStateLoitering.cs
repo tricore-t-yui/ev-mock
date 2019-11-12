@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型
+/// NOTE : ルートかランダムかで動作させるスクリプトを変更する
 /// </summary>
 public class KageStateLoitering : StateMachineBehaviour
 {
@@ -32,6 +33,7 @@ public class KageStateLoitering : StateMachineBehaviour
     /// </summary>
     void Awake()
     {
+        // NOET : 現在はルートでの徘徊しか完成していないためそのままセット
         currentLoiteringMove = loiteringMoveAtRoute;
     }
 

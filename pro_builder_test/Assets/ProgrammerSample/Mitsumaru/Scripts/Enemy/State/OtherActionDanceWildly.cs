@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 影人間のステート：通常状態 / 徘徊型 / その他の行動「踊り狂う」
+/// </summary>
 public class OtherActionDanceWildly : StateMachineBehaviour
 {
     // ナビメッシュ
