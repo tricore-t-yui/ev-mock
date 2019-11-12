@@ -23,7 +23,7 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // パラメータクラスを取得
-        animParameterList = animParameterList ?? animator.GetComponent<KageAnimParameterList>();
+        animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
         // 抽選の割合をパラメータに渡す
         animParameterList.SetFloat(ParameterType.loiteringBehaviorRate, behaviourRate);
