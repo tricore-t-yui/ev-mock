@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 影人間のステート：通常状態 / 徘徊型 / その他の行動「走り出す」
+/// </summary>
 public class OtherActionRunning : StateMachineBehaviour
 {
     // ナビメッシュ

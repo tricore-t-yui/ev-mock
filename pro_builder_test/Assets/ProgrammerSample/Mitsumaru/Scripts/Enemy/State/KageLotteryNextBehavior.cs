@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 影人間の徘徊中にそのまま徘徊を続けるかその他の行動に移行するかの抽選を行う
+/// </summary>
 public class KageLotteryNextBehavior : StateMachineBehaviour
 {
     // 移動とその他行動の抽選割合

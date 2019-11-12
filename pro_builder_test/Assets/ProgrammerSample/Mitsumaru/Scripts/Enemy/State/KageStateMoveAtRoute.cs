@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
+/// <summary>
+/// 影人間のステート：通常状態 / 徘徊型 / ルート移動
+/// </summary>
 public class KageStateMoveAtRoute : StateMachineBehaviour
 {
     // 移動チェックポイント
