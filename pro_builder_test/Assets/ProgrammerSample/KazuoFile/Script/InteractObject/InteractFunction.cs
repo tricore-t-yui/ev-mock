@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// インタラクト用共通部分関数クラス
+/// 共通部分関数クラス
 /// </summary>
 public class InteractFunction : MonoBehaviour
 {

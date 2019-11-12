@@ -109,9 +109,9 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.STEALTH);
         brethController.StateUpdate(PlayerBrethController.BrethState.STEALTH);
-        moveController.Move();
         animationContoller.AnimStart(AnimType.STEALTH);
         camera.IsRotationCamera(true);
+        moveController.Move();
     }
 
     /// <summary>

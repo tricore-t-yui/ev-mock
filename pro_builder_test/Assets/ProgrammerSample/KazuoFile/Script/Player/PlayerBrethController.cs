@@ -23,28 +23,91 @@ public class PlayerBrethController : MonoBehaviour
     }
 
     [SerializeField]
-    KeyCode ReductionKey = KeyCode.Q;               // 息の消費軽減キー
+    KeyCode ReductionKey = KeyCode.Q;                           // 息の消費軽減キー
     [SerializeField]
-    PlayerHideController hideController = default;  // 隠れるクラス
+    PlayerHideController hideController = default;              // 隠れるクラス
+    [SerializeField]
+    SoundAreaController soundArea = default;                    // 音管理クラス
 
     [SerializeField]
-    float normalRecoveryAmount = 0.5f;              // 通常の息の回復量
+    float normalRecovery = 0.5f;                                // 通常の息の回復量
     [SerializeField]
-    float breathlessnessRecoveryAmount = 0.2f;      // 息切れ時の息の回復量
+    float breathlessnessRecovery = 0.2f;                        // 息切れ時の息の回復量
     [SerializeField]
-    float DashDecrement = 0.2f;                     // 息止め時の息消費量
+    float DashDecrement = 0.2f;                                 // 息止め時の息消費量
     [SerializeField]
-    float stealthDecrement = 0.15f;                 // 息止め時の息消費量
+    float stealthDecrement = 0.15f;                             // 息止め時の息消費量
     [SerializeField]
-    float patienceDecrement = 0.25f;                // 息我慢時(連打なし)の息消費量
+    float patienceDecrement = 0.25f;                            // 息我慢時(連打なし)の息消費量
     [SerializeField]
-    float buttonPatienceDecrement = 0.1f;           // 息我慢時(連打あり)の息消費量
+    float buttonPatienceDecrement = 0.1f;                       // 息我慢時(連打あり)の息消費量
     [SerializeField]
-    int durationPlus = 5;                           // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
+    int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
 
-    int duration = 0;                               // 連打処理の継続フレーム (詳細は165行のNOTE)
+    [SerializeField]
+    float smallDisturbance = 75;                                // 息の乱れ(小)の基準値
+    [SerializeField]
+    float mediumDisturbance = 50;                               // 息の乱れ(中)の基準値
+    [SerializeField]
+    float largeDisturbance = 20;                                // 息の乱れ(大)の基準値
 
-    public float NowAmount { get; private set; } = 100;             // 息の残量
+    int duration = 0;                                           // 連打処理の継続フレーム (詳細は165行のNOTE)
+
+    public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
+    public float NowAmount { get; private set; } = 100;         // 息の残量
+
+    /// <summary>
+    /// 更新処理
+    /// </summary>
+    void Update()
+    {
+        // 息切れ検知
+        CheckBreathlessness();
+
+        // 息の残量による音の発生
+        BreathSound();
+    }
+
+    /// <summary>
+    /// 息切れ検知
+    /// </summary>
+    void CheckBreathlessness()
+    {
+        if (!IsBreathlessness && NowAmount <= 0)
+        {
+            IsBreathlessness = true;
+        }
+        else if (NowAmount >= 100)
+        {
+            IsBreathlessness = false;
+        }
+    }
+
+    /// <summary>
+    /// 息の残量による音の発生
+    /// </summary>
+    void BreathSound()
+    {
+        if (IsBreathlessness)
+        {
+            soundArea.ChangeSoundLevel(5);
+        }
+        else
+        {
+            if (NowAmount <= smallDisturbance)
+            {
+                soundArea.ChangeSoundLevel(2);
+                if (NowAmount <= mediumDisturbance)
+                {
+                    soundArea.ChangeSoundLevel(3);
+                    if (NowAmount <= largeDisturbance)
+                    {
+                        soundArea.ChangeSoundLevel(4);
+                    }
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// 各ステートに合わせた処理
@@ -54,13 +117,13 @@ public class PlayerBrethController : MonoBehaviour
         // 各ステートに合わせた処理を実行
         switch (state)
         {
-            case BrethState.WAIT: NowAmount += normalRecoveryAmount; break;
-            case BrethState.WALK: NowAmount += normalRecoveryAmount; break;
+            case BrethState.WAIT: NowAmount += normalRecovery; break;
+            case BrethState.WALK: NowAmount += normalRecovery; break;
             case BrethState.DASH: ConsumeBreath(state); break;
             case BrethState.STEALTH: ConsumeBreath(state); break;
             case BrethState.HIDE: ConsumeBreath(state); break;
-            case BrethState.DEEPBREATH: NowAmount += normalRecoveryAmount * 2; break;
-            case BrethState.BREATHLESSNESS: NowAmount += breathlessnessRecoveryAmount; break;
+            case BrethState.DEEPBREATH: NowAmount += normalRecovery * 2; break;
+            case BrethState.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
             default: break;
         }
     }
@@ -94,7 +157,7 @@ public class PlayerBrethController : MonoBehaviour
                 }
                 else
                 {
-                    NowAmount += normalRecoveryAmount;
+                    NowAmount += normalRecovery;
                 }
                 break;
             default: break;
