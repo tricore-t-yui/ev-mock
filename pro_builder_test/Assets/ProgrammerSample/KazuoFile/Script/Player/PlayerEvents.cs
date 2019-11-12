@@ -13,7 +13,7 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerMoveController moveController = default;          // 移動クラス
     [SerializeField]
-    PlayerBrethController brethController = default;        // 息管理クラス
+    PlayerBreathController breathController = default;        // 息管理クラス
     [SerializeField]
     PlayerHideController hideController = default;          // 隠れるアクションクラス
     [SerializeField]
@@ -30,7 +30,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Wait()
     {
-        brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
+        breathController.StateUpdate(PlayerBreathController.BrethState.WAIT);
         camera.IsRotationCamera(true);
     }
 
@@ -45,7 +45,7 @@ public class PlayerEvents : MonoBehaviour
     public void Walk()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.WALK);
-        brethController.StateUpdate(PlayerBrethController.BrethState.WALK);
+        breathController.StateUpdate(PlayerBreathController.BrethState.WALK);
         moveController.Move();
         animationContoller.AnimStart(AnimType.WALK);
         camera.IsRotationCamera(true);
@@ -56,7 +56,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void WalkEnd()
     {
-        brethController.StateUpdate(PlayerBrethController.BrethState.WAIT);
+        breathController.StateUpdate(PlayerBreathController.BrethState.WAIT);
         animationContoller.AnimStop(AnimType.WALK);
     }
 
@@ -67,7 +67,7 @@ public class PlayerEvents : MonoBehaviour
     {
         SquatEnd();
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.DASH);
-        brethController.StateUpdate(PlayerBrethController.BrethState.DASH);
+        breathController.StateUpdate(PlayerBreathController.BrethState.DASH);
         moveController.Move();
         animationContoller.AnimStart(AnimType.DASH);
         camera.IsRotationCamera(true);
@@ -108,7 +108,7 @@ public class PlayerEvents : MonoBehaviour
     public void Stealth()
     {
         moveController.ChangeSpeedLimit(PlayerMoveController.SpeedLimitType.STEALTH);
-        brethController.StateUpdate(PlayerBrethController.BrethState.STEALTH);
+        breathController.StateUpdate(PlayerBreathController.BrethState.STEALTH);
         animationContoller.AnimStart(AnimType.STEALTH);
         camera.IsRotationCamera(true);
         moveController.Move();
@@ -128,7 +128,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
-        brethController.StateUpdate(PlayerBrethController.BrethState.DEEPBREATH);
+        breathController.StateUpdate(PlayerBreathController.BrethState.DEEPBREATH);
         moveController.IsRootMotion(true, true);
         camera.IsRotationCamera(false);
     }
@@ -143,7 +143,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Brethlessness()
     {
-        brethController.StateUpdate(PlayerBrethController.BrethState.BREATHLESSNESS);
+        breathController.StateUpdate(PlayerBreathController.BrethState.BREATHLESSNESS);
         moveController.IsRootMotion(true, true);
         animationContoller.AnimStart(AnimType.BREATHLESSNESS);
         camera.IsRotationCamera(false);
@@ -176,7 +176,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        brethController.StateUpdate(PlayerBrethController.BrethState.HIDE);
+        breathController.StateUpdate(PlayerBreathController.BrethState.HIDE);
         hideController.EndHideAction();
 
         switch (LayerMask.LayerToName(hideController.HideObj.layer))

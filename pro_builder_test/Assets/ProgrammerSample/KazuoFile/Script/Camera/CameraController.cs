@@ -27,8 +27,6 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     float sensitivity = 2;                          // カメラの感度
 
-    float shakePower = 0;                           // カメラの揺れの大きさ
-
     /// <summary>
     /// 起動処理
     /// </summary>
