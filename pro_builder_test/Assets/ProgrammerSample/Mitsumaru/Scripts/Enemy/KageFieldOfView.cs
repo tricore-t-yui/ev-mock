@@ -3,39 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public delegate void OnDiscoverMomentDelegate();
-public delegate void OnLoseMomentDelegate();
-
 /// <summary>
-/// 敵の視界の処理を行う
+/// 影人間の視野の制御
 /// </summary
-public class EnemyVisibility : MonoBehaviour
+public class KageFieldOfView : MonoBehaviour
 {
+    // 視野の距離のパラメータ
+    [System.Serializable]
+    class DistanceParam
+    {
+        // ステートの名前
+        public string stateName = null;
+        // 視野の距離
+        public float distance = 0;
+    }
+
+    // ヘッドのトランスフォーム
+    [SerializeField]
+    Transform head = default;
+
+    // 位置オフセット
+    [SerializeField]
+    Vector3 positionOffset = Vector3.zero;
+
+    // 回転オフセット
+    [SerializeField]
+    Quaternion rotationOffset = Quaternion.identity;
+
     // プレイヤー
     [SerializeField]
     Transform player = default;
+
+    // 視界の角度
+    [SerializeField]
+    [Range(0, 180)]
+    float angle = 0;
+
+    // デバッグ用の距離
+    [SerializeField]
+    float debugOnlyDistance = 0;
+    // ステートごとの視界の距離
+    [SerializeField]
+    List<DistanceParam> distances = default;
+    // 現在の視界の距離
+    float currentDistance = 0;
 
     // レイに衝突する対象のレイヤー名
     [SerializeField]
     List<string> rayTargetLayer = default;
 
+    // 視野にに入っているとき
+    UnityEvent onInViewRange = default;
+
+    // 視野から出ているとき
+    UnityEvent onOutViewRange = default;
+
     // レイヤーマスク
     int layerMask = 0;
-
-    // 視界の角度
-    [SerializeField]
-    [Range(0, 180)]
-    float angle = 10;
-
-    // 視界の距離
-    [SerializeField]
-    float distance = 0;
-
-    // プレイヤーを見つけた瞬間
-    OnDiscoverMomentDelegate onDiscoverMoment;
-
-    // プレイヤーを見失った瞬間
-    OnLoseMomentDelegate onLoseMoment;
 
     // 視界の左側の境界
     Vector3 leftBorder = Vector3.zero;
@@ -45,11 +69,6 @@ public class EnemyVisibility : MonoBehaviour
     Vector3 upBorder = Vector3.zero;
     // 視界の下側の境界
     Vector3 downBorder = Vector3.zero;
-
-    // プレイヤーを発見したか
-    bool isDiscover = false;
-    // プレイヤーを発見したか（前フレーム）
-    bool isPrevDiscover = false;
 
     /// <summary>
     /// 開始
@@ -65,45 +84,48 @@ public class EnemyVisibility : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // 視野のトランスフォームをヘッドと同期する（オフセット分加算）
+        transform.position = head.position + positionOffset;
+        transform.rotation = head.rotation * rotationOffset;
+
         // 境界ベクトルを更新
-        UpdateBorderVector();
-
-        // 発見中かどうかのフラグを現在と前フレームで入れ替える
-        isPrevDiscover = isDiscover;
-        isDiscover = IsPlayerDiscover();
-
-        if (IsPlayerDiscoverMoment())
-        {
-            onDiscoverMoment();
-        }
-        else if (IsPlayerLoseMoment())
-        {
-            onLoseMoment();
-        }
+        UpdateBorderVector(angle,currentDistance);
     }
 
     /// <summary>
-    /// 発見したときのデリゲートをセット
+    ///  視野の範囲内のいるときのイベントを追加
     /// </summary>
     /// <param name="set"></param>
-    public void SetOnDiscoverMomentDelegate(OnDiscoverMomentDelegate set)
+    public void SetOnInViewRangeEvent(UnityAction set)
     {
-        onDiscoverMoment = set;
+        onInViewRange.AddListener(set);
     }
 
     /// <summary>
-    /// 見失ったときデリゲートをセットする
+    /// 視界の範囲外にいるときのイベント追加
     /// </summary>
     /// <param name="set"></param>
-    public void SetOnLoseMomentDelegate(OnLoseMomentDelegate set)
+    public void SetOnOutViewRangeEvent(UnityAction set)
     {
-        onLoseMoment = set;
+        onOutViewRange.AddListener(set);
+    }
+
+    /// <summary>
+    /// 視界の距離の変更を行う
+    /// </summary>
+    /// <param name="stateName"></param>
+    public void ChangeDistance(string stateName)
+    {
+        // 引数と同じステート名のパラメータを取得
+        DistanceParam param = distances.Find(x => x.stateName == stateName);
+        // 現在の視界の距離を変更
+        currentDistance = param.distance;
     }
 
     /// <summary>
     /// 視界の境界ベクトルを更新
     /// </summary>
-    void UpdateBorderVector()
+    void UpdateBorderVector(float angle,float distance)
     {
         // 左側の境界ベクトル
         leftBorder = (Quaternion.AngleAxis(angle * 0.5f,transform.right * -1) * transform.forward) * distance;
@@ -119,7 +141,7 @@ public class EnemyVisibility : MonoBehaviour
     /// プレイヤーを発見しているかどうか
     /// </summary>
     /// <returns>発見中かどうかのフラグ</returns>
-    bool IsPlayerDiscover()
+    bool IsInViewRange()
     {
         // エネミーからプレイヤーに向かってレイを飛ばす
         Ray ray = new Ray(transform.position,(player.transform.position - transform.position).normalized);
@@ -145,41 +167,10 @@ public class EnemyVisibility : MonoBehaviour
         // [条件２]
         // プレイヤーとエネミーの距離が視界の距離よりも離れているかどうか
         // memo : 離れている→視界の範囲外　離れていない→視界の範囲内
-        if (dot < (angle * 0.5f) && raycastHit.distance < distance)
+        if (dot < (angle * 0.5f) && raycastHit.distance < currentDistance)
         {
             // プレイヤーを見つけた
             return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// プレイヤーを発見した瞬間
-    /// </summary>
-    /// <returns></returns>
-    bool IsPlayerDiscoverMoment()
-    {
-        if (!isPrevDiscover)
-        {
-            if (isDiscover)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// プレイヤーを見失った
-    /// </summary>
-    bool IsPlayerLoseMoment()
-    {
-        if (isPrevDiscover)
-        {
-            if (!isDiscover)
-            {
-                return true;
-            }
         }
         return false;
     }
@@ -190,7 +181,7 @@ public class EnemyVisibility : MonoBehaviour
     void OnDrawGizmos()
     {
         // 境界ベクトルを更新
-        UpdateBorderVector();
+        UpdateBorderVector(angle,debugOnlyDistance);
         // デバッグ用に境界ベクトルを表示する
         Debug.DrawRay(transform.position, leftBorder, Color.green);
         Debug.DrawRay(transform.position, rightBorder, Color.green);
