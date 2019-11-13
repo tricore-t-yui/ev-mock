@@ -18,7 +18,7 @@ public class HideObjectController : MonoBehaviour
     }
 
     [SerializeField]
-    Animator lockerAnim = default;                  // ロッカーのアニメーション
+    Animator lockerAnim = default;                  // ロッカーのアニメーション ベッドの場合は不要
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
