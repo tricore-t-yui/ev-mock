@@ -61,16 +61,16 @@ public class PlayerDoorController : MonoBehaviour
         // NOTE:k.oishi 個人の作業シーンで作業をすると、
         //      AreaManagerが無いってと怒られるのでとりあえずコメントアウトしています。
         //
-        //// 触れるドアが逆なら逆向きのアニメーション開始
-        //string areaName = areaManager.GetExistAreaToCharacter("Player");
-        //if (door.IsReverseOpen(areaName))
-        //{
-        //    playerAnim.SetBool("ReverseDoorOpen",true);
-        //}
-        //else
-        //{
-        //    playerAnim.SetBool("ReverseDoorOpen", false);
-        //}
+        // 触れるドアが逆なら逆向きのアニメーション開始
+        string areaName = areaManager.GetExistAreaToCharacter("Player");
+        if (door.IsReverseOpen(areaName))
+        {
+            playerAnim.SetBool("ReverseDoorOpen",true);
+        }
+        else
+        {
+            playerAnim.SetBool("ReverseDoorOpen", false);
+        }
 
         // ドア開け開始
         enabled = true;

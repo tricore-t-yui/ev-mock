@@ -42,7 +42,7 @@ public class ScreenEffectController : MonoBehaviour
         // 死んでしまったら
         if (healthController.IsDeath)
         {
-            fadeOut.color = DisplayEffect(ImageType.FADEOUT);
+            //fadeOut.color = DisplayEffect(ImageType.FADEOUT);
         }
     }
 
