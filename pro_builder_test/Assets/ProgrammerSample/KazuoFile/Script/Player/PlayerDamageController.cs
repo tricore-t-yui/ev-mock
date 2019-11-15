@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AnimationType = PlayerAnimationContoller.AnimationType;
 
 /// <summary>
 /// ダメージリアクションクラス
@@ -8,7 +9,7 @@ using UnityEngine;
 public class PlayerDamageController : MonoBehaviour
 {
     [SerializeField]
-    Animator playerAnim = default;                          // アニメーター
+    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
     [SerializeField]
     Rigidbody rigidbody = default;                          // リジットボディ
     [SerializeField]
@@ -17,9 +18,12 @@ public class PlayerDamageController : MonoBehaviour
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
     [SerializeField]
+    float objectDamage = 0.1f;                              // オブジェクトでのダメージ量
+    [SerializeField]
     float invincibleSecond = 2;                             // ダメージ処理後の無敵時間
 
-    bool isInvincible = false;                              // 無敵時間かどうか 
+    bool isInvincible = false;                              // 無敵時間かどうか
+    bool isDamageObjHit = false;                            // ダメージオブジェクトにふれているかどうか
     public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
 
     /// <summary>
@@ -34,6 +38,16 @@ public class PlayerDamageController : MonoBehaviour
             // オブジェクトに当たったら倒れる
             EndBlowAway();
             IsObjHit = true;
+        }
+
+        // ダメージオブジェクト触れているかどうか
+        if (LayerMask.LayerToName(collision.gameObject.layer) == "DamageObj")
+        {
+            isDamageObjHit = true;
+        }
+        else
+        {
+            isDamageObjHit = false;
         }
     }
 
@@ -60,10 +74,23 @@ public class PlayerDamageController : MonoBehaviour
 
             // 吹き飛ばしてアニメーション開始
             rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
-            playerAnim.SetTrigger("Damage");
+            animationContoller.AnimStart(AnimationType.DAMAGE);
 
             // 処理開始
             enabled = true;
+        }
+    }
+
+    /// <summary>
+    /// ダメージオブジェクトに当たった時のダメージ処理
+    /// </summary>
+    public void HitDamageObject()
+    {
+        // ダメージオブジェクトに触れていたら
+        if(isDamageObjHit)
+        {
+            // ダメージを食らう
+            healthController.Damage(objectDamage);
         }
     }
 
@@ -75,12 +102,12 @@ public class PlayerDamageController : MonoBehaviour
         // 死んでしまったなら死亡アニメーション
         if (healthController.IsDeath)
         {
-            playerAnim.SetBool("Death", true);
+            animationContoller.AnimStart(AnimationType.DEATH);
         }
         // 生きているなら立ち上がる
         else
         {
-            playerAnim.SetBool("Death", false);
+            animationContoller.AnimStop(AnimationType.DEATH);
         }
     }
 
@@ -89,10 +116,9 @@ public class PlayerDamageController : MonoBehaviour
     /// </summary>
     public void EndDamageAction()
     {
-        // 閉じられていたら終了処理
-        if (playerAnim.GetBool("DamageEnd"))
+        // アニメーションが再生され終わったら終了処理
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DAMAGE) && !healthController.IsDeath)
         {
-            playerAnim.SetBool("DamageEnd", false);
             interactController.CommonEndAction();
 
             // 無敵時間開始

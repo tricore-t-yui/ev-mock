@@ -19,15 +19,17 @@ public class CameraController : MonoBehaviour
     }
 
     [SerializeField]
-    Transform player = default;                     // プレイヤー
+    Transform player = default;                         // プレイヤー
     [SerializeField]
-    GameObject animCamera = default;                // アニメーション用カメラ
+    GameObject animCamera = default;                    // アニメーション用カメラ
     [SerializeField]
-    PlayerHideController hideController = default;  // 隠れるアクション管理クラス
+    PlayerHideController hideController = default;      // 隠れるアクション管理クラス
     [SerializeField]
-    PlayerHealthController healthController = default;  // 隠れるアクション管理クラス
+    PlayerBreathController breathController = default;  // 隠れるアクション管理クラス
     [SerializeField]
-    float sensitivity = 2;                          // カメラの感度
+    PlayerStateController stateController = default;    // ステート管理クラス
+    [SerializeField]
+    float sensitivity = 2;                              // カメラの感度
 
     /// <summary>
     /// 起動処理
@@ -46,12 +48,8 @@ public class CameraController : MonoBehaviour
         // プレイヤーの頭の位置に合わせる
         transform.parent.position = player.transform.position;
 
-        // 死んでしまったら回転させない
-        if(!healthController.IsDeath)
-        {
-            // 回転
-            Rotation();
-        }
+        // 回転
+        Rotation();
     }
 
     /// <summary>
@@ -59,15 +57,14 @@ public class CameraController : MonoBehaviour
     /// </summary>
     void Rotation()
     {
-
         // 回転量を求める
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
         float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
 
-        // 動かしていない状態ならゆっくり視点を上下に
-        if (!GetDirectionKey() && Y_Rotation == 0 && X_Rotation == 0)
+        // 動かしていない状態ならゆっくり視点を上下にサイン関数移動
+        if (!GetDirectionKey() && Y_Rotation == 0 && X_Rotation == 0 && stateController.State == PlayerStateController.ActionStateType.WAIT)
         {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x + Mathf.Sin(Time.time) / 50, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x + WaitCameraSin(), transform.eulerAngles.y, transform.eulerAngles.z);
         }
         else
         {
@@ -226,5 +223,23 @@ public class CameraController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// 待機時のカメラのサイン関数移動
+    /// </summary>
+    float WaitCameraSin()
+    {
+        float sin = 0;
+        if (breathController.NowAmount < 100)
+        {
+            sin = Mathf.Sin(3 * Mathf.PI * Time.time) / 7.5f;
+        }
+        else
+        {
+            sin = Mathf.Sin(Time.time) / 50;
+        }
+
+        return sin;
     }
 }

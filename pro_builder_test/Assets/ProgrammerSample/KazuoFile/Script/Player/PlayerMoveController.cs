@@ -29,6 +29,7 @@ public class PlayerMoveController : MonoBehaviour
         SQUAT,
         STEALTH,
         BREATHLESSNESS,
+        BAREFOOT,
     }
 
     /// <summary>
@@ -41,13 +42,13 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     [SerializeField]
-    Rigidbody rigid = default;                       // リジットボディ
+    Rigidbody rigid = default;              // リジットボディ
     [SerializeField]
-    CapsuleCollider collider = default;              // コライダー
+    CapsuleCollider collider = default;     // コライダー
     [SerializeField]
-    Animator playerAnim = default;                  // アニメーター
+    Animator playerAnim = default;          // アニメーター
     [SerializeField]
-    Transform camera = default;
+    Transform camera = default;             // カメラ
 
     [SerializeField]
     float forwardSpeed = 2f;                // 前移動時のスピード
@@ -57,17 +58,19 @@ public class PlayerMoveController : MonoBehaviour
     float backSpeed = 1.5f;                 // 後ろ移動時のスピード
     [SerializeField]
     float speedMagnification = 10;          // 移動速度の倍率
+    [SerializeField, Range(0, 1)]
+    float barefootSpeedReduction = 0.15f;   // 裸足時の移動速度の減少割合
 
     [SerializeField]
-    float walkSpeedLimit = 0.75f;              // 歩き時の移動速度の限界
+    float walkSpeedLimit = 0.75f;           // 歩き時の移動速度の限界
     [SerializeField]
-    float dashSpeedLimit = 1.5f;              // ダッシュ時の移動速度の限界
+    float dashSpeedLimit = 1.5f;            // ダッシュ時の移動速度の限界
     [SerializeField]
-    float squatSpeedLimit = 0.25f;           // しゃがみ時の移動速度の限界
+    float squatSpeedLimit = 0.25f;          // しゃがみ時の移動速度の限界
     [SerializeField]
-    float stealthSpeedLimit = 0.25f;         // 忍び歩き時の移動速度の限界
+    float stealthSpeedLimit = 0.25f;        // 忍び歩き時の移動速度の限界
     [SerializeField]
-    float breathlessnessSpeedLimit = 0.25f;  // 息切れ時の移動速度の限界
+    float breathlessnessSpeedLimit = 0.25f; // 息切れ時の移動速度の限界
 
     [SerializeField, Range(0,180)]
     float stepAngle = 60;                   // 段差の許容角度
@@ -221,6 +224,9 @@ public class PlayerMoveController : MonoBehaviour
             case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
             case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
             case SpeedLimitType.BREATHLESSNESS: moveTypeSpeedLimit = breathlessnessSpeedLimit; break;
+
+            // 裸足は移動速度を減少させる
+            case SpeedLimitType.BAREFOOT: moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction; break;
         }
     }
 

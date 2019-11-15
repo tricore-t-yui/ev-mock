@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ActionSoundType = SoundAreaController.ActionSoundType;
 
 /// <summary>
 /// プレイヤーの体力管理クラス
@@ -48,9 +49,6 @@ public class PlayerHealthController : MonoBehaviour
             Recovery();
         }
 
-        // 体力の残量による音の発生
-        HealthSound();
-
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
     }
@@ -65,6 +63,9 @@ public class PlayerHealthController : MonoBehaviour
         {
             // ダメージフレームをカウント
             damageFrame++;
+
+            // 体力の残量による音の発生
+            HealthSound();
 
             // ダメージフレームが回復フレームより大きくなったら回復開始
             if (recoveryFrame <= damageFrame)
@@ -86,10 +87,10 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (NowAmount <= smallDisturbance)
         {
-            soundArea.ChangeSoundLevel(5);
+            soundArea.AddSoundLevel(ActionSoundType.HALFHEALTH);
             if (NowAmount <= largeDisturbance)
             {
-                soundArea.ChangeSoundLevel(7);
+                soundArea.AddSoundLevel(ActionSoundType.PINCHHEALTH);
             }
         }
     }
