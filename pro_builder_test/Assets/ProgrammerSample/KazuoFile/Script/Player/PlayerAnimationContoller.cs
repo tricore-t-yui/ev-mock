@@ -17,10 +17,49 @@ public class PlayerAnimationContoller : MonoBehaviour
         STEALTH,            // 忍び歩き
         SQUAT,              // しゃがみ
         BREATHLESSNESS,     // 息切れ
+        SHOES,              // 靴
+        DAMAGE,             // ダメージ
+        DEATH,              // 死亡
+        HIDELOCKER,         // ロッカーに隠れる
+        HIDEBED,            // ベッドに隠れる
+        OPENDOOR,           // ドア開閉
+        DASHOPENDOOR,       // ダッシュでドア開閉
+        REVERSEOPENDOOR,    // 逆からドア開閉
+    }
+
+    /// <summary>
+    /// アニメーション終了検知のタイプ
+    /// </summary>
+    public enum EndAnimationType
+    {
+        DOOR,
+        HIDE,
+        DAMAGE,
+        SHOES,
     }
 
     [SerializeField]
-    Animator animator = default;    // プレイヤーのアニメーター
+    Animator animator = default;                                // プレイヤーのアニメーター
+
+    [SerializeField]
+    GameObject rightArm = default;                              // 右腕
+    [SerializeField]
+    GameObject shoesArm = default;                              // 靴もっている腕
+    [SerializeField]
+    GameObject shoes = default;                                 // 右腕に持っている靴
+    [SerializeField]
+    bool isShoesArm = true;                                     // 靴を持つ手を表示するか
+
+    public bool IsEndAnim { get; private set; } = true;         // アニメーションが終わったかどうか
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        // 靴を履く
+        animator.SetBool("Shoes", true);
+    }
 
     /// <summary>
     /// アニメーションの開始
@@ -32,9 +71,17 @@ public class PlayerAnimationContoller : MonoBehaviour
         {
             case AnimationType.WALK: animator.SetBool("Walk", true); break;
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
-            case AnimationType.STEALTH: animator.SetBool("Stealth", true); break;
-            case AnimationType.SQUAT: animator.SetBool("Squat", true); break;
-            case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); break;
+            case AnimationType.STEALTH: animator.SetBool("Stealth",true);break;
+            case AnimationType.SQUAT: animator.SetBool("Squat", true);break;
+            case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true);break;
+            case AnimationType.DAMAGE: animator.SetTrigger("Damage"); break;
+            case AnimationType.DEATH: animator.SetBool("Death", true);break;
+            case AnimationType.HIDELOCKER: animator.SetTrigger("LockerIn"); break;
+            case AnimationType.HIDEBED: animator.SetTrigger("BedIn"); break;
+            case AnimationType.OPENDOOR: animator.SetTrigger("DoorOpen"); break;
+            case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); break;
+            case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); break;
+            case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false;break;
         }
     }
 
@@ -51,6 +98,88 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.STEALTH: animator.SetBool("Stealth", false); break;
             case AnimationType.SQUAT: animator.SetBool("Squat", false); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", false); break;
+            case AnimationType.DAMAGE: animator.ResetTrigger("Damage"); break;
+            case AnimationType.DEATH: animator.SetBool("Death", false); break;
+            case AnimationType.HIDELOCKER: animator.ResetTrigger("LockerIn"); break;
+            case AnimationType.HIDEBED: animator.ResetTrigger("BedIn"); break;
+            case AnimationType.OPENDOOR: animator.ResetTrigger("DoorOpen"); break;
+            case AnimationType.DASHOPENDOOR: animator.ResetTrigger("DashDoorOpen"); break;
+            case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", false); break;
+            case AnimationType.SHOES: animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
+        }
+    }
+
+    /// <summary>
+    /// それぞれのアニメーション終了検知
+    /// </summary>
+    /// <param name="type">アニメーション終了検知のタイプ</param>
+    public bool EndAnimation(EndAnimationType type)
+    {
+        switch (type)
+        {
+            case EndAnimationType.DOOR:
+                if (animator.GetBool("DoorEnd"))
+                {
+                    animator.SetBool("DoorEnd", false);
+                    return true;
+                }
+                return false;
+            case EndAnimationType.HIDE:
+                if (animator.GetBool("HideEnd"))
+                {
+                    animator.SetBool("HideEnd", false);
+                    return true;
+                }
+                return false;
+            case EndAnimationType.DAMAGE:
+                if (animator.GetBool("DamageEnd"))
+                {
+                    animator.SetBool("DamageEnd", false);
+                    return true;
+                }
+                return false;
+            default:
+                IsEndAnim = true;
+                return true;
+        }
+    }
+
+    /// <summary>
+    /// 靴を表示するかどうか
+    /// </summary>
+    /// NOTE:k.oishi ステートマシン用関数
+    public void DisplayShoes(bool flag)
+    {
+        // 表示
+        if (flag)
+        {
+            if (isShoesArm)
+            {
+                // 靴をもった腕を表示
+                rightArm.SetActive(false);
+                shoesArm.SetActive(true);
+            }
+            else
+            {
+
+                // 手の靴表示
+                shoes.SetActive(true);
+            }
+        }
+        // 非表示
+        else
+        {
+            if (isShoesArm)
+            {
+                // 靴をもった腕を非表示
+                rightArm.SetActive(true);
+                shoesArm.SetActive(false);
+            }
+            else
+            {
+                // 手の靴非表示
+                shoes.SetActive(false);
+            }
         }
     }
 }

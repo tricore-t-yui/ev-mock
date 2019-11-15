@@ -13,27 +13,29 @@ public class PlayerEventCaller : MonoBehaviour
     /// </summary>
     public enum EventType
     {
-        WAIT,               // 待機時
-        WALK,               // 歩く時
-        DASH,               // ダッシュ時
-        SQUAT,              // しゃがみ時
-        STEALTH,            // 忍び歩き時
-        DOOR,               // ドア時
-        HIDE,               // 隠れる時
-        DEEPBREATH,         // 深呼吸時
-        BREATHLESSNESS,     // 息切れ時
-        DAMAGE,             // ダメージ時
+        WAIT,               // 待機
+        WALK,               // 歩く
+        DASH,               // ダッシュ
+        SQUAT,              // しゃがみ
+        STEALTH,            // 忍び歩き
+        DOOR,               // ドア
+        HIDE,               // 隠れる
+        DEEPBREATH,         // 深呼吸
+        BREATHLESSNESS,     // 息切れ
+        DAMAGE,             // ダメージ
+        BAREFOOT,           // 裸足
 
-        WAITEND,            // 待機終了時
-        WALKEND,            // 歩く終了時
-        DASHEND,            // ダッシュ終了時
-        SQUATEND,           // しゃがみ終了時
-        STEALTHEND,         // 忍び歩き終了時
-        DOOREND,            // ドア終了時
-        HIDEEND,            // 隠れる終了時
-        DEEPBREATHEND,      // 深呼吸終了時
-        BREATHLESSNESSEND,  // 息切れ終了時
-        DAMAGEEND,          // ダメージ終了時
+        WAITEND,            // 待機終了
+        WALKEND,            // 歩く終了
+        DASHEND,            // ダッシュ終了
+        SQUATEND,           // しゃがみ終了
+        STEALTHEND,         // 忍び歩き終了
+        DOOREND,            // ドア終了
+        HIDEEND,            // 隠れる終了
+        DEEPBREATHEND,      // 深呼吸終了
+        BREATHLESSNESSEND,  // 息切れ終了
+        DAMAGEEND,          // ダメージ終了
+        BAREFOOTEND,        // 裸足終了
     }
 
     [SerializeField]
@@ -56,6 +58,8 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent brethressness    = new UnityEvent();     // 息切れイベント
     [SerializeField]
     UnityEvent damage           = new UnityEvent();     // ダメージイベント
+    [SerializeField]
+    UnityEvent barefoot         = new UnityEvent();     // 裸足イベント
 
     [SerializeField]
     UnityEvent waitEnd          = new UnityEvent();     // 待機終了イベント
@@ -72,11 +76,13 @@ public class PlayerEventCaller : MonoBehaviour
     [SerializeField]
     UnityEvent hideEnd          = new UnityEvent();     // 隠れる終了イベント
     [SerializeField]
-    UnityEvent deepBreathEnd    = new UnityEvent();     // 深呼吸イベント
+    UnityEvent deepBreathEnd    = new UnityEvent();     // 深呼吸終了イベント
     [SerializeField]
     UnityEvent brethressnessEnd = new UnityEvent();     // 息切れ終了イベント
     [SerializeField]
-    UnityEvent damageEnd        = new UnityEvent();     // ダメージイベント
+    UnityEvent damageEnd        = new UnityEvent();     // ダメージ終了イベント
+    [SerializeField]
+    UnityEvent barefootEnd      = new UnityEvent();     // 裸足終了イベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -96,6 +102,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DEEPBREATH:        deepBreath.Invoke();       break;
             case EventType.BREATHLESSNESS:    brethressness.Invoke();    break;
             case EventType.DAMAGE:            damage.Invoke();           break;
+            case EventType.BAREFOOT:          barefoot.Invoke();         break;
 
             case EventType.WAITEND:           waitEnd.Invoke();          break;
             case EventType.WALKEND:           walkEnd.Invoke();          break;
@@ -107,6 +114,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DEEPBREATHEND:     deepBreathEnd.Invoke();    break;
             case EventType.BREATHLESSNESSEND: brethressnessEnd.Invoke(); break;
             case EventType.DAMAGEEND:         damageEnd.Invoke();        break;
+            case EventType.BAREFOOTEND:       barefootEnd.Invoke();      break;
         }
     }
 }

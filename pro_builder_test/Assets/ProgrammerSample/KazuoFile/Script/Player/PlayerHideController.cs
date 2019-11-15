@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DirType = InteractFunction.DirType;
+using AnimationType = PlayerAnimationContoller.AnimationType;
 
 /// <summary>
 /// 隠れるアクション管理クラス
@@ -18,7 +19,7 @@ public class PlayerHideController : MonoBehaviour
     }
 
     [SerializeField]
-    Animator playerAnim = default;                              // アニメーター
+    PlayerAnimationContoller animationContoller = default;      // アニメーション管理クラス
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
@@ -27,7 +28,6 @@ public class PlayerHideController : MonoBehaviour
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
-    public bool IsWarning { get; private set; } = false;        // 警戒フラグ
     public bool IsStealth { get; private set; } = false;        // 息止めフラグ
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
@@ -65,10 +65,10 @@ public class PlayerHideController : MonoBehaviour
         switch (LayerMask.LayerToName(HideObj.layer))
         {
             case "Locker":
-                playerAnim.SetTrigger("LockerIn");
+                animationContoller.AnimStart(AnimationType.HIDELOCKER);
                 hideObjectController.AnimStart("LockerIn"); break;
             case "Bed":
-                playerAnim.SetTrigger("BedIn"); break;
+                animationContoller.AnimStart(AnimationType.HIDEBED); break;
         }
 
         // 隠れる開始
@@ -118,10 +118,9 @@ public class PlayerHideController : MonoBehaviour
     /// </summary>
     public void EndHideAction()
     {
-        // 閉じられていたら終了処理
-        if (playerAnim.GetBool("HideEnd"))
+        // アニメーションが再生され終わったら終了処理
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.HIDE))
         {
-            playerAnim.SetBool("HideEnd", false);
             interactController.CommonEndAction();
             hideObjectController.SetActiveCollider(true);
             enabled = false;
@@ -146,13 +145,5 @@ public class PlayerHideController : MonoBehaviour
     public void SetIsStealth(bool flag)
     {
         IsStealth = flag;
-    }
-
-    /// <summary>
-    /// 警戒状態のフラグセット関数
-    /// </summary>
-    public void CheckWarning(bool flag)
-    {
-        IsWarning = flag;
     }
 }

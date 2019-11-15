@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MoveType = PlayerStateController.ActionStateType;
+using ActionSoundType = SoundAreaController.ActionSoundType;
 
 /// <summary>
 /// プレイヤーの息管理クラス
@@ -13,13 +15,11 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     public enum BrethState
     {
-        WAIT,                   // 何もしていない状態
-        WALK,                   // 歩いている状態
-        DASH,                   // ダッシュしている状態
-        STEALTH,                // 忍び歩きしている状態
-        HIDE,                   // 隠れている状態
-        DEEPBREATH,             // 深呼吸している状態
-        BREATHLESSNESS,         // 息切れしている状態
+        NOTCONFUSION,       // 乱れなし
+        SMALLCONFUSION,     // 小さな乱れ
+        MEDIUMCONFUSION,    // 乱れ
+        LARGECONFUSION,     // 大きな乱れ
+        BREATHLESSNESS,     // 息切れ
     }
 
     [SerializeField]
@@ -28,21 +28,26 @@ public class PlayerBreathController : MonoBehaviour
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
     SoundAreaController soundArea = default;                    // 音管理クラス
+    [SerializeField]
+    HideStateController hideState = default;                    // 隠れる状態管理クラス
 
     [SerializeField]
     float normalRecovery = 0.5f;                                // 通常の息の回復量
     [SerializeField]
     float breathlessnessRecovery = 0.2f;                        // 息切れ時の息の回復量
+
     [SerializeField]
-    float DashDecrement = 0.2f;                                 // 息止め時の息消費量
+    float DashDecrement = 0.2f;                                 // ダッシュ時の息消費量
     [SerializeField]
     float stealthDecrement = 0.15f;                             // 息止め時の息消費量
     [SerializeField]
-    float patienceDecrement = 0.25f;                            // 息我慢時(連打なし)の息消費量
+    float hideSmallDecrement = 0.15f;                           // 隠れる＋息止め時の息消費量(小)
+    [SerializeField]
+    float hideMediumDecrement = 0.25f;                          // 隠れる＋息止め時の息消費量(中)
+    [SerializeField]
+    float hideLargeDecrement = 0.35f;                           // 隠れる＋息止め時の息消費量(大)
     [SerializeField]
     float buttonPatienceDecrement = 0.1f;                       // 息我慢時(連打あり)の息消費量
-    [SerializeField]
-    int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
 
     [SerializeField]
     float smallDisturbance = 75;                                // 息の乱れ(小)の基準値
@@ -51,8 +56,11 @@ public class PlayerBreathController : MonoBehaviour
     [SerializeField]
     float largeDisturbance = 20;                                // 息の乱れ(大)の基準値
 
+    [SerializeField]
+    int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
     int duration = 0;                                           // 連打処理の継続フレーム (詳細は165行のNOTE)
 
+    public BrethState state { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
     public float NowAmount { get; private set; } = 100;         // 息の残量
 
@@ -87,21 +95,36 @@ public class PlayerBreathController : MonoBehaviour
     {
         if (IsBreathlessness)
         {
-            soundArea.ChangeSoundLevel(5);
+            // 息切れ
+            soundArea.AddSoundLevel(ActionSoundType.BREATHLESSNESS);
+            state = BrethState.BREATHLESSNESS;
         }
         else
         {
             if (NowAmount <= smallDisturbance)
             {
-                soundArea.ChangeSoundLevel(2);
+                // 小さな乱れ
+                soundArea.AddSoundLevel(ActionSoundType.SMALLCONFUSION);
+                state = BrethState.SMALLCONFUSION;
+
                 if (NowAmount <= mediumDisturbance)
                 {
-                    soundArea.ChangeSoundLevel(3);
+                    // 乱れ
+                    soundArea.AddSoundLevel(ActionSoundType.MEDIUMCONFUSION);
+                    state = BrethState.MEDIUMCONFUSION;
+
                     if (NowAmount <= largeDisturbance)
                     {
-                        soundArea.ChangeSoundLevel(4);
+                        // 大きな乱れ
+                        soundArea.AddSoundLevel(ActionSoundType.LARGECONFUSION);
+                        state = BrethState.LARGECONFUSION;
                     }
                 }
+            }
+            else
+            {
+                // 乱れ無し
+                state = BrethState.NOTCONFUSION;
             }
         }
     }
@@ -118,18 +141,18 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
-    public void StateUpdate(BrethState state)
+    public void StateUpdate(MoveType state)
     {
         // 各ステートに合わせた処理を実行
         switch (state)
         {
-            case BrethState.WAIT: NowAmount += normalRecovery; break;
-            case BrethState.WALK: NowAmount += normalRecovery; break;
-            case BrethState.DASH: ConsumeBreath(state); break;
-            case BrethState.STEALTH: ConsumeBreath(state); break;
-            case BrethState.HIDE: ConsumeBreath(state); break;
-            case BrethState.DEEPBREATH: NowAmount += normalRecovery * 2; break;
-            case BrethState.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
+            case MoveType.WAIT: NowAmount += normalRecovery; break;
+            case MoveType.WALK: NowAmount += normalRecovery; break;
+            case MoveType.DASH: ConsumeBreath(state); break;
+            case MoveType.STEALTH: ConsumeBreath(state); break;
+            case MoveType.HIDE: ConsumeBreath(state); break;
+            case MoveType.DEEPBREATH: NowAmount += normalRecovery * 2; break;
+            case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
             default: break;
         }
 
@@ -140,13 +163,13 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 息消費
     /// </summary>
-    public void ConsumeBreath(BrethState state)
+    public void ConsumeBreath(MoveType state)
     {
         switch (state)
         {
-            case BrethState.DASH: NowAmount -= DashDecrement; break;
-            case BrethState.STEALTH:NowAmount -= stealthDecrement;break;
-            case BrethState.HIDE:
+            case MoveType.DASH: NowAmount -= DashDecrement; break;
+            case MoveType.STEALTH:NowAmount -= stealthDecrement;break;
+            case MoveType.HIDE:
                 // 警戒状態じゃなかったら
                 if (hideController.IsStealth && (hideController.IsHideLocker || hideController.IsHideBed))
                 {
@@ -158,15 +181,33 @@ public class PlayerBreathController : MonoBehaviour
                     {
                         NowAmount -= buttonPatienceDecrement;
                     }
-                    // 続いていなかったら
+                    // 連打していない場合
                     else
                     {
-                        NowAmount -= patienceDecrement;
+                        if (hideState.IsSafety)
+                        {
+                            // 安全地帯内に敵がいて、まだ敵が見えていない状態(消費中)
+                            NowAmount -= hideMediumDecrement;
+
+                            if (hideState.IsLookEnemy)
+                            {
+                                // 安全地帯内に敵がいて、敵が見えている状態(消費大)
+                                NowAmount -= hideLargeDecrement;
+                            }
+                        }
+                        else
+                        {
+                            // 安全地帯内に敵がおらず、敵が見えていない状態(消費小)
+                            NowAmount -= hideSmallDecrement;
+
+                            // 安全地帯内に敵がおらず、敵が見えている状態
+                            if (hideState.IsLookEnemy)
+                            {
+                                // 安全地帯内に敵がいて姿を見ている状態(消費中)
+                                NowAmount -= hideMediumDecrement;
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    NowAmount += normalRecovery;
                 }
                 break;
             default: break;
