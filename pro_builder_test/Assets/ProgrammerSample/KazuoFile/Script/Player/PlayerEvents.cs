@@ -147,9 +147,9 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
+        moveController.IsRootMotion(true, true);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
         breathController.StateUpdate(MoveType.DEEPBREATH);
-        moveController.IsRootMotion(true, true);
         camera.IsRotationCamera(false);
     }
 
@@ -163,8 +163,8 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Brethlessness()
     {
-        breathController.StateUpdate(MoveType.BREATHLESSNESS);
         moveController.IsRootMotion(true, true);
+        breathController.StateUpdate(MoveType.BREATHLESSNESS);
         animationContoller.AnimStart(AnimType.BREATHLESSNESS);
         camera.IsRotationCamera(false);
     }
@@ -258,6 +258,28 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Barefoot()
     {
+        if (!stateController.IsShoes)
+        {
+            if (stateController.State == MoveType.HIDE)
+            {
+                animationContoller.DisplayShoesArm(false, true);
+                Debug.Log(hideController.IsStealth);
+                if (hideController.IsStealth)
+                {
+                    animationContoller.DisplayRightArm(false);
+                }
+                else
+                {
+                    animationContoller.DisplayRightArm(true);
+                }
+            }
+            else if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
+            {
+                animationContoller.DisplayRightArm(false);
+                animationContoller.DisplayShoesArm(true, true);
+            }
+        }
+
         moveController.ChangeSpeedLimit(SpeedType.BAREFOOT);
         soundArea.AddSoundLevel(ActionSoundType.BAREFOOT);
         damageController.HitDamageObject();

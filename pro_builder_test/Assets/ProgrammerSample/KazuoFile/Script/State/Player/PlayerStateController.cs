@@ -54,6 +54,7 @@ public class PlayerStateController : MonoBehaviour
 
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を表示するかどうか
+    public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
 
     /// <summary>
@@ -77,10 +78,12 @@ public class PlayerStateController : MonoBehaviour
         if (Input.GetKey(squatKey))
         {
             eventCaller.Invoke(PlayerEventCaller.EventType.SQUAT);
+            IsSquat = true;
         }
         else
         {
             eventCaller.Invoke(PlayerEventCaller.EventType.SQUATEND);
+            IsSquat = false;
         }
     }
 
@@ -324,6 +327,7 @@ public class PlayerStateController : MonoBehaviour
                 {
                     CheckSquatState();
                 }
+                CheckShooesState();
 
                 // 隠れるアクションクラスが停止しているなら終了し、各処理の検知
                 if (!hideController.enabled && State == ActionStateType.HIDE)

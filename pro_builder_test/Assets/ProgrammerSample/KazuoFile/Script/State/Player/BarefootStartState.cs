@@ -29,8 +29,7 @@ public class BarefootStartState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // 靴を表示
-        animationContoller.DisplayShoes(true);
+        // 終了処理
         animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES);
     }
 }

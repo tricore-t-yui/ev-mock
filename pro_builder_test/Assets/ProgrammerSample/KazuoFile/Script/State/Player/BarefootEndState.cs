@@ -17,9 +17,6 @@ public class BarefootEndState : StateMachineBehaviour
         // クラスを取得してフラグを立てる
         animationContoller = animator.gameObject.GetComponent<PlayerAnimationContoller>();
         animator.SetBool("Shoes", true);
-
-        // 靴を非表示
-        animationContoller.DisplayShoes(false);
     }
 
     /// <summary>
@@ -32,7 +29,12 @@ public class BarefootEndState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // 終了処理
         animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES);
         animator.ResetTrigger("TakeOffShoes");
+
+        // 右手を表示して、靴を非表示
+        animationContoller.DisplayRightArm(true);
+        animationContoller.DisplayShoesArm(false, false);
     }
 }

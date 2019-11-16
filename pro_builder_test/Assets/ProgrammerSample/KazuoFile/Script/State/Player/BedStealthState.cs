@@ -33,6 +33,7 @@ public class BedStealthState : StateMachineBehaviour
         {
             animator.SetTrigger("BedOut");
             animator.SetBool("Stealth", false);
+            hideController.SetIsStealth(false);
         }
     }
 
