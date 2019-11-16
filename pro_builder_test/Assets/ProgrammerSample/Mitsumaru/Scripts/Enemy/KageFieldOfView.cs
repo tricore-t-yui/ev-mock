@@ -12,8 +12,8 @@ public class KageFieldOfView : MonoBehaviour
     [System.Serializable]
     class DistanceParam
     {
-        // ステートの名前
-        public string stateName = null;
+        // ステートの種類
+        public KageState.Kind state = default;
         // 視野の距離
         public float distance = 0;
     }
@@ -34,6 +34,10 @@ public class KageFieldOfView : MonoBehaviour
     [SerializeField]
     Transform player = default;
 
+    // プレイヤーのコライダー
+    [SerializeField]
+    Collider playerCollider = default;
+
     // 視界の角度
     [SerializeField]
     [Range(0, 180)]
@@ -53,10 +57,11 @@ public class KageFieldOfView : MonoBehaviour
     List<string> rayTargetLayer = default;
 
     // 視野にに入っているとき
-    UnityEvent onInViewRange = default;
+    class ColliderUnityEvent : UnityEvent<Transform,Collider> { }
+    ColliderUnityEvent onInViewRange = new ColliderUnityEvent();
 
     // 視野から出ているとき
-    UnityEvent onOutViewRange = default;
+    ColliderUnityEvent onOutViewRange = new ColliderUnityEvent();
 
     // レイヤーマスク
     int layerMask = 0;
@@ -77,6 +82,9 @@ public class KageFieldOfView : MonoBehaviour
     {
         // レイに衝突する対象のレイヤーを取得
         layerMask = LayerMask.GetMask(rayTargetLayer.ToArray());
+
+        // 最初の警戒範囲を設定する
+        ChangeDistance(KageState.Kind.Normal);
     }
 
     /// <summary>
@@ -90,13 +98,24 @@ public class KageFieldOfView : MonoBehaviour
 
         // 境界ベクトルを更新
         UpdateBorderVector(angle,currentDistance);
+
+        if (IsInViewRange())
+        {
+            // 範囲内に入ったときのコールバック
+            onInViewRange?.Invoke(transform.root,playerCollider);
+        }
+        else
+        {
+            // 範囲からでたときのコールバック
+            onOutViewRange?.Invoke(transform.root, playerCollider);
+        }
     }
 
     /// <summary>
     ///  視野の範囲内のいるときのイベントを追加
     /// </summary>
     /// <param name="set"></param>
-    public void SetOnInViewRangeEvent(UnityAction set)
+    public void SetOnInViewRangeEvent(UnityAction<Transform, Collider> set)
     {
         onInViewRange.AddListener(set);
     }
@@ -105,7 +124,7 @@ public class KageFieldOfView : MonoBehaviour
     /// 視界の範囲外にいるときのイベント追加
     /// </summary>
     /// <param name="set"></param>
-    public void SetOnOutViewRangeEvent(UnityAction set)
+    public void SetOnOutViewRangeEvent(UnityAction<Transform, Collider> set)
     {
         onOutViewRange.AddListener(set);
     }
@@ -113,11 +132,11 @@ public class KageFieldOfView : MonoBehaviour
     /// <summary>
     /// 視界の距離の変更を行う
     /// </summary>
-    /// <param name="stateName"></param>
-    public void ChangeDistance(string stateName)
+    /// <param name="state"></param>
+    public void ChangeDistance(KageState.Kind state)
     {
         // 引数と同じステート名のパラメータを取得
-        DistanceParam param = distances.Find(x => x.stateName == stateName);
+        DistanceParam param = distances.Find(x => x.state == state);
         // 現在の視界の距離を変更
         currentDistance = param.distance;
     }
