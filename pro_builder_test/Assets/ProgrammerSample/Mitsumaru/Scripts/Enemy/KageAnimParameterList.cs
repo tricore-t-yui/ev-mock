@@ -24,6 +24,12 @@ public class KageAnimParameterList : MonoBehaviour
         loiteringOtherActionStart,
         loiteringBehaviorRate,
         isVigilanceMode,
+        isFightingMode,
+        targetPositionX,
+        targetPositionY,
+        targetPositionZ,
+        perceiveSound,
+        targetPosStop,
     }
 
     // アニメーター
@@ -70,6 +76,16 @@ public class KageAnimParameterList : MonoBehaviour
         int paramId = IdList[type];
         // パラメータのトリガーをオンにする
         animator.SetTrigger(paramId);
+    }
+
+    /// <summary>
+    /// トリガーをリセット
+    public void ResetTrigger(ParameterType type)
+    {
+        // リストからパラメータIDを取得
+        int paramId = IdList[type];
+        // パラメータのトリガーをオンにする
+        animator.ResetTrigger(paramId);
     }
 
     /// <summary>
