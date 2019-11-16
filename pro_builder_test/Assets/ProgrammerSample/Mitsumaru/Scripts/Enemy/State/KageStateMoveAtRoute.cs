@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using System.Linq;
 using ParameterType = KageAnimParameterList.ParameterType;
 
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型 / ルート移動
 /// </summary>
-public class KageStateMoveAtRoute : StateMachineBehaviour
+public class KageStateMoveAtRoute : VigilanceMoveBase
 {
     // 移動チェックポイント
     IReadOnlyList<Vector3> checkPointList = default;
 
     // 現在のチェックポイントのインデックス
     int currentCheckPointIndex = 0;
-
-    // ナビメッシュ
-    NavMeshAgent navMesh = null;
 
     // 移動中のカウント
     int moveCount = 0;
@@ -49,8 +47,8 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         // チェックポイントを取得
         checkPointList = stateParameter.RouteCheckPointList;
 
-        // ナビメッシュのコンポーネントを取得
-        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+        // ナビメッシュの取得
+        GetNavMeshAgent(animator);
 
         // 移動スピードを設定
         navMesh.speed = moveSpeed;
@@ -85,6 +83,17 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
             // カウンターをリセット
             moveCount = 0;
         }
+    }
+
+    /// <summary>
+    /// 元の徘徊地点に戻る
+    /// </summary>
+    public override void ReturnVigilancePoint(Animator animator)
+    {
+        // 一番近いチェックポイントを取得する
+        Vector3 returnPos = checkPointList.OrderByDescending(elem => (animator.transform.position-elem).magnitude * -1).FirstOrDefault();
+        // 次の目標位置にセット
+        navMesh.SetDestination(returnPos);
     }
 
     /// <summary>

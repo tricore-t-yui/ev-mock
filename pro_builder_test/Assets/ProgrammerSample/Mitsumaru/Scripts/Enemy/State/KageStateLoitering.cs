@@ -28,7 +28,7 @@ public class KageStateLoitering : StateMachineBehaviour
     KageStateMoveAtRandom loiteringMoveAtRandom = default;
 
     // 現在の移動タイプ
-    StateMachineBehaviour currentLoiteringMove;
+    VigilanceMoveBase currentLoiteringMove;
 
     // 影人間のステートのパラーメータを取得
     KageStateParameter stateParameter = null;
@@ -42,10 +42,12 @@ public class KageStateLoitering : StateMachineBehaviour
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
 
         // 徘徊のタイプによってクラスを分ける
+        // ルートタイプ
         if (stateParameter.StateLoiteringOfType == LoiteringKind.Route)
         {
             currentLoiteringMove = loiteringMoveAtRoute;
         }
+        // ランダムタイプ
         else
         {
             currentLoiteringMove = loiteringMoveAtRandom;
@@ -71,5 +73,13 @@ public class KageStateLoitering : StateMachineBehaviour
     {
         // ステートの終了
         currentLoiteringMove.OnStateExit(animator, animatorStateInfo, layerIndex);
+    }
+
+    /// <summary>
+    /// 徘徊ポイントに戻る
+    /// </summary>
+    public void ReturnLoiteringPoint(Animator animator)
+    {
+        currentLoiteringMove.ReturnVigilancePoint(animator);
     }
 }

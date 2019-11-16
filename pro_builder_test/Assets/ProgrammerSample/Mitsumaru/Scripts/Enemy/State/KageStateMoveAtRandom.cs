@@ -7,13 +7,10 @@ using ParameterType = KageAnimParameterList.ParameterType;
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型 / ランダム移動
 /// </summary>
-public class KageStateMoveAtRandom : StateMachineBehaviour
+public class KageStateMoveAtRandom : VigilanceMoveBase
 {
     // 範囲用コライダー
     RandomMoveRangeCollider rangeCollider = null;
-
-    // ナビメッシュ
-    NavMeshAgent navMesh = null;
 
     // 移動中のカウント
     int moveCount = 0;
@@ -51,8 +48,8 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
         // 範囲から抜けた瞬間に呼ばれる関数をセット
         rangeCollider.SetCallback(OnRangeExit);
 
-        // ナビメッシュのコンポーネントを取得
-        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+        // ナビメッシュの取得
+        GetNavMeshAgent(animator);
 
         // 移動スピードを設定
         navMesh.speed = moveSpeed;
@@ -84,6 +81,15 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
             // カウンターをリセット
             moveCount = 0;
         }
+    }
+
+    /// <summary>
+    /// 元の徘徊地点に戻る
+    /// </summary>
+    public override void ReturnVigilancePoint(Animator animator)
+    {
+        // 範囲の中心点を復帰地点に設定
+        navMesh.SetDestination(rangeCollider.transform.position);
     }
 
     /// <summary>
