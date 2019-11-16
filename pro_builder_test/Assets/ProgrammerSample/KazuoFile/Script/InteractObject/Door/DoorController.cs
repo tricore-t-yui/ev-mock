@@ -11,9 +11,12 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     Transform player = default;                 // プレイヤー
     [SerializeField]
-    CapsuleCollider playerCollider = default;   // プレイヤー
+    CapsuleCollider playerCollider = default;   // プレイヤーのコライダー
     [SerializeField]
     Animator doorAnim = default;                // ドアのアニメーター
+
+    [SerializeField]
+    float closeDistance = 2;                    // ドアが自動で閉まる距離
 
     bool isAutoClose = false;                   // 自動でドアを閉めるフラグ
 
@@ -88,6 +91,12 @@ public class DoorController : MonoBehaviour
                     return true;
                 }
                 break; 
+        }
+
+        // プレイヤーとドアの距離が離れたら
+        if((transform.position - player.position).magnitude > closeDistance)
+        {
+            return true;
         }
 
         return false;
