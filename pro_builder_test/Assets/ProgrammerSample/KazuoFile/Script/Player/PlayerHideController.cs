@@ -121,6 +121,7 @@ public class PlayerHideController : MonoBehaviour
         // アニメーションが再生され終わったら終了処理
         if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.HIDE))
         {
+            animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             interactController.CommonEndAction();
             hideObjectController.SetActiveCollider(true);
             enabled = false;

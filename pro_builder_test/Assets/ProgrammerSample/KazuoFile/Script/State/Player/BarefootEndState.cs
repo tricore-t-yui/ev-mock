@@ -30,7 +30,10 @@ public class BarefootEndState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 終了処理
-        animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES);
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES))
+        {
+            animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.SHOES);
+        }
         animator.ResetTrigger("TakeOffShoes");
 
         // 右手を表示して、靴を非表示

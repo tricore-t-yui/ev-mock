@@ -30,6 +30,9 @@ public class BarefootStartState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 終了処理
-        animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES);
+        if(animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.SHOES))
+        {
+            animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.SHOES);
+        }
     }
 }

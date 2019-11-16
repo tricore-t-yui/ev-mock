@@ -120,7 +120,6 @@ public class DoorController : MonoBehaviour
     /// <summary>
     /// ドアが逆側に開くかどうか
     /// </summary>
-    /// <param name="num">今の部屋番号</param>
     public bool IsReverseOpen(string name)
     {
         // 今の部屋番号が逆の部屋番号と一致したなら

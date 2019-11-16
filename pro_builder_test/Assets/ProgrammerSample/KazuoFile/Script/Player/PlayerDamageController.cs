@@ -119,6 +119,7 @@ public class PlayerDamageController : MonoBehaviour
         // アニメーションが再生され終わったら終了処理
         if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DAMAGE) && !healthController.IsDeath)
         {
+            animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DAMAGE);
             interactController.CommonEndAction();
 
             // 無敵時間開始

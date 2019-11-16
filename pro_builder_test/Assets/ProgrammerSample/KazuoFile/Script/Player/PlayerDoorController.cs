@@ -87,13 +87,26 @@ public class PlayerDoorController : MonoBehaviour
     }
 
     /// <summary>
-    /// 各アクションの終了
+    /// 各アクションの終了処理
     /// </summary>
-    public void EndDoorAction()
+    /// <param name="isIgnore">条件無視フラグ</param>
+    public void EndDoorAction(bool isIgnore)
     {
-        // アニメーションが再生され終わったら終了処理
-        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DOOR))
+        bool flag = false; // 終了処理をさせるかどうか
+
+        // アニメーションが再生され終わるか、条件無視フラグが立っていたら終了処理開始
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DOOR) && !isIgnore)
         {
+            flag = true;
+        }
+        else if(isIgnore)
+        {
+            flag = true;
+        }
+
+        if(flag)
+        {
+            animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DOOR);
             interactController.CommonEndAction();
             enabled = false;
         }

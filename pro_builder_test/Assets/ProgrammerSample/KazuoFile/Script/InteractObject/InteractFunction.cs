@@ -42,7 +42,7 @@ public class InteractFunction : MonoBehaviour
     /// <summary>
     /// オブジェクトの向きに合わせた位置合わせ
     /// </summary>
-    /// <param name="type">ドアのタイプ</param>
+    /// <param name="type">オブジェクトのタイプ</param>
     public Vector3 InitPosition(DirType type, Transform player, Transform target)
     {
         Vector3 position = Vector3.zero;
@@ -69,7 +69,7 @@ public class InteractFunction : MonoBehaviour
     /// <summary>
     /// オブジェクトの向きに合わせた角度合わせ
     /// </summary>
-    /// <param name="type">ドアのタイプ</param>
+    /// <param name="type">オブジェクトのタイプ</param>
     public Quaternion InitRotation(DirType type)
     {
         Quaternion rotation = default;

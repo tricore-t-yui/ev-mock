@@ -21,9 +21,9 @@ public class PlayerHealthController : MonoBehaviour
     float largeDisturbance = 50;                        // 息の乱れ(大)の基準値
 
     float damageFrame = 0;                              // ダメージを食らってからのフレーム
-    bool isDamage = false;                              // ダメージ所持状態フラグ
 
     public float NowAmount { get; private set; } = 100; // 体力
+    public bool IsDamage { get; private set; } = false; // ダメージ所持状態フラグ
     public bool IsDeath { get; private set; } = false;  // 死んでしまったかどうかのフラグ
 
     /// <summary>
@@ -33,7 +33,7 @@ public class PlayerHealthController : MonoBehaviour
     {
         // 初期化
         IsDeath = false;
-        isDamage = false;
+        IsDamage = false;
         damageFrame = 0;
         NowAmount = 100;
     }
@@ -59,7 +59,7 @@ public class PlayerHealthController : MonoBehaviour
     void Recovery()
     {
         // ダメージ所持状態フラグがたっている間は回復できない
-        if (isDamage)
+        if (IsDamage)
         {
             // ダメージフレームをカウント
             damageFrame++;
@@ -71,7 +71,7 @@ public class PlayerHealthController : MonoBehaviour
             if (recoveryFrame <= damageFrame)
             {
                 damageFrame = 0;
-                isDamage = false;
+                IsDamage = false;
             }
         }
         else
@@ -111,7 +111,7 @@ public class PlayerHealthController : MonoBehaviour
         // なっていないならダメージ所持状態フラグを立てる
         else
         {
-            isDamage = true;
+            IsDamage = true;
         }
     }
 }
