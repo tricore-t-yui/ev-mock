@@ -22,12 +22,14 @@ public class CameraController : MonoBehaviour
     Transform player = default;                         // プレイヤー
     [SerializeField]
     GameObject animCamera = default;                    // アニメーション用カメラ
+
     [SerializeField]
     PlayerHideController hideController = default;      // 隠れるアクション管理クラス
     [SerializeField]
     PlayerBreathController breathController = default;  // 隠れるアクション管理クラス
     [SerializeField]
     PlayerStateController stateController = default;    // ステート管理クラス
+
     [SerializeField]
     float sensitivity = 2;                              // カメラの感度
 
@@ -36,6 +38,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
+        transform.parent.position = player.transform.position;
         transform.parent.rotation = player.rotation;
         transform.rotation = animCamera.transform.rotation;
     }
@@ -106,14 +109,12 @@ public class CameraController : MonoBehaviour
        {
             // カメラ切り替え
             gameObject.SetActive(true);
-            transform.parent.position = player.transform.position;
             animCamera.SetActive(false);
        }
        else
        {
             // カメラ切り替え
             gameObject.SetActive(false);
-            transform.parent.position = player.transform.position;
             animCamera.SetActive(true);
        }
     }

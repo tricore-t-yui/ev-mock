@@ -34,6 +34,7 @@ public class LockerStealthState : StateMachineBehaviour
         {
             animator.SetTrigger("LockerOut");
             animator.SetBool("Stealth", false);
+            hideController.SetIsStealth(false);
         }
     }
 
