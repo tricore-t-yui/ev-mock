@@ -49,14 +49,6 @@ public class RandomMoveRangeCollider : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         // コールバック関数を呼ぶ
-        onRangeExit(other.transform.root.name);
-    }
-
-    [SerializeField]
-    NavMeshAgent navMesh = default;
-
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(navMesh.pathEndPosition,0.3f);
+        onRangeExit?.Invoke(other.transform.root.name);
     }
 }
