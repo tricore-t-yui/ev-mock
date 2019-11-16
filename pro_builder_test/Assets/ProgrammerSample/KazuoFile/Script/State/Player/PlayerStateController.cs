@@ -31,7 +31,7 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
-    PlayerHealthController healthController = default;      // 体力管理クラス
+    PlayerMoveController moveController = default;          // 座標移動クラス
     [SerializeField]
     PlayerDoorController doorController = default;          // ドアアクションクラス
     [SerializeField]
@@ -243,7 +243,7 @@ public class PlayerStateController : MonoBehaviour
     public void ChangeDamageState(Vector3 enemyPos, float damage)
     {
         // ダメージ処理が開始されていないならダメージを食らう
-        if (!damageController.enabled && !healthController.IsDamage)
+        if (!damageController.enabled && !damageController.IsInvincible)
         {
             EventStop();
             damageController.SetInfo(enemyPos, damage);
@@ -284,6 +284,9 @@ public class PlayerStateController : MonoBehaviour
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckShooesState();
+
+                // 検知した後に移動
+                moveController.Move();
                 break;
             case ActionStateType.DASH:
                 // 各イベント処理
@@ -296,6 +299,9 @@ public class PlayerStateController : MonoBehaviour
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckBrethlessnessState();
+
+                // 検知した後に移動
+                moveController.Move();
                 break;
             case ActionStateType.STEALTH:
                 // 各イベント処理
@@ -310,6 +316,9 @@ public class PlayerStateController : MonoBehaviour
                 CheckHideState();
                 CheckBrethlessnessState();
                 CheckShooesState();
+
+                // 検知した後に移動
+                moveController.Move();
                 break;
             case ActionStateType.DOOROPEN:
                 // 各イベント処理

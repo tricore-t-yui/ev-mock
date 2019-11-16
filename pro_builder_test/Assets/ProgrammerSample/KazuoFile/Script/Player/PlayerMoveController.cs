@@ -108,6 +108,8 @@ public class PlayerMoveController : MonoBehaviour
     /// </summary>
     public void Move()
     {
+        IsRootMotion(false, false);
+
         //　移動速度計算
         SpeedCalculation();
 
@@ -117,8 +119,6 @@ public class PlayerMoveController : MonoBehaviour
         {
             rigid.AddForce(moveSpeed.normalized * speedMagnification);
         }
-
-        IsRootMotion(false, false);
     }
 
     /// <summary>

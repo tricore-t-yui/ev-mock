@@ -54,7 +54,6 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.ChangeSpeedLimit(SpeedType.WALK);
         breathController.StateUpdate(MoveType.WALK);
-        moveController.Move();
         animationContoller.AnimStart(AnimType.WALK);
         soundArea.AddSoundLevel(ActionSoundType.WALK);
         camera.IsRotationCamera(true);
@@ -77,7 +76,6 @@ public class PlayerEvents : MonoBehaviour
         SquatEnd();
         moveController.ChangeSpeedLimit(SpeedType.DASH);
         breathController.StateUpdate(MoveType.DASH);
-        moveController.Move();
         animationContoller.AnimStart(AnimType.DASH);
         soundArea.AddSoundLevel(ActionSoundType.DASH);
         camera.IsRotationCamera(true);
@@ -130,7 +128,6 @@ public class PlayerEvents : MonoBehaviour
         {
             soundArea.AddSoundLevel(ActionSoundType.STEALTH);
         }
-        moveController.Move();
     }
 
     /// <summary>
