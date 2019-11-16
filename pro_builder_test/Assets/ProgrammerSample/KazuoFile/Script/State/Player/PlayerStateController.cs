@@ -31,6 +31,8 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
+    PlayerHealthController healthController = default;      // 体力管理クラス
+    [SerializeField]
     PlayerDoorController doorController = default;          // ドアアクションクラス
     [SerializeField]
     PlayerHideController hideController = default;          // 隠れるアクションクラス
@@ -66,6 +68,11 @@ public class PlayerStateController : MonoBehaviour
         if (animationContoller.IsEndAnim)
         {
             EventPlay();
+        }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            ChangeDamageState(Vector3.back, 50);
         }
     }
 
@@ -236,7 +243,7 @@ public class PlayerStateController : MonoBehaviour
     public void ChangeDamageState(Vector3 enemyPos, float damage)
     {
         // ダメージ処理が開始されていないならダメージを食らう
-        if (!damageController.enabled)
+        if (!damageController.enabled && !healthController.IsDamage)
         {
             EventStop();
             damageController.SetInfo(enemyPos, damage);
@@ -394,7 +401,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.HIDE: eventCaller.Invoke(PlayerEventCaller.EventType.HIDE); break;
             case ActionStateType.DEEPBREATH: eventCaller.Invoke(PlayerEventCaller.EventType.DEEPBREATHEND); break;
             case ActionStateType.BREATHLESSNESS: eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESSEND); break;
-            case ActionStateType.DAMAGE: eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGE); break;
+            case ActionStateType.DAMAGE: eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGEEND); break;
         }
     }
 

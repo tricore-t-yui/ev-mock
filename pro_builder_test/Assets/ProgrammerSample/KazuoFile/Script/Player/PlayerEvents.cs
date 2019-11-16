@@ -183,7 +183,7 @@ public class PlayerEvents : MonoBehaviour
     public void DoorOpen()
     {
         moveController.IsRootMotion(true, true);
-        doorController.EndDoorAction();
+        doorController.EndDoorAction(false);
         if (stateController.IsDashOpen)
         {
             soundArea.AddSoundLevel(ActionSoundType.DASHDOOROPEN);
@@ -197,7 +197,10 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ドア開閉終了
     /// </summary>
-    public void DoorOpenEnd() { }
+    public void DoorOpenEnd()
+    {
+        doorController.EndDoorAction(true);
+    }
 
     /// <summary>
     /// 隠れる
@@ -263,7 +266,7 @@ public class PlayerEvents : MonoBehaviour
             if (stateController.State == MoveType.HIDE)
             {
                 animationContoller.DisplayShoesArm(false, true);
-                Debug.Log(hideController.IsStealth);
+
                 if (hideController.IsStealth)
                 {
                     animationContoller.DisplayRightArm(false);

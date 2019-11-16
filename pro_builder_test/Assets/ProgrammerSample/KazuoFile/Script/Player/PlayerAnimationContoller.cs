@@ -67,7 +67,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     {
         switch (type)
         {
-            case AnimationType.WALK: animator.SetBool("Walk", true); break;
+            case AnimationType.WALK: animator.SetBool("Walk", true);break;
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
             case AnimationType.STEALTH: animator.SetBool("Stealth",true);break;
             case AnimationType.SQUAT: animator.SetBool("Squat", true);break;
@@ -118,27 +118,41 @@ public class PlayerAnimationContoller : MonoBehaviour
             case EndAnimationType.DOOR:
                 if (animator.GetBool("DoorEnd"))
                 {
-                    animator.SetBool("DoorEnd", false);
                     return true;
                 }
                 return false;
             case EndAnimationType.HIDE:
                 if (animator.GetBool("HideEnd"))
                 {
-                    animator.SetBool("HideEnd", false);
                     return true;
                 }
                 return false;
             case EndAnimationType.DAMAGE:
                 if (animator.GetBool("DamageEnd"))
                 {
-                    animator.SetBool("DamageEnd", false);
                     return true;
                 }
                 return false;
             default:
                 IsEndAnim = true;
                 return true;
+        }
+    }
+
+    /// <summary>
+    /// アニメーション終了フラグのセット関数
+    /// </summary>
+    /// <param name="type"></param>
+    public void SetEndAnimationFlag(EndAnimationType type)
+    {
+        switch (type)
+        {
+            case EndAnimationType.DOOR:animator.SetBool("DoorEnd", false);break;
+            case EndAnimationType.HIDE:animator.SetBool("HideEnd", false); break;
+            case EndAnimationType.DAMAGE:
+                animator.SetBool("DamageEnd", false);
+                animator.SetBool("DoorEnd", false);
+                break;
         }
     }
 

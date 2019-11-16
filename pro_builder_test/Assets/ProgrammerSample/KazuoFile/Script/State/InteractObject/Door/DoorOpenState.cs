@@ -54,7 +54,7 @@ public class DoorOpenState : StateMachineBehaviour
 
         // プレイヤーだったら閉じたフラグを立てる
         if (isPlayer)
-        {
+        { 
             animator.SetBool("DoorEnd", true);
         }
     }
