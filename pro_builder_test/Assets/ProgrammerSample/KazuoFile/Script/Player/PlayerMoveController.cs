@@ -42,46 +42,52 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     [SerializeField]
-    Rigidbody rigid = default;              // リジットボディ
+    Rigidbody rigid = default;                  // リジットボディ
     [SerializeField]
-    CapsuleCollider collider = default;     // コライダー
+    CapsuleCollider collider = default;         // コライダー
     [SerializeField]
-    Animator playerAnim = default;          // アニメーター
-    [SerializeField]
-    Transform camera = default;             // カメラ
+    Animator playerAnim = default;              // アニメーター
 
     [SerializeField]
-    float forwardSpeed = 2f;                // 前移動時のスピード
+    PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
     [SerializeField]
-    float sideSpeed = 2f;                   // 横移動時のスピード
+    PlayerStateController stateController = default;                // ステート管理クラス
+
     [SerializeField]
-    float backSpeed = 1.5f;                 // 後ろ移動時のスピード
+    float forwardSpeed = 2f;                    // 前移動時のスピード
     [SerializeField]
-    float speedMagnification = 10;          // 移動速度の倍率
+    float sideSpeed = 2f;                       // 横移動時のスピード
+    [SerializeField]
+    float backSpeed = 1.5f;                     // 後ろ移動時のスピード
+    [SerializeField]
+    float speedMagnification = 10;              // 移動速度の倍率
+
     [SerializeField, Range(0, 1)]
-    float barefootSpeedReduction = 0.15f;   // 裸足時の移動速度の減少割合
+    float barefootSpeedReduction = 0.85f;       // 裸足時の移動速度の減少割合
+    [SerializeField, Range(0, 1)]
+    float objectDamageSpeedReduction = 0.85f;   // オブジェクトダメージ時の移動速度の減少割合
 
     [SerializeField]
-    float walkSpeedLimit = 0.75f;           // 歩き時の移動速度の限界
+    float walkSpeedLimit = 0.75f;               // 歩き時の移動速度の限界
     [SerializeField]
-    float dashSpeedLimit = 1.5f;            // ダッシュ時の移動速度の限界
+    float dashSpeedLimit = 1.5f;                // ダッシュ時の移動速度の限界
     [SerializeField]
-    float squatSpeedLimit = 0.25f;          // しゃがみ時の移動速度の限界
+    float squatSpeedLimit = 0.25f;              // しゃがみ時の移動速度の限界
     [SerializeField]
-    float stealthSpeedLimit = 0.25f;        // 忍び歩き時の移動速度の限界
+    float stealthSpeedLimit = 0.25f;            // 忍び歩き時の移動速度の限界
     [SerializeField]
-    float breathlessnessSpeedLimit = 0.25f; // 息切れ時の移動速度の限界
+    float breathlessnessSpeedLimit = 0.25f;     // 息切れ時の移動速度の限界
 
     [SerializeField, Range(0,180)]
-    float stepAngle = 60;                   // 段差の許容角度
+    float stepAngle = 60;                       // 段差の許容角度
     [SerializeField]
-    float stepUpPower = 1.45f;              // 段差に当たった時に加える上方向の力
+    float stepUpPower = 1.45f;                  // 段差に当たった時に加える上方向の力
 
-    float moveTypeSpeedLimit = 0;           // 移動タイプによる移動速度の限界
-    float dirTypeSpeedLimit = 0;            // 移動方向による移動速度の限界
-    Vector3 moveSpeed = Vector3.zero;       // 移動速度
-    bool isAnimPosition = false;            // アニメーションに座標移動をまかせるかどうか
-    bool isAnimRotation = false;            // アニメーションに回転をまかせるかどうか
+    float moveTypeSpeedLimit = 0;               // 移動タイプによる移動速度の限界
+    float dirTypeSpeedLimit = 0;                // 移動方向による移動速度の限界
+    Vector3 moveSpeed = Vector3.zero;           // 移動速度
+    bool isAnimPosition = false;                // アニメーションに座標移動をまかせるかどうか
+    bool isAnimRotation = false;                // アニメーションに回転をまかせるかどうか
 
     /// <summary>
     /// アニメーション中の移動方法
@@ -93,13 +99,11 @@ public class PlayerMoveController : MonoBehaviour
         {
             // 座標移動をanimatorに任せる
             transform.position = playerAnim.rootPosition;
-            camera.transform.position = playerAnim.rootPosition;
         }
         if (isAnimRotation)
         {
             // 回転をanimatorに任せる
             transform.rotation = playerAnim.rootRotation;
-            camera.transform.rotation = playerAnim.rootRotation;
         }
     }
 
@@ -224,9 +228,17 @@ public class PlayerMoveController : MonoBehaviour
             case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
             case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
             case SpeedLimitType.BREATHLESSNESS: moveTypeSpeedLimit = breathlessnessSpeedLimit; break;
+        }
 
-            // 裸足は移動速度を減少させる
-            case SpeedLimitType.BAREFOOT: moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction; break;
+        // 裸足
+        if (!stateController.IsShoes)
+        {
+            moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction;
+        }
+        // ダメージ所持状態
+        if(objectDamageController.IsObjectDamage)
+        {
+            moveTypeSpeedLimit = moveTypeSpeedLimit * objectDamageSpeedReduction;
         }
     }
 

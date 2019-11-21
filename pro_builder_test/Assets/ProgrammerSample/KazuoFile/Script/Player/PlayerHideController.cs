@@ -27,10 +27,10 @@ public class PlayerHideController : MonoBehaviour
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
+    bool isStealth = false;                                     // 息止めフラグ
+    bool isHideLocker = false;                                  // ロッカーに隠れているかどうかのフラグ
+    bool isHideBed = false;                                     // ベッドに隠れているかどうかのフラグ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
-    public bool IsStealth { get; private set; } = false;        // 息止めフラグ
-    public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
-    public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
 
     public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
@@ -71,8 +71,25 @@ public class PlayerHideController : MonoBehaviour
                 animationContoller.AnimStart(AnimationType.HIDEBED); break;
         }
 
+        SetIsAnimRotation(true);
+
         // 隠れる開始
         enabled = true;
+    }
+
+    /// <summary>
+    /// 隠れている時のカメラ移動
+    /// </summary>
+    public void HideCameraMove()
+    {
+        if (isHideBed)
+        {
+            camera.Rotation(CameraController.RotationType.HIDEBED);
+        }
+        if (isHideLocker)
+        {
+            camera.Rotation(CameraController.RotationType.HIDELOCKER);
+        }
     }
 
     /// <summary>
@@ -87,10 +104,11 @@ public class PlayerHideController : MonoBehaviour
         {
             // ロッカー
             case "Locker":
-                IsHideLocker = true; break;
+                camera.Rotation(CameraController.RotationType.HIDELOCKER);
+                isHideLocker = true; break;
             // ベッド
             case "Bed":
-                IsHideBed = true; break;
+                isHideBed = true; break;
         }
     }
 
@@ -106,10 +124,10 @@ public class PlayerHideController : MonoBehaviour
         {
             // ロッカー
             case "Locker":
-                IsHideLocker = false; break;
+                isHideLocker = false; break;
             // ベッド
             case "Bed":
-                IsHideBed = false; break;
+                isHideBed = false; break;
         }
     }
 
@@ -125,6 +143,21 @@ public class PlayerHideController : MonoBehaviour
             interactController.CommonEndAction();
             hideObjectController.SetActiveCollider(true);
             enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// 隠れている状態で息を止めいてるかどうか
+    /// </summary>
+    public bool IsHideStealth()
+    {
+        if(isStealth && (isHideLocker || isHideBed))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -145,6 +178,6 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE: k.oishi ステートマシン用関数
     public void SetIsStealth(bool flag)
     {
-        IsStealth = flag;
+        isStealth = flag;
     }
 }
