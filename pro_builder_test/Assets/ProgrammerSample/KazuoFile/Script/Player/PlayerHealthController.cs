@@ -87,10 +87,10 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (NowAmount <= smallDisturbance)
         {
-            soundArea.AddSoundLevel(ActionSoundType.HALFHEALTH);
+            soundArea.AddSoundLevel(ActionSoundType.DAMAGEHALFHEALTH);
             if (NowAmount <= largeDisturbance)
             {
-                soundArea.AddSoundLevel(ActionSoundType.PINCHHEALTH);
+                soundArea.AddSoundLevel(ActionSoundType.DAMAGEPINCHHEALTH);
             }
         }
     }

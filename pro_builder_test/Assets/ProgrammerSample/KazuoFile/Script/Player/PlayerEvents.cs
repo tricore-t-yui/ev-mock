@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AnimType = PlayerAnimationContoller.AnimationType;
+using PlayerAnimType = PlayerAnimationContoller.AnimationType;
 using MoveType = PlayerStateController.ActionStateType;
 using SpeedType = PlayerMoveController.SpeedLimitType;
 using ActionSoundType = SoundAreaController.ActionSoundType;
+using CameraType = CameraController.RotationType;
+using CameraAnimType = CameraAnimationController.AnimationType;
 
 /// <summary>
 /// 各イベント関数置き場
@@ -26,11 +28,15 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerDamageController damageController = default;      // ダメージリアクションクラス
     [SerializeField]
-    PlayerAnimationContoller animationContoller = default;  // アニメーションクラス
+    PlayerAnimationContoller playerAnimationContoller = default;  // アニメーションクラス
     [SerializeField]
     PlayerStateController stateController = default;        // ステート管理クラス
     [SerializeField]
     SoundAreaController soundArea = default;                // 音管理クラス
+    [SerializeField]
+    PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
+    [SerializeField]
+    CameraAnimationController cameraAnimationController = default;      // ダメージリアクションクラス
 
     /// <summary>
     /// 待機
@@ -40,6 +46,7 @@ public class PlayerEvents : MonoBehaviour
         breathController.StateUpdate(MoveType.WAIT);
         soundArea.AddSoundLevel(ActionSoundType.WAIT);
         camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
     }
 
     /// <summary>
@@ -54,9 +61,10 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.ChangeSpeedLimit(SpeedType.WALK);
         breathController.StateUpdate(MoveType.WALK);
-        animationContoller.AnimStart(AnimType.WALK);
+        playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         soundArea.AddSoundLevel(ActionSoundType.WALK);
         camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
     }
 
     /// <summary>
@@ -65,7 +73,7 @@ public class PlayerEvents : MonoBehaviour
     public void WalkEnd()
     {
         breathController.StateUpdate(MoveType.WAIT);
-        animationContoller.AnimStop(AnimType.WALK);
+        playerAnimationContoller.AnimStop(PlayerAnimType.WALK);
     }
 
     /// <summary>
@@ -76,9 +84,11 @@ public class PlayerEvents : MonoBehaviour
         SquatEnd();
         moveController.ChangeSpeedLimit(SpeedType.DASH);
         breathController.StateUpdate(MoveType.DASH);
-        animationContoller.AnimStart(AnimType.DASH);
+        playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
         soundArea.AddSoundLevel(ActionSoundType.DASH);
         camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
+        cameraAnimationController.AnimStart(CameraAnimType.DASH);
     }
 
     /// <summary>
@@ -87,7 +97,8 @@ public class PlayerEvents : MonoBehaviour
     public void DashEnd()
     {
         moveController.ChangeSpeedLimit(SpeedType.WALK);
-        animationContoller.AnimStop(AnimType.DASH);
+        playerAnimationContoller.AnimStop(PlayerAnimType.DASH);
+        cameraAnimationController.AnimStop(CameraAnimType.DASH);
     }
 
     /// <summary>
@@ -98,8 +109,9 @@ public class PlayerEvents : MonoBehaviour
         collider.height = 0.4f;
         soundArea.AddSoundLevel(ActionSoundType.SQUAT);
         moveController.ChangeSpeedLimit(SpeedType.SQUAT);
-        animationContoller.AnimStart(AnimType.SQUAT);
+        playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
         camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
     }
 
     /// <summary>
@@ -108,7 +120,7 @@ public class PlayerEvents : MonoBehaviour
     public void SquatEnd()
     {
         collider.height = 1.4f;
-        animationContoller.AnimStop(AnimType.SQUAT);
+        playerAnimationContoller.AnimStop(PlayerAnimType.SQUAT);
     }
 
     /// <summary>
@@ -118,15 +130,14 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.ChangeSpeedLimit(SpeedType.STEALTH);
         breathController.StateUpdate(MoveType.STEALTH);
-        animationContoller.AnimStart(AnimType.STEALTH);
+        playerAnimationContoller.AnimStart(PlayerAnimType.STEALTH);
         camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
+        cameraAnimationController.AnimStart(CameraAnimType.STEALTH);
+        soundArea.AddSoundLevel(ActionSoundType.STEALTH);
         if (stateController.GetDirectionKey())
         {
-            soundArea.AddSoundLevel(ActionSoundType.STEALTHMOVE);
-        }
-        else
-        {
-            soundArea.AddSoundLevel(ActionSoundType.STEALTH);
+            soundArea.AddSoundLevel(ActionSoundType.WALK);
         }
     }
 
@@ -136,7 +147,8 @@ public class PlayerEvents : MonoBehaviour
     public void StealthEnd()
     {
         moveController.ChangeSpeedLimit(SpeedType.WALK);
-        animationContoller.AnimStop(AnimType.STEALTH);
+        playerAnimationContoller.AnimStop(PlayerAnimType.STEALTH);
+        cameraAnimationController.AnimStop(CameraAnimType.STEALTH);
     }
 
     /// <summary>
@@ -144,16 +156,21 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
-        moveController.IsRootMotion(true, true);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
         breathController.StateUpdate(MoveType.DEEPBREATH);
-        camera.IsRotationCamera(false);
+        objectDamageController.RecoveryDeepBreath();
+        camera.IsRotationCamera(true);
+        camera.Rotation(CameraType.NORMAL);
+        cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
     }
 
     /// <summary>
     /// 深呼吸
     /// </summary>
-    public void DeepBreathEnd(){}
+    public void DeepBreathEnd()
+    {
+        cameraAnimationController.AnimStop(CameraAnimType.DEEPBREATH);
+    }
 
     /// <summary>
     /// 息切れ
@@ -162,8 +179,9 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.IsRootMotion(true, true);
         breathController.StateUpdate(MoveType.BREATHLESSNESS);
-        animationContoller.AnimStart(AnimType.BREATHLESSNESS);
+        playerAnimationContoller.AnimStart(PlayerAnimType.BREATHLESSNESS);
         camera.IsRotationCamera(false);
+        cameraAnimationController.AnimStart(CameraAnimType.BREATHLESSNESS);
     }
 
     /// <summary>
@@ -171,7 +189,8 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BrethlessnessEnd()
     {
-        animationContoller.AnimStop(AnimType.BREATHLESSNESS);
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHLESSNESS);
+        cameraAnimationController.AnimStop(CameraAnimType.BREATHLESSNESS);
     }
 
     /// <summary>
@@ -207,6 +226,7 @@ public class PlayerEvents : MonoBehaviour
         breathController.StateUpdate(MoveType.HIDE);
         hideController.EndHideAction();
         soundArea.AddSoundLevel(ActionSoundType.HIDE);
+        hideController.HideCameraMove();
 
         switch (LayerMask.LayerToName(hideController.HideObj.layer))
         {
@@ -254,42 +274,40 @@ public class PlayerEvents : MonoBehaviour
     public void DamageEnd() { }
 
     /// <summary>
+    /// 裸足終了
+    /// </summary>
+    public void BarefootEnter()
+    {
+        playerAnimationContoller.AnimStart(PlayerAnimType.SHOES);
+        camera.IsRotationCamera(false);
+        moveController.IsRootMotion(true, true);
+    }
+
+    /// <summary>
     /// 裸足
     /// </summary>
     public void Barefoot()
     {
-        if (!stateController.IsShoes)
+        if (stateController.State == MoveType.HIDE)
         {
-            if (stateController.State == MoveType.HIDE)
-            {
-                animationContoller.DisplayShoesArm(false, true);
+            playerAnimationContoller.DisplayShoesArm(false, true);
 
-                if (hideController.IsStealth)
-                {
-                    animationContoller.DisplayRightArm(false);
-                }
-                else
-                {
-                    animationContoller.DisplayRightArm(true);
-                }
-            }
-            else if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
+            if (hideController.IsHideStealth())
             {
-                animationContoller.DisplayRightArm(false);
-                animationContoller.DisplayShoesArm(true, true);
+                playerAnimationContoller.DisplayRightArm(false);
+            }
+            else
+            {
+                playerAnimationContoller.DisplayRightArm(true);
             }
         }
+        else if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
+        {
+            playerAnimationContoller.DisplayRightArm(false);
+            playerAnimationContoller.DisplayShoesArm(true, true);
+        }
 
-        moveController.ChangeSpeedLimit(SpeedType.BAREFOOT);
         soundArea.AddSoundLevel(ActionSoundType.BAREFOOT);
-        damageController.HitDamageObject();
-
-        if (stateController.IsShoes)
-        {
-            animationContoller.AnimStart(AnimType.SHOES);
-            camera.IsRotationCamera(false);
-            moveController.IsRootMotion(true, true);
-        }
     }
 
     /// <summary>
@@ -297,11 +315,8 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BarefootEnd()
     {
-        if (!stateController.IsShoes)
-        {
-            animationContoller.AnimStop(AnimType.SHOES);
-            camera.IsRotationCamera(false);
-            moveController.IsRootMotion(true, true);
-        }
+        playerAnimationContoller.AnimStop(PlayerAnimType.SHOES);
+        camera.IsRotationCamera(false);
+        moveController.IsRootMotion(true, true);
     }
 }

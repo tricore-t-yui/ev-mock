@@ -18,45 +18,10 @@ public class PlayerDamageController : MonoBehaviour
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
     [SerializeField]
-    float objectDamage = 0.1f;                              // オブジェクトでのダメージ量
-    [SerializeField]
     float invincibleSecond = 2;                             // ダメージ処理後の無敵時間
 
-    public bool IsInvincible { get; private set; } = false;                              // 無敵時間かどうか
-    bool isDamageObjHit = false;                            // ダメージオブジェクトにふれているかどうか
+    public bool IsInvincible { get; private set; } = false; // 無敵時間かどうか
     public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
-
-    /// <summary>
-    /// 障害物に当たったら
-    /// </summary>
-    /// <param name="collision"></param>
-    void OnCollisionEnter(Collision collision)
-    {
-        // ダメージ処理に入っているなら
-        if (enabled)
-        {
-            // オブジェクトに当たったら倒れる
-            EndBlowAway();
-            IsObjHit = true;
-        }
-    }
-
-    /// <summary>
-    /// 障害物に当たっている間
-    /// </summary>
-    /// <param name="collision"></param>
-    void OnCollisionStay(Collision collision)
-    {
-        // ダメージオブジェクト触れているかどうか
-        if (LayerMask.LayerToName(collision.gameObject.layer) == "Damage")
-        {
-            isDamageObjHit = true;
-        }
-        else
-        {
-            isDamageObjHit = false;
-        }
-    }
 
     /// <summary>
     /// 起動処理
@@ -65,6 +30,7 @@ public class PlayerDamageController : MonoBehaviour
     {
         // 初期化
         interactController.CommonInit();
+        EndBlowAway();
     }
 
     /// <summary>
@@ -82,19 +48,6 @@ public class PlayerDamageController : MonoBehaviour
 
         // 処理開始
         enabled = true;
-    }
-
-    /// <summary>
-    /// ダメージオブジェクトに当たった時のダメージ処理
-    /// </summary>
-    public void HitDamageObject()
-    {
-        // ダメージオブジェクトに触れていたら
-        if(isDamageObjHit)
-        {
-            // ダメージを食らう
-            healthController.Damage(objectDamage);
-        }
     }
 
     /// <summary>

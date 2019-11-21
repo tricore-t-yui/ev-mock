@@ -13,7 +13,6 @@ public class SoundAreaController : MonoBehaviour
     public enum ActionSoundType
     {
         STEALTH,            // 息止め
-        STEALTHMOVE,        // 息止め移動
         HIDE,               // 隠れる
         WAIT,               // 待機
         WALK,               // 移動
@@ -26,9 +25,11 @@ public class SoundAreaController : MonoBehaviour
         LARGECONFUSION,     // 息の大きな乱れ
         BREATHLESSNESS,     // 息切れ
         DEEPBREATH,         // 深呼吸
-        HALFHEALTH,         // 体力が半分
-        PINCHHEALTH,        // 体力がピンチ
+        DAMAGE,             // ダメージ
+        DAMAGEHALFHEALTH,   // 体力が半分
+        DAMAGEPINCHHEALTH,  // 体力がピンチ
         BAREFOOT,           // 裸足
+        BAREFOOTDAMAGE,     // 裸足でダメージ
     }
 
     /// <summary>
@@ -64,7 +65,7 @@ public class SoundAreaController : MonoBehaviour
         soundLevel = 0;
 
         // 合計値に応じて領域拡大
-        collider.radius = 1 + (areaMagnification * soundLevel);
+        collider.radius = 1 + (areaMagnification * TotalSoundLevel);
 
         // 心音の変更
         ChangeHeartSound();
@@ -83,22 +84,21 @@ public class SoundAreaController : MonoBehaviour
         {
             case ActionSoundType.STEALTH: addLevel = -3; break;
             case ActionSoundType.WAIT: addLevel = 1; break;
+            case ActionSoundType.WALK: addLevel = 6; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 2; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 3; break;
             case ActionSoundType.LARGECONFUSION: addLevel = 4; break;
             case ActionSoundType.HIDE: addLevel = -2; break;
-            case ActionSoundType.DOOROPEN: addLevel = 0; break;
+            case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 3; break;
-            case ActionSoundType.DASHDOOROPEN: addLevel = 3; break;
-            case ActionSoundType.DASH: addLevel = 7; break;
+            case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
+            case ActionSoundType.DASH: addLevel = 8; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 5; break;
-            case ActionSoundType.STEALTHMOVE: addLevel = 3; break;
-            case ActionSoundType.HALFHEALTH: addLevel = 5; break;
-            case ActionSoundType.PINCHHEALTH: addLevel = 7; break;
-
-            // NOTE: k.oishi 裸足は一旦保留にしておきます
-            case ActionSoundType.BAREFOOT: addLevel = 0; break;
+            case ActionSoundType.DAMAGE: addLevel = 3; break;
+            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 5; break;
+            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 8; break;
+            case ActionSoundType.BAREFOOT: addLevel = -2; break;
         }
 
         soundLevel += addLevel;

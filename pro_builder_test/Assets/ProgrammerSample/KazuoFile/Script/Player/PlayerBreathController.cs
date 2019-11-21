@@ -171,7 +171,7 @@ public class PlayerBreathController : MonoBehaviour
             case MoveType.STEALTH:NowAmount -= stealthDecrement;break;
             case MoveType.HIDE:
                 // 警戒状態じゃなかったら
-                if (hideController.IsStealth && (hideController.IsHideLocker || hideController.IsHideBed))
+                if (hideController.IsHideStealth())
                 {
                     // 連打処理
                     StrikeButtonRepeatedly();
