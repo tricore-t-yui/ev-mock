@@ -13,19 +13,20 @@ public class HideStateController : MonoBehaviour
     public enum HeartSoundType
     {
         NORMAL,     // 通常
-        SMALL,      // 小
         MEDIUM,     // 中
         LARGE,      // 大
     }
 
     [SerializeField]
-    CapsuleCollider playerCollider = default;
+    CapsuleCollider playerCollider = default;           // プレイヤーのコライダー
+    [SerializeField]
+    PlayerBreathController breathController = default;  // 息管理クラス
 
-    MeshRenderer mesh = default;
-    CapsuleCollider enemyCollider = default;
+    MeshRenderer mesh = default;                        // 敵のメッシュ
+    CapsuleCollider enemyCollider = default;            // 敵のコライダー
 
-    public bool IsSafety { get; private set; } = false;     // 安全地帯内かどうか
-    public bool IsLookEnemy { get; private set; } = false;  // 敵が見えているかどうか
+    bool isSafety = false;                              // 安全地帯内にいないかどうか
+    bool isLookEnemy = false;                           // 敵が見えているかどうか
     public HeartSoundType HeartSound { get; private set; } = HeartSoundType.NORMAL;      // 心音
 
     /// <summary>
@@ -37,7 +38,7 @@ public class HideStateController : MonoBehaviour
         {
             mesh = other.GetComponent<MeshRenderer>();
             enemyCollider = other.GetComponent<CapsuleCollider>();
-            IsSafety = true;
+            isSafety = false;
         }
     }
 
@@ -50,11 +51,11 @@ public class HideStateController : MonoBehaviour
         {
             if (mesh.isVisible && VisibleEnemyRay(other.gameObject.transform))
             {
-                IsLookEnemy = true;
+                isLookEnemy = true;
             }
             else
             {
-                IsLookEnemy = false;
+                isLookEnemy = false;
             }
         }
     }
@@ -66,7 +67,7 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            IsSafety = false;
+            isSafety = true;
         }
     }
 
@@ -75,7 +76,11 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // 心音の変更
         ChangeHeartSound();
+
+        // 心音の変更に合わせた処理
+        breathController.ChangeHideDecrement(HeartSound);
     }
 
     /// <summary>
@@ -106,7 +111,7 @@ public class HideStateController : MonoBehaviour
             // 処理回数によってレイの向きと距離を計算
             switch(i)
             {
-                case 0: dir = (enemyTop - start).normalized; distance = (start - enemyTop).magnitude; break;
+                case 0: dir = (enemyTop - start).normalized;    distance = (start - enemyTop).magnitude; break;
                 case 1: dir = (enemyMiddle - start).normalized; distance = (start - enemyMiddle).magnitude; break;
                 case 2: dir = (enemyBottom - start).normalized; distance = (start - enemyBottom).magnitude; break;
             }
@@ -136,12 +141,12 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void ChangeHeartSound()
     {
-        if (IsSafety)
+        if (!isSafety)
         {
             // 安全地帯内に敵がいて、まだ敵が見えていない状態(消費中)
             HeartSound = HeartSoundType.MEDIUM;
 
-            if (IsLookEnemy)
+            if (isLookEnemy)
             {
                 // 安全地帯内に敵がいて、敵が見えている状態(消費大)
                 HeartSound = HeartSoundType.LARGE;
@@ -150,10 +155,10 @@ public class HideStateController : MonoBehaviour
         else
         {
             // 安全地帯内に敵がおらず、敵が見えていない状態(消費小)
-            HeartSound = HeartSoundType.SMALL;
+            HeartSound = HeartSoundType.NORMAL;
 
             // 安全地帯内に敵がおらず、敵が見えている状態
-            if (IsLookEnemy)
+            if (isLookEnemy)
             {
                 // 安全地帯内に敵がいて姿を見ている状態(消費中)
                 HeartSound = HeartSoundType.MEDIUM;
