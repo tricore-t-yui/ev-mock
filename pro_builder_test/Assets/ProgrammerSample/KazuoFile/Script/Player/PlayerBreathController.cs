@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MoveType = PlayerStateController.ActionStateType;
-using ActionSoundType = SoundAreaController.ActionSoundType;
+using ActionSoundType = SoundAreaSpawner.ActionSoundType;
+using HeartSoundType = HideStateController.HeartSoundType;
 
 /// <summary>
 /// プレイヤーの息管理クラス
@@ -27,7 +28,7 @@ public class PlayerBreathController : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
-    SoundAreaController soundArea = default;                    // 音管理クラス
+    SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
     HideStateController hideState = default;                    // 隠れる状態管理クラス
 
@@ -60,9 +61,10 @@ public class PlayerBreathController : MonoBehaviour
     int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
     int duration = 0;                                           // 連打処理の継続フレーム (詳細は165行のNOTE)
 
-    public BrethState state { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
+    float hideDecrement = 0;                                    // 隠れているときの息の消費量
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
     public float NowAmount { get; private set; } = 100;         // 息の残量
+    public BrethState state { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
 
     /// <summary>
     /// 開始処理
@@ -170,8 +172,8 @@ public class PlayerBreathController : MonoBehaviour
             case MoveType.DASH: NowAmount -= DashDecrement; break;
             case MoveType.STEALTH:NowAmount -= stealthDecrement;break;
             case MoveType.HIDE:
-                // 警戒状態じゃなかったら
-                if (hideController.IsStealth && (hideController.IsHideLocker || hideController.IsHideBed))
+                // 息を止めていなかったら
+                if (hideController.IsHideStealth())
                 {
                     // 連打処理
                     StrikeButtonRepeatedly();
@@ -184,30 +186,13 @@ public class PlayerBreathController : MonoBehaviour
                     // 連打していない場合
                     else
                     {
-                        if (hideState.IsSafety)
-                        {
-                            // 安全地帯内に敵がいて、まだ敵が見えていない状態(消費中)
-                            NowAmount -= hideMediumDecrement;
-
-                            if (hideState.IsLookEnemy)
-                            {
-                                // 安全地帯内に敵がいて、敵が見えている状態(消費大)
-                                NowAmount -= hideLargeDecrement;
-                            }
-                        }
-                        else
-                        {
-                            // 安全地帯内に敵がおらず、敵が見えていない状態(消費小)
-                            NowAmount -= hideSmallDecrement;
-
-                            // 安全地帯内に敵がおらず、敵が見えている状態
-                            if (hideState.IsLookEnemy)
-                            {
-                                // 安全地帯内に敵がいて姿を見ている状態(消費中)
-                                NowAmount -= hideMediumDecrement;
-                            }
-                        }
+                        // 心音に合わせた息消費
+                        NowAmount -= hideDecrement;
                     }
+                }
+                else
+                {
+                    NowAmount += normalRecovery;
                 }
                 break;
             default: break;
@@ -235,5 +220,18 @@ public class PlayerBreathController : MonoBehaviour
 
         // 値が0以下ににならないように補正
         duration = Mathf.Clamp(duration, 0, 100);
+    }
+
+    /// <summary>
+    /// 心音に合わせた息消費
+    /// </summary>
+    public void ChangeHideDecrement(HeartSoundType type)
+    {
+        switch (type)
+        {
+            case HeartSoundType.NORMAL: hideDecrement = hideSmallDecrement; break;
+            case HeartSoundType.MEDIUM: hideDecrement = hideMediumDecrement; break;
+            case HeartSoundType.LARGE: hideDecrement = hideLargeDecrement; break;
+        }
     }
 }

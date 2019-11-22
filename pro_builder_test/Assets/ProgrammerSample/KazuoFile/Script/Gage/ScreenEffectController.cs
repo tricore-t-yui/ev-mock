@@ -16,19 +16,24 @@ public class ScreenEffectController : MonoBehaviour
         BREATH,
         HEALTH,
         FADEOUT,
+        OBJECTDAMAGE,
     }
 
     [SerializeField]
-    PlayerBreathController breathController = default;    // 息管理クラス
+    PlayerBreathController breathController = default;              // 息管理クラス
 	[SerializeField]
-	PlayerHealthController healthController = default;  // 体力クラス
+	PlayerHealthController healthController = default;              // 体力クラス
+    [SerializeField]
+    PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
 
     [SerializeField]
-    Image breathEffect = default;   // 息の画面エフェクト
+    Image breathEffect = default;       // 息の画面エフェクト
     [SerializeField]
-    Image healthEffect = default;    // 体力の画面エフェクト
+    Image healthEffect = default;       // 体力の画面エフェクト
     [SerializeField]
-    Image fadeOut = default;        // フェードアウト用イメージ
+    Image fadeOut = default;            // フェードアウト用イメージ
+    [SerializeField]
+    Image objectDamageEffect = default; // オブジェクトダメージの画面エフェクト
 
     /// <summary>
     /// 更新処理
@@ -38,6 +43,7 @@ public class ScreenEffectController : MonoBehaviour
         // 息、体力によってエフェクト表示
         breathEffect.color = DisplayEffect(ImageType.BREATH);
         healthEffect.color = DisplayEffect(ImageType.HEALTH);
+        objectDamageEffect.color = DisplayEffect(ImageType.OBJECTDAMAGE);
 
         // 死んでしまったら
         if (healthController.IsDeath)
@@ -67,6 +73,10 @@ public class ScreenEffectController : MonoBehaviour
             case ImageType.FADEOUT:
                 color = fadeOut.color;
                 color.a += 0.01f;
+                break;
+            case ImageType.OBJECTDAMAGE:
+                color = objectDamageEffect.color;
+                color.a = objectDamageController.NowObjectDamage / 100;
                 break;
         }
 

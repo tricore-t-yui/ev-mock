@@ -18,38 +18,10 @@ public class PlayerDamageController : MonoBehaviour
     InteractFunction interactController = default;          // インタラクト用関数クラス
 
     [SerializeField]
-    float objectDamage = 0.1f;                              // オブジェクトでのダメージ量
-    [SerializeField]
     float invincibleSecond = 2;                             // ダメージ処理後の無敵時間
 
-    bool isInvincible = false;                              // 無敵時間かどうか
-    bool isDamageObjHit = false;                            // ダメージオブジェクトにふれているかどうか
+    public bool IsInvincible { get; private set; } = false; // 無敵時間かどうか
     public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
-
-    /// <summary>
-    /// 障害物に当たったら
-    /// </summary>
-    /// <param name="collision"></param>
-    void OnCollisionEnter(Collision collision)
-    {
-        // ダメージ処理に入っているなら
-        if (enabled)
-        {
-            // オブジェクトに当たったら倒れる
-            EndBlowAway();
-            IsObjHit = true;
-        }
-
-        // ダメージオブジェクト触れているかどうか
-        if (LayerMask.LayerToName(collision.gameObject.layer) == "DamageObj")
-        {
-            isDamageObjHit = true;
-        }
-        else
-        {
-            isDamageObjHit = false;
-        }
-    }
 
     /// <summary>
     /// 起動処理
@@ -58,6 +30,7 @@ public class PlayerDamageController : MonoBehaviour
     {
         // 初期化
         interactController.CommonInit();
+        EndBlowAway();
     }
 
     /// <summary>
@@ -66,32 +39,15 @@ public class PlayerDamageController : MonoBehaviour
     /// <param name="enemyPos"></param>
     public void SetInfo(Vector3 enemyPos, float damage)
     {
-        // 無敵時間じゃなかったら処理開始
-        if (!isInvincible)
-        {
-            // ダメージを食らう
-            healthController.Damage(damage);
+        // ダメージを食らう
+        healthController.Damage(damage);
 
-            // 吹き飛ばしてアニメーション開始
-            rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
-            animationContoller.AnimStart(AnimationType.DAMAGE);
+        // 吹き飛ばしてアニメーション開始
+        rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
+        animationContoller.AnimStart(AnimationType.DAMAGE);
 
-            // 処理開始
-            enabled = true;
-        }
-    }
-
-    /// <summary>
-    /// ダメージオブジェクトに当たった時のダメージ処理
-    /// </summary>
-    public void HitDamageObject()
-    {
-        // ダメージオブジェクトに触れていたら
-        if(isDamageObjHit)
-        {
-            // ダメージを食らう
-            healthController.Damage(objectDamage);
-        }
+        // 処理開始
+        enabled = true;
     }
 
     /// <summary>
@@ -123,7 +79,7 @@ public class PlayerDamageController : MonoBehaviour
             interactController.CommonEndAction();
 
             // 無敵時間開始
-            isInvincible = true;
+            IsInvincible = true;
             StartCoroutine(InvincibleCount());
 
             // 処理終了
@@ -137,6 +93,6 @@ public class PlayerDamageController : MonoBehaviour
     IEnumerator InvincibleCount()
     {
         yield return new WaitForSeconds(invincibleSecond);
-        isInvincible = false;
+        IsInvincible = false;
     }
 }

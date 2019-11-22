@@ -27,10 +27,10 @@ Transform:
   m_GameObject: {fileID: 99061309}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1.4971}
   m_Children: []
   m_Father: {fileID: 1125087521836334049}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &99061312
 SphereCollider:
@@ -57,66 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a95431317c2447ef9c7f7bc56e79925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &696758881
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 696758882}
-  - component: {fileID: 696758884}
-  - component: {fileID: 696758883}
-  m_Layer: 8
-  m_Name: SoundArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &696758882
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696758881}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1125087521836334049}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &696758884
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696758881}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.75
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &696758883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696758881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765db4dbc20034c73b64e234a0994dfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collider: {fileID: 696758884}
-  hideState: {fileID: 99061311}
-  areaMagnification: 0.3
+  playerCollider: {fileID: 1125087521836334053}
+  breathController: {fileID: 1125087521836334050}
 --- !u!1 &988820044
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +566,7 @@ GameObject:
   - component: {fileID: 1125087521836334055}
   - component: {fileID: 733771168}
   - component: {fileID: 1873015058}
+  - component: {fileID: 1125087522315089306}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -645,7 +588,6 @@ Transform:
   - {fileID: 1125087521023189967}
   - {fileID: 1125087520652504941}
   - {fileID: 1125087521124948933}
-  - {fileID: 696758882}
   - {fileID: 99061310}
   - {fileID: 1125087521023641559}
   m_Father: {fileID: 0}
@@ -715,13 +657,15 @@ MonoBehaviour:
   rigid: {fileID: 1125087521836334054}
   collider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
-  camera: {fileID: 1125087521023189967}
+  objectDamageController: {fileID: 1125087522315089306}
+  stateController: {fileID: 0}
   forwardSpeed: 2
   sideSpeed: 2
   backSpeed: 1.5
-  speedMagnification: 10
+  speedMagnification: 20
   barefootSpeedReduction: 0.85
-  walkSpeedLimit: 0.5
+  objectDamageSpeedReduction: 0.85
+  walkSpeedLimit: 0.75
   dashSpeedLimit: 1.5
   squatSpeedLimit: 0.25
   stealthSpeedLimit: 0.25
@@ -740,7 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff0586b1ac1c49be98105f8da395e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundArea: {fileID: 696758883}
+  soundArea: {fileID: 0}
   recoveryFrame: 240
   recoveryAmount: 0.1
   smallDisturbance: 75
@@ -759,7 +703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ReductionKey: 113
   hideController: {fileID: 1125087521836334055}
-  soundArea: {fileID: 696758883}
+  soundArea: {fileID: 0}
   hideState: {fileID: 99061311}
   normalRecovery: 0.5
   breathlessnessRecovery: 0.2
@@ -819,7 +763,6 @@ MonoBehaviour:
   rigidbody: {fileID: 1125087521836334054}
   healthController: {fileID: 1125087521836334051}
   interactController: {fileID: 0}
-  objectDamage: 0.1
   invincibleSecond: 2
 --- !u!114 &1873015058
 MonoBehaviour:
@@ -837,6 +780,20 @@ MonoBehaviour:
   rightArm: {fileID: 1125087521124948932}
   shoesArm: {fileID: 0}
   shoes: {fileID: 988820044}
+--- !u!114 &1125087522315089306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125087521836334063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02c39d3e2a00469ebad3978e6fc5bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateController: {fileID: 0}
+  soundArea: {fileID: 0}
 --- !u!1001 &2878279672215381301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -887,7 +844,7 @@ PrefabInstance:
     - target: {fileID: 2912889147544232674, guid: f3779c2511a8c4adfa0df6e685841c53,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2912889147544232674, guid: f3779c2511a8c4adfa0df6e685841c53,
         type: 3}

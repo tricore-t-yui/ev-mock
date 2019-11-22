@@ -25,6 +25,8 @@ public class PlayerEventCaller : MonoBehaviour
         DAMAGE,             // ダメージ
         BAREFOOT,           // 裸足
 
+        BAREFOOTENTER,      // 裸足開始
+
         WAITEND,            // 待機終了
         WALKEND,            // 歩く終了
         DASHEND,            // ダッシュ終了
@@ -60,6 +62,9 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent damage           = new UnityEvent();     // ダメージイベント
     [SerializeField]
     UnityEvent barefoot         = new UnityEvent();     // 裸足イベント
+
+    [SerializeField]
+    UnityEvent barefootEnter    = new UnityEvent();     // 裸足開始イベント
 
     [SerializeField]
     UnityEvent waitEnd          = new UnityEvent();     // 待機終了イベント
@@ -103,6 +108,8 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.BREATHLESSNESS:    brethressness.Invoke();    break;
             case EventType.DAMAGE:            damage.Invoke();           break;
             case EventType.BAREFOOT:          barefoot.Invoke();         break;
+
+            case EventType.BAREFOOTENTER:     barefootEnter.Invoke();    break;
 
             case EventType.WAITEND:           waitEnd.Invoke();          break;
             case EventType.WALKEND:           walkEnd.Invoke();          break;

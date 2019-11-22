@@ -32,7 +32,6 @@ public class BedStealthState : StateMachineBehaviour
         if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
         {
             animator.SetTrigger("BedOut");
-            animator.SetBool("Stealth", false);
             hideController.SetIsStealth(false);
         }
     }
@@ -42,6 +41,7 @@ public class BedStealthState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.SetBool("Stealth", false);
         hideController.SetIsStealth(false);
     }
 }
