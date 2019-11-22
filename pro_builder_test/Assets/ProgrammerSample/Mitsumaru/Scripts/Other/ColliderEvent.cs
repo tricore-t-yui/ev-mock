@@ -71,6 +71,54 @@ public class ColliderEvent : MonoBehaviour
     }
 
     /// <summary>
+    /// 触れた瞬間のコールバックを削除
+    /// </summary>
+    public void RemoveEnterListener(UnityAction<Transform, Collider> call)
+    {
+        onTriggerEnter?.RemoveListener(call);
+    }
+
+    /// <summary>
+    /// 触れ続けているときののコールバック削除
+    /// </summary>
+    public void RemoveUpdateListener(UnityAction<Transform, Collider> call)
+    {
+        onTriggerUpdate?.RemoveListener(call);
+    }
+
+    /// <summary>
+    /// 離れたのコールバック削除
+    /// </summary>
+    public void RemoveExitListener(UnityAction<Transform, Collider> call)
+    {
+        onTriggerExit?.RemoveListener(call);
+    }
+
+    /// <summary>
+    /// 衝突した瞬間のコールバック削除
+    /// </summary>
+    public void RemoveEnterListener(UnityAction<Transform, Collision> call)
+    {
+        onCollisionEnter?.RemoveListener(call);
+    }
+
+    /// <summary>
+    /// 衝突した瞬間のコールバック削除
+    /// </summary>
+    public void RemoveUpdateListener(UnityAction<Transform, Collision> call)
+    {
+        onCollisionUpdate?.RemoveListener(call);
+    }
+
+    /// <summary>
+    /// 衝突した瞬間のコールバック削除
+    /// </summary>
+    public void RemoveExitListener(UnityAction<Transform, Collision> call)
+    {
+        onCollisionExit?.RemoveListener(call);
+    }
+
+    /// <summary>
     /// 触れた瞬間
     /// </summary>
     /// <param name="other"></param>

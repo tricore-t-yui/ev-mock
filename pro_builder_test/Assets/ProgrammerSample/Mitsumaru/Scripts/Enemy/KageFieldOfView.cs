@@ -99,6 +99,9 @@ public class KageFieldOfView : MonoBehaviour
         // 境界ベクトルを更新
         UpdateBorderVector(angle,currentDistance);
 
+        // デバッグ用の距離を現在の距離に置き換える
+        debugOnlyDistance = currentDistance;
+
         if (IsInViewRange())
         {
             // 範囲内に入ったときのコールバック

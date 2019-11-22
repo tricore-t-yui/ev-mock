@@ -79,13 +79,19 @@ public class KageStateNormal : StateMachineBehaviour
 
         // 指定された状態に変更
         animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)stateType);
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
     /// 物音が聞こえた瞬間のコールバック
     /// </summary>
+    /// 
     void OnHearEnter(Transform self,Collider target)
     {
+        // プレイヤー自身はスキップ
+        if (target.tag == "Player") { return; }
+
         // 警戒モードに変更
         animParameterList.SetBool(ParameterType.isVigilanceMode, true);
         // 接近対象の位置をセット
@@ -101,6 +107,8 @@ public class KageStateNormal : StateMachineBehaviour
     /// </summary>
     void OnPlayerDiscovery(Transform self, Collider target)
     {
+        // 警戒モードを解除
+        animParameterList.SetBool(ParameterType.isVigilanceMode, false);
         // 戦闘モードに変更
         animParameterList.SetBool(ParameterType.isFightingMode, true);
     }
