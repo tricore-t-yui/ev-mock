@@ -27,7 +27,7 @@ public class PlayerBreathController : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
-    SoundAreaSpawner soundArea = default;                    // 音管理クラス
+    SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
     HideStateController hideState = default;                    // 隠れる状態管理クラス
 
@@ -170,7 +170,7 @@ public class PlayerBreathController : MonoBehaviour
             case MoveType.DASH: NowAmount -= DashDecrement; break;
             case MoveType.STEALTH:NowAmount -= stealthDecrement;break;
             case MoveType.HIDE:
-                // 警戒状態じゃなかったら
+                // 息を止めていなかったら
                 if (hideController.IsHideStealth())
                 {
                     // 連打処理
@@ -208,6 +208,10 @@ public class PlayerBreathController : MonoBehaviour
                             }
                         }
                     }
+                }
+                else
+                {
+                    NowAmount += normalRecovery;
                 }
                 break;
             default: break;

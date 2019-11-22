@@ -14,29 +14,29 @@ using CameraAnimType = CameraAnimationController.AnimationType;
 public class PlayerEvents : MonoBehaviour
 {
     [SerializeField]
-    CapsuleCollider collider = default;                     // コライダー
+    CapsuleCollider collider = default;                             // コライダー
     [SerializeField]
-    PlayerMoveController moveController = default;          // 移動クラス
+    PlayerMoveController moveController = default;                  // 移動クラス
     [SerializeField]
-    PlayerBreathController breathController = default;      // 息管理クラス
+    PlayerBreathController breathController = default;              // 息管理クラス
     [SerializeField]
-    PlayerHideController hideController = default;          // 隠れるアクションクラス
+    PlayerHideController hideController = default;                  // 隠れるアクションクラス
     [SerializeField]
-    PlayerDoorController doorController = default;          // 隠れるアクションクラス
+    PlayerDoorController doorController = default;                  // 隠れるアクションクラス
     [SerializeField]
-    CameraController camera = default;                      // カメラクラス
+    CameraController camera = default;                              // カメラクラス
     [SerializeField]
-    PlayerDamageController damageController = default;      // ダメージリアクションクラス
+    PlayerDamageController damageController = default;              // ダメージリアクションクラス
     [SerializeField]
-    PlayerAnimationContoller playerAnimationContoller = default;  // アニメーションクラス
+    PlayerAnimationContoller playerAnimationContoller = default;    // アニメーションクラス
     [SerializeField]
-    PlayerStateController stateController = default;        // ステート管理クラス
+    PlayerStateController stateController = default;                // ステート管理クラス
     [SerializeField]
-    SoundAreaSpawner soundArea = default;                // 音管理クラス
+    SoundAreaSpawner soundArea = default;                           // 音管理クラス
     [SerializeField]
-    PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
+    PlayerObjectDamageController objectDamageController = default;  // ダメージリアクションクラス
     [SerializeField]
-    CameraAnimationController cameraAnimationController = default;      // ダメージリアクションクラス
+    CameraAnimationController cameraAnimationController = default;  // ダメージリアクションクラス
 
     /// <summary>
     /// 待機
@@ -227,6 +227,10 @@ public class PlayerEvents : MonoBehaviour
         hideController.EndHideAction();
         soundArea.AddSoundLevel(ActionSoundType.HIDE);
         hideController.HideCameraMove();
+        if(hideController.IsHideStealth())
+        {
+            soundArea.AddSoundLevel(ActionSoundType.STEALTH);
+        }
 
         switch (LayerMask.LayerToName(hideController.HideObj.layer))
         {
