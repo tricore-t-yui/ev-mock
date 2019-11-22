@@ -43,6 +43,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Wait()
     {
+        moveController.ChangeSpeedLimit(SpeedType.NOTMOVE);
         breathController.StateUpdate(MoveType.WAIT);
         soundArea.AddSoundLevel(ActionSoundType.WAIT);
         camera.IsRotationCamera(true);
@@ -156,6 +157,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
+        moveController.ChangeSpeedLimit(SpeedType.NOTMOVE);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
         breathController.StateUpdate(MoveType.DEEPBREATH);
         objectDamageController.RecoveryDeepBreath();
