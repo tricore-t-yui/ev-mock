@@ -18,7 +18,11 @@ public class HideStateController : MonoBehaviour
         LARGE,      // 大
     }
 
-    Renderer enemyRenderer = default;   // 敵のレンダラー
+    [SerializeField]
+    CapsuleCollider playerCollider = default;
+
+    MeshRenderer mesh = default;
+    CapsuleCollider enemyCollider = default;
 
     public bool IsSafety { get; private set; } = false;     // 安全地帯内かどうか
     public bool IsLookEnemy { get; private set; } = false;  // 敵が見えているかどうか
@@ -31,7 +35,8 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            enemyRenderer = other.gameObject.GetComponent<Renderer>();
+            mesh = other.GetComponent<MeshRenderer>();
+            enemyCollider = other.GetComponent<CapsuleCollider>();
             IsSafety = true;
         }
     }
@@ -43,7 +48,7 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            if (enemyRenderer.isVisible)
+            if (mesh.isVisible && VisibleEnemyRay(other.gameObject.transform))
             {
                 IsLookEnemy = true;
             }
@@ -61,9 +66,69 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            enemyRenderer = null;
             IsSafety = false;
         }
+    }
+
+    /// <summary>
+    /// 更新処理
+    /// </summary>
+    void Update()
+    {
+        ChangeHeartSound();
+    }
+
+    /// <summary>
+    /// 敵が見えているかどうかのRaycast
+    /// </summary>
+    bool VisibleEnemyRay(Transform enemy)
+    {
+        // 敵のそれぞれの座標
+        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + (enemyCollider.height / 2), enemy.position.z);
+        Vector3 enemyMiddle = enemy.position;
+        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y - (enemyCollider.height / 2) + 0.01f, enemy.position.z);
+
+        // レイのスタート位置
+        Vector3 start = new Vector3(transform.position.x, transform.position.y + (playerCollider.height / 2), transform.position.z);
+
+        // レイの向き
+        Vector3 dir = Vector3.zero;
+
+        // レイの距離
+        float distance = 0.0f;
+
+        // レイヤーマスク(プレイヤーからレイが伸びているので除外)
+        int layerMask = (1 << LayerMask.NameToLayer("Player"));
+        layerMask = ~layerMask;
+
+        for (int i = 0; i < 3; i++)
+        {
+            // 処理回数によってレイの向きと距離を計算
+            switch(i)
+            {
+                case 0: dir = (enemyTop - start).normalized; distance = (start - enemyTop).magnitude; break;
+                case 1: dir = (enemyMiddle - start).normalized; distance = (start - enemyMiddle).magnitude; break;
+                case 2: dir = (enemyBottom - start).normalized; distance = (start - enemyBottom).magnitude; break;
+            }
+
+            // レイ作成
+            Ray ray = new Ray(start, dir);
+            RaycastHit hit = default;
+
+            // デバック用ライン
+            Debug.DrawLine(start, start + (dir * distance), Color.red);
+
+            // レイに当たったらtrue、外れていたらfalse
+            if (Physics.Raycast(ray, out hit, distance, layerMask))
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

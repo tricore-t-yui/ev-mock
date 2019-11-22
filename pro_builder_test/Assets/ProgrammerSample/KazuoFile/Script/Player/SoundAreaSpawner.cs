@@ -83,8 +83,6 @@ public class SoundAreaSpawner : MonoBehaviour
         totalSoundLevel = soundLevel;
         areaRadius = 1 + (areaMagnification * totalSoundLevel);
 
-        Debug.Log(areaRadius);
-
         // スポーンしてリストに追加
         var spawn = PoolManager.Pools["SoundArea"];
         var cube = spawn.Spawn(areaCollider);

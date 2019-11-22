@@ -24,6 +24,7 @@ public class PlayerMoveController : MonoBehaviour
     /// </summary>
     public enum SpeedLimitType
     {
+        NOTMOVE,
         WALK,
         DASH,
         SQUAT,
@@ -223,6 +224,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         switch (type)
         {
+            case SpeedLimitType.NOTMOVE: moveTypeSpeedLimit = 0; break;
             case SpeedLimitType.WALK: moveTypeSpeedLimit = walkSpeedLimit; break;
             case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
             case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
