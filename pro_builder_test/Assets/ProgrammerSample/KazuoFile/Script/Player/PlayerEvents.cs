@@ -4,7 +4,7 @@ using UnityEngine;
 using PlayerAnimType = PlayerAnimationContoller.AnimationType;
 using MoveType = PlayerStateController.ActionStateType;
 using SpeedType = PlayerMoveController.SpeedLimitType;
-using ActionSoundType = SoundAreaController.ActionSoundType;
+using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 using CameraType = CameraController.RotationType;
 using CameraAnimType = CameraAnimationController.AnimationType;
 
@@ -32,7 +32,7 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerStateController stateController = default;        // ステート管理クラス
     [SerializeField]
-    SoundAreaController soundArea = default;                // 音管理クラス
+    SoundAreaSpawner soundArea = default;                // 音管理クラス
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
     [SerializeField]
