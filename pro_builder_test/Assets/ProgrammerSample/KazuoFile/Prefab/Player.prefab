@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 99061309}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1.4971}
   m_Children: []
   m_Father: {fileID: 1125087521836334049}
   m_RootOrder: 3
@@ -57,6 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a95431317c2447ef9c7f7bc56e79925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollider: {fileID: 1125087521836334053}
+  breathController: {fileID: 1125087521836334050}
 --- !u!1 &988820044
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +566,7 @@ GameObject:
   - component: {fileID: 1125087521836334055}
   - component: {fileID: 733771168}
   - component: {fileID: 1873015058}
+  - component: {fileID: 1125087522315089306}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -654,15 +657,15 @@ MonoBehaviour:
   rigid: {fileID: 1125087521836334054}
   collider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
-  objectDamageController: {fileID: 0}
+  objectDamageController: {fileID: 1125087522315089306}
   stateController: {fileID: 0}
   forwardSpeed: 2
   sideSpeed: 2
   backSpeed: 1.5
-  speedMagnification: 10
+  speedMagnification: 20
   barefootSpeedReduction: 0.85
   objectDamageSpeedReduction: 0.85
-  walkSpeedLimit: 0.5
+  walkSpeedLimit: 0.75
   dashSpeedLimit: 1.5
   squatSpeedLimit: 0.25
   stealthSpeedLimit: 0.25
@@ -777,6 +780,20 @@ MonoBehaviour:
   rightArm: {fileID: 1125087521124948932}
   shoesArm: {fileID: 0}
   shoes: {fileID: 988820044}
+--- !u!114 &1125087522315089306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125087521836334063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02c39d3e2a00469ebad3978e6fc5bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateController: {fileID: 0}
+  soundArea: {fileID: 0}
 --- !u!1001 &2878279672215381301
 PrefabInstance:
   m_ObjectHideFlags: 0
