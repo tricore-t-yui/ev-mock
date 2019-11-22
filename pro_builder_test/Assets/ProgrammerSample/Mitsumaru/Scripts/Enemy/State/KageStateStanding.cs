@@ -31,17 +31,20 @@ public class KageStateStanding : StateMachineBehaviour
 
     // 待機位置
     Vector3 standingPosition = Vector3.zero;
+    
+    // 初期位置を保存したかどうか
+    bool isSaveToStandingPos = false;
 
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        // 最初の一回のみ保存
-        if ((int)(standingPosition.sqrMagnitude) == 0)
+        // 待機位置を保存
+        if (!isSaveToStandingPos)
         {
-            // 待機位置を保存
             standingPosition = animator.transform.position;
+            isSaveToStandingPos = true;
         }
 
         // ナビメッシュを取得

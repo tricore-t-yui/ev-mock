@@ -77,6 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTagNames:
   - PlayerNoise
+  - Player
 --- !u!114 &8613790267793922612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,11 +93,11 @@ MonoBehaviour:
   rangeCollider: {fileID: 8441904132726920492}
   rangeParams:
   - state: 0
-    radius: 2
-  - state: 1
     radius: 3
-  - state: 2
+  - state: 1
     radius: 4
+  - state: 2
+    radius: 5
 --- !u!1 &1314441842436545888
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +155,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1391140448724936661}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.838, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5093175550433275674}
@@ -203,6 +204,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTagNames:
   - Player
+--- !u!1 &1598382290679155503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 120968332446981258}
+  - component: {fileID: 6341159413698073716}
+  m_Layer: 0
+  m_Name: Other
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &120968332446981258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598382290679155503}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5093175551164090574}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6341159413698073716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598382290679155503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6ab34e97a9c76498cd546b2f0dcecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHide: 0
+  isBreathHold: 0
 --- !u!1 &3225632075623846892
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,7 +855,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.21
+  m_Radius: 0.25
   m_Height: 1.53
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
@@ -5188,6 +5234,7 @@ Transform:
   - {fileID: 5093175551822477253}
   - {fileID: 8154613750996835388}
   - {fileID: 5093175550433275674}
+  - {fileID: 120968332446981258}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -1.899, z: 0}
@@ -5200,7 +5247,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5093175551164090570}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.61
+  m_Radius: 0.2
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
@@ -5257,7 +5304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ba398454dc1d044bce755162e260bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateNormalOfType: 2
+  stateNormalOfType: 1
   stateLoiteringOfType: 1
   randomMoveRangeOfObjectName: Range1
   routeCheckPointList:
@@ -5671,14 +5718,14 @@ MonoBehaviour:
   player: {fileID: 0}
   playerCollider: {fileID: 0}
   angle: 120
-  debugOnlyDistance: 1.5
+  debugOnlyDistance: 2.79
   distances:
   - state: 0
-    distance: 1.5
+    distance: 1.8
   - state: 1
-    distance: 3
+    distance: 2.8
   - state: 2
-    distance: 3
+    distance: 3.8
   rayTargetLayer:
   - Player
   - Stage
