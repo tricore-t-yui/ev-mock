@@ -104,11 +104,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// <summary>
     void OnInVigilanceRange(Transform self, Collider target)
     {
-        bool isHide = (playerHideController.IsHideBed || playerHideController.IsHideLocker) ? true : false;
-        bool isBreathHold = (playerHideController.IsStealth) ? true : false;
-
         // 隠れていて、かつ息を止めていればスキップ
-        if (playerHideController.IsHideLocker)
+        if (playerHideController.IsHideStealth())
         {
             Debug.Log("year!!!");
             return;

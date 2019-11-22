@@ -82,6 +82,8 @@ public class SoundAreaSpawner : MonoBehaviour
         // 合計値に適応、それに応じて領域拡大
         totalSoundLevel = soundLevel;
         areaRadius = 1 + (areaMagnification * totalSoundLevel);
+        Debug.Log(areaRadius);
+        if (areaRadius < 0.25f) { return; }
 
         // スポーンしてリストに追加
         var spawn = PoolManager.Pools["SoundArea"];
