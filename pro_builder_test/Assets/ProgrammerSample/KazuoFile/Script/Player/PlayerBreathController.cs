@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MoveType = PlayerStateController.ActionStateType;
-using ActionSoundType = SoundAreaController.ActionSoundType;
+using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 
 /// <summary>
 /// プレイヤーの息管理クラス
@@ -27,7 +27,7 @@ public class PlayerBreathController : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
-    SoundAreaController soundArea = default;                    // 音管理クラス
+    SoundAreaSpawner soundArea = default;                    // 音管理クラス
     [SerializeField]
     HideStateController hideState = default;                    // 隠れる状態管理クラス
 

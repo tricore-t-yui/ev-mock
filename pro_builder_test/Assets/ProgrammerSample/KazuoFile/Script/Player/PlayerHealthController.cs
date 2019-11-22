@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ActionSoundType = SoundAreaController.ActionSoundType;
+using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 
 /// <summary>
 /// プレイヤーの体力管理クラス
@@ -9,7 +9,7 @@ using ActionSoundType = SoundAreaController.ActionSoundType;
 public class PlayerHealthController : MonoBehaviour
 {
     [SerializeField]
-    SoundAreaController soundArea = default;            // 音管理クラス
+    SoundAreaSpawner soundArea = default;            // 音管理クラス
 
     [SerializeField]
     float recoveryFrame = 240;                          // 回復が始まるまでのフレーム数
