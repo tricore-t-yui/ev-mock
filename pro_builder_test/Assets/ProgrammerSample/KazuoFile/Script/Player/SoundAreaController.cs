@@ -14,6 +14,8 @@ public class SoundAreaController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner areaSpawner = default; // スポナー
 
+    float areaDecrease = 0.1f;                 // 1フレームの領域の減少量
+
     /// <summary>
     /// 起動処理
     /// </summary>
@@ -28,7 +30,7 @@ public class SoundAreaController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        collider.radius -= 0.1f;
+        collider.radius -= areaDecrease;
         if(collider.radius < 0)
         {
             gameObject.SetActive(false);
