@@ -31,6 +31,7 @@ public class SoundAreaSpawner : MonoBehaviour
         DAMAGEPINCHHEALTH,  // 体力がピンチ
         BAREFOOT,           // 裸足
         BAREFOOTDAMAGE,     // 裸足でダメージ
+        DAMAGEOBJECT,       // ダメージオブジェクトを踏んだとき
     }
 
     [SerializeField]
@@ -81,6 +82,8 @@ public class SoundAreaSpawner : MonoBehaviour
         // 合計値に適応、それに応じて領域拡大
         totalSoundLevel = soundLevel;
         areaRadius = 1 + (areaMagnification * totalSoundLevel);
+
+        Debug.Log(areaRadius);
 
         // スポーンしてリストに追加
         var spawn = PoolManager.Pools["SoundArea"];
@@ -142,6 +145,7 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 5; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 8; break;
             case ActionSoundType.BAREFOOT: addLevel = -2; break;
+            case ActionSoundType.DAMAGEOBJECT: addLevel = 1; break;
         }
 
         soundLevel += addLevel;
