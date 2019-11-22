@@ -191,10 +191,10 @@ public class PlayerMoveController : MonoBehaviour
         {
             case RayType.MOVEDIRECTION:
                 // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
-                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.01f)), transform.position.z);
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.1f)), transform.position.z);
                 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
             case RayType.DIAGONALDIRECTION:
-                start = new Vector3(transform.position.x, transform.position.y - (collider.height / 2), transform.position.z);
+                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.1f)), transform.position.z);
                 dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
         }
 
