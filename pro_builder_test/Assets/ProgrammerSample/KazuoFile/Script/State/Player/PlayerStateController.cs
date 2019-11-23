@@ -48,8 +48,6 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerEventCaller eventCaller = default;                // イベント呼び出しクラス
     [SerializeField]
-    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
-    [SerializeField]
     PlayerEndEventCaller eventEndCaller = default;          // 終了イベント呼び出しクラス
 
     [SerializeField]
@@ -79,7 +77,7 @@ public class PlayerStateController : MonoBehaviour
             EventPlay();
         }
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             ChangeDamageState(Vector3.back, 50);
         }
@@ -111,7 +109,7 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetKey(shoeshKey))
         {
-            if(IsShoes)
+            if (IsShoes)
             {
                 eventStartCaller.Invoke(EventStartType.BAREFOOTSTART);
                 IsShoes = false;
@@ -266,7 +264,7 @@ public class PlayerStateController : MonoBehaviour
             State = ActionStateType.DAMAGE;
         }
     }
-    
+
     /// <summary>
     /// イベント再生
     /// </summary>
@@ -460,7 +458,7 @@ public class PlayerStateController : MonoBehaviour
         float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = (1 << LayerMask.GetMask(new string[] { "Player","Stage" }));
+        int layerMask = (1 << LayerMask.GetMask(new string[] { "Player", "Stage" }));
         layerMask = ~layerMask;
 
         // レイ作成
