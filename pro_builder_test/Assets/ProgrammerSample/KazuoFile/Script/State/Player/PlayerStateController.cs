@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AnimType = PlayerAnimationContoller.AnimationType;
+using EventStartType = PlayerStartEventCaller.EventType;
+using EventType = PlayerEventCaller.EventType;
+using EventEndType = PlayerEndEventCaller.EventType;
 
 public class PlayerStateController : MonoBehaviour
 {
@@ -27,7 +30,7 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     Transform player = default;                             // プレイヤー
     [SerializeField]
-    CapsuleCollider collider = default;                     // プレイヤーのコライダー
+    CapsuleCollider playerCollider = default;               // プレイヤーのコライダー
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
@@ -39,13 +42,15 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerDamageController damageController = default;      // ダメージリアクションクラス
     [SerializeField]
+    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
+    [SerializeField]
+    PlayerStartEventCaller eventStartCaller = default;      // 開始イベント呼び出しクラス
+    [SerializeField]
     PlayerEventCaller eventCaller = default;                // イベント呼び出しクラス
     [SerializeField]
     PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
-
-    // プレイヤーダメージイベント
     [SerializeField]
-    PlayerDamageEvent playerDamageEvent = default;
+    PlayerEndEventCaller eventEndCaller = default;          // 終了イベント呼び出しクラス
 
     [SerializeField]
     KeyCode dashKey = KeyCode.LeftShift;                    // ダッシュキー
@@ -62,11 +67,6 @@ public class PlayerStateController : MonoBehaviour
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
-
-    void Start()
-    {
-        playerDamageEvent?.Add(ChangeDamageState);
-    }
 
     /// <summary>
     /// 更新処理
@@ -93,12 +93,12 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetKey(squatKey))
         {
-            eventCaller.Invoke(PlayerEventCaller.EventType.SQUAT);
+            eventCaller.Invoke(EventType.SQUAT);
             IsSquat = true;
         }
         else
         {
-            eventCaller.Invoke(PlayerEventCaller.EventType.SQUATEND);
+            eventEndCaller.Invoke(EventEndType.SQUATEND);
             IsSquat = false;
         }
     }
@@ -113,16 +113,16 @@ public class PlayerStateController : MonoBehaviour
         {
             if(IsShoes)
             {
-                eventCaller.Invoke(PlayerEventCaller.EventType.BAREFOOTENTER);
+                eventStartCaller.Invoke(EventStartType.BAREFOOTSTART);
                 IsShoes = false;
             }
-            eventCaller.Invoke(PlayerEventCaller.EventType.BAREFOOT);
+            eventCaller.Invoke(EventType.BAREFOOT);
         }
         else
         {
             if (!IsShoes)
             {
-                eventCaller.Invoke(PlayerEventCaller.EventType.BAREFOOTEND);
+                eventEndCaller.Invoke(EventEndType.BAREFOOTEND);
                 IsShoes = true;
             }
         }
@@ -417,15 +417,14 @@ public class PlayerStateController : MonoBehaviour
     {
         switch (State)
         {
-            case ActionStateType.WAIT: eventCaller.Invoke(PlayerEventCaller.EventType.WAITEND); break;
-            case ActionStateType.WALK: eventCaller.Invoke(PlayerEventCaller.EventType.WALKEND); break;
-            case ActionStateType.DASH: eventCaller.Invoke(PlayerEventCaller.EventType.DASHEND); break;
-            case ActionStateType.STEALTH: eventCaller.Invoke(PlayerEventCaller.EventType.STEALTHEND); break;
-            case ActionStateType.DOOROPEN: eventCaller.Invoke(PlayerEventCaller.EventType.DOOREND); break;
-            case ActionStateType.HIDE: eventCaller.Invoke(PlayerEventCaller.EventType.HIDE); break;
-            case ActionStateType.DEEPBREATH: eventCaller.Invoke(PlayerEventCaller.EventType.DEEPBREATHEND); break;
-            case ActionStateType.BREATHLESSNESS: eventCaller.Invoke(PlayerEventCaller.EventType.BREATHLESSNESSEND); break;
-            case ActionStateType.DAMAGE: eventCaller.Invoke(PlayerEventCaller.EventType.DAMAGEEND); break;
+            case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
+            case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
+            case ActionStateType.STEALTH: eventEndCaller.Invoke(EventEndType.STEALTHEND); break;
+            case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
+            case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
+            case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
+            case ActionStateType.BREATHLESSNESS: eventEndCaller.Invoke(EventEndType.BREATHLESSNESSEND); break;
+            case ActionStateType.DAMAGE: eventEndCaller.Invoke(EventEndType.DAMAGEEND); break;
         }
     }
 
@@ -458,7 +457,7 @@ public class PlayerStateController : MonoBehaviour
         Vector3 dir = player.forward;
 
         // レイの距離
-        float distance = collider.radius * 3.5f;
+        float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
         int layerMask = (1 << LayerMask.GetMask(new string[] { "Player","Stage" }));

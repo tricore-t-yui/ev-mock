@@ -29,7 +29,6 @@ public class PlayerMoveController : MonoBehaviour
         DASH,
         SQUAT,
         STEALTH,
-        BREATHLESSNESS,
         BAREFOOT,
     }
 
@@ -43,9 +42,9 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     [SerializeField]
-    Rigidbody rigid = default;                  // リジットボディ
+    Rigidbody playerRigidbody = default;        // リジットボディ
     [SerializeField]
-    CapsuleCollider collider = default;         // コライダー
+    CapsuleCollider playerCollider = default;   // コライダー
     [SerializeField]
     Animator playerAnim = default;              // アニメーター
 
@@ -76,8 +75,6 @@ public class PlayerMoveController : MonoBehaviour
     float squatSpeedLimit = 0.25f;              // しゃがみ時の移動速度の限界
     [SerializeField]
     float stealthSpeedLimit = 0.25f;            // 忍び歩き時の移動速度の限界
-    [SerializeField]
-    float breathlessnessSpeedLimit = 0.25f;     // 息切れ時の移動速度の限界
 
     [SerializeField, Range(0,180)]
     float stepAngle = 60;                       // 段差の許容角度
@@ -119,10 +116,10 @@ public class PlayerMoveController : MonoBehaviour
         SpeedCalculation();
 
         // 移動速度の限界を超えるまで力をくわえ続ける
-        float walkSpeed = new Vector3(rigid.velocity.x, 0, rigid.velocity.z).magnitude;
+        float walkSpeed = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z).magnitude;
         if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit)
         {
-            rigid.AddForce(moveSpeed.normalized * speedMagnification);
+            playerRigidbody.AddForce(moveSpeed.normalized * speedMagnification);
         }
     }
 
@@ -180,7 +177,7 @@ public class PlayerMoveController : MonoBehaviour
         Vector3 dir = Vector3.zero;
 
         // レイの距離
-        float distance = collider.radius * 2;
+        float distance = playerCollider.radius * 2;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
         int layerMask = (1 << LayerMask.NameToLayer("Player"));
@@ -191,10 +188,10 @@ public class PlayerMoveController : MonoBehaviour
         {
             case RayType.MOVEDIRECTION:
                 // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
-                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.1f)), transform.position.z);
+                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
                 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
             case RayType.DIAGONALDIRECTION:
-                start = new Vector3(transform.position.x, transform.position.y - (collider.height / (2 + 0.1f)), transform.position.z);
+                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
                 dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
         }
 
@@ -229,7 +226,6 @@ public class PlayerMoveController : MonoBehaviour
             case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
             case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
             case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
-            case SpeedLimitType.BREATHLESSNESS: moveTypeSpeedLimit = breathlessnessSpeedLimit; break;
         }
 
         // 裸足
@@ -253,7 +249,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (isPosition)
         {
-            rigid.velocity = Vector3.zero;
+            playerRigidbody.velocity = Vector3.zero;
             isAnimPosition = true;
         }
         else
@@ -263,7 +259,11 @@ public class PlayerMoveController : MonoBehaviour
 
         if (isRotation)
         {
-            isAnimRotation = true;
+            if (!isAnimRotation)
+            {
+                transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+                isAnimRotation = true;
+            }
         }
         else
         {
