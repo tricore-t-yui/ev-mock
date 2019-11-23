@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
-        transform.parent.position = player.transform.position;
+        transform.parent.position = player.position;
         transform.parent.rotation = player.rotation;
         transform.rotation = animCamera.transform.rotation;
     }
@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public void Rotation(RotationType type)
     {
-        transform.parent.position = player.transform.position;
+        transform.parent.position = player.position;
 
         // 回転量を求める
         float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;

@@ -27,7 +27,6 @@ public class PlayerEventCaller : MonoBehaviour
 
         BAREFOOTENTER,      // 裸足開始
 
-        WAITEND,            // 待機終了
         WALKEND,            // 歩く終了
         DASHEND,            // ダッシュ終了
         SQUATEND,           // しゃがみ終了
@@ -66,8 +65,6 @@ public class PlayerEventCaller : MonoBehaviour
     [SerializeField]
     UnityEvent barefootEnter    = new UnityEvent();     // 裸足開始イベント
 
-    [SerializeField]
-    UnityEvent waitEnd          = new UnityEvent();     // 待機終了イベント
     [SerializeField]
     UnityEvent walkEnd          = new UnityEvent();     // 歩き終了イベント
     [SerializeField]
@@ -111,7 +108,6 @@ public class PlayerEventCaller : MonoBehaviour
 
             case EventType.BAREFOOTENTER:     barefootEnter.Invoke();    break;
 
-            case EventType.WAITEND:           waitEnd.Invoke();          break;
             case EventType.WALKEND:           walkEnd.Invoke();          break;
             case EventType.DASHEND:           dashEnd.Invoke();          break;
             case EventType.SQUATEND:          squatEnd.Invoke();         break;

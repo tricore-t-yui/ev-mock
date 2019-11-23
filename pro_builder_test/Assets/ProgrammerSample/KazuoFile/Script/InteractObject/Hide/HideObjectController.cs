@@ -22,7 +22,7 @@ public class HideObjectController : MonoBehaviour
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
-    BoxCollider collider = default;                 // コライダー
+    BoxCollider objectCollider = default;           // コライダー
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
 
@@ -94,11 +94,11 @@ public class HideObjectController : MonoBehaviour
     {
         if(flag)
         {
-            collider.enabled = true;
+            objectCollider.enabled = true;
         }
         else
         {
-            collider.enabled = false;
+            objectCollider.enabled = false;
         }
     }
 

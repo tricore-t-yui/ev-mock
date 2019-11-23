@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoveType = PlayerStateController.ActionStateType;
 
 /// <summary>
 /// プレイヤーのアニメーションクラス
@@ -40,6 +41,10 @@ public class PlayerAnimationContoller : MonoBehaviour
 
     [SerializeField]
     Animator animator = default;                                // プレイヤーのアニメーター
+    [SerializeField]
+    PlayerStateController stateController = default;            // ステート管理クラス
+    [SerializeField]
+    PlayerHideController hideController = default;              // 隠れるアクションクラス
 
     [SerializeField]
     GameObject rightArm = default;                              // 右腕
@@ -153,6 +158,31 @@ public class PlayerAnimationContoller : MonoBehaviour
                 animator.SetBool("DamageEnd", false);
                 animator.SetBool("DoorEnd", false);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// 裸足時の右手を表示
+    /// </summary>
+    public void BarefootRightArm()
+    {
+        if (stateController.State == MoveType.HIDE)
+        {
+            DisplayShoesArm(false, true);
+
+            if (hideController.IsHideStealth())
+            {
+                DisplayRightArm(false);
+            }
+            else
+            {
+                DisplayRightArm(true);
+            }
+        }
+        else if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
+        {
+            DisplayRightArm(false);
+            DisplayShoesArm(true, true);
         }
     }
 

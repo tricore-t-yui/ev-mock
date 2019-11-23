@@ -27,7 +27,7 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     Transform player = default;                             // プレイヤー
     [SerializeField]
-    CapsuleCollider collider = default;                     // プレイヤーのコライダー
+    CapsuleCollider playerCollider = default;               // プレイヤーのコライダー
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
@@ -408,7 +408,6 @@ public class PlayerStateController : MonoBehaviour
     {
         switch (State)
         {
-            case ActionStateType.WAIT: eventCaller.Invoke(PlayerEventCaller.EventType.WAITEND); break;
             case ActionStateType.WALK: eventCaller.Invoke(PlayerEventCaller.EventType.WALKEND); break;
             case ActionStateType.DASH: eventCaller.Invoke(PlayerEventCaller.EventType.DASHEND); break;
             case ActionStateType.STEALTH: eventCaller.Invoke(PlayerEventCaller.EventType.STEALTHEND); break;
@@ -449,7 +448,7 @@ public class PlayerStateController : MonoBehaviour
         Vector3 dir = player.forward;
 
         // レイの距離
-        float distance = collider.radius * 3.5f;
+        float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
         int layerMask = (1 << LayerMask.GetMask(new string[] { "Player","Stage" }));
