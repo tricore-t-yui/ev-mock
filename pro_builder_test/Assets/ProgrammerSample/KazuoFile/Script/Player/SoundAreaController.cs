@@ -12,7 +12,7 @@ public class SoundAreaController : MonoBehaviour
     [SerializeField]
     Transform player = default;             // プレイヤー
     [SerializeField]
-    SoundAreaSpawner areaSpawner = default; // スポナー
+    SoundAreaSpawner spawner = default;     // スポナー
 
     [SerializeField]
     float largeBorder = 2;                  // 大きな領域のボーダーライン
@@ -29,7 +29,7 @@ public class SoundAreaController : MonoBehaviour
     private void OnEnable()
     {
         transform.position = player.position;
-        soundCollider.radius = areaSpawner.GetColliderRadius();
+        soundCollider.radius = spawner.GetColliderRadius();
 
         // 領域の大きさに応じて減少量を変更
         if(soundCollider.radius > largeBorder)
