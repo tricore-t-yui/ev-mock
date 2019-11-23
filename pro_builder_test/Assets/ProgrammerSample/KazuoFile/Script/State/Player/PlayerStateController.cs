@@ -48,6 +48,8 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerEventCaller eventCaller = default;                // イベント呼び出しクラス
     [SerializeField]
+    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
+    [SerializeField]
     PlayerEndEventCaller eventEndCaller = default;          // 終了イベント呼び出しクラス
 
     [SerializeField]

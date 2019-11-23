@@ -8,6 +8,10 @@ using UnityEngine.AI;
 /// </summary>
 public class KageStateReturnLoiteringPoint : StateMachineBehaviour
 {
+    // 移動速度
+    [SerializeField]
+    float speed = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
@@ -29,6 +33,9 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
     {
         // ナビメッシュ取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // 移動速度をセット
+        navMesh.speed = speed;
 
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
