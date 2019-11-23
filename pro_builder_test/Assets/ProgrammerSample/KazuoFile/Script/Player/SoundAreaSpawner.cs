@@ -4,7 +4,7 @@ using UnityEngine;
 using PathologicalGames;
 
 /// <summary>
-/// 音管理クラス
+/// 音領域のスポナー
 /// </summary>
 public class SoundAreaSpawner : MonoBehaviour
 {
@@ -82,20 +82,19 @@ public class SoundAreaSpawner : MonoBehaviour
         // 合計値に適応、それに応じて領域拡大
         totalSoundLevel = soundLevel;
         areaRadius = 1 + (areaMagnification * totalSoundLevel);
-        Debug.Log(areaRadius);
+
         if (areaRadius < 0.25f) { return; }
 
         // スポーンしてリストに追加
-        var spawn = PoolManager.Pools["SoundArea"];
-        var cube = spawn.Spawn(areaCollider);
-        spawnList.Add(cube);
+        var spawn = PoolManager.Pools["SoundArea"].Spawn(areaCollider);
+        spawnList.Add(spawn);
 
         // カウントをリセット
         spawnframeCount = 0;
     }
 
     /// <summary>
-    /// でスポーン
+    /// デスポーン
     /// </summary>
     void Despawn()
     {
