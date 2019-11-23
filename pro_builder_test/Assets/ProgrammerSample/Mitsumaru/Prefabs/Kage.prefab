@@ -93,11 +93,11 @@ MonoBehaviour:
   rangeCollider: {fileID: 8441904132726920492}
   rangeParams:
   - state: 0
-    radius: 3
+    radius: 1.5
   - state: 1
-    radius: 4
+    radius: 2
   - state: 2
-    radius: 5
+    radius: 2.5
 --- !u!1 &1314441842436545888
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +213,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 120968332446981258}
-  - component: {fileID: 6341159413698073716}
   m_Layer: 0
   m_Name: Other
   m_TagString: Untagged
@@ -235,20 +234,6 @@ Transform:
   m_Father: {fileID: 5093175551164090574}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6341159413698073716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1598382290679155503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b6ab34e97a9c76498cd546b2f0dcecb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHide: 0
-  isBreathHold: 0
 --- !u!1 &3225632075623846892
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,7 +795,7 @@ GameObject:
   - component: {fileID: 9078368671267398603}
   m_Layer: 0
   m_Name: KageBody
-  m_TagString: Untagged
+  m_TagString: Kage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -873,6 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTagNames:
   - PlayerNoise
+  - Kage
 --- !u!1 &5093175549952940268
 GameObject:
   m_ObjectHideFlags: 0
@@ -7656,6 +7642,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7154179694791988418}
+  - component: {fileID: 3836686050532512509}
   m_Layer: 0
   m_Name: Attack
   m_TagString: Untagged
@@ -7677,3 +7664,15 @@ Transform:
   m_Father: {fileID: 8154613750996835388}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3836686050532512509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7712169328284605978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f90063b9cc81e149bbfff6390d4a4f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
