@@ -52,7 +52,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 99061309}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a95431317c2447ef9c7f7bc56e79925, type: 3}
   m_Name: 
@@ -654,22 +654,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e3017fdad064651ad1e5d1d03d0050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigid: {fileID: 1125087521836334054}
-  collider: {fileID: 1125087521836334053}
+  playerRigidbody: {fileID: 1125087521836334054}
+  playerCollider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
   objectDamageController: {fileID: 1125087522315089306}
   stateController: {fileID: 0}
   forwardSpeed: 2
   sideSpeed: 2
   backSpeed: 1.5
-  speedMagnification: 20
+  speedMagnification: 25
   barefootSpeedReduction: 0.85
   objectDamageSpeedReduction: 0.85
   walkSpeedLimit: 0.75
   dashSpeedLimit: 1.5
   squatSpeedLimit: 0.25
   stealthSpeedLimit: 0.25
-  breathlessnessSpeedLimit: 0.25
   stepAngle: 60
   stepUpPower: 1.45
 --- !u!114 &1125087521836334051
@@ -746,7 +745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationContoller: {fileID: 1873015058}
   interactController: {fileID: 0}
-  camera: {fileID: 0}
+  moveCamera: {fileID: 0}
 --- !u!114 &733771168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,7 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationContoller: {fileID: 1873015058}
-  rigidbody: {fileID: 1125087521836334054}
+  playerRigidbody: {fileID: 1125087521836334054}
   healthController: {fileID: 1125087521836334051}
   interactController: {fileID: 0}
   invincibleSecond: 2
@@ -777,6 +776,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1125087521836334048}
+  stateController: {fileID: 0}
+  hideController: {fileID: 1125087521836334055}
   rightArm: {fileID: 1125087521124948932}
   shoesArm: {fileID: 0}
   shoes: {fileID: 988820044}

@@ -23,7 +23,7 @@ public class PlayerHideController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
-    CameraController camera = default;                          // カメラクラス
+    CameraController moveCamera = default;                      // 移動カメラクラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -84,11 +84,11 @@ public class PlayerHideController : MonoBehaviour
     {
         if (isHideBed)
         {
-            camera.Rotation(CameraController.RotationType.HIDEBED);
+            moveCamera.Rotation(CameraController.RotationType.HIDEBED);
         }
         if (isHideLocker)
         {
-            camera.Rotation(CameraController.RotationType.HIDELOCKER);
+            moveCamera.Rotation(CameraController.RotationType.HIDELOCKER);
         }
     }
 
@@ -99,12 +99,12 @@ public class PlayerHideController : MonoBehaviour
     public void HideObject()
     {
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
-        camera.IsRotationCamera(true);
+        moveCamera.IsRotationCamera(true);
         switch (LayerMask.LayerToName(HideObj.layer))
         {
             // ロッカー
             case "Locker":
-                camera.Rotation(CameraController.RotationType.HIDELOCKER);
+                moveCamera.Rotation(CameraController.RotationType.HIDELOCKER);
                 isHideLocker = true; break;
             // ベッド
             case "Bed":
@@ -119,7 +119,7 @@ public class PlayerHideController : MonoBehaviour
     public void ExitHideObject()
     {
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
-        camera.IsRotationCamera(false);
+        moveCamera.IsRotationCamera(false);
         switch (LayerMask.LayerToName(HideObj.layer))
         {
             // ロッカー
@@ -134,10 +134,22 @@ public class PlayerHideController : MonoBehaviour
     /// <summary>
     /// 各アクションの終了
     /// </summary>
-    public void EndHideAction()
+    public void EndHideAction(bool isIgnore)
     {
+        bool flag = false; // 終了処理をさせるかどうか
+
+        // アニメーションが再生され終わるか、条件無視フラグが立っていたら終了処理開始
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.HIDE) && !isIgnore)
+        {
+            flag = true;
+        }
+        else if (isIgnore)
+        {
+            flag = true;
+        }
+
         // アニメーションが再生され終わったら終了処理
-        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.HIDE))
+        if (flag)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             interactController.CommonEndAction();

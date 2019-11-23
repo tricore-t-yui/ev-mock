@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3492274395205396727
+--- !u!1 &3492274395825781958
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3492274395205396713}
-  - component: {fileID: 3492274395205396726}
+  - component: {fileID: 3492274395825782008}
+  - component: {fileID: 3492274395825782009}
   m_Layer: 0
-  m_Name: PlayerEventCaller
+  m_Name: PlayerEvents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3492274395205396713
+--- !u!4 &3492274395825782008
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3492274395205396727}
+  m_GameObject: {fileID: 3492274395825781958}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6.1178026, y: -5.047325, z: 9.017677}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,69 @@ Transform:
   m_Father: {fileID: 7162753497123237928}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3492274395205396726
+--- !u!114 &3492274395825782009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3492274395205396727}
+  m_GameObject: {fileID: 3492274395825781958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc0cd069742104b008ba3ebcbfce978b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollider: {fileID: 0}
+  moveController: {fileID: 0}
+  breathController: {fileID: 0}
+  hideController: {fileID: 0}
+  doorController: {fileID: 0}
+  moveCamera: {fileID: 0}
+  damageController: {fileID: 0}
+  playerAnimationContoller: {fileID: 0}
+  stateController: {fileID: 0}
+  soundArea: {fileID: 0}
+  objectDamageController: {fileID: 0}
+  cameraAnimationController: {fileID: 0}
+--- !u!1 &8638950102133211276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7162753497123237928}
+  - component: {fileID: 1611073757}
+  m_Layer: 0
+  m_Name: PlayerEventController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7162753497123237928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8638950102133211276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.2494016, y: 1.2971944, z: 1.8594944}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3492274395825782008}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1611073757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8638950102133211276}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3c28ebbe2ba04b9b8ec62e3781c5165, type: 3}
@@ -211,20 +267,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  waitEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3492274395825782009}
-        m_MethodName: WaitEnd
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   walkEnd:
     m_PersistentCalls:
       m_Calls:
@@ -365,90 +407,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &3492274395825781958
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3492274395825782008}
-  - component: {fileID: 3492274395825782009}
-  m_Layer: 0
-  m_Name: PlayerEvents
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3492274395825782008
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3492274395825781958}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.1178026, y: -5.047325, z: 9.017677}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 7162753497123237928}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3492274395825782009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3492274395825781958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc0cd069742104b008ba3ebcbfce978b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collider: {fileID: 0}
-  moveController: {fileID: 0}
-  breathController: {fileID: 0}
-  hideController: {fileID: 0}
-  doorController: {fileID: 0}
-  camera: {fileID: 0}
-  damageController: {fileID: 0}
-  playerAnimationContoller: {fileID: 0}
-  stateController: {fileID: 0}
-  soundArea: {fileID: 0}
-  objectDamageController: {fileID: 0}
-  cameraAnimationController: {fileID: 0}
---- !u!1 &8638950102133211276
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7162753497123237928}
-  m_Layer: 0
-  m_Name: PlayerEventController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7162753497123237928
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8638950102133211276}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2494016, y: 1.2971944, z: 1.8594944}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 3492274395205396713}
-  - {fileID: 3492274395825782008}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

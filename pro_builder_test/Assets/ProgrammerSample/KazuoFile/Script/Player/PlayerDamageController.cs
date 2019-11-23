@@ -11,7 +11,7 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
     [SerializeField]
-    Rigidbody rigidbody = default;                          // リジットボディ
+    Rigidbody playerRigidbody = default;                    // リジットボディ
     [SerializeField]
     PlayerHealthController healthController = default;      // 体力管理クラス
     [SerializeField]
@@ -43,7 +43,7 @@ public class PlayerDamageController : MonoBehaviour
         healthController.Damage(damage);
 
         // 吹き飛ばしてアニメーション開始
-        rigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
+        playerRigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
         animationContoller.AnimStart(AnimationType.DAMAGE);
 
         // 処理開始
