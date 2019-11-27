@@ -9,6 +9,10 @@ using ParameterType = KageAnimParameterList.ParameterType;
 /// </summary>
 public class KageStateApproachTheTarget : StateMachineBehaviour
 {
+    // 移動速度
+    [SerializeField]
+    float speed = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
@@ -28,6 +32,9 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     {
         // ナビメッシュのコンポーネントを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // 移動速度をセット
+        navMesh.speed = speed;
 
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;

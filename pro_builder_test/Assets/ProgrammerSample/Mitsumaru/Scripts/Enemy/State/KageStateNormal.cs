@@ -70,7 +70,7 @@ public class KageStateNormal : StateMachineBehaviour
         fieldOfView = animator.transform.Find("Collider").Find("KageFeildOfView").GetComponent<KageFieldOfView>() ?? fieldOfView;
         // 視野の範囲を設定する
         fieldOfView.ChangeDistance(KageState.Kind.Normal);
-        fieldOfView.SetOnInViewRangeEvent(OnHearEnter);
+        fieldOfView.SetOnInViewRangeEvent(OnPlayerDiscovery);
 
         // 警戒範囲
         vigilanceRange = animator.transform.Find("Collider").Find("KageVigilanceRange").GetComponent<KageVigilanceRange>() ?? vigilanceRange;
@@ -80,6 +80,7 @@ public class KageStateNormal : StateMachineBehaviour
         // 指定された状態に変更
         animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)stateType);
 
+        // マウスロック
         Cursor.lockState = CursorLockMode.Locked;
     }
 
