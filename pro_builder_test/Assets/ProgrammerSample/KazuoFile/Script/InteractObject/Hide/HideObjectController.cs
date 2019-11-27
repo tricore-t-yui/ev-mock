@@ -115,11 +115,11 @@ public class HideObjectController : MonoBehaviour
     {
         if(flag)
         {
-            objectCollider.enabled = true;
+            objectCollider.isTrigger = false;
         }
         else
         {
-            objectCollider.enabled = false;
+            objectCollider.isTrigger = true;
         }
     }
 

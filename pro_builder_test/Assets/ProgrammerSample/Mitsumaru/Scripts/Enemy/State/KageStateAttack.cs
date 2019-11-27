@@ -46,5 +46,7 @@ public class KageStateAttack : StateMachineBehaviour
         // ここで攻撃フラグをオフにする
         // NOTE:なぜか２回続けてフラグがtrueになるため
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack, false);
+        animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, false);
+        animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, false);
     }
 }
