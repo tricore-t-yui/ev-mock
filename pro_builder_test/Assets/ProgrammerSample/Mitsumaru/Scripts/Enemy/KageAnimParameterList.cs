@@ -30,6 +30,7 @@ public class KageAnimParameterList : MonoBehaviour
         targetPositionZ,
         perceiveSound,
         targetPosStop,
+        isAttack,
     }
 
     // アニメーター

@@ -8,6 +8,10 @@ using UnityEngine.AI;
 /// </summary>
 public class KageStateReturnStandingPoint : StateMachineBehaviour
 {
+    // 移動速度
+    [SerializeField]
+    float speed = 0;
+
     // 待機型のステート
     KageStateStanding stateStanding = null;
 
@@ -24,6 +28,9 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
     {
         // ナビメッシュのコンポーネントを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // 移動速度をセット
+        navMesh.speed = speed;
 
         // 待機型のステートを取得
         stateStanding = animator.GetBehaviour<KageStateStanding>() ?? stateStanding;

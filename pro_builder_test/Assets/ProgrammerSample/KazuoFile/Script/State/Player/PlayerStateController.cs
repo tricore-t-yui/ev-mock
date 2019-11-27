@@ -34,6 +34,8 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
+    PlayerMoveController moveController = default;          // 座標移動クラス
+    [SerializeField]
     PlayerDoorController doorController = default;          // ドアアクションクラス
     [SerializeField]
     PlayerHideController hideController = default;          // 隠れるアクションクラス
@@ -104,7 +106,7 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetKey(shoeshKey))
         {
-            if(IsShoes)
+            if (IsShoes)
             {
                 eventStartCaller.Invoke(EventStartType.BAREFOOTSTART);
                 IsShoes = false;
@@ -462,7 +464,7 @@ public class PlayerStateController : MonoBehaviour
         float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = (1 << LayerMask.GetMask(new string[] { "Player","Stage" }));
+        int layerMask = (1 << LayerMask.GetMask(new string[] { "Player", "Stage" }));
         layerMask = ~layerMask;
 
         // レイ作成

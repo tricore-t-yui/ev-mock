@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
+using System.Linq;
 
 /// <summary>
 /// 影人間のステート：プレイヤーの追跡
 /// </summary>
 public class KageStatePlayerChaser : StateMachineBehaviour
 {
+    // 移動速度
+    [SerializeField]
+    float speed = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
     // 影人間のパラメータークラス
@@ -19,7 +24,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // 警戒範囲
     KageVigilanceRange vigilanceRange = null;
     // 警戒範囲用コライダーのイベント
-    ColliderEvent vigilanceRangeEvent = default;
+    ColliderEvent vigilanceRangeEvent = null;
+    // 影人間自信のコライダーイベント
+    ColliderEvent kageBodyEvent = null;
 
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
@@ -39,6 +46,11 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
+        // 移動速度をセット
+        navMesh.speed = speed;
+
+        navMesh.isStopped = false;
+
         // 視野の範囲
         fieldOfView = animator.transform.Find("Collider").Find("KageFeildOfView").GetComponent<KageFieldOfView>() ?? fieldOfView;
         // 視野の範囲を設定する
@@ -51,6 +63,11 @@ public class KageStatePlayerChaser : StateMachineBehaviour
 
         // 警戒範囲用コライダーのイベントクラスを取得
         vigilanceRangeEvent = animator.transform.Find("Collider").Find("KageVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
+
+        // 影人間の自信のコライダーイベントを取得
+        kageBodyEvent = animator.transform.Find("Collider").Find("KageBody").GetComponent<ColliderEvent>() ?? kageBodyEvent;
+        // コールバックをセット
+        kageBodyEvent.AddEnterListener(OnCollisionPlayer);
 
         // ハイドコントローラーを取得
         playerHideController = FindObjectOfType<PlayerHideController>() ?? playerHideController;
@@ -67,7 +84,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 影人間の移動が停止したら、見失ったとみなす
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < 0.1f)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
@@ -82,8 +99,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         // 視野の範囲と警戒範囲ともに警戒状態時のものに変更する
         fieldOfView.ChangeDistance(KageState.Kind.Vigilance);
         vigilanceRange.ChangeRadius(KageState.Kind.Fight);
-
-        vigilanceRangeEvent.RemoveUpdateListener(OnInVigilanceRange);
     }
 
     /// <summary>
@@ -116,6 +131,18 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         {
             // プレイヤーの位置を取得する
             navMesh.SetDestination(target.transform.position);
+        }
+    }
+
+    void OnCollisionPlayer(Transform self,Collision target)
+    {
+        // 影人間の前方にレイを飛ばす
+        Ray forwardRay = new Ray(target.transform.position + new Vector3(0, 1, 0), target.transform.forward);
+
+        RaycastHit hit;
+        if (Physics.Raycast(forwardRay, out hit))
+        {
+            animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack,true);
         }
     }
 }
