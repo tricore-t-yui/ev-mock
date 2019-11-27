@@ -34,7 +34,7 @@ public class CameraAnimationController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        DisplayPlayerArm(true);
+        DisplayPlayerArm(false);
     }
 
     /// <summary>
@@ -82,7 +82,16 @@ public class CameraAnimationController : MonoBehaviour
     {
         for (int i = 0; i < playerArm.Length; i++)
         {
-            playerArm[i].SetActive(flag);
+            playerArm[i].SetActive(true);
         }
+    }
+
+    /// <summary>
+    /// 腕の表示
+    /// </summary>
+    /// NOTE:k.oishi アニメーション用関数
+    public void DisplayArm()
+    {
+        DisplayPlayerArm(true);
     }
 }
