@@ -18,9 +18,13 @@ public class LockerInState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
+        if (stateInfo.normalizedTime >= 1.0f)
         {
-            animator.SetTrigger("LockerOut");
+            animator.SetBool("Close", true);
+            if (!Input.GetMouseButton(0))
+            {
+                animator.SetTrigger("LockerOut");
+            }
         }
     }
 
