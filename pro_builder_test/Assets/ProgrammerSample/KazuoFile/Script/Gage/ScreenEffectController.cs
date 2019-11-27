@@ -44,12 +44,6 @@ public class ScreenEffectController : MonoBehaviour
         breathEffect.color = DisplayEffect(ImageType.BREATH);
         healthEffect.color = DisplayEffect(ImageType.HEALTH);
         objectDamageEffect.color = DisplayEffect(ImageType.OBJECTDAMAGE);
-
-        // 死んでしまったら
-        if (healthController.IsDeath)
-        {
-            //fadeOut.color = DisplayEffect(ImageType.FADEOUT);
-        }
     }
 
     /// <summary>
@@ -72,7 +66,7 @@ public class ScreenEffectController : MonoBehaviour
                 break;
             case ImageType.FADEOUT:
                 color = fadeOut.color;
-                color.a += 0.01f;
+                color.a = 1;
                 break;
             case ImageType.OBJECTDAMAGE:
                 color = objectDamageEffect.color;

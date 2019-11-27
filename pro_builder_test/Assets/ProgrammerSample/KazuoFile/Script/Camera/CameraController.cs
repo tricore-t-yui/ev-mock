@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
         NORMAL,
         HIDEBED,
         HIDELOCKER,
+        DEATH,
     }
 
     /// <summary>
@@ -32,6 +33,8 @@ public class CameraController : MonoBehaviour
     Transform player = default;                         // プレイヤー
     [SerializeField]
     GameObject animCamera = default;                    // アニメーション用カメラ
+    [SerializeField]
+    PlayerDamageController damageController = default;  // ダメージクラス
 
     [SerializeField]
     PlayerHideController hideController = default;      // 隠れるアクション管理クラス
@@ -81,6 +84,9 @@ public class CameraController : MonoBehaviour
                 // 回転制限
                 player.localEulerAngles = HideAngleLimit();
                 transform.parent.localEulerAngles = HideAngleLimit();
+                break;
+            case RotationType.DEATH:
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((damageController.EnemyPos.position - transform.position).normalized), Time.deltaTime);
                 break;
         }
     }

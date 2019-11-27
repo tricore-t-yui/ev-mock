@@ -320,12 +320,30 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Damage()
     {
-        switch(damageController.Type)
+        switch (damageController.Type)
         {
-            case PlayerDamageController.DamageType.HIDELOCKER: moveController.IsRootMotion(true, true);break;
-            default: moveController.IsRootMotion(false, true);break;
+            case PlayerDamageController.DamageType.HIDELOCKER:
+                moveController.IsRootMotion(true, true);
+                moveCamera.IsRotationCamera(false);
+                break;
+            case PlayerDamageController.DamageType.DEATH:
+                if(damageController.IsFinishBlow)
+                {
+                    moveController.IsRootMotion(false, false);
+                    moveCamera.IsRotationCamera(true);
+                    cameraAnimationController.AnimStart(CameraAnimType.DEATH);
+                    moveCamera.Rotation(CameraType.DEATH);
+                }
+                else
+                {
+                    moveController.IsRootMotion(false, true);
+                    moveCamera.IsRotationCamera(false);
+                }
+                break;
+            default:
+                moveController.IsRootMotion(false, true);
+                moveCamera.IsRotationCamera(false); break;
         }
-        moveCamera.IsRotationCamera(false);
         damageController.EndDamageAction();
     }
     /// <summary>

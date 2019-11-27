@@ -26,6 +26,17 @@ public class CameraAnimationController : MonoBehaviour
     [SerializeField]
     Animator animator = default;    // カメラのアニメーター
 
+    [SerializeField]
+    GameObject[] playerArm = default;   // カメラについているプレイヤーの腕
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        DisplayPlayerArm(true);
+    }
+
     /// <summary>
     /// アニメーションの開始
     /// </summary>
@@ -39,7 +50,7 @@ public class CameraAnimationController : MonoBehaviour
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
             case AnimationType.STEALTH: animator.SetBool("Stealth", true); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Breathlessness", true); break;
-            case AnimationType.DEATH: animator.SetBool("Death", true); break;
+            case AnimationType.DEATH: animator.SetBool("Death", true);break;
             case AnimationType.OBJECTDAMAGE: animator.SetBool("ObjectDamage", true); break;
             case AnimationType.DEEPBREATH: animator.SetBool("DeepBreath", true); break;
         }
@@ -61,6 +72,17 @@ public class CameraAnimationController : MonoBehaviour
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
             case AnimationType.OBJECTDAMAGE: animator.SetBool("ObjectDamage", false); break;
             case AnimationType.DEEPBREATH: animator.SetBool("DeepBreath", false); break;
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーの腕の表示
+    /// </summary>
+    public void DisplayPlayerArm(bool flag)
+    {
+        for (int i = 0; i < playerArm.Length; i++)
+        {
+            playerArm[i].SetActive(flag);
         }
     }
 }
