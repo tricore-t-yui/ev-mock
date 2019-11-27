@@ -31,10 +31,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
-    // プレイヤーを見つけている
-    bool isDiscover = false;
-    // 警戒範囲内にいる
-    bool isInVigilanceRange = false;
+    // 視野の範囲内にいるかどうか
+    bool isInFieldOfView = false;
 
     /// <summary>
     /// ステートの開始
@@ -115,6 +113,16 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     }
 
     /// <summary>
+    /// 影人間の視野の範囲外にいる
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target"></param>
+    void OnOutFieldOfView(Transform self, Collider target)
+    {
+
+    }
+
+    /// <summary>
     /// 影人間の警戒範囲内にいる
     /// <summary>
     void OnInVigilanceRange(Transform self, Collider target)
@@ -137,12 +145,33 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     void OnCollisionPlayer(Transform self,Collision target)
     {
         // 影人間の前方にレイを飛ばす
-        Ray forwardRay = new Ray(target.transform.position + new Vector3(0, 1, 0), target.transform.forward);
+        Ray forwardRay = new Ray(self.transform.position + new Vector3(0, 0.1f, 0), self.transform.forward);
+        Debug.DrawRay(self.transform.position + new Vector3(0, 0.1f, 0), self.transform.forward);
+        RaycastHit[] raycastHitAll = Physics.RaycastAll(forwardRay);
 
-        RaycastHit hit;
-        if (Physics.Raycast(forwardRay, out hit))
-        {
-            animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack,true);
+        bool isHitPlayer = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Player"));
+        bool isHitLocker = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Locker"));
+        bool isHitBed    = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Bed"));
+
+        // プレイヤーに衝突
+        if (isHitPlayer)
+        { 
+            // ロッカーに衝突
+            if (isHitLocker)
+            {
+                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, true);
+            }
+            // ベッドに衝突
+            else if (isHitBed)
+            {
+                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, true);
+            }
+            // プレイヤーのみ
+            else
+            {
+                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack, true);
+            }
+
         }
     }
 }
