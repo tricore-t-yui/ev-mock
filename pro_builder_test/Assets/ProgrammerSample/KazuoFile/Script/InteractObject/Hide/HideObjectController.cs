@@ -22,10 +22,12 @@ public class HideObjectController : MonoBehaviour
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
+    PlayerDamageController damageController  = default;                     // プレイヤー
+    [SerializeField]
     BoxCollider objectCollider = default;           // コライダー
+
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
-
     [SerializeField]
     DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
 
@@ -50,6 +52,25 @@ public class HideObjectController : MonoBehaviour
         if (objType == ObjectType.BED)
         {
             ChandeDirType();
+        }
+        if (objType == ObjectType.LOCKER)
+        {
+            if (lockerAnim.GetBool("Close"))
+            {
+                if (lockerAnim.GetBool("DragOut"))
+                {
+                    SetActiveCollider(false);
+                }
+                else
+                {
+                    SetActiveCollider(true);
+                }
+            }
+            if(!lockerAnim.GetBool("DragOut"))
+            {
+                lockerAnim.SetBool("Close", false);
+                SetActiveCollider(true);
+            }
         }
     }
 

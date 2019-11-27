@@ -8,10 +8,20 @@ using AnimationType = PlayerAnimationContoller.AnimationType;
 /// </summary>
 public class PlayerDamageController : MonoBehaviour
 {
-    [SerializeField]
-    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
+    /// <summary>
+    /// ダメージのタイプ
+    /// </summary>
+    public enum DamageType
+    {
+        NORMAL,     // 通常のダメージ
+        HIDEBED,    // ベッドから引き摺り出される時のダメージ
+        HIDELOCKER, // ロッカーから引き摺り出される時のダメージ
+    }
+
     [SerializeField]
     Rigidbody playerRigidbody = default;                    // リジットボディ
+    [SerializeField]
+    PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
     [SerializeField]
     PlayerHealthController healthController = default;      // 体力管理クラス
     [SerializeField]
@@ -20,6 +30,7 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     float invincibleSecond = 2;                             // ダメージ処理後の無敵時間
 
+    public DamageType Type { get; private set; } = default;
     public bool IsInvincible { get; private set; } = false; // 無敵時間かどうか
     public bool IsObjHit { get; private set; } = false;     // オブジェクトに当たったらどうか
 
@@ -30,30 +41,46 @@ public class PlayerDamageController : MonoBehaviour
     {
         // 初期化
         interactController.CommonInit();
-        EndBlowAway();
+        IsDeath();
     }
 
     /// <summary>
     /// 敵座標の登録
     /// </summary>
     /// <param name="enemyPos"></param>
-    public void SetInfo(Vector3 enemyPos, float damage)
+    public void SetInfo(Vector3 enemyPos, float damage, DamageType type)
     {
         // ダメージを食らう
         healthController.Damage(damage);
+        Type = type;
 
-        // 吹き飛ばしてアニメーション開始
-        playerRigidbody.AddForce((enemyPos - transform.position).normalized * 5, ForceMode.Impulse);
-        animationContoller.AnimStart(AnimationType.DAMAGE);
+        // ダメージによって吹き飛ばしてアニメーション開始
+        switch (Type)
+        {
+            case DamageType.NORMAL:
+                playerRigidbody.AddForce((enemyPos - transform.position).normalized, ForceMode.Impulse);
+                animationContoller.AnimStart(AnimationType.DAMAGE);break;
+            case DamageType.HIDEBED:
+                playerRigidbody.AddForce((enemyPos - transform.position).normalized * -10, ForceMode.Impulse);
+                animationContoller.AnimStart(AnimationType.DRAGOUT); break;
+            case DamageType.HIDELOCKER:
+                animationContoller.AnimStart(AnimationType.DRAGOUT); break;
+        }
+
+        if(Type != DamageType.HIDEBED)
+        {
+            // アニメーションに入る前にプレイヤーのrotationを初期化
+            transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+        }
 
         // 処理開始
         enabled = true;
     }
 
     /// <summary>
-    /// 吹き飛び終了
+    /// 死んでいないかどうか
     /// </summary>
-    public void EndBlowAway()
+    public void IsDeath()
     {
         // 死んでしまったなら死亡アニメーション
         if (healthController.IsDeath)

@@ -21,6 +21,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
 
+    public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
     public bool IsObjectDamage { get; private set; } = false;   // ダメージオブジェクトにふれているかどうか
     public float NowObjectDamage { get; private set; } = 0;     // 今食らっているオブジェクトダメージ
 
@@ -35,10 +36,25 @@ public class PlayerObjectDamageController : MonoBehaviour
             if (!stateController.IsShoes)
             {
                 IsObjectDamage = true;
-                NowObjectDamage = 100;
+                NowObjectDamage = 50;
             }
 
             soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.DAMAGEOBJECT);
+        }
+    }
+
+    /// <summary>
+    /// ダメージ
+    /// </summary>
+    public void Damage()
+    {
+        if (IsObjectDamage)
+        {
+            NowObjectDamage += 0.1f;
+            if (NowObjectDamage >= 100)
+            {
+                IsDeepBreath = true;
+            }
         }
     }
 
@@ -48,10 +64,11 @@ public class PlayerObjectDamageController : MonoBehaviour
     public void RecoveryDeepBreath()
     {
         // 深呼吸回数をカウントし、回数が上限を超えたら回復
-        NowObjectDamage--;
+        NowObjectDamage -= 0.1f;
         if (NowObjectDamage <= 0)
         {
             NowObjectDamage = 0;
+            IsDeepBreath = false;
             IsObjectDamage = false;
         }
     }

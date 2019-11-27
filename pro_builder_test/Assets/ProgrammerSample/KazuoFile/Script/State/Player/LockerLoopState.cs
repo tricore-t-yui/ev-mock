@@ -24,7 +24,7 @@ public class LockerLoopState : StateMachineBehaviour
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(0) && !animator.GetBool("DragOut"))
         {
             animator.SetTrigger("LockerOut");
         }

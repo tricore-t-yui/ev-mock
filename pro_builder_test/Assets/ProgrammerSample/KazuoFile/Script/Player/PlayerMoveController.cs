@@ -259,11 +259,7 @@ public class PlayerMoveController : MonoBehaviour
 
         if (isRotation)
         {
-            if (!isAnimRotation)
-            {
-                transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
-                isAnimRotation = true;
-            }
+            isAnimRotation = true;
         }
         else
         {

@@ -20,6 +20,8 @@ public class PlayerAnimationContoller : MonoBehaviour
         BREATHLESSNESS,     // 息切れ
         SHOES,              // 靴
         DAMAGE,             // ダメージ
+        DRAGOUT,            // 引き摺り出し
+        DRAGOUTSTANDUP,     // 引き摺り出し後の立ち上がり
         DEATH,              // 死亡
         HIDELOCKER,         // ロッカーに隠れる
         HIDEBED,            // ベッドに隠れる
@@ -78,6 +80,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.SQUAT: animator.SetBool("Squat", true);break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); DisplayRightArm(true); break;
             case AnimationType.DAMAGE: animator.SetTrigger("Damage"); DisplayRightArm(true); break;
+            case AnimationType.DRAGOUT: animator.SetBool("DragOut", true); DisplayRightArm(true); break;
             case AnimationType.DEATH: animator.SetBool("Death", true); DisplayRightArm(true); break;
             case AnimationType.HIDELOCKER: animator.SetTrigger("LockerIn"); DisplayRightArm(true); break;
             case AnimationType.HIDEBED: animator.SetTrigger("BedIn"); DisplayRightArm(true); break;
@@ -102,6 +105,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.SQUAT: animator.SetBool("Squat", false); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", false); break;
             case AnimationType.DAMAGE: animator.ResetTrigger("Damage"); break;
+            case AnimationType.DRAGOUT: animator.SetBool("DragOut", false); break;
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
             case AnimationType.HIDELOCKER: animator.ResetTrigger("LockerIn"); break;
             case AnimationType.HIDEBED: animator.ResetTrigger("BedIn"); break;
@@ -157,6 +161,8 @@ public class PlayerAnimationContoller : MonoBehaviour
             case EndAnimationType.DAMAGE:
                 animator.SetBool("DamageEnd", false);
                 animator.SetBool("DoorEnd", false);
+                animator.SetBool("HideEnd", false);
+                animator.SetBool("DragOut", false);
                 break;
         }
     }

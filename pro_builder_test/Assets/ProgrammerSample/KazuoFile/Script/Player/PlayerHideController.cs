@@ -30,6 +30,7 @@ public class PlayerHideController : MonoBehaviour
     bool isStealth = false;                                     // 息止めフラグ
     bool isHideLocker = false;                                  // ロッカーに隠れているかどうかのフラグ
     bool isHideBed = false;                                     // ベッドに隠れているかどうかのフラグ
+    public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
 
@@ -66,9 +67,11 @@ public class PlayerHideController : MonoBehaviour
         {
             case "Locker":
                 animationContoller.AnimStart(AnimationType.HIDELOCKER);
-                hideObjectController.AnimStart("LockerIn"); break;
+                hideObjectController.AnimStart("LockerIn");
+                type = HideObjectType.LOCKER; break;
             case "Bed":
-                animationContoller.AnimStart(AnimationType.HIDEBED); break;
+                animationContoller.AnimStart(AnimationType.HIDEBED);
+                type = HideObjectType.BED; break;
         }
 
         SetIsAnimRotation(true);
@@ -100,14 +103,14 @@ public class PlayerHideController : MonoBehaviour
     {
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
         moveCamera.IsRotationCamera(true);
-        switch (LayerMask.LayerToName(HideObj.layer))
+        switch (type)
         {
             // ロッカー
-            case "Locker":
+            case HideObjectType.LOCKER:
                 moveCamera.Rotation(CameraController.RotationType.HIDELOCKER);
                 isHideLocker = true; break;
             // ベッド
-            case "Bed":
+            case HideObjectType.BED:
                 isHideBed = true; break;
         }
     }
@@ -120,13 +123,13 @@ public class PlayerHideController : MonoBehaviour
     {
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
         moveCamera.IsRotationCamera(false);
-        switch (LayerMask.LayerToName(HideObj.layer))
+        switch (type)
         {
             // ロッカー
-            case "Locker":
+            case HideObjectType.LOCKER:
                 isHideLocker = false; break;
             // ベッド
-            case "Bed":
+            case HideObjectType.BED:
                 isHideBed = false; break;
         }
     }
