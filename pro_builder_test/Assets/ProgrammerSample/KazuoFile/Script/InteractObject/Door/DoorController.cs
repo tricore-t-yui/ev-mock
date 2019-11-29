@@ -18,7 +18,7 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     float closeDistance = 2;                    // ドアが自動で閉まる距離
 
-    bool isAutoClose = false;                   // 自動でドアを閉めるフラグ
+    bool isAutoClose = true;                    // 自動でドアを閉めるフラグ
 
     DirType type = default;                     // 現在のドアの開ける方向のタイプ
     DirType firstType = default;                // 開始時のドアの開ける方向のタイプ
@@ -65,34 +65,6 @@ public class DoorController : MonoBehaviour
     /// </summary>
     bool isCloseLine()
     {
-        switch (type)
-        {
-            case DirType.FORWARD:
-                if(player.position.z >= transform.position.z + playerCollider.radius)
-                {
-                    return true;
-                }
-                break;
-            case DirType.BACK:
-                if (player.position.z <= transform.position.z - playerCollider.radius)
-                {
-                    return true;
-                }
-                break; 
-            case DirType.RIGHT:
-                if (player.position.x >= transform.position.x + playerCollider.radius)
-                {
-                    return true;
-                }
-                break; 
-            case DirType.LEFT:
-                if (player.position.x <= transform.position.x - playerCollider.radius)
-                {
-                    return true;
-                }
-                break; 
-        }
-
         // プレイヤーとドアの距離が離れたら
         if((transform.position - player.position).magnitude > closeDistance)
         {
@@ -114,6 +86,7 @@ public class DoorController : MonoBehaviour
             case PlayerDoorController.OpenType.DASH: doorAnim.SetTrigger("DashDoorOpen"); break;
         }
 
+        doorAnim.ResetTrigger("DoorClose");
         isAutoClose = false;
     }
 
