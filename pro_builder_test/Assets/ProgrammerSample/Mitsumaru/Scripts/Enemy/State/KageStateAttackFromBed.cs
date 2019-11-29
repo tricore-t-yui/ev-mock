@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-/// 影人間のステート：ロッカーでの攻撃
+/// ベッドでの攻撃処理
 /// </summary>
-public class KageStateAttackFromLocker : StateMachineBehaviour
+public class KageStateAttackFromBed : StateMachineBehaviour
 {
     // ダメージ量
     [SerializeField]
@@ -19,15 +19,8 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
     NavMeshAgent navMesh = null;
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
-    // ロッカーのアニメーター
-    Animator lockerAnimator = null;
 
-    [SerializeField]
-    int lockerOpenTime = 0;
-    [SerializeField]
-    int damageTime = 0;
-
-    int counter = 0;
+    Transform colliderParent = null;
 
     /// <summary>
     /// ステートの開始
@@ -39,33 +32,17 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
+        colliderParent = animator.transform.Find("Collider") ?? colliderParent;
+        colliderParent.gameObject.SetActive(false);
+
         // 影人間を停止させる
         navMesh.isStopped = true;
 
         // ダメージイベントのクラスを取得
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
 
-        // ロッカーのアニメーターを取得
-        lockerAnimator = GameObject.FindGameObjectWithTag("Locker").GetComponent<Animator>() ?? lockerAnimator;
-    }
-
-
-    /// <summary>
-    /// ステートの更新
-    /// </summary>
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
-    {
-        // ロッカーを開ける
-        if (counter == lockerOpenTime)
-        {
-            lockerAnimator.SetBool("DragOut", true);
-        }
-        // 吹き飛ばす
-        else if (counter == damageTime)
-        {
-            damageEvent.Invoke(animator.transform, 50);
-        }
-        counter++;
+        // ダメージイベントを呼ぶ
+        damageEvent.Invoke(animator.transform, 50);
     }
 
     /// <summary>
@@ -73,15 +50,12 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
     /// </summary>
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        // カウンターリセット
-        counter = 0;
-
-        lockerAnimator.SetBool("DragOut", false);
-
         // ここで攻撃フラグをオフにする
         // NOTE:なぜか２回続けてフラグがtrueになるため
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack, false);
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, false);
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, false);
+
+        colliderParent.gameObject.SetActive(true);
     }
 }

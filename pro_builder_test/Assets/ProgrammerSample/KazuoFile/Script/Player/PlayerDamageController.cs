@@ -27,9 +27,13 @@ public class PlayerDamageController : MonoBehaviour
     PlayerHealthController healthController = default;          // 体力管理クラス
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
+    [SerializeField]
+    PlayerHideController playerHideController = default;
 
     [SerializeField]
     float invincibleSecond = 2;                                 // ダメージ処理後の無敵時間
+
+    HideObjectController hideObjectController = null;
 
     public DamageType Type { get; private set; } = default;     // ダメージタイプ
     public Transform EnemyPos { get; private set; } = default;  // 敵のTransform
@@ -45,6 +49,11 @@ public class PlayerDamageController : MonoBehaviour
         // 初期化
         interactController.CommonInit();
         IsDeath();
+    }
+
+    private void Update()
+    {
+        Debug.Log(playerRigidbody.velocity);
     }
 
     /// <summary>
@@ -66,8 +75,13 @@ public class PlayerDamageController : MonoBehaviour
                 playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * -5, ForceMode.Impulse);
                 animationContoller.AnimStart(AnimationType.DAMAGE); break;
             case DamageType.HIDEBED:
-                playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * 10, ForceMode.Impulse);
-                animationContoller.AnimStart(AnimationType.DRAGOUT); break;
+
+                //UnityEditor.EditorApplication.isPaused = true;
+
+                animationContoller.AnimStart(AnimationType.DRAGOUT);
+                hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
+                hideObjectController.SetActiveCollider(false);
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
             case DamageType.HIDELOCKER:
                 animationContoller.AnimStart(AnimationType.DRAGOUT); break;
         }
@@ -123,6 +137,9 @@ public class PlayerDamageController : MonoBehaviour
             // 無敵時間開始
             IsInvincible = true;
             StartCoroutine(InvincibleCount());
+
+            if(Type == DamageType.HIDEBED)
+            hideObjectController?.SetActiveCollider(true);
 
             // 処理終了
             enabled = false;

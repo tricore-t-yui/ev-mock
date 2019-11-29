@@ -75,7 +75,7 @@ public class PlayerStateController : MonoBehaviour
 
     private void Start()
     {
-        playerDamageEvent.Add(PlayerDamageEvent.DamageType.Normal, ChangeDamageState);
+        playerDamageEvent.Add(ChangeDamageState);
     }
 
     /// <summary>
@@ -275,6 +275,7 @@ public class PlayerStateController : MonoBehaviour
         {  
             if (State == ActionStateType.HIDE)
             {
+                EventStop();
                 switch (hideController.type)
                 {
                     case PlayerHideController.HideObjectType.BED:
@@ -287,9 +288,9 @@ public class PlayerStateController : MonoBehaviour
             }
             else
             {
+                EventStop();
                 damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
             }
-            EventStop();
             State = ActionStateType.DAMAGE;
             EventStart();
         }

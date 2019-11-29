@@ -54,6 +54,7 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
         navMesh.speed = moveSpeed;
 
         // 最初のチェックポイントを設定
+        currentCheckPointIndex = 0;
         navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
 
         // 移動を開始する
@@ -92,6 +93,7 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     {
         // 一番近いチェックポイントを取得する
         Vector3 returnPos = checkPointList.OrderByDescending(elem => (animator.transform.position-elem).magnitude * -1).FirstOrDefault();
+        currentCheckPointIndex = checkPointList.ToList().IndexOf(returnPos);
         // 次の目標位置にセット
         navMesh.SetDestination(returnPos);
     }
@@ -102,7 +104,7 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     /// <returns></returns>
     int GetNextCheckPointIndex()
     {
-        if (currentCheckPointIndex == checkPointList.Count -1)
+        if (currentCheckPointIndex > checkPointList.Count -1)
         {
             return 0;
         }
