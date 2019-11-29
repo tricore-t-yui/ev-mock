@@ -65,7 +65,7 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
         // 吹き飛ばす
         else if (counter == damageTime)
         {
-            damageEvent.Invoke(PlayerDamageEvent.DamageType.Normal, animator.transform.position, 50);
+            damageEvent.Invoke(PlayerDamageEvent.DamageType.Normal, animator.transform, 50);
         }
         // ロッカーを閉める
         else if (counter == lockerCloseTime)

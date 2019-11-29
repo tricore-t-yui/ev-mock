@@ -35,7 +35,7 @@ public class KageStateAttack : StateMachineBehaviour
         // ダメージイベントのクラスを取得
         damageEvent = animator.GetComponentInChildren<PlayerDamageEvent>() ?? damageEvent;
         // プレイヤーのダメージイベントを呼ぶ
-        damageEvent?.Invoke(PlayerDamageEvent.DamageType.Normal,animator.transform.position,damage);
+        damageEvent?.Invoke(PlayerDamageEvent.DamageType.Normal,animator.transform,damage);
     }
 
     /// <summary>
