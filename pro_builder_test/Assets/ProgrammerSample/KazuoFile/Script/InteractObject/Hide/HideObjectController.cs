@@ -114,6 +114,8 @@ public class HideObjectController : MonoBehaviour
     /// </summary>
     public void SetActiveCollider(bool flag)
     {
+        if (objType == ObjectType.BED)
+            Debug.Log(flag);
         if(flag)
         {
             objectCollider.isTrigger = false;

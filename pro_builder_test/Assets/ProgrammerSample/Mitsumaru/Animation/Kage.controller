@@ -2850,7 +2850,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -19857208682403159}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 748407790599703130}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2859,12 +2860,25 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 0}
+  m_Motion: {fileID: 7400002, guid: d89ea37480b6d75458aa38843e9688dc, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &748407790599703130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1252baca1db0dc499771af2d25ec407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
 --- !u!1101 &808662549032763153
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4211,10 +4225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95ca86dc26df06f47853fd732b7e7ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 50
-  lockerOpenTime: 30
-  damageTime: 120
-  lockerCloseTime: 150
+  damage: 40
+  lockerOpenTime: 20
+  damageTime: 110
 --- !u!1109 &5875283094647077810
 AnimatorTransition:
   m_ObjectHideFlags: 1

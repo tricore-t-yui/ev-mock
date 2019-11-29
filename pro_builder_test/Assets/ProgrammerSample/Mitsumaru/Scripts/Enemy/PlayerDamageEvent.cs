@@ -8,63 +8,23 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerDamageEvent : MonoBehaviour
 {
-    /// <summary>
-    /// ダメージの種類
-    /// </summary>
-    public enum DamageType
-    {
-        Normal,    // 通常
-        Locker,    // ロッカー
-        Bed,       // ベッド
-    }
-
     // プレイヤーのダメージイベント
     class DamageUnityEvent : UnityEvent<Transform, float> { }
     DamageUnityEvent playerDamageEvent = new DamageUnityEvent();
-    DamageUnityEvent playerDamageFromLockerEvent = new DamageUnityEvent();
-    DamageUnityEvent playerDamageFromBedEvent = new DamageUnityEvent();
 
     /// <summary>
     /// コールバックを呼ぶ
     /// </summary>
-    public void Invoke(DamageType type,Transform enemyPos,float damege)
+    public void Invoke(Transform enemyPos,float damege)
     {
-        // 通常
-        if (type == DamageType.Normal)
-        {
-            playerDamageEvent?.Invoke(enemyPos, damege);
-        }
-        // ロッカー
-        else if (type == DamageType.Locker)
-        {
-            playerDamageFromLockerEvent?.Invoke(enemyPos, damege);
-        }
-        // ベッド
-        else if (type == DamageType.Bed)
-        {
-            playerDamageFromBedEvent?.Invoke(enemyPos, damege);
-        }
+        playerDamageEvent?.Invoke(enemyPos, damege);
     }
 
     /// <summary>
     /// コールバック追加
     /// </summary>
-    public void Add(DamageType type,UnityAction<Transform,float> call)
+    public void Add(UnityAction<Transform,float> call)
     {
-        // 通常
-        if (type == DamageType.Normal)
-        {
-            playerDamageEvent?.AddListener(call);
-        }
-        // ロッカー
-        else if (type == DamageType.Locker)
-        {
-            playerDamageFromLockerEvent?.AddListener(call);
-        }
-        // ベッド
-        else if (type == DamageType.Bed)
-        {
-            playerDamageFromBedEvent?.AddListener(call);
-        }
+        playerDamageEvent?.AddListener(call);
     }
 }

@@ -33,9 +33,9 @@ public class KageStateAttack : StateMachineBehaviour
         navMesh.isStopped = true;
 
         // ダメージイベントのクラスを取得
-        damageEvent = animator.GetComponentInChildren<PlayerDamageEvent>() ?? damageEvent;
+        damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
         // プレイヤーのダメージイベントを呼ぶ
-        damageEvent?.Invoke(PlayerDamageEvent.DamageType.Normal,animator.transform,damage);
+        damageEvent?.Invoke(animator.transform,damage);
     }
 
     /// <summary>

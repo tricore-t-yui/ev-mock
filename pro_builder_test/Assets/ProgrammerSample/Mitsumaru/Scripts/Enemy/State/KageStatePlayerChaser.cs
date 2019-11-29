@@ -70,7 +70,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         // 影人間の自信のコライダーイベントを取得
         kageBodyEvent = animator.transform.Find("Collider").Find("KageAttackRange").GetComponent<ColliderEvent>() ?? kageBodyEvent;
         // コールバックをセット
-        kageBodyEvent.AddEnterListener(OnCollisionPlayer);
+        kageBodyEvent.AddUpdateListener(OnCollisionPlayer);
 
         // ハイドコントローラーを取得
         playerHideController = FindObjectOfType<PlayerHideController>() ?? playerHideController;
@@ -86,8 +86,10 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        Debug.DrawRay(animator.transform.position + new Vector3(0, 0.2f, 0), animator.transform.forward);
+
         // 影人間の移動が停止したら、見失ったとみなす
-        if (navMesh.remainingDistance < 0.1f)
+        if (navMesh.remainingDistance < 0.3f)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
@@ -150,36 +152,47 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     void OnCollisionPlayer(Transform self,Collider target)
     {
         if (isDamage == true) { return; }
-        if (target.tag != "Player") { return; }
+        if (target.tag == "PlayerNoise") { return; }
 
-        // 影人間の前方にレイを飛ばす
-        Ray forwardRay = new Ray(self.transform.position + new Vector3(0, 0.3f, 0), self.transform.forward);
-        Debug.DrawRay(self.transform.position + new Vector3(0, 0.3f, 0), self.transform.forward);
-        RaycastHit[] raycastHitAll = Physics.RaycastAll(forwardRay);
+        // プレイヤーがハイドポイントに隠れているか
+        if (playerHideController.enabled)
+        {
+            // 隠れているオブジェクトを取得
+            GameObject hideObject = playerHideController.HideObj;
 
-        bool isHitPlayer = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Player"));
-        bool isHitLocker = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Locker"));
-        bool isHitBed    = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Bed"));
+            // 隠れているオブジェクトと敵が衝突しているオブジェクトが同じか判定する
+            // note : 違っていれば関数を抜ける
+            if (hideObject.GetInstanceID() != target.gameObject.GetInstanceID()) { return; }
 
-        // プレイヤーに衝突
-        if (isHitPlayer)
-        { 
-            // ロッカーに衝突
-            if (isHitLocker)
+            // 隠れているオブジェクトの種類を判定
+            // ロッカー
+            if (target.tag == "Locker")
             {
                 animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromLocker);
             }
-            // ベッドに衝突
-            else if (isHitBed)
+            // ベッド
+            else if (target.tag == "Bed")
             {
                 animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromBed);
             }
-            // プレイヤーのみ
-            else
-            {
-                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttack);
-            }
+            // ダメージフラグを立てる
             isDamage = true;
+        }
+        // プレイヤーに衝突した場合
+        else if (target.tag == "Player")
+        {
+            // 敵からプレイヤーに伸びるベクトルを算出
+            Vector3 playerToKageVec = (target.transform.position - self.root.position).normalized;
+            // 算出したベクトルとプレイヤーのベクトルの角度を算出
+            float vecDot = Vector3.Angle(playerToKageVec, self.root.forward);
+            // 角度が視野角の範囲内であれば攻撃する
+            if (vecDot < 60)
+            {
+                // プレイヤーに攻撃
+                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttack);
+                // ダメージフラグを立てる
+                isDamage = true;
+            }
         }
     }
 }
