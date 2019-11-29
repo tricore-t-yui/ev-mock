@@ -34,11 +34,16 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // 視野の範囲内にいるかどうか
     bool isInFieldOfView = false;
 
+    // ダメージを受けたかどうか
+    bool isDamage = false;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        isDamage = false;
+
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
         // パラメータクラスを取得
@@ -63,7 +68,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         vigilanceRangeEvent = animator.transform.Find("Collider").Find("KageVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
 
         // 影人間の自信のコライダーイベントを取得
-        kageBodyEvent = animator.transform.Find("Collider").Find("KageBody").GetComponent<ColliderEvent>() ?? kageBodyEvent;
+        kageBodyEvent = animator.transform.Find("Collider").Find("KageAttackRange").GetComponent<ColliderEvent>() ?? kageBodyEvent;
         // コールバックをセット
         kageBodyEvent.AddEnterListener(OnCollisionPlayer);
 
@@ -142,11 +147,14 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         }
     }
 
-    void OnCollisionPlayer(Transform self,Collision target)
+    void OnCollisionPlayer(Transform self,Collider target)
     {
+        if (isDamage == true) { return; }
+        if (target.tag != "Player") { return; }
+
         // 影人間の前方にレイを飛ばす
-        Ray forwardRay = new Ray(self.transform.position + new Vector3(0, 0.1f, 0), self.transform.forward);
-        Debug.DrawRay(self.transform.position + new Vector3(0, 0.1f, 0), self.transform.forward);
+        Ray forwardRay = new Ray(self.transform.position + new Vector3(0, 0.3f, 0), self.transform.forward);
+        Debug.DrawRay(self.transform.position + new Vector3(0, 0.3f, 0), self.transform.forward);
         RaycastHit[] raycastHitAll = Physics.RaycastAll(forwardRay);
 
         bool isHitPlayer = System.Array.Exists(raycastHitAll, elem => elem.collider.gameObject.layer == LayerMask.NameToLayer("Player"));
@@ -159,19 +167,19 @@ public class KageStatePlayerChaser : StateMachineBehaviour
             // ロッカーに衝突
             if (isHitLocker)
             {
-                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, true);
+                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromLocker);
             }
             // ベッドに衝突
             else if (isHitBed)
             {
-                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, true);
+                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromBed);
             }
             // プレイヤーのみ
             else
             {
-                animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack, true);
+                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttack);
             }
-
+            isDamage = true;
         }
     }
 }

@@ -35,7 +35,7 @@ public class KageStateAttack : StateMachineBehaviour
         // ダメージイベントのクラスを取得
         damageEvent = animator.GetComponentInChildren<PlayerDamageEvent>() ?? damageEvent;
         // プレイヤーのダメージイベントを呼ぶ
-        damageEvent?.Invoke(animator.transform.position,damage);
+        damageEvent?.Invoke(PlayerDamageEvent.DamageType.Normal,animator.transform.position,damage);
     }
 
     /// <summary>
@@ -45,8 +45,6 @@ public class KageStateAttack : StateMachineBehaviour
     {
         // ここで攻撃フラグをオフにする
         // NOTE:なぜか２回続けてフラグがtrueになるため
-        animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttack, false);
-        animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, false);
-        animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, false);
+        animParameterList.ResetTrigger(KageAnimParameterList.ParameterType.isAttack);
     }
 }

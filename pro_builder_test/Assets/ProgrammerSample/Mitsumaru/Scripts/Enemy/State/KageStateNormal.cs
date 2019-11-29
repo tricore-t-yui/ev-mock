@@ -54,7 +54,7 @@ public class KageStateNormal : StateMachineBehaviour
         // コライダークラス取得
         fightingRangeCollider = animator.transform.Find("Collider").Find("KageFightingRange").GetComponent<ColliderEvent>() ?? fightingRangeCollider;
         // コライダークラスを追加
-        kageBodyCollider = animator.transform.Find("Collider").Find("KageBody").GetComponent<ColliderEvent>() ?? kageBodyCollider;
+        kageBodyCollider = animator.transform.Find("Collider").Find("KageAttackRange").GetComponent<ColliderEvent>() ?? kageBodyCollider;
 
         // コールバックをセットする
         hearRangeCollider.AddEnterListener(OnHearEnter);

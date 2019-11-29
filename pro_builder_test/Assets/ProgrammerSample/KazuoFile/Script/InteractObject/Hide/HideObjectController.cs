@@ -25,7 +25,8 @@ public class HideObjectController : MonoBehaviour
     PlayerDamageController damageController  = default;                     // プレイヤー
     [SerializeField]
     BoxCollider objectCollider = default;           // コライダー
-
+    [SerializeField]
+    PlayerHideController hideController = default;
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
     [SerializeField]
@@ -57,16 +58,16 @@ public class HideObjectController : MonoBehaviour
         {
             if (lockerAnim.GetBool("Close"))
             {
-                if (lockerAnim.GetBool("DragOut"))
+                if (lockerAnim.GetBool("DragOut") || !hideController.IsHideLocker)
                 {
                     SetActiveCollider(false);
                 }
-                else
+                else 
                 {
                     SetActiveCollider(true);
                 }
             }
-            if(!lockerAnim.GetBool("DragOut"))
+            if(!lockerAnim.GetBool("DragOut") && !hideController.enabled)
             {
                 lockerAnim.SetBool("Close", false);
                 SetActiveCollider(true);
