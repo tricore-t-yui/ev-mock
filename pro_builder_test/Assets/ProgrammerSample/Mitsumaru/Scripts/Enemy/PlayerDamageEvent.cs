@@ -19,7 +19,7 @@ public class PlayerDamageEvent : MonoBehaviour
     }
 
     // プレイヤーのダメージイベント
-    class DamageUnityEvent : UnityEvent<Vector3, float> { }
+    class DamageUnityEvent : UnityEvent<Transform, float> { }
     DamageUnityEvent playerDamageEvent = new DamageUnityEvent();
     DamageUnityEvent playerDamageFromLockerEvent = new DamageUnityEvent();
     DamageUnityEvent playerDamageFromBedEvent = new DamageUnityEvent();
@@ -27,7 +27,7 @@ public class PlayerDamageEvent : MonoBehaviour
     /// <summary>
     /// コールバックを呼ぶ
     /// </summary>
-    public void Invoke(DamageType type,Vector3 enemyPos,float damege)
+    public void Invoke(DamageType type,Transform enemyPos,float damege)
     {
         // 通常
         if (type == DamageType.Normal)
@@ -49,7 +49,7 @@ public class PlayerDamageEvent : MonoBehaviour
     /// <summary>
     /// コールバック追加
     /// </summary>
-    public void Add(DamageType type,UnityAction<Vector3,float> call)
+    public void Add(DamageType type,UnityAction<Transform,float> call)
     {
         // 通常
         if (type == DamageType.Normal)
