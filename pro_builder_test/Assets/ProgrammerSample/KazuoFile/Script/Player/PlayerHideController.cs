@@ -24,6 +24,8 @@ public class PlayerHideController : MonoBehaviour
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
     CameraController moveCamera = default;                      // 移動カメラクラス
+    [SerializeField]
+    HideStateController hideStateController = default;          // 隠れた時の状態変化クラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -77,6 +79,7 @@ public class PlayerHideController : MonoBehaviour
         SetIsAnimRotation(true);
 
         // 隠れる開始
+        hideStateController.enabled = true;
         enabled = true;
     }
 
@@ -157,6 +160,7 @@ public class PlayerHideController : MonoBehaviour
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             interactController.CommonEndAction();
             hideObjectController.SetActiveCollider(true);
+            hideStateController.enabled = false;
             enabled = false;
         }
     }

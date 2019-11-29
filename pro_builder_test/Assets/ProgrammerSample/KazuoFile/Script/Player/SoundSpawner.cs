@@ -13,8 +13,8 @@ public class SoundSpawner : MonoBehaviour
     /// </summary>
     public enum SoundType
     {
-        // NOTE:k.oishi
-        //      必要な音の名前をここに書いてEnumで管理します
+        HeartSound,
+        Breth,
     }
 
     [SerializeField]
@@ -24,20 +24,16 @@ public class SoundSpawner : MonoBehaviour
 
     AudioClip playSound = default;                      // 再生する音
     AudioClip stopSound = default;                      // 停止する音
+    SoundType soundtype = default;                      // 再生する音の種類
+    bool isLoop = false;                                // ループするかどうか
     List<Transform> spawnList = new List<Transform>();  // スポーンされたオブジェクトのリスト
 
     /// <summary>
-    /// 再生
+    /// 開始処理
     /// </summary>
-    /// <param name="type">音のタイプ</param>
-    public void Play(SoundType type)
+    void Start()
     {
-        // 再生される音をセット
-        playSound = sounds[(int)type];
-
-        // スポーンしてリストに追加
-        var spawn = PoolManager.Pools["Sound"].Spawn(spawnBase);
-        spawnList.Add(spawn);
+        Play(SoundType.Breth);
     }
 
     /// <summary>
@@ -72,10 +68,26 @@ public class SoundSpawner : MonoBehaviour
     }
 
     /// <summary>
+    /// 再生
+    /// </summary>
+    /// <param name="type">音のタイプ</param>
+    public void Play(SoundType type)
+    {
+        // 再生される音をセット
+        playSound = sounds[(int)type];
+        soundtype = type;
+        IsLoop(type);
+
+        // スポーンしてリストに追加
+        var spawn = PoolManager.Pools["Sound"].Spawn(spawnBase);
+        spawnList.Add(spawn);
+    }
+
+    /// <summary>
     /// 停止
     /// </summary>
     /// <param name="type">音のタイプ</param>
-    void Stop(SoundType type)
+    public void Stop(SoundType type)
     {
         // 停止される音をセット
         stopSound = sounds[(int)type];
@@ -87,6 +99,35 @@ public class SoundSpawner : MonoBehaviour
     public AudioClip GetPlaySound()
     {
         return playSound;
+    }
+
+    /// <summary>
+    /// 再生される音タイプのゲット関数
+    /// </summary>
+    public SoundType GetSoundType()
+    {
+        return soundtype;
+    }
+
+    /// <summary>
+    /// ループするかどうかのゲット関数
+    /// </summary>
+    public bool GetIsLoop()
+    {
+        return isLoop;
+    }
+
+    /// <summary>
+    /// ループするかどうか
+    /// </summary>
+    void IsLoop(SoundType type)
+    {
+        switch (type)
+        {
+            case SoundType.Breth: isLoop = true; break;
+            case SoundType.HeartSound: isLoop = true; break;
+            default: isLoop = false; break;
+        }
     }
 
     /// <summary>

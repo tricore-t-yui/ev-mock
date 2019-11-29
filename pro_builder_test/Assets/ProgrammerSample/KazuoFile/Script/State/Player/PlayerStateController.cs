@@ -154,6 +154,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.WALK;
+            EventStart();
         }
     }
 
@@ -167,6 +168,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.DASH;
+            EventStart();
         }
     }
 
@@ -179,6 +181,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.STEALTH;
+            EventStart();
         }
     }
 
@@ -191,6 +194,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.DEEPBREATH;
+            EventStart();
         }
     }
 
@@ -203,6 +207,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.BREATHLESSNESS;
+            EventStart();
         }
     }
 
@@ -231,6 +236,7 @@ public class PlayerStateController : MonoBehaviour
             EventStop();
             hideController.SetInfo(rayObject);
             State = ActionStateType.HIDE;
+            EventStart();
         }
     }
 
@@ -254,6 +260,7 @@ public class PlayerStateController : MonoBehaviour
             }
 
             State = ActionStateType.DOOROPEN;
+            EventStart();
         }
     }
 
@@ -284,6 +291,7 @@ public class PlayerStateController : MonoBehaviour
             }
             EventStop();
             State = ActionStateType.DAMAGE;
+            EventStart();
         }
     }
 
@@ -439,6 +447,24 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
             case ActionStateType.BREATHLESSNESS: eventEndCaller.Invoke(EventEndType.BREATHLESSNESSEND); break;
             case ActionStateType.DAMAGE: eventEndCaller.Invoke(EventEndType.DAMAGEEND); break;
+        }
+    }
+
+    /// <summary>
+    /// 各イベント開始処理
+    /// </summary>
+    void EventStart()
+    {
+        switch (State)
+        {
+            case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WAITSTART); break;
+            case ActionStateType.DASH: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
+            case ActionStateType.STEALTH: eventStartCaller.Invoke(EventStartType.STEALTHSTART); break;
+            case ActionStateType.DOOROPEN: eventStartCaller.Invoke(EventStartType.DOORSTART); break;
+            case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
+            case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;
+            case ActionStateType.BREATHLESSNESS: eventStartCaller.Invoke(EventStartType.BREATHLESSNESSSTART); break;
+            case ActionStateType.DAMAGE: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
         }
     }
 
