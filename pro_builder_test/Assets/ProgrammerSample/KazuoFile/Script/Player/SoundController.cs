@@ -29,6 +29,7 @@ public class SoundController : MonoBehaviour
     {
         soundType = spawner.GetSoundType();
         audioSource.clip = spawner.GetPlaySound();
+        audioSource.loop = spawner.GetIsLoop();
         audioSource.Play();
     }
 
@@ -39,7 +40,7 @@ public class SoundController : MonoBehaviour
     {
         switch(soundType)
         {
-            case SoundType.Breth:break;
+            case SoundType.Breth: BreathVolume(); break;
             case SoundType.HeartSound: HeartSoundVolume(); break;
             default:break;
         }

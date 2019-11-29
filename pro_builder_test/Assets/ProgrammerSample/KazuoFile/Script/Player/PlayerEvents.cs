@@ -14,7 +14,7 @@ using CameraAnimType = CameraAnimationController.AnimationType;
 public class PlayerEvents : MonoBehaviour
 {
     [SerializeField]
-    CapsuleCollider playerCollider = default;                             // コライダー
+    CapsuleCollider playerCollider = default;                       // コライダー
     [SerializeField]
     PlayerMoveController moveController = default;                  // 移動クラス
     [SerializeField]
@@ -24,7 +24,7 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerDoorController doorController = default;                  // 隠れるアクションクラス
     [SerializeField]
-    CameraController moveCamera = default;                              // カメラクラス
+    CameraController moveCamera = default;                          // カメラクラス
     [SerializeField]
     PlayerDamageController damageController = default;              // ダメージリアクションクラス
     [SerializeField]
@@ -32,7 +32,9 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerStateController stateController = default;                // ステート管理クラス
     [SerializeField]
-    SoundAreaSpawner soundArea = default;                           // 音管理クラス
+    SoundAreaSpawner soundArea = default;                           // 音領域管理クラス
+    [SerializeField]
+    SoundSpawner sound = default;                                   // 音生成クラス
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;  // ダメージリアクションクラス
     [SerializeField]
@@ -263,7 +265,10 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 隠れる開始
     /// </summary>
-    public void HideStart() { }
+    public void HideStart()
+    {
+        sound.Play(SoundSpawner.SoundType.HeartSound);
+    }
     /// <summary>
     /// 隠れる
     /// </summary>
@@ -307,6 +312,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void HideEnd()
     {
+        sound.Stop(SoundSpawner.SoundType.HeartSound);
         hideController.EndHideAction(true);
         moveController.IsRootMotion(false, false);
     }
