@@ -52,6 +52,11 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
 
+    // プレイヤーのダメージイベント（Added by Mitsumaru）
+    // note : このクラスから受け取ったダメージのイベント関数を保存しておく
+    [SerializeField]
+    PlayerDamageEvent playerDamageEvent = default;
+
     [SerializeField]
     KeyCode dashKey = KeyCode.LeftShift;                    // ダッシュキー
     [SerializeField]
@@ -67,6 +72,11 @@ public class PlayerStateController : MonoBehaviour
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
+
+    private void Start()
+    {
+        playerDamageEvent.Add(PlayerDamageEvent.DamageType.Normal, ChangeDamageState);
+    }
 
     /// <summary>
     /// 更新処理

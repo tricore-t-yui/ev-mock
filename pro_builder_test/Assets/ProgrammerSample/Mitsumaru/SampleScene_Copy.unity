@@ -283,6 +283,16 @@ PrefabInstance:
       propertyPath: playerCollider
       value: 
       objectReference: {fileID: 1085793337}
+    - target: {fileID: 2129991352404032482, guid: 9934758d5f9e944dcb23b97b7b23231b,
+        type: 3}
+      propertyPath: objectDamageController
+      value: 
+      objectReference: {fileID: 1085793329}
+    - target: {fileID: 2129991352404032482, guid: 9934758d5f9e944dcb23b97b7b23231b,
+        type: 3}
+      propertyPath: playerDamageController
+      value: 
+      objectReference: {fileID: 1085793330}
     - target: {fileID: 2129991352605002302, guid: 9934758d5f9e944dcb23b97b7b23231b,
         type: 3}
       propertyPath: camera
@@ -536,12 +546,12 @@ PrefabInstance:
     - target: {fileID: 5093175551164090570, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: m_Name
-      value: Kage_Route1
+      value: Kage_Route
       objectReference: {fileID: 0}
     - target: {fileID: 5093175551164090574, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.83
+      value: -9.68
       objectReference: {fileID: 0}
     - target: {fileID: 5093175551164090574, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
@@ -551,7 +561,7 @@ PrefabInstance:
     - target: {fileID: 5093175551164090574, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.72
+      value: 12.65
       objectReference: {fileID: 0}
     - target: {fileID: 5093175551164090574, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
@@ -608,11 +618,6 @@ PrefabInstance:
       propertyPath: isBreathHold
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3229566893034141079, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5093175551164090573, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: stateNormalOfType
@@ -651,7 +656,12 @@ PrefabInstance:
     - target: {fileID: 5093175551164090575, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: m_AutoBraking
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093175550433275675, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5093175549951165051, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
@@ -667,6 +677,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093175549951165028, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
+        type: 3}
+      propertyPath: m_Name
+      value: KageAttackRange
       objectReference: {fileID: 0}
     - target: {fileID: 5093175551335119887, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
@@ -2386,11 +2401,6 @@ PrefabInstance:
       propertyPath: isBreathHold
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3229566893034141079, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5093175551164090573, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: routeCheckPointList.Array.size
@@ -2399,6 +2409,11 @@ PrefabInstance:
     - target: {fileID: 5093175551164090573, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
         type: 3}
       propertyPath: stateNormalOfType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229566893034141079, guid: 99fa8d7163ae2a741a3ecce1986aa5c5,
+        type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2603,6 +2618,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d393edc606228047855ab4a4d76889e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1523980244 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8978951856806216353, guid: 74037c40be2e44d568a241439d75c377,
+    type: 3}
+  m_PrefabInstance: {fileID: 1580610328}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1523980249
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523980244}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.375, y: 1, z: 0.55}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0.5}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1580610328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2744,6 +2781,21 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 8978951856806216358, guid: 74037c40be2e44d568a241439d75c377,
+        type: 3}
+      propertyPath: damageController
+      value: 
+      objectReference: {fileID: 1085793330}
+    - target: {fileID: 8978951856806216358, guid: 74037c40be2e44d568a241439d75c377,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1085793339}
+    - target: {fileID: 8978951856806216358, guid: 74037c40be2e44d568a241439d75c377,
+        type: 3}
+      propertyPath: hideController
+      value: 
+      objectReference: {fileID: 1085793328}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74037c40be2e44d568a241439d75c377, type: 3}
 --- !u!114 &1602971987 stripped
@@ -2834,6 +2886,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1085793339}
+    - target: {fileID: 1767205331, guid: cb32f787f29f64ce9a651e1fbd2c9982, type: 3}
+      propertyPath: damageController
+      value: 
+      objectReference: {fileID: 1085793330}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb32f787f29f64ce9a651e1fbd2c9982, type: 3}
 --- !u!1001 &1711479494
