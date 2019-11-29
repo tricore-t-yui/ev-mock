@@ -13,8 +13,8 @@ public class SoundSpawner : MonoBehaviour
     /// </summary>
     public enum SoundType
     {
-        // NOTE:k.oishi
-        //      必要な音の名前をここに書いてEnumで管理します
+        HeartSound,
+        Breth,
     }
 
     [SerializeField]
@@ -24,6 +24,7 @@ public class SoundSpawner : MonoBehaviour
 
     AudioClip playSound = default;                      // 再生する音
     AudioClip stopSound = default;                      // 停止する音
+    SoundType soundtype = default;                           // 再生する音の種類
     List<Transform> spawnList = new List<Transform>();  // スポーンされたオブジェクトのリスト
 
     /// <summary>
@@ -34,6 +35,7 @@ public class SoundSpawner : MonoBehaviour
     {
         // 再生される音をセット
         playSound = sounds[(int)type];
+        soundtype = type;
 
         // スポーンしてリストに追加
         var spawn = PoolManager.Pools["Sound"].Spawn(spawnBase);
@@ -87,6 +89,14 @@ public class SoundSpawner : MonoBehaviour
     public AudioClip GetPlaySound()
     {
         return playSound;
+    }
+
+    /// <summary>
+    /// 再生される音タイプのゲット関数
+    /// </summary>
+    public SoundType GetSoundType()
+    {
+        return soundtype;
     }
 
     /// <summary>

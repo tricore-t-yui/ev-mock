@@ -251,7 +251,7 @@ public class PlayerStateController : MonoBehaviour
     /// ダメージ処理
     /// </summary>
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
-    public void ChangeDamageState(Vector3 enemyPos, float damage)
+    public void ChangeDamageState(Transform enemyPos, float damage)
     {
         // ダメージ処理が開始されていないならダメージを食らう
         if (!damageController.enabled && !damageController.IsInvincible)

@@ -22,12 +22,25 @@ public class HideStateController : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;  // 息管理クラス
 
-    MeshRenderer mesh = default;                        // 敵のメッシュ
-    CapsuleCollider enemyCollider = default;            // 敵のコライダー
-
-    bool isSafety = false;                              // 安全地帯内にいないかどうか
+    bool isSafetyArea = false;                           // 安全地帯内にいないかどうか
     bool isLookEnemy = false;                           // 敵が見えているかどうか
     public HeartSoundType HeartSound { get; private set; } = HeartSoundType.NORMAL;      // 心音
+
+    /// <summary>
+    /// 起動処理
+    /// </summary>
+    void OnEnable()
+    {
+        isSafetyArea = false;
+        isLookEnemy = false;
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
+        {
+        }
+    }
 
     /// <summary>
     /// トリガーがヒットしたら
@@ -36,27 +49,7 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            mesh = other.GetComponent<MeshRenderer>();
-            enemyCollider = other.GetComponent<CapsuleCollider>();
-            isSafety = false;
-        }
-    }
-
-    /// <summary>
-    /// トリガーがヒットしている間
-    /// </summary>
-    void OnTriggerStay(Collider other)
-    {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
-        {
-            if (mesh.isVisible && VisibleEnemyRay(other.gameObject.transform))
-            {
-                isLookEnemy = true;
-            }
-            else
-            {
-                isLookEnemy = false;
-            }
+            isSafetyArea = true;
         }
     }
 
@@ -67,7 +60,7 @@ public class HideStateController : MonoBehaviour
     {
         if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
         {
-            isSafety = true;
+            isSafetyArea = false;
         }
     }
 
@@ -84,14 +77,29 @@ public class HideStateController : MonoBehaviour
     }
 
     /// <summary>
+    /// 敵が見えているかどうか
+    /// </summary>
+    public void VisibleEnemy(Transform enemy, float height)
+    {
+        if (VisibleEnemyRay(enemy, height))
+        {
+            isLookEnemy = true;
+        }
+        else
+        {
+            isLookEnemy = false;
+        }
+    }
+
+    /// <summary>
     /// 敵が見えているかどうかのRaycast
     /// </summary>
-    bool VisibleEnemyRay(Transform enemy)
+    bool VisibleEnemyRay(Transform enemy, float height)
     {
         // 敵のそれぞれの座標
-        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + (enemyCollider.height / 2), enemy.position.z);
+        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + (height / 2), enemy.position.z);
         Vector3 enemyMiddle = enemy.position;
-        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y - (enemyCollider.height / 2) + 0.01f, enemy.position.z);
+        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y - (height / 2) + 0.01f, enemy.position.z);
 
         // レイのスタート位置
         Vector3 start = new Vector3(transform.position.x, transform.position.y + (playerCollider.height / 2), transform.position.z);
@@ -141,7 +149,8 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void ChangeHeartSound()
     {
-        if (!isSafety)
+        Debug.Log(HeartSound);
+        if (isSafetyArea)
         {
             // 安全地帯内に敵がいて、まだ敵が見えていない状態(消費中)
             HeartSound = HeartSoundType.MEDIUM;

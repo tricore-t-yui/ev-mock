@@ -64,7 +64,7 @@ public class PlayerBreathController : MonoBehaviour
     float hideDecrement = 0;                                    // 隠れているときの息の消費量
     public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
     public float NowAmount { get; private set; } = 100;         // 息の残量
-    public BrethState state { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
+    public BrethState State { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
 
     /// <summary>
     /// 開始処理
@@ -99,7 +99,7 @@ public class PlayerBreathController : MonoBehaviour
         {
             // 息切れ
             soundArea.AddSoundLevel(ActionSoundType.BREATHLESSNESS);
-            state = BrethState.BREATHLESSNESS;
+            State = BrethState.BREATHLESSNESS;
         }
         else
         {
@@ -107,26 +107,26 @@ public class PlayerBreathController : MonoBehaviour
             {
                 // 小さな乱れ
                 soundArea.AddSoundLevel(ActionSoundType.SMALLCONFUSION);
-                state = BrethState.SMALLCONFUSION;
+                State = BrethState.SMALLCONFUSION;
 
                 if (NowAmount <= mediumDisturbance)
                 {
                     // 乱れ
                     soundArea.AddSoundLevel(ActionSoundType.MEDIUMCONFUSION);
-                    state = BrethState.MEDIUMCONFUSION;
+                    State = BrethState.MEDIUMCONFUSION;
 
                     if (NowAmount <= largeDisturbance)
                     {
                         // 大きな乱れ
                         soundArea.AddSoundLevel(ActionSoundType.LARGECONFUSION);
-                        state = BrethState.LARGECONFUSION;
+                        State = BrethState.LARGECONFUSION;
                     }
                 }
             }
             else
             {
                 // 乱れ無し
-                state = BrethState.NOTCONFUSION;
+                State = BrethState.NOTCONFUSION;
             }
         }
     }
