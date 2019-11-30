@@ -55,7 +55,7 @@ public class AreaManager : MonoBehaviour
     public void OnExit(string areaName, string charaName)
     {
         // エリアIDの要素からキャラクターを削除
-        areaExistCharacters[areaName].RemoveAll(x => x == charaName) ;
+        areaExistCharacters[areaName].RemoveAll(x => x == charaName);
     }
 
     /// <summary>

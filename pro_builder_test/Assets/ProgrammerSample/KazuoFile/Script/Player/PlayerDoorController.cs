@@ -59,19 +59,18 @@ public class PlayerDoorController : MonoBehaviour
             case OpenType.DASH: animationContoller.AnimStart(AnimationType.DASHOPENDOOR); break;
         }
 
-        //// NOTE:k.oishi 個人の作業シーンで作業をすると、
-        ////      AreaManagerが無いってと怒られるのでとりあえずコメントアウトしています。
-        ////
-        //// 触れるドアが逆なら逆向きのアニメーション開始
-        //string areaName = areaManager.GetExistAreaToCharacter("Player");
-        //if (door.IsReverseOpen(areaName))
-        //{
-        //    animationContoller.AnimStart(AnimationType.REVERSEOPENDOOR);
-        //}
-        //else
-        //{
-        //    animationContoller.AnimStop(AnimationType.REVERSEOPENDOOR);
-        //}
+        // NOTE:k.oishi 個人の作業シーンで作業をすると、
+        //      AreaManagerが無いってと怒られるのでとりあえずコメントアウトしています。
+        // 触れるドアが逆なら逆向きのアニメーション開始
+        string areaName = areaManager.GetExistAreaToCharacter("Player");
+        if (door.IsReverseOpen(areaName))
+        {
+            animationContoller.AnimStart(AnimationType.REVERSEOPENDOOR);
+        }
+        else
+        {
+            animationContoller.AnimStop(AnimationType.REVERSEOPENDOOR);
+        }
 
         // ドア開け開始
         enabled = true;
