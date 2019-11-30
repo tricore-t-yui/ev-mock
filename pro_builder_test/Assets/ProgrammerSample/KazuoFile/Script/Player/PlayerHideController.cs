@@ -35,6 +35,7 @@ public class PlayerHideController : MonoBehaviour
     public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
+    List<DirType> hideObjWallContactDir = new List<DirType>();  // 隠れるオブジェクトに接触している壁の向き
 
     public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
 
@@ -60,6 +61,7 @@ public class PlayerHideController : MonoBehaviour
         HideObj = targetObj;
         hideObjectController = HideObj.GetComponent<HideObjectController>();
         HideObjDir = hideObjectController.GetDirType();
+        hideObjWallContactDir = hideObjectController.GetWallContactDirType();
 
         // アニメーションの邪魔になるのでコライダーを切る
         hideObjectController.SetActiveCollider(false);
@@ -198,5 +200,13 @@ public class PlayerHideController : MonoBehaviour
     public void SetIsStealth(bool flag)
     {
         isStealth = flag;
+    }
+
+    /// <summary>
+    /// ロッカーの向きタイプのゲット関数
+    /// </summary>
+    public List<DirType> GetHideObjWallContactDir()
+    {
+        return hideObjWallContactDir;
     }
 }

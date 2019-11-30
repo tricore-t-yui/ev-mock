@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PathologicalGames;
 using SoundType = SoundSpawner.SoundType;
 using HeartSoundType = HideStateController.HeartSoundType;
 using BrethState = PlayerBreathController.BrethState;
@@ -59,8 +58,8 @@ public class SoundController : MonoBehaviour
         switch(hideStateController.HeartSound)
         {
             case HeartSoundType.NORMAL: audioSource.pitch = 0.25f; break;
-            case HeartSoundType.MEDIUM: audioSource.pitch = 0.5f; break;
-            case HeartSoundType.LARGE: audioSource.pitch = 1f; break;
+            case HeartSoundType.MEDIUM: audioSource.pitch = 0.75f; break;
+            case HeartSoundType.LARGE: audioSource.pitch = 1.5f; break;
         }
     }
 
@@ -71,11 +70,11 @@ public class SoundController : MonoBehaviour
     {
         switch (breathController.State)
         {
-            case BrethState.NOTCONFUSION: audioSource.volume = 0.1f; break;
-            case BrethState.SMALLCONFUSION: audioSource.volume = 0.25f; break;
-            case BrethState.MEDIUMCONFUSION: audioSource.volume = 0.5f; break;
-            case BrethState.LARGECONFUSION: audioSource.volume = 0.75f; break;
-            case BrethState.BREATHLESSNESS: audioSource.volume = 1; break;
+            case BrethState.NOTCONFUSION: audioSource.volume = 0.01f; audioSource.pitch = 1f; break;
+            case BrethState.SMALLCONFUSION: audioSource.volume = 0.1f; audioSource.pitch = 1.25f; break;
+            case BrethState.MEDIUMCONFUSION: audioSource.volume = 0.2f; audioSource.pitch = 1.5f; break;
+            case BrethState.LARGECONFUSION: audioSource.volume = 0.4f; audioSource.pitch = 1.75f; break;
+            case BrethState.BREATHLESSNESS: audioSource.volume = 0.5f; audioSource.pitch = 2f; break;
         }
     }
 }

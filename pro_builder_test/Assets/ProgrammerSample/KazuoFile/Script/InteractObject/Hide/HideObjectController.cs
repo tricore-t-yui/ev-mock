@@ -31,6 +31,8 @@ public class HideObjectController : MonoBehaviour
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
     [SerializeField]
     DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
+    [SerializeField]
+    List<DirType> wallContactDir = new List<DirType>();             // 壁に接触している向きのタイプ
 
     Vector3 rightForward = default;                 // 位置による向きタイプ変更の基準となる右前の角の座標
     Vector3 leftForward = default;                  // 位置による向きタイプ変更の基準となる左前の角の座標
@@ -132,6 +134,14 @@ public class HideObjectController : MonoBehaviour
     public DirType GetDirType()
     {
         return dirType;
+    }
+
+    /// <summary>
+    /// ロッカーの向きタイプのゲット関数
+    /// </summary>
+    public List<DirType> GetWallContactDirType()
+    {
+        return wallContactDir;
     }
 }
         
