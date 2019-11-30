@@ -125,7 +125,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void SquatStart()
     {
-        playerCollider.height = 0.4f;
         moveCamera.IsRotationCamera(true);
     }
     /// <summary>
@@ -133,6 +132,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Squat()
     {
+        playerCollider.height = 0.4f;
         moveController.ChangeSpeedLimit(SpeedType.SQUAT);
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
         soundArea.AddSoundLevel(ActionSoundType.SQUAT);

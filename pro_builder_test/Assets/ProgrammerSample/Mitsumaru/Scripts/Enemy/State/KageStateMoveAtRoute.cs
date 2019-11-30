@@ -15,9 +15,11 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     IReadOnlyList<Vector3> checkPointList = default;
 
     // 現在のチェックポイントのインデックス
+    [System.NonSerialized]
     int currentCheckPointIndex = 0;
 
     // 移動中のカウント
+    [System.NonSerialized]
     int moveCount = 0;
 
     // 移動スピード
@@ -40,10 +42,12 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+       Debug.Log(currentCheckPointIndex);
+
         // ステートパラメータを取得
-        stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
+        stateParameter = animator.gameObject.GetComponent<KageStateParameter>();
         // パラメータクラスを取得
-        animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
+        animParameterList = animator.gameObject.GetComponent<KageAnimParameterList>();
         // チェックポイントを取得
         checkPointList = stateParameter.RouteCheckPointList;
 
@@ -53,8 +57,12 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
         // 移動スピードを設定
         navMesh.speed = moveSpeed;
 
+        navMesh.isStopped = false;
         // 最初のチェックポイントを設定
-        currentCheckPointIndex = 0;
+        if (currentCheckPointIndex > checkPointList.Count - 1)
+        {
+            currentCheckPointIndex = 0;
+        }
         navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
 
         // 移動を開始する
@@ -67,7 +75,7 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標のチェックポイントに着いたら
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < 0.5f)
         {
             // 次のチェックポイントを設定する
             currentCheckPointIndex = GetNextCheckPointIndex();
@@ -83,6 +91,11 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
             animParameterList.SetBool(ParameterType.isLoiteringMove, false);
             // カウンターをリセット
             moveCount = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            navMesh.SetDestination(checkPointList[2]);
         }
     }
 

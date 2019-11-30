@@ -16,8 +16,15 @@ public abstract class VigilanceMoveBase : StateMachineBehaviour
     /// </summary>
     protected void GetNavMeshAgent(Animator animator)
     {
-        // ナビメッシュの取得
-        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+        if (navMesh == null)
+        {
+            // ナビメッシュの取得
+            navMesh = animator.gameObject.GetComponent<NavMeshAgent>();
+        }
+        else
+        {
+           // Debug.Log("else");
+        }
     }
 
     /// <summary>
