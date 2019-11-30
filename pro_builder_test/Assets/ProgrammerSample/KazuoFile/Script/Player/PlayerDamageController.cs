@@ -51,11 +51,6 @@ public class PlayerDamageController : MonoBehaviour
         IsDeath();
     }
 
-    private void Update()
-    {
-        Debug.Log(playerRigidbody.velocity);
-    }
-
     /// <summary>
     /// 敵座標の登録
     /// </summary>
@@ -76,20 +71,12 @@ public class PlayerDamageController : MonoBehaviour
                 animationContoller.AnimStart(AnimationType.DAMAGE); break;
             case DamageType.HIDEBED:
 
-                //UnityEditor.EditorApplication.isPaused = true;
-
                 animationContoller.AnimStart(AnimationType.DRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
                 playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
             case DamageType.HIDELOCKER:
                 animationContoller.AnimStart(AnimationType.DRAGOUT); break;
-        }
-
-        if (Type != DamageType.HIDEBED)
-        {
-            // アニメーションに入る前にプレイヤーのrotationを初期化
-            transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
         }
 
         // 処理開始
@@ -131,7 +118,7 @@ public class PlayerDamageController : MonoBehaviour
         if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DAMAGE) && !healthController.IsDeath)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DAMAGE);
-            transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
             interactController.CommonEndAction();
 
             // 無敵時間開始
