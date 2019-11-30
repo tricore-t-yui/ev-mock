@@ -182,9 +182,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         else if (target.tag == "Player")
         {
             // 敵からプレイヤーに伸びるベクトルを算出
-            Vector3 playerToKageVec = (target.transform.position - self.root.position).normalized;
+            Vector3 playerToKageVec = (target.transform.position - self.parent.parent.position).normalized;
             // 算出したベクトルとプレイヤーのベクトルの角度を算出
-            float vecDot = Vector3.Angle(playerToKageVec, self.root.forward);
+            float vecDot = Vector3.Angle(playerToKageVec, self.parent.parent.forward);
             // 角度が視野角の範囲内であれば攻撃する
             if (vecDot < 60)
             {
