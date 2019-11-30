@@ -22,7 +22,13 @@ public class KageStateParameter : MonoBehaviour
     // ルート徘徊するときのチェックポイントのリスト
     [SerializeField]
     List<Vector3> routeCheckPointList = default;
-    public IReadOnlyList<Vector3> RouteCheckPointList => routeCheckPointList;
+    public IReadOnlyList<Vector3> RouteCheckPointList
+    {
+        get
+        {
+            return routeCheckPointList;
+        }
+    }
 
 #if UNITY_EDITOR
     /// <summary>
@@ -32,7 +38,6 @@ public class KageStateParameter : MonoBehaviour
     {
         // 現在と次の目標位置を線でつなぐ
         DrawLineToTargetPos(routeCheckPointList);
-        MonoBehaviour monoBehaviour;
     }
 
     /// <summary>
