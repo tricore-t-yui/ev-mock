@@ -42,6 +42,8 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     [SerializeField]
+    Transform animCamera = default;             // アニメーターのトランスフォーム
+    [SerializeField]
     Rigidbody playerRigidbody = default;        // リジットボディ
     [SerializeField]
     CapsuleCollider playerCollider = default;   // コライダー
@@ -96,11 +98,13 @@ public class PlayerMoveController : MonoBehaviour
         if (isAnimPosition)
         {
             // 座標移動をanimatorに任せる
+            animCamera.position = playerAnim.rootPosition;
             transform.position = playerAnim.rootPosition;
         }
         if (isAnimRotation)
         {
             // 回転をanimatorに任せる
+            animCamera.rotation = playerAnim.rootRotation;
             transform.rotation = playerAnim.rootRotation;
         }
     }
