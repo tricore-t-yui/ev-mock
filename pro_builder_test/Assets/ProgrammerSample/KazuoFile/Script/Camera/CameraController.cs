@@ -138,32 +138,21 @@ public class CameraController : MonoBehaviour
     {
         // 回転値
         Vector3 angle = transform.parent.localEulerAngles;
-
+        Debug.Log(hideController.HideObjDir);
         switch (hideController.HideObjDir)
         {
             case DirType.FORWARD:
                 // 上限設定
-                if (transform.parent.localEulerAngles.y >= 200)
+                if (transform.parent.localEulerAngles.y >= 110)
                 {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 200, transform.parent.localEulerAngles.z);
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 110, transform.parent.localEulerAngles.z);
                 }
-                if (transform.parent.localEulerAngles.y <= 160)
+                if (transform.parent.localEulerAngles.y <= 70)
                 {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 160, transform.parent.localEulerAngles.z);
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 70, transform.parent.localEulerAngles.z);
                 }
                 break;
             case DirType.BACK:
-                // 上限設定
-                if (transform.parent.localEulerAngles.y >= 20 && transform.parent.localEulerAngles.y <= 180)
-                {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 20, transform.parent.localEulerAngles.z);
-                }
-                if (transform.parent.localEulerAngles.y <= 340 && transform.parent.localEulerAngles.y >= 180)
-                {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 340, transform.parent.localEulerAngles.z);
-                }
-                break;
-            case DirType.RIGHT:
                 // 上限設定
                 if (transform.parent.localEulerAngles.y >= 290)
                 {
@@ -173,16 +162,29 @@ public class CameraController : MonoBehaviour
                 {
                     angle = new Vector3(transform.parent.localEulerAngles.x, 250, transform.parent.localEulerAngles.z);
                 }
+
+                break;
+            case DirType.RIGHT:
+                // 上限設定
+                if (transform.parent.localEulerAngles.y >= 200)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 200, transform.parent.localEulerAngles.z);
+                }
+                if (transform.parent.localEulerAngles.y <= 160)
+                {
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 160, transform.parent.localEulerAngles.z);
+                }
+
                 break;
             case DirType.LEFT:
                 // 上限設定
-                if (transform.parent.localEulerAngles.y >= 110)
+                if (transform.parent.localEulerAngles.y >= 20 && transform.parent.localEulerAngles.y <= 180)
                 {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 110, transform.parent.localEulerAngles.z);
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 20, transform.parent.localEulerAngles.z);
                 }
-                if (transform.parent.localEulerAngles.y <= 70)
+                if (transform.parent.localEulerAngles.y <= 340 && transform.parent.localEulerAngles.y >= 180)
                 {
-                    angle = new Vector3(transform.parent.localEulerAngles.x, 70, transform.parent.localEulerAngles.z);
+                    angle = new Vector3(transform.parent.localEulerAngles.x, 340, transform.parent.localEulerAngles.z);
                 }
                 break;
         }

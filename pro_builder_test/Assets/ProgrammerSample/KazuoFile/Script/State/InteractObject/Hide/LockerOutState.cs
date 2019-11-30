@@ -46,7 +46,7 @@ public class LockerOutState : StateMachineBehaviour
         if (isPlayer)
         {
             // 求めた脱出方向に向かって回転
-            if (animator.gameObject.transform.rotation != exitRotation && !hideController.IsAnimRotation)
+            if (animator.gameObject.transform.rotation.eulerAngles != exitRotation.eulerAngles && !hideController.IsAnimRotation)
             {
                 Quaternion rotation = Quaternion.RotateTowards(animator.gameObject.transform.rotation, exitRotation, exitRotationSpeed);
                 animator.gameObject.transform.rotation = rotation;
@@ -83,8 +83,8 @@ public class LockerOutState : StateMachineBehaviour
         {
             case DirType.FORWARD: exitRotation = Quaternion.Euler(0, 180, 0); break;
             case DirType.BACK: exitRotation = Quaternion.Euler(0, 0, 0); break;
-            case DirType.RIGHT: exitRotation = Quaternion.Euler(0, 90, 0); break;
-            case DirType.LEFT: exitRotation = Quaternion.Euler(0, 270, 0); break;
+            case DirType.RIGHT: exitRotation = Quaternion.Euler(0, 270, 0); break;
+            case DirType.LEFT: exitRotation = Quaternion.Euler(0, 90, 0); break;
         }
     }
 }
