@@ -25,6 +25,8 @@ public class KageStateAttack : StateMachineBehaviour
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        Debug.Log("Attack");
+
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
         // パラメータクラスを取得

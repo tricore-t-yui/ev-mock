@@ -105,12 +105,12 @@ public class KageFieldOfView : MonoBehaviour
         if (IsInViewRange())
         {
             // 範囲内に入ったときのコールバック
-            onInViewRange?.Invoke(transform.root,playerCollider);
+            onInViewRange?.Invoke(transform.parent.parent,playerCollider);
         }
         else
         {
             // 範囲からでたときのコールバック
-            onOutViewRange?.Invoke(transform.root, playerCollider);
+            onOutViewRange?.Invoke(transform.parent.parent, playerCollider);
         }
     }
 
