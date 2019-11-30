@@ -94,6 +94,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
         }
+
+       
     }
 
     /// <summary>
