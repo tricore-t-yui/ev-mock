@@ -20,15 +20,8 @@ public class KageStateLoitering : StateMachineBehaviour
     // 徘徊の種類
     LoiteringKind loiteringType = LoiteringKind.Route;
 
-    // 徘徊タイプ：ルート
-    [SerializeField]
-    KageStateMoveAtRoute loiteringMoveAtRoute = default;
-    // 徘徊タイプ：ランダム
-    [SerializeField]
-    KageStateMoveAtRandom loiteringMoveAtRandom = default;
-
-    // 現在の移動タイプ
-    VigilanceMoveBase currentLoiteringMove;
+    // 影人間のパラメータークラス
+    KageAnimParameterList animParameterList = null;
 
     // 影人間のステートのパラーメータを取得
     KageStateParameter stateParameter = null;
@@ -40,46 +33,19 @@ public class KageStateLoitering : StateMachineBehaviour
     {
         // ステートパラメータを取得
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
+        // パラメータクラスを取得
+        animParameterList = animator.gameObject.GetComponent<KageAnimParameterList>();
 
         // 徘徊のタイプによってクラスを分ける
         // ルートタイプ
         if (stateParameter.StateLoiteringOfType == LoiteringKind.Route)
         {
-            currentLoiteringMove = loiteringMoveAtRoute;
+            animParameterList.SetInteger(KageAnimParameterList.ParameterType.loiteringKindId, 1);
         }
         // ランダムタイプ
         else
         {
-            currentLoiteringMove = loiteringMoveAtRandom;
+            animParameterList.SetInteger(KageAnimParameterList.ParameterType.loiteringKindId, 2);
         }
-
-        // ステートの開始
-        currentLoiteringMove.OnStateEnter(animator, animatorStateInfo, layerIndex);
-    }
-    
-    /// <summary>
-    /// ステートの更新
-    /// </summary>
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
-    {
-        // ステートの更新
-        currentLoiteringMove.OnStateUpdate(animator, animatorStateInfo, layerIndex);
-    }
-
-    /// <summary>
-    /// ステートの終了
-    /// </summary>
-    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
-    {
-        // ステートの終了
-        currentLoiteringMove.OnStateExit(animator, animatorStateInfo, layerIndex);
-    }
-
-    /// <summary>
-    /// 徘徊ポイントに戻る
-    /// </summary>
-    public void ReturnLoiteringPoint(Animator animator)
-    {
-        currentLoiteringMove.ReturnVigilancePoint(animator);
     }
 }

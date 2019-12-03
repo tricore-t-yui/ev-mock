@@ -33,6 +33,7 @@ public class KageAnimParameterList : MonoBehaviour
         isAttack,
         isAttackFromLocker,
         isAttackFromBed,
+        isReturnPoint,
     }
 
     // アニメーター

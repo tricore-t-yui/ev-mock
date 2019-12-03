@@ -113,4 +113,12 @@ public class KageStateNormal : StateMachineBehaviour
         // 戦闘モードに変更
         animParameterList.SetBool(ParameterType.isFightingMode, true);
     }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    {
+        if (animParameterList.GetInteger(ParameterType.normalBehaviourKindId) == 2)
+        {
+            return;
+        }
+    }
 }
