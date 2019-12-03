@@ -76,7 +76,10 @@ public class PlayerStateController : MonoBehaviour
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
 
-    private void Start()
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
     {
         playerDamageEvent.Add(ChangeDamageState);
     }
@@ -248,9 +251,9 @@ public class PlayerStateController : MonoBehaviour
         if (Input.GetMouseButton(0) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
         {
             EventStop();
-            hideController.SetInfo(rayObject);
             State = ActionStateType.HIDE;
             EventStart();
+            hideController.SetInfo(rayObject);
         }
     }
 
@@ -272,7 +275,6 @@ public class PlayerStateController : MonoBehaviour
                 doorController.SetInfo(rayObject, PlayerDoorController.OpenType.NORMAL);
                 IsDashOpen = false;
             }
-
             State = ActionStateType.DOOROPEN;
             EventStart();
         }

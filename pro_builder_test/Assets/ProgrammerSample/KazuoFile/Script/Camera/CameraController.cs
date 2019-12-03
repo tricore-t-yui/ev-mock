@@ -138,7 +138,7 @@ public class CameraController : MonoBehaviour
     {
         // 回転値
         Vector3 angle = transform.parent.localEulerAngles;
-        Debug.Log(hideController.HideObjDir);
+
         switch (hideController.HideObjDir)
         {
             case DirType.FORWARD:
@@ -190,21 +190,5 @@ public class CameraController : MonoBehaviour
         }
 
         return angle;
-    }
-
-    /// <summary>
-    /// 移動キーが入力されたかどうか
-    /// </summary>
-    /// <returns></returns>
-    bool GetDirectionKey()
-    {
-        if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 }
