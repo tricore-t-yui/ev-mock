@@ -59,15 +59,17 @@ public class PlayerStateController : MonoBehaviour
     PlayerDamageEvent playerDamageEvent = default;
 
     [SerializeField]
-    KeyCode dashKey = KeyCode.LeftShift;                    // ダッシュキー
+    KeyCode dashKey = KeyCode.LeftShift;            // ダッシュキー
     [SerializeField]
-    KeyCode squatKey = KeyCode.LeftCommand;                 // しゃがみキー
+    KeyCode squatKey = KeyCode.C;                   // しゃがみキー
     [SerializeField]
-    KeyCode stealthKey = KeyCode.LeftControl;               // 忍び足キー
+    KeyCode stealthKey = KeyCode.E;                 // 忍び足キー
     [SerializeField]
-    KeyCode deepBreathKey = KeyCode.Space;                  // 深呼吸キー
+    KeyCode deepBreathKey = KeyCode.LeftControl;    // 深呼吸キー
     [SerializeField]
-    KeyCode shoeshKey = KeyCode.V;                          // 靴着脱キー
+    KeyCode shoeshKey = KeyCode.Space;              // 靴着脱キー
+    [SerializeField]
+    KeyCode lookBackKey = KeyCode.Q;            // 振り返りキー
 
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
@@ -191,7 +193,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthMoveState()
     {
-        if (GetDirectionKey() && State == ActionStateType.BREATHLESSNESS)
+        if (GetDirectionKey())
         {
             State = ActionStateType.STEALTHMOVE;
         }
@@ -472,6 +474,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
             case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
             case ActionStateType.STEALTH: eventEndCaller.Invoke(EventEndType.STEALTHEND); break;
+            case ActionStateType.STEALTHMOVE: eventEndCaller.Invoke(EventEndType.STEALTHEND); break;
             case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
             case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;

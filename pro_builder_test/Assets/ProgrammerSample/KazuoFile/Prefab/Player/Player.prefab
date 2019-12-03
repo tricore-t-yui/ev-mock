@@ -288,7 +288,6 @@ GameObject:
   - component: {fileID: 1125087520652504941}
   - component: {fileID: 1125087520652504928}
   - component: {fileID: 1125087520652504943}
-  - component: {fileID: 1125087520652504942}
   m_Layer: 8
   m_Name: LeftArm
   m_TagString: Untagged
@@ -356,20 +355,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &1125087520652504942
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125087520652504940}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1125087521023189966
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +449,6 @@ GameObject:
   - component: {fileID: 1125087521124948933}
   - component: {fileID: 1125087521124948984}
   - component: {fileID: 1125087521124948935}
-  - component: {fileID: 1125087521124948934}
   m_Layer: 8
   m_Name: RightArm
   m_TagString: Untagged
@@ -533,20 +517,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &1125087521124948934
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125087521124948932}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1125087521836334063
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,9 +624,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e3017fdad064651ad1e5d1d03d0050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animCamera: {fileID: 0}
   playerRigidbody: {fileID: 1125087521836334054}
   playerCollider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
+  staminaController: {fileID: 0}
   objectDamageController: {fileID: 1125087522315089306}
   stateController: {fileID: 0}
   forwardSpeed: 2
@@ -665,6 +637,7 @@ MonoBehaviour:
   speedMagnification: 25
   barefootSpeedReduction: 0.85
   objectDamageSpeedReduction: 0.85
+  staminaSpeedReduction: 0.85
   walkSpeedLimit: 0.75
   dashSpeedLimit: 1.5
   squatSpeedLimit: 0.25
@@ -700,13 +673,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cceab300322a24715bab8d355088e39c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ReductionKey: 113
   hideController: {fileID: 1125087521836334055}
   soundArea: {fileID: 0}
-  hideState: {fileID: 99061311}
   normalRecovery: 0.5
+  deepBreathRecovery: 1
   breathlessnessRecovery: 0.2
-  DashDecrement: 0.2
   stealthDecrement: 0.15
   hideSmallDecrement: 0.15
   hideMediumDecrement: 0.25
@@ -746,6 +717,7 @@ MonoBehaviour:
   animationContoller: {fileID: 1873015058}
   interactController: {fileID: 0}
   moveCamera: {fileID: 0}
+  hideStateController: {fileID: 0}
 --- !u!114 &733771168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,6 +734,7 @@ MonoBehaviour:
   animationContoller: {fileID: 1873015058}
   healthController: {fileID: 1125087521836334051}
   interactController: {fileID: 0}
+  playerHideController: {fileID: 0}
   invincibleSecond: 2
 --- !u!114 &1873015058
 MonoBehaviour:
@@ -795,6 +768,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   soundArea: {fileID: 0}
+  damageAmount: 0.1
+  deepBreathRecovery: 0.5
 --- !u!1001 &2878279672215381301
 PrefabInstance:
   m_ObjectHideFlags: 0
