@@ -24,8 +24,6 @@ public class PlayerBreathController : MonoBehaviour
     }
 
     [SerializeField]
-    KeyCode ReductionKey = KeyCode.Q;                           // 息の消費軽減キー
-    [SerializeField]
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
@@ -194,7 +192,7 @@ public class PlayerBreathController : MonoBehaviour
     void StrikeButtonRepeatedly()
     {
         // 消費軽減キーを押したら
-        if (Input.GetKeyDown(ReductionKey))
+        if (Input.GetMouseButtonDown(1))
         {
             // 連打処理の継続時間にプラス
             duration += durationPlus;

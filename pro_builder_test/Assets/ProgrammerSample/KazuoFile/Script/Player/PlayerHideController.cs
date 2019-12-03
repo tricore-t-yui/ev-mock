@@ -23,6 +23,8 @@ public class PlayerHideController : MonoBehaviour
     [SerializeField]
     InteractFunction interactController = default;              // インタラクト用関数クラス
     [SerializeField]
+    PlayerMoveController moveController = default;              // 移動クラス
+    [SerializeField]
     CameraController moveCamera = default;                      // 移動カメラクラス
     [SerializeField]
     HideStateController hideStateController = default;          // 隠れた時の状態変化クラス
@@ -108,6 +110,7 @@ public class PlayerHideController : MonoBehaviour
     {
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
         moveCamera.IsRotationCamera(true);
+        IsAnimRotation = false;
         switch (type)
         {
             // ロッカー
@@ -136,6 +139,43 @@ public class PlayerHideController : MonoBehaviour
             // ベッド
             case HideObjectType.BED:
                 isHideBed = false; break;
+        }
+    }
+
+    /// <summary>
+    /// アニメーションんに座標移動、回転を任せるかどうか
+    /// </summary>
+    public void ChangeRootMotion()
+    {
+        switch (LayerMask.LayerToName(HideObj.layer))
+        {
+            case "Locker":
+                if (IsAnimRotation)
+                {
+                    moveController.IsRootMotion(true, true);
+                }
+                else
+                {
+                    if (IsHideLocker)
+                    {
+                        moveController.IsRootMotion(false, false);
+                    }
+                    else
+                    {
+                        moveController.IsRootMotion(true, false);
+                    }
+                }
+                break;
+            case "Bed":
+                if (IsAnimRotation)
+                {
+                    moveController.IsRootMotion(false, true);
+                }
+                else
+                {
+                    moveController.IsRootMotion(false, false);
+                }
+                break;
         }
     }
 

@@ -286,29 +286,7 @@ public class PlayerEvents : MonoBehaviour
             soundArea.AddSoundLevel(ActionSoundType.STEALTH);
         }
 
-        switch (LayerMask.LayerToName(hideController.HideObj.layer))
-        {
-            case "Locker":
-                if (hideController.IsAnimRotation)
-                {
-                    moveController.IsRootMotion(true, true);
-                }
-                else
-                {
-                    moveController.IsRootMotion(true, false);
-                }
-                break;
-            case "Bed":
-                if (hideController.IsAnimRotation)
-                {
-                    moveController.IsRootMotion(false, true);
-                }
-                else
-                {
-                    moveController.IsRootMotion(false, false);
-                }
-                break;
-        }
+        hideController.ChangeRootMotion();
     }
     /// <summary>
     /// 隠れる終了
