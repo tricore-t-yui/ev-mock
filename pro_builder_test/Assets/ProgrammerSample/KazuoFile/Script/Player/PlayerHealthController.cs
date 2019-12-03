@@ -9,7 +9,7 @@ using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 public class PlayerHealthController : MonoBehaviour
 {
     [SerializeField]
-    SoundAreaSpawner soundArea = default;            // 音管理クラス
+    SoundAreaSpawner soundArea = default;               // 音管理クラス
 
     [SerializeField]
     float recoveryFrame = 240;                          // 回復が始まるまでのフレーム数
@@ -39,45 +39,36 @@ public class PlayerHealthController : MonoBehaviour
     }
 
     /// <summary>
-    /// 更新処理
+    /// 体力回復
     /// </summary>
-    void Update()
+    public void HealthRecovery()
     {
-        // 回復
         if (!IsDeath)
         {
-            Recovery();
+            // ダメージ所持状態フラグがたっている間は回復できない
+            if (IsDamage)
+            {
+                // ダメージフレームをカウント
+                damageFrame++;
+
+                // 体力の残量による音の発生
+                HealthSound();
+
+                // ダメージフレームが回復フレームより大きくなったら回復開始
+                if (recoveryFrame <= damageFrame)
+                {
+                    damageFrame = 0;
+                    IsDamage = false;
+                }
+            }
+            else
+            {
+                NowAmount += recoveryAmount;
+            }
         }
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
-    }
-
-    /// <summary>
-    /// 体力回復
-    /// </summary>
-    void Recovery()
-    {
-        // ダメージ所持状態フラグがたっている間は回復できない
-        if (IsDamage)
-        {
-            // ダメージフレームをカウント
-            damageFrame++;
-
-            // 体力の残量による音の発生
-            HealthSound();
-
-            // ダメージフレームが回復フレームより大きくなったら回復開始
-            if (recoveryFrame <= damageFrame)
-            {
-                damageFrame = 0;
-                IsDamage = false;
-            }
-        }
-        else
-        {
-            NowAmount += recoveryAmount;
-        }
     }
 
     /// <summary>

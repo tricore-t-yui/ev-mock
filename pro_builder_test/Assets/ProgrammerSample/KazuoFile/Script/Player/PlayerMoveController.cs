@@ -51,6 +51,8 @@ public class PlayerMoveController : MonoBehaviour
     Animator playerAnim = default;              // アニメーター
 
     [SerializeField]
+    playerStaminaController staminaController = default;            // スタミナクラス
+    [SerializeField]
     PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
     [SerializeField]
     PlayerStateController stateController = default;                // ステート管理クラス
@@ -68,6 +70,8 @@ public class PlayerMoveController : MonoBehaviour
     float barefootSpeedReduction = 0.85f;       // 裸足時の移動速度の減少割合
     [SerializeField, Range(0, 1)]
     float objectDamageSpeedReduction = 0.85f;   // オブジェクトダメージ時の移動速度の減少割合
+    [SerializeField, Range(0, 1)]
+    float staminaSpeedReduction = 0.85f;        // スタミナ切れ時の移動速度の減少割合
 
     [SerializeField]
     float walkSpeedLimit = 0.75f;               // 歩き時の移動速度の限界
@@ -238,9 +242,14 @@ public class PlayerMoveController : MonoBehaviour
             moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction;
         }
         // ダメージ所持状態
-        if(objectDamageController.IsObjectDamage)
+        if(objectDamageController.IsDamage)
         {
             moveTypeSpeedLimit = moveTypeSpeedLimit * objectDamageSpeedReduction;
+        }
+        // スタミナ切れ時
+        if(staminaController.IsDisappear)
+        {
+            moveTypeSpeedLimit = moveTypeSpeedLimit * staminaSpeedReduction;
         }
     }
 

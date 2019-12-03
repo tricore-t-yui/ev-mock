@@ -18,6 +18,7 @@ public class PlayerEventCaller : MonoBehaviour
         DASH,               // ダッシュ
         SQUAT,              // しゃがみ
         STEALTH,            // 忍び歩き
+        STEALTHMOVE,        // 忍び歩き
         DOOR,               // ドア
         HIDE,               // 隠れる
         DEEPBREATH,         // 深呼吸
@@ -36,6 +37,8 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent squat            = new UnityEvent();     // しゃがみイベント
     [SerializeField]
     UnityEvent stealth          = new UnityEvent();     // 忍び歩きイベント
+    [SerializeField]
+    UnityEvent stealthMove      = new UnityEvent();     // 忍び歩きイベント
     [SerializeField]
     UnityEvent doorOpen         = new UnityEvent();     // ドア開閉イベント
     [SerializeField]
@@ -62,6 +65,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DASH:              dash.Invoke();             break;
             case EventType.SQUAT:             squat.Invoke();            break;
             case EventType.STEALTH:           stealth.Invoke();          break;
+            case EventType.STEALTHMOVE:       stealthMove.Invoke();      break;
             case EventType.DOOR:              doorOpen.Invoke();         break;
             case EventType.HIDE:              hide.Invoke();             break;
             case EventType.DEEPBREATH:        deepBreath.Invoke();       break;

@@ -29,16 +29,14 @@ public class PlayerBreathController : MonoBehaviour
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
-    [SerializeField]
-    HideStateController hideState = default;                    // 隠れる状態管理クラス
 
     [SerializeField]
     float normalRecovery = 0.5f;                                // 通常の息の回復量
     [SerializeField]
+    float deepBreathRecovery = 1f;                              // 深呼吸時の息の回復量
+    [SerializeField]
     float breathlessnessRecovery = 0.2f;                        // 息切れ時の息の回復量
 
-    [SerializeField]
-    float DashDecrement = 0.2f;                                 // ダッシュ時の息消費量
     [SerializeField]
     float stealthDecrement = 0.15f;                             // 息止め時の息消費量
     [SerializeField]
@@ -62,7 +60,7 @@ public class PlayerBreathController : MonoBehaviour
     int duration = 0;                                           // 連打処理の継続フレーム (詳細は165行のNOTE)
 
     float hideDecrement = 0;                                    // 隠れているときの息の消費量
-    public bool IsBreathlessness { get; private set; } = false; // 息切れフラグ
+    public bool IsDisappear { get; private set; } = false;      // 息切れフラグ
     public float NowAmount { get; private set; } = 100;         // 息の残量
     public BrethState State { get; private set; } = BrethState.NOTCONFUSION;      // 息の状態
 
@@ -71,23 +69,8 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        IsBreathlessness = false;
+        IsDisappear = false;
         NowAmount = 100;
-    }
-
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update()
-    {
-        // 息切れ検知
-        if (!IsBreathlessness && NowAmount <= 0)
-        {
-            IsBreathlessness = true;
-        }
-
-        // 息の残量による音の発生
-        BreathSound();
     }
 
     /// <summary>
@@ -95,7 +78,7 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     void BreathSound()
     {
-        if (IsBreathlessness)
+        if (IsDisappear)
         {
             // 息切れ
             soundArea.AddSoundLevel(ActionSoundType.BREATHLESSNESS);
@@ -137,65 +120,67 @@ public class PlayerBreathController : MonoBehaviour
     /// NOTE:k.oishi アニメーション用関数
     public void RecoveryBreathlessness()
     {
-        IsBreathlessness = false;
+        IsDisappear = false;
     }
 
     /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
-    public void StateUpdate(MoveType state)
+    public void StateUpdate(MoveType type)
     {
-        // 各ステートに合わせた処理を実行
-        switch (state)
+        if (!IsDisappear)
         {
-            case MoveType.WAIT: NowAmount += normalRecovery; break;
-            case MoveType.WALK: NowAmount += normalRecovery; break;
-            case MoveType.DASH: ConsumeBreath(state); break;
-            case MoveType.STEALTH: ConsumeBreath(state); break;
-            case MoveType.HIDE: ConsumeBreath(state); break;
-            case MoveType.DEEPBREATH: NowAmount += normalRecovery * 2; break;
-            case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
-            default: break;
+            // 各ステートに合わせた処理を実行
+            switch (type)
+            {
+                case MoveType.WAIT: NowAmount += normalRecovery; break;
+                case MoveType.WALK: NowAmount += normalRecovery; break;
+                case MoveType.STEALTH: NowAmount -= stealthDecrement; break;
+                case MoveType.HIDE: ConsumeHideBreath(); break;
+                case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
+                default: break;
+            }
+
+            // 息切れ検知
+            if (NowAmount <= 0)
+            {
+                IsDisappear = true;
+            }
         }
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
+
+        // 息の残量による音の発生
+        BreathSound();
     }
 
     /// <summary>
-    /// 息消費
+    /// 隠れた時の息消費
     /// </summary>
-    public void ConsumeBreath(MoveType state)
+    public void ConsumeHideBreath()
     {
-        switch (state)
+        // 息を止めていなかったら
+        if (hideController.IsHideStealth())
         {
-            case MoveType.DASH: NowAmount -= DashDecrement; break;
-            case MoveType.STEALTH:NowAmount -= stealthDecrement;break;
-            case MoveType.HIDE:
-                // 息を止めていなかったら
-                if (hideController.IsHideStealth())
-                {
-                    // 連打処理
-                    StrikeButtonRepeatedly();
+            // 連打処理
+            StrikeButtonRepeatedly();
 
-                    // 連打処理の継続時間続いている間
-                    if (duration > 0)
-                    {
-                        NowAmount -= buttonPatienceDecrement;
-                    }
-                    // 連打していない場合
-                    else
-                    {
-                        // 心音に合わせた息消費
-                        NowAmount -= hideDecrement;
-                    }
-                }
-                else
-                {
-                    NowAmount += normalRecovery;
-                }
-                break;
-            default: break;
+            // 連打処理の継続時間続いている間
+            if (duration > 0)
+            {
+                NowAmount -= buttonPatienceDecrement;
+            }
+            // 連打していない場合
+            else
+            {
+                // 心音に合わせた息消費
+                NowAmount -= hideDecrement;
+            }
+        }
+        else
+        {
+            NowAmount += normalRecovery;
         }
     }
 
@@ -233,5 +218,13 @@ public class PlayerBreathController : MonoBehaviour
             case HeartSoundType.MEDIUM: hideDecrement = hideMediumDecrement; break;
             case HeartSoundType.LARGE: hideDecrement = hideLargeDecrement; break;
         }
+    }
+
+    /// <summary>
+    /// 深呼吸回復
+    /// </summary>
+    public void DeepBreathRecovery()
+    {
+        NowAmount += deepBreathRecovery;
     }
 }
