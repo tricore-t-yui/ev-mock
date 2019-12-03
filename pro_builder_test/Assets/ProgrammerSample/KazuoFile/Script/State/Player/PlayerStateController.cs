@@ -17,6 +17,7 @@ public class PlayerStateController : MonoBehaviour
         WALK,           // 歩き
         DASH,           // ダッシュ
         STEALTH,        // 忍び歩き
+        STEALTHMOVE,    // 忍び歩き
         DOOROPEN,       // ドア開閉
         HIDE,           // 隠れる
         DEEPBREATH,     // 深呼吸
@@ -34,8 +35,6 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
     [SerializeField]
-    PlayerMoveController moveController = default;          // 座標移動クラス
-    [SerializeField]
     PlayerDoorController doorController = default;          // ドアアクションクラス
     [SerializeField]
     PlayerHideController hideController = default;          // 隠れるアクションクラス
@@ -49,6 +48,8 @@ public class PlayerStateController : MonoBehaviour
     PlayerEventCaller eventCaller = default;                // イベント呼び出しクラス
     [SerializeField]
     PlayerEndEventCaller eventEndCaller = default;          // 終了イベント呼び出しクラス
+    [SerializeField]
+    playerStaminaController staminaController = default;    // スタミナクラス
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
 
@@ -150,7 +151,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWalkState()
     {
-        if (GetDirectionKey() && !Input.GetKey(dashKey) && !Input.GetKey(stealthKey) && State != ActionStateType.BREATHLESSNESS)
+        if (GetDirectionKey() && (staminaController.IsDisappear || !Input.GetKey(dashKey)) && !Input.GetKey(stealthKey) && State != ActionStateType.BREATHLESSNESS)
         {
             EventStop();
             State = ActionStateType.WALK;
@@ -164,7 +165,7 @@ public class PlayerStateController : MonoBehaviour
     void CheckDashState()
     {
         // 方向キーが押されている時
-        if (GetDirectionKey() && Input.GetKey(dashKey) && State != ActionStateType.BREATHLESSNESS)
+        if (GetDirectionKey() && Input.GetKey(dashKey) && State != ActionStateType.BREATHLESSNESS && !staminaController.IsDisappear)
         {
             EventStop();
             State = ActionStateType.DASH;
@@ -186,6 +187,17 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
+    /// 忍び歩き検知
+    /// </summary>
+    void CheckStealthMoveState()
+    {
+        if (GetDirectionKey() && State == ActionStateType.BREATHLESSNESS)
+        {
+            State = ActionStateType.STEALTHMOVE;
+        }
+    }
+
+    /// <summary>
     /// 深呼吸検知
     /// </summary>
     void CheckDeepBreathState()
@@ -203,7 +215,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckBrethlessnessState()
     {
-        if (breathController.IsBreathlessness)
+        if (breathController.IsDisappear)
         {
             EventStop();
             State = ActionStateType.BREATHLESSNESS;
@@ -219,7 +231,7 @@ public class PlayerStateController : MonoBehaviour
         if (breathController.NowAmount >= 100)
         {
             EventStop();
-            if (!breathController.IsBreathlessness)
+            if (!breathController.IsDisappear)
             {
                 State = ActionStateType.WAIT;
             }
@@ -350,6 +362,23 @@ public class PlayerStateController : MonoBehaviour
 
                 // 各処理の検知
                 CheckSquatState();
+                CheckWaitState();
+                CheckWalkState();
+                CheckDashState();
+                CheckDoorOpenState();
+                CheckHideState();
+                CheckBrethlessnessState();
+                CheckShooesState();
+                CheckDeepBreathState();
+                CheckStealthMoveState();
+                break;
+            case ActionStateType.STEALTHMOVE:
+                // 各イベント処理
+                eventCaller.Invoke(EventType.STEALTHMOVE);
+
+                // 各処理の検知
+                CheckSquatState();
+                CheckStealthState();
                 CheckWaitState();
                 CheckWalkState();
                 CheckDashState();
