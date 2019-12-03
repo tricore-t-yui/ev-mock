@@ -37,12 +37,15 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     // 影人間のステートのパラーメータを取得
     KageStateParameter stateParameter = null;
 
+    [System.NonSerialized]
+    bool isSetedNextPos = false;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-       Debug.Log(currentCheckPointIndex);
+        Debug.Log(currentCheckPointIndex);
 
         // ステートパラメータを取得
         stateParameter = animator.gameObject.GetComponent<KageStateParameter>();
@@ -58,8 +61,18 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
         navMesh.speed = moveSpeed;
 
         navMesh.isStopped = false;
-        // 最初のチェックポイントを設定
-        navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
+        if (isSetedNextPos == false)
+        {
+            Debug.Log(animator.gameObject.name);
+            if (navMesh.pathStatus == NavMeshPathStatus.PathComplete)
+            {
+                // 最初のチェックポイントを設定
+                navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
+                isSetedNextPos = true;
+                Debug.Log(animator.gameObject.name + ":" + "currentCheckPointIndex" + currentCheckPointIndex  + "; "+ checkPointList[currentCheckPointIndex]);
+            }
+        }
+        
 
         // 移動を開始する
         animParameterList.SetBool(ParameterType.isLoiteringMove, true);
@@ -73,6 +86,10 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
         // 目標のチェックポイントに着いたら
         if (navMesh.remainingDistance < 0.5f)
         {
+            if (animator.gameObject.name == "Kage_Route02")
+            {
+                Debug.Log("Set Kage_Route01");
+            }
             // 次のチェックポイントを設定する
             currentCheckPointIndex = GetNextCheckPointIndex();
             navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
@@ -89,10 +106,17 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
             moveCount = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            navMesh.SetDestination(checkPointList[2]);
-        }
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        navMesh.SetDestination(checkPointList[2]);
+    //    }
+    //
+    //    if (animator.gameObject.name == "Kage_Route01")
+    //    {
+    //        Debug.Log("Kage_Route01");
+    //        Debug.Log(navMesh.destination);
+    //        Debug.Log(navMesh.isStopped);
+    //    }
     }
 
     /// <summary>

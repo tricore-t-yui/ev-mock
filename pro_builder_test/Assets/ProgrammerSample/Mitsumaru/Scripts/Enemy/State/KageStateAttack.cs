@@ -38,6 +38,7 @@ public class KageStateAttack : StateMachineBehaviour
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
         // プレイヤーのダメージイベントを呼ぶ
         damageEvent?.Invoke(animator.transform,damage);
+
     }
 
     /// <summary>

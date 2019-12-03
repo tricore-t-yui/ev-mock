@@ -61,7 +61,6 @@ public class PlayerDamageController : MonoBehaviour
         healthController.Damage(damage);
         Type = type;
         EnemyPos = enemyPos;
-        transform.LookAt(EnemyPos);
 
         // ダメージによって吹き飛ばしてアニメーション開始
         switch (Type)

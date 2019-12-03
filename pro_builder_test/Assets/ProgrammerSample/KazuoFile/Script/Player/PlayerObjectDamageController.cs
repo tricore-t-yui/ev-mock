@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoveType = PlayerStateController.ActionStateType;
 
 /// <summary>
 /// オブジェクトのダメージ管理クラス
@@ -21,9 +22,15 @@ public class PlayerObjectDamageController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
 
+    [SerializeField]
+    float damageAmount = 0.1f;                                  // ダメージ量
+
+    [SerializeField]
+    float deepBreathRecovery = 0.5f;                            // 深呼吸時の回復量
+
     public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
-    public bool IsObjectDamage { get; private set; } = false;   // ダメージオブジェクトにふれているかどうか
-    public float NowObjectDamage { get; private set; } = 0;     // 今食らっているオブジェクトダメージ
+    public bool IsDamage { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
+    public float NowDamage { get; private set; } = 0;           // 今食らっているオブジェクトダメージ
 
     /// <summary>
     /// 障害物に当たっている間
@@ -35,8 +42,8 @@ public class PlayerObjectDamageController : MonoBehaviour
         {
             if (!stateController.IsShoes)
             {
-                IsObjectDamage = true;
-                NowObjectDamage = 50;
+                IsDamage = true;
+                NowDamage += 50;
             }
 
             soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.DAMAGEOBJECT);
@@ -44,32 +51,43 @@ public class PlayerObjectDamageController : MonoBehaviour
     }
 
     /// <summary>
-    /// ダメージ
+    /// 各ステートに合わせた処理
     /// </summary>
-    public void Damage()
+    public void StateUpdate(MoveType type)
     {
-        if (IsObjectDamage)
+        if (IsDamage)
         {
-            NowObjectDamage += 0.1f;
-            if (NowObjectDamage >= 100)
+            // 各ステートに合わせた処理を実行
+            switch (type)
+            {
+                case MoveType.WALK: NowDamage += damageAmount; break;
+                case MoveType.DASH: NowDamage += damageAmount; break;
+                case MoveType.STEALTHMOVE: NowDamage += damageAmount; break;
+                default: break;
+            }
+
+            if (NowDamage >= 100)
             {
                 IsDeepBreath = true;
             }
         }
+
+        // 値補正
+        NowDamage = Mathf.Clamp(NowDamage, 0, 100);
     }
 
     /// <summary>
     /// 深呼吸回復
     /// </summary>
-    public void RecoveryDeepBreath()
+    public void DeepBreathRecovery()
     {
         // 深呼吸回数をカウントし、回数が上限を超えたら回復
-        NowObjectDamage -= 0.1f;
-        if (NowObjectDamage <= 0)
+        NowDamage -= deepBreathRecovery;
+        if (NowDamage <= 0)
         {
-            NowObjectDamage = 0;
+            NowDamage = 0;
             IsDeepBreath = false;
-            IsObjectDamage = false;
+            IsDamage = false;
         }
     }
 }
