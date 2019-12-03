@@ -89,7 +89,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         Debug.DrawRay(animator.transform.position + new Vector3(0, 0.2f, 0), animator.transform.forward);
 
         // 影人間の移動が停止したら、見失ったとみなす
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);

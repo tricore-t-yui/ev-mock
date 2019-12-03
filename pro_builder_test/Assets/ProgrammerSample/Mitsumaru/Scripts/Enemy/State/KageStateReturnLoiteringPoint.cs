@@ -26,6 +26,9 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
     // 警戒範囲
     KageVigilanceRange vigilanceRange = null;
 
+    KageStateMoveAtRoute stateMoveAtRoute = null;
+    KageStateMoveAtRandom stateMoveAtRandom = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -40,11 +43,17 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
-        // 徘徊中のステートを取得
-        stateLoitering = animator.GetBehaviour<KageStateLoitering>() ?? stateLoitering;
+        stateMoveAtRoute = animator.GetBehaviour<KageStateMoveAtRoute>() ?? stateMoveAtRoute;
+        stateMoveAtRandom = animator.GetBehaviour<KageStateMoveAtRandom>() ?? stateMoveAtRandom;
 
-        // 徘徊ポイントに戻る位置を設定
-        stateLoitering.ReturnLoiteringPoint(animator);
+        if (animParameterList.GetInteger(KageAnimParameterList.ParameterType.loiteringKindId) == 1)
+        {
+            stateMoveAtRoute.ReturnVigilancePoint(animator);
+        }
+        else if (animParameterList.GetInteger(KageAnimParameterList.ParameterType.loiteringKindId) == 2)
+        {
+            stateMoveAtRandom.ReturnLoiteringPoint(animator);
+        }
 
         // 視野の範囲
         fieldOfView = animator.transform.Find("Collider").Find("KageFeildOfView").GetComponent<KageFieldOfView>() ?? fieldOfView;
@@ -63,7 +72,7 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標位置に着いたらそのまま徘徊を再開
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
         }

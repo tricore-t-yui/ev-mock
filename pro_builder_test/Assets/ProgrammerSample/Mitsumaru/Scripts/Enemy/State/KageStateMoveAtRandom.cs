@@ -7,7 +7,7 @@ using ParameterType = KageAnimParameterList.ParameterType;
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型 / ランダム移動
 /// </summary>
-public class KageStateMoveAtRandom : VigilanceMoveBase
+public class KageStateMoveAtRandom : StateMachineBehaviour
 {
     // 範囲用コライダー
     RandomMoveRangeCollider rangeCollider = null;
@@ -23,6 +23,8 @@ public class KageStateMoveAtRandom : VigilanceMoveBase
     [Space(10)]
     [SerializeField]
     int moveInterval = 0;
+
+    NavMeshAgent navMesh = null;
 
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
@@ -49,7 +51,7 @@ public class KageStateMoveAtRandom : VigilanceMoveBase
         rangeCollider.SetCallback(OnRangeExit);
 
         // ナビメッシュの取得
-        GetNavMeshAgent(animator);
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
         // 移動スピードを設定
         navMesh.speed = moveSpeed;
@@ -64,7 +66,7 @@ public class KageStateMoveAtRandom : VigilanceMoveBase
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標位置に到着したら
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             // 新たに目標位置を設定
             navMesh.SetDestination(GetNextTargetPos());
@@ -81,15 +83,6 @@ public class KageStateMoveAtRandom : VigilanceMoveBase
             // カウンターをリセット
             moveCount = 0;
         }
-    }
-
-    /// <summary>
-    /// 元の徘徊地点に戻る
-    /// </summary>
-    public override void ReturnVigilancePoint(Animator animator)
-    {
-        // 範囲の中心点を復帰地点に設定
-        navMesh.SetDestination(rangeCollider.transform.position);
     }
 
     /// <summary>
@@ -121,5 +114,13 @@ public class KageStateMoveAtRandom : VigilanceMoveBase
             // 新たに目標位置を設定
             navMesh.SetDestination(GetNextTargetPos());
         }
+    }
+
+    /// <summary>
+    /// 元の徘徊位置に戻る
+    /// </summary>
+    public void ReturnLoiteringPoint(Animator animator)
+    {
+
     }
 }

@@ -55,7 +55,7 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標位置に到着
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             // その場で待機する
             animParameterList.SetTrigger(ParameterType.targetPosStop);

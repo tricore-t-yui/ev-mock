@@ -48,7 +48,7 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標位置に着いたら、待機モードに変更
-        if (navMesh.remainingDistance < 0.3f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
         }

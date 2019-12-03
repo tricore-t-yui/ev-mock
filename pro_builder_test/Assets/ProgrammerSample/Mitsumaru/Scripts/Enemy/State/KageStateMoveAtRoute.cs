@@ -9,7 +9,7 @@ using ParameterType = KageAnimParameterList.ParameterType;
 /// <summary>
 /// 影人間のステート：通常状態 / 徘徊型 / ルート移動
 /// </summary>
-public class KageStateMoveAtRoute : VigilanceMoveBase
+public class KageStateMoveAtRoute : StateMachineBehaviour
 {
     // 移動チェックポイント
     IReadOnlyList<Vector3> checkPointList = default;
@@ -31,14 +31,13 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     [SerializeField]
     int moveInterval = 0;
 
+    NavMeshAgent navMesh = null;
+
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
     // 影人間のステートのパラーメータを取得
     KageStateParameter stateParameter = null;
-
-    [System.NonSerialized]
-    bool isSetedNextPos = false;
 
     /// <summary>
     /// ステートの開始
@@ -55,23 +54,15 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
         checkPointList = stateParameter.RouteCheckPointList;
 
         // ナビメッシュの取得
-        GetNavMeshAgent(animator);
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
         // 移動スピードを設定
         navMesh.speed = moveSpeed;
 
         navMesh.isStopped = false;
-        if (isSetedNextPos == false)
-        {
-            Debug.Log(animator.gameObject.name);
-            if (navMesh.pathStatus == NavMeshPathStatus.PathComplete)
-            {
-                // 最初のチェックポイントを設定
-                navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
-                isSetedNextPos = true;
-                Debug.Log(animator.gameObject.name + ":" + "currentCheckPointIndex" + currentCheckPointIndex  + "; "+ checkPointList[currentCheckPointIndex]);
-            }
-        }
+        
+        // 最初のチェックポイントを設定
+        navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
         
 
         // 移動を開始する
@@ -84,18 +75,16 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標のチェックポイントに着いたら
-        if (navMesh.remainingDistance < 0.5f)
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
-            if (animator.gameObject.name == "Kage_Route02")
-            {
-                Debug.Log("Set Kage_Route01");
-            }
             // 次のチェックポイントを設定する
             currentCheckPointIndex = GetNextCheckPointIndex();
             navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
         }
         // 移動中のカウンター
         moveCount++;
+
+        Debug.Log(navMesh.pathStatus);
 
         // 一定時間移動し続けたら
         if (moveCount >= moveInterval)
@@ -105,24 +94,12 @@ public class KageStateMoveAtRoute : VigilanceMoveBase
             // カウンターをリセット
             moveCount = 0;
         }
-
-    //    if (Input.GetKeyDown(KeyCode.A))
-    //    {
-    //        navMesh.SetDestination(checkPointList[2]);
-    //    }
-    //
-    //    if (animator.gameObject.name == "Kage_Route01")
-    //    {
-    //        Debug.Log("Kage_Route01");
-    //        Debug.Log(navMesh.destination);
-    //        Debug.Log(navMesh.isStopped);
-    //    }
     }
 
     /// <summary>
     /// 元の徘徊地点に戻る
     /// </summary>
-    public override void ReturnVigilancePoint(Animator animator)
+    public void ReturnVigilancePoint(Animator animator)
     {
         // 一番近いチェックポイントを取得する
         Vector3 returnPos = checkPointList.OrderByDescending(elem => (animator.transform.position-elem).magnitude * -1).FirstOrDefault();

@@ -9,4 +9,12 @@ public class KageSpawnTrigger : MonoBehaviour
     GameObject kage = default;
 
     NavMeshAgent navMeshAgent = null;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "Player")
+        {
+            kage.SetActive(true);
+        }
+    }
 }
