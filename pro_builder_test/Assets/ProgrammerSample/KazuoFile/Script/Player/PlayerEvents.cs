@@ -238,7 +238,10 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ドア開閉開始
     /// </summary>
-    public void DoorOpenStart() { }
+    public void DoorOpenStart()
+    {
+        moveController.IsRootMotion(true, true);
+    }
     /// <summary>
     /// ドア開閉
     /// </summary>
@@ -271,6 +274,7 @@ public class PlayerEvents : MonoBehaviour
     public void HideStart()
     {
         sound.Play(SoundSpawner.SoundType.HeartSound);
+        moveController.IsRootMotion(true, true);
     }
     /// <summary>
     /// 隠れる
