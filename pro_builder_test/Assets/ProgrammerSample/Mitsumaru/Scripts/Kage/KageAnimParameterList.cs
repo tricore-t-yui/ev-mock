@@ -72,6 +72,14 @@ public class KageAnimParameterList : MonoBehaviour
         animator.SetBool(paramId, value);
     }
 
+    public bool GetBool(ParameterType type)
+    {
+        // リストからパラメータIDを取得
+        int paramId = IdList[type];
+        // パラメーターにフラグをセットする
+        return animator.GetBool(paramId);
+    }
+
     /// <summary>
     /// トリガーをセット
     public void SetTrigger(ParameterType type)

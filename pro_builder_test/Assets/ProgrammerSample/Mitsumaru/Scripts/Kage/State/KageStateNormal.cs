@@ -40,6 +40,9 @@ public class KageStateNormal : StateMachineBehaviour
     // 警戒範囲
     KageVigilanceRange vigilanceRange = null;
 
+    // プレイヤーのハイドコントローラー
+    PlayerHideController playerHideController = null;
+
     GameObject player = null;
 
     /// <summary>
@@ -60,6 +63,9 @@ public class KageStateNormal : StateMachineBehaviour
         fightingRangeCollider = animator.transform.Find("Collider").Find("KageFightingRange").GetComponent<ColliderEvent>() ?? fightingRangeCollider;
         // コライダークラスを追加
         kageBodyCollider = animator.transform.Find("Collider").Find("KageAttackRange").GetComponent<ColliderEvent>() ?? kageBodyCollider;
+
+        // ハイドコントローラーを取得
+        playerHideController = FindObjectOfType<PlayerHideController>() ?? playerHideController;
 
         // コールバックをセットする
         hearRangeCollider.AddEnterListener(OnHearEnter);
@@ -87,8 +93,6 @@ public class KageStateNormal : StateMachineBehaviour
 
         // マウスロック
         Cursor.lockState = CursorLockMode.Locked;
-
-
     }
 
     /// <summary>
@@ -99,6 +103,24 @@ public class KageStateNormal : StateMachineBehaviour
     {
         // プレイヤー自身はスキップ
         if (target.tag == "Player") { return; }
+
+        if (playerHideController.IsHideBed || playerHideController.IsHideLocker)
+        {
+            // ハイドポイントに向かってレイを飛ばす
+            Ray ray = new Ray(self.position, (playerHideController.HideObj.transform.position - self.position).normalized);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask(new string[] { "Bed","Locker", "Stage" })))
+            {
+                // レイがプレイヤー以外だったら
+                if (hit.collider.gameObject.GetInstanceID() == playerHideController.HideObj.GetInstanceID())
+                {
+                    // 戦闘状態に移行
+                    animParameterList.SetBool(ParameterType.isFightingMode, true);
+                    return;
+                }
+            }
+        }
 
         // 警戒モードに変更
         animParameterList.SetBool(ParameterType.isVigilanceMode, true);
@@ -115,13 +137,18 @@ public class KageStateNormal : StateMachineBehaviour
     /// </summary>
     void OnPlayerDiscovery(Transform self, Collider target)
     {
+        if (playerHideController.IsHideBed || playerHideController.IsHideLocker)
+        {
+            return;
+        }
+
         if (target.tag == "PlayerNoise")
         {
             // プレイヤーに向かってレイを飛ばす
             Ray ray = new Ray(self.position, (player.transform.position - self.position).normalized);
 
             RaycastHit hit;
-            if (Physics.Raycast(ray,out hit,Mathf.Infinity,LayerMask.GetMask(new string[] { "Player","Stage" })))
+            if (Physics.Raycast(ray,out hit,Mathf.Infinity,LayerMask.GetMask(new string[] { "Player","Stage","Locker","Bed" })))
             {
                 // レイがプレイヤー以外だったら
                 if (hit.collider.tag != "Player")
