@@ -95,6 +95,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventPlay();
         }
+        Debug.Log(State);
     }
 
     /// <summary>
@@ -202,6 +203,11 @@ public class PlayerStateController : MonoBehaviour
         if (GetDirectionKey())
         {
             State = ActionStateType.STEALTHMOVE;
+        }
+        else
+        {
+            State = ActionStateType.STEALTH;
+            EventStart();
         }
     }
 
@@ -404,7 +410,7 @@ public class PlayerStateController : MonoBehaviour
 
                 // 各処理の検知
                 CheckSquatState();
-                CheckStealthState();
+                CheckStealthMoveState();
                 CheckWaitState();
                 CheckWalkState();
                 CheckDashState();
