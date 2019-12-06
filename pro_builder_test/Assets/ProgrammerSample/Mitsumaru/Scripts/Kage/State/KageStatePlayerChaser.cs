@@ -136,13 +136,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// <summary>
     void OnInVigilanceRange(Transform self, Collider target)
     {
-        // 隠れていて、かつ息を止めていればスキップ
-        if (playerHideController.IsHideStealth())
-        {
-            Debug.Log("year!!!");
-            return;
-        }
-
         // プレイヤーであれば
         if (target.tag == "Player")
         {
@@ -155,6 +148,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     {
         if (isDamage == true) { return; }
         if (target.tag == "PlayerNoise") { return; }
+        if (!animParameterList.GetBool(KageAnimParameterList.ParameterType.isFightingMode)) { return; }
 
         // プレイヤーがハイドポイントに隠れているか
         if (playerHideController.enabled)
