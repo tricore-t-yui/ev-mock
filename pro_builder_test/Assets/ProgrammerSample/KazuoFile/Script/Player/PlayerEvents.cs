@@ -196,10 +196,11 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
+        SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
-        statusController.StateUpdate(MoveType.DEEPBREATH, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL);
+        statusController.DeepBreathRecovery();
     }
     /// <summary>
     /// 深呼吸

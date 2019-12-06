@@ -120,22 +120,24 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi 靴着脱はステートを持っていないので検知と同時に処理
     void CheckShooesState()
     {
-        if (Input.GetKey(shoeshKey))
+        if (Input.GetKeyDown(shoeshKey))
         {
             if (IsShoes)
             {
                 eventStartCaller.Invoke(EventStartType.BAREFOOTSTART);
                 IsShoes = false;
             }
-            eventCaller.Invoke(EventType.BAREFOOT);
-        }
-        else
-        {
-            if (!IsShoes)
+            else
             {
                 eventEndCaller.Invoke(EventEndType.BAREFOOTEND);
                 IsShoes = true;
             }
+
+        }
+
+        if (!IsShoes)
+        {
+            eventCaller.Invoke(EventType.BAREFOOT);
         }
     }
 
