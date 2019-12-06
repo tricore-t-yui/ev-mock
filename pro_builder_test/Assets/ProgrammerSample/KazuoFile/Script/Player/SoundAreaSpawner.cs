@@ -41,7 +41,7 @@ public class SoundAreaSpawner : MonoBehaviour
     float areaMagnification = 0.3f;                         // 拡大倍率
 
     [SerializeField]
-    float spawnframe = 45;                                  // スポーンするまでのフレーム数
+    float spawnframe = 75;                                  // スポーンするまでのフレーム数
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
@@ -54,8 +54,8 @@ public class SoundAreaSpawner : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // 音量レベルが大きくなるか、スポーンまでのフレーム数に達したら
-        if (spawnframeCount >= spawnframe)
+        // 音量レベルが変わるか、スポーンまでのフレーム数に達したら
+        if (totalSoundLevel != soundLevel || spawnframeCount >= spawnframe)
         {
             // スポーン
             Spawn();

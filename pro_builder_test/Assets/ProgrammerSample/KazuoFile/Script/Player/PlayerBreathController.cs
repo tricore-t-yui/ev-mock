@@ -29,22 +29,22 @@ public class PlayerBreathController : MonoBehaviour
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
 
     [SerializeField]
-    float normalRecovery = 0.5f;                                // 通常の息の回復量
+    float normalRecovery = 0.3f;                               // 通常の息の回復量
     [SerializeField]
-    float deepBreathRecovery = 1f;                              // 深呼吸時の息の回復量
+    float deepBreathRecovery = 0.5f;                            // 深呼吸時の息の回復量
     [SerializeField]
-    float breathlessnessRecovery = 0.2f;                        // 息切れ時の息の回復量
+    float breathlessnessRecovery = 0.3f;                       // 息切れ時の息の回復量
 
     [SerializeField]
-    float stealthDecrement = 0.05f;                             // 息止め時の息消費量
+    float stealthDecrement = 0.15f;                             // 息止め時の息消費量
     [SerializeField]
-    float hideSmallDecrement = 0.1f;                           // 隠れる＋息止め時の息消費量(小)
+    float hideSmallDecrement = 0.15f;                           // 隠れる＋息止め時の息消費量(小)
     [SerializeField]
-    float hideMediumDecrement = 0.15f;                         // 隠れる＋息止め時の息消費量(中)
+    float hideMediumDecrement = 0.2f;                          // 隠れる＋息止め時の息消費量(中)
     [SerializeField]
-    float hideLargeDecrement = 0.2f;                            // 隠れる＋息止め時の息消費量(大)
+    float hideLargeDecrement = 0.3f;                            // 隠れる＋息止め時の息消費量(大)
     [SerializeField]
-    float buttonPatienceDecrement = 0.01f;                       // 息我慢時(連打あり)の息消費量
+    float buttonPatienceDecrement = 0.05f;                      // 息我慢時(連打あり)の息消費量
 
     [SerializeField]
     float smallDisturbance = 75;                                // 息の乱れ(小)の基準値
@@ -113,37 +113,29 @@ public class PlayerBreathController : MonoBehaviour
     }
 
     /// <summary>
-    /// 息切れ解除
-    /// </summary>
-    /// NOTE:k.oishi アニメーション用関数
-    public void RecoveryBreathlessness()
-    {
-        IsDisappear = false;
-    }
-
-    /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
     public void StateUpdate(MoveType type)
     {
-        if (!IsDisappear)
+        // 各ステートに合わせた処理を実行
+        switch (type)
         {
-            // 各ステートに合わせた処理を実行
-            switch (type)
-            {
-                case MoveType.WAIT: NowAmount += normalRecovery; break;
-                case MoveType.WALK: NowAmount += normalRecovery; break;
-                case MoveType.STEALTH: NowAmount -= stealthDecrement; break;
-                case MoveType.HIDE: ConsumeHideBreath(); break;
-                case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
-                default: break;
-            }
+            case MoveType.WAIT: NowAmount += normalRecovery; break;
+            case MoveType.WALK: NowAmount += normalRecovery; break;
+            case MoveType.STEALTH: NowAmount -= stealthDecrement; break;
+            case MoveType.HIDE: ConsumeHideBreath(); break;
+            case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
+            default: break;
+        }
 
-            // 息切れ検知
-            if (NowAmount <= 0)
-            {
-                IsDisappear = true;
-            }
+        // 息切れ検知
+        if (NowAmount <= 0)
+        {
+            IsDisappear = true;
+        }
+        if(IsDisappear && NowAmount >= 100)
+        {
+            IsDisappear = false;
         }
 
         // 値補正
@@ -192,7 +184,7 @@ public class PlayerBreathController : MonoBehaviour
     void StrikeButtonRepeatedly()
     {
         // 消費軽減キーを押したら
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             // 連打処理の継続時間にプラス
             duration += durationPlus;

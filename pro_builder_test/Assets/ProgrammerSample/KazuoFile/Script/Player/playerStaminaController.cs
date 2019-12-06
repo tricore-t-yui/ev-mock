@@ -18,7 +18,7 @@ public class playerStaminaController : MonoBehaviour
     [SerializeField]                                        
     float squatRecovery = 0.5f;                             // 通常の息の回復量
     [SerializeField]                                        
-    float deepBreathRecovery = 2f;                          // 深呼吸時の息の回復量
+    float deepBreathRecovery = 0.15f;                        // 深呼吸時の息の回復量
 
     public float NowAmount { get; private set; } = 100;     // 現在量
     public bool IsDisappear { get; private set; } = false;  // スタミナ切れフラグ
