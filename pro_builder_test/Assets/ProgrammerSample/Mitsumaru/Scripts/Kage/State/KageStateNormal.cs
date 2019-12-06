@@ -40,11 +40,16 @@ public class KageStateNormal : StateMachineBehaviour
     // 警戒範囲
     KageVigilanceRange vigilanceRange = null;
 
+    GameObject player = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // プレイヤー取得
+        player = GameObject.FindGameObjectWithTag("Player") ?? player;
+
         // ステートパラメータを取得
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
         // パラメータクラスを取得
@@ -82,6 +87,8 @@ public class KageStateNormal : StateMachineBehaviour
 
         // マウスロック
         Cursor.lockState = CursorLockMode.Locked;
+
+
     }
 
     /// <summary>
@@ -108,6 +115,24 @@ public class KageStateNormal : StateMachineBehaviour
     /// </summary>
     void OnPlayerDiscovery(Transform self, Collider target)
     {
+        if (target.tag == "PlayerNoise")
+        {
+            // プレイヤーに向かってレイを飛ばす
+            Ray ray = new Ray(self.position, (player.transform.position - self.position).normalized);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray,out hit,Mathf.Infinity,LayerMask.GetMask(new string[] { "Player","Stage" })))
+            {
+                // レイがプレイヤー以外だったら
+                if (hit.collider.tag != "Player")
+                {
+                    // 警戒状態に移行
+                    animParameterList.SetBool(ParameterType.isVigilanceMode, true);
+                    return;
+                }
+            }
+        }
+
         // 警戒モードを解除
         animParameterList.SetBool(ParameterType.isVigilanceMode, false);
         // 戦闘モードに変更

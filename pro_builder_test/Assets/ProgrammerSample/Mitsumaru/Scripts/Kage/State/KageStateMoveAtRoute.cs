@@ -84,8 +84,6 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         // 移動中のカウンター
         moveCount++;
 
-        Debug.Log(navMesh.pathStatus);
-
         // 一定時間移動し続けたら
         if (moveCount >= moveInterval)
         {
