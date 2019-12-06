@@ -35,9 +35,11 @@ public class CameraController : MonoBehaviour
     GameObject animCamera = default;                    // アニメーション用カメラ
     [SerializeField]
     PlayerDamageController damageController = default;  // ダメージクラス
-
     [SerializeField]
     PlayerHideController hideController = default;      // 隠れるアクション管理クラス
+
+    [SerializeField]
+    KeyCode lookBackKey = KeyCode.Q;                    // 振り返りキー
 
     [SerializeField]
     float sensitivity = 2;                              // カメラの感度
@@ -69,6 +71,13 @@ public class CameraController : MonoBehaviour
                 player.Rotate(0, X_Rotation, 0);
                 transform.parent.Rotate(0, X_Rotation, 0);
                 transform.Rotate(-Y_Rotation, 0, 0);
+
+                // 振り返り
+                if (Input.GetKeyDown(lookBackKey))
+                {
+                    player.Rotate(0, 180, 0);
+                    transform.parent.Rotate(0, 180, 0);
+                }
 
                 // 回転制限
                 transform.localEulerAngles = NormalAngleLimit();

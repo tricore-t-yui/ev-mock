@@ -58,7 +58,98 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCollider: {fileID: 1125087521836334053}
-  breathController: {fileID: 1125087521836334050}
+  breathController: {fileID: 1084558973}
+--- !u!1 &480597974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 480597975}
+  - component: {fileID: 480597976}
+  m_Layer: 0
+  m_Name: FlashLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &480597975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480597974}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1125087521836334049}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &480597976
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480597974}
+  m_Enabled: 1
+  serializedVersion: 9
+  m_Type: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 2.2
+  m_Range: 8.245184
+  m_SpotAngle: 54
+  m_InnerSpotAngle: 5
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.6
+    m_Bias: 0.01
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 2800000, guid: 5419462265a72da44bb925357b3a4863, type: 3}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 5.2050937e-32, z: 1e-45, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &988820044
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +182,116 @@ Transform:
   m_Father: {fileID: 1125087521124948933}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -25, y: 0, z: 0}
+--- !u!1 &1084558967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1084558972}
+  - component: {fileID: 1084558973}
+  - component: {fileID: 1084558971}
+  - component: {fileID: 1084558970}
+  - component: {fileID: 1084558969}
+  m_Layer: 8
+  m_Name: StatusController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1084558972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1125087521836334049}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1084558973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cceab300322a24715bab8d355088e39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideController: {fileID: 1125087521836334055}
+  soundArea: {fileID: 0}
+  normalRecovery: 0.3
+  deepBreathRecovery: 0.5
+  breathlessnessRecovery: 0.3
+  stealthDecrement: 0.15
+  hideSmallDecrement: 0.15
+  hideMediumDecrement: 0.2
+  hideLargeDecrement: 0.3
+  buttonPatienceDecrement: 0.01
+  smallDisturbance: 75
+  mediumDisturbance: 50
+  largeDisturbance: 20
+  durationPlus: 5
+--- !u!114 &1084558971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff0586b1ac1c49be98105f8da395e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundArea: {fileID: 0}
+  recoveryFrame: 240
+  recoveryAmount: 0.1
+  smallDisturbance: 75
+  largeDisturbance: 50
+--- !u!114 &1084558970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f91e192e3314c7ca022d7e5f457acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashDecrement: 0.5
+  normalRecovery: 1
+  walkRecovery: 0.5
+  squatRecovery: 0.5
+  deepBreathRecovery: 0.15
+--- !u!114 &1084558969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8522b9bb9474632803ddb5fc78fad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathController: {fileID: 1084558973}
+  healthController: {fileID: 1084558971}
+  staminaController: {fileID: 1084558970}
+  objectDamageController: {fileID: 5175318063243173603}
 --- !u!1 &1372339494
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +567,8 @@ GameObject:
   - component: {fileID: 1125087521023189967}
   - component: {fileID: 1125087521023189954}
   - component: {fileID: 1125087521023189953}
-  m_Layer: 8
+  - component: {fileID: 2090301396}
+  m_Layer: 16
   m_Name: AnimationCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -380,13 +582,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125087521023189966}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1125087521836334049}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1125087521023189954
 Camera:
   m_ObjectHideFlags: 0
@@ -396,8 +598,8 @@ Camera:
   m_GameObject: {fileID: 1125087521023189966}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -410,8 +612,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.03
-  far clip plane: 1000
+  near clip plane: 0.05
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -438,6 +640,66 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125087521023189966}
   m_Enabled: 1
+--- !u!114 &2090301396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125087521023189966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 0}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 65536
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &1125087521124948932
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,16 +792,15 @@ GameObject:
   - component: {fileID: 1125087521836334054}
   - component: {fileID: 1125087521836334053}
   - component: {fileID: 1125087521836334052}
-  - component: {fileID: 1125087521836334051}
-  - component: {fileID: 1125087521836334050}
   - component: {fileID: 1125087521836333848}
   - component: {fileID: 1125087521836334055}
   - component: {fileID: 733771168}
   - component: {fileID: 1873015058}
-  - component: {fileID: 1125087522315089306}
+  - component: {fileID: 1360036397}
+  - component: {fileID: 5175318063243173603}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -560,6 +821,8 @@ Transform:
   - {fileID: 1125087521124948933}
   - {fileID: 99061310}
   - {fileID: 1125087521023641559}
+  - {fileID: 480597975}
+  - {fileID: 1084558972}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -574,7 +837,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 967e19642128b4cea82ab0098182f45f, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -624,12 +887,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e3017fdad064651ad1e5d1d03d0050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animCamera: {fileID: 0}
+  animCamera: {fileID: 1125087521023189967}
   playerRigidbody: {fileID: 1125087521836334054}
   playerCollider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
-  staminaController: {fileID: 0}
-  objectDamageController: {fileID: 1125087522315089306}
+  staminaController: {fileID: 1084558970}
+  objectDamageController: {fileID: 5175318063243173603}
   stateController: {fileID: 0}
   forwardSpeed: 2
   sideSpeed: 2
@@ -644,49 +907,6 @@ MonoBehaviour:
   stealthSpeedLimit: 0.25
   stepAngle: 60
   stepUpPower: 1.45
---- !u!114 &1125087521836334051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125087521836334063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ff0586b1ac1c49be98105f8da395e20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundArea: {fileID: 0}
-  recoveryFrame: 240
-  recoveryAmount: 0.1
-  smallDisturbance: 75
-  largeDisturbance: 50
---- !u!114 &1125087521836334050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125087521836334063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cceab300322a24715bab8d355088e39c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hideController: {fileID: 1125087521836334055}
-  soundArea: {fileID: 0}
-  normalRecovery: 0.5
-  deepBreathRecovery: 1
-  breathlessnessRecovery: 0.2
-  stealthDecrement: 0.15
-  hideSmallDecrement: 0.15
-  hideMediumDecrement: 0.25
-  hideLargeDecrement: 0.35
-  buttonPatienceDecrement: 0.1
-  smallDisturbance: 75
-  mediumDisturbance: 50
-  largeDisturbance: 20
-  durationPlus: 5
 --- !u!114 &1125087521836333848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,8 +936,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationContoller: {fileID: 1873015058}
   interactController: {fileID: 0}
+  moveController: {fileID: 1125087521836334052}
   moveCamera: {fileID: 0}
-  hideStateController: {fileID: 0}
+  hideStateController: {fileID: 99061311}
+  breathController: {fileID: 1084558973}
 --- !u!114 &733771168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,9 +954,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 1125087521836334054}
   animationContoller: {fileID: 1873015058}
-  healthController: {fileID: 1125087521836334051}
+  healthController: {fileID: 1084558971}
   interactController: {fileID: 0}
-  playerHideController: {fileID: 0}
+  playerHideController: {fileID: 1125087521836334055}
   invincibleSecond: 2
 --- !u!114 &1873015058
 MonoBehaviour:
@@ -754,7 +976,22 @@ MonoBehaviour:
   rightArm: {fileID: 1125087521124948932}
   shoesArm: {fileID: 0}
   shoes: {fileID: 988820044}
---- !u!114 &1125087522315089306
+--- !u!114 &1360036397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125087521836334063}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e344118bb04e405c97504c6cfb72762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftArm: {fileID: 1125087520652504940}
+  interactController: {fileID: 0}
+  distance: 0.75
+--- !u!114 &5175318063243173603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -768,8 +1005,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   soundArea: {fileID: 0}
-  damageAmount: 0.1
-  deepBreathRecovery: 0.5
+  damageAmount: 0.05
+  deepBreathRecovery: 0.15
 --- !u!1001 &2878279672215381301
 PrefabInstance:
   m_ObjectHideFlags: 0

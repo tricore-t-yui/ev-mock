@@ -24,6 +24,7 @@ public class PlayerStateController : MonoBehaviour
         BREATHLESSNESS, // 息切れ
         DAMAGE,         // ダメージ
         SHOES,          // 靴
+        DOLLGET,        // 人形ゲット
     }
 
     GameObject rayObject = default;                         // レイに当たったオブジェクト
@@ -52,6 +53,8 @@ public class PlayerStateController : MonoBehaviour
     playerStaminaController staminaController = default;    // スタミナクラス
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
+    [SerializeField]
+    DollGetController dollGetController = default;          // 人形ゲットクラス
 
     // プレイヤーのダメージイベント（Added by Mitsumaru）
     // note : このクラスから受け取ったダメージのイベント関数を保存しておく
@@ -68,8 +71,6 @@ public class PlayerStateController : MonoBehaviour
     KeyCode deepBreathKey = KeyCode.LeftControl;    // 深呼吸キー
     [SerializeField]
     KeyCode shoeshKey = KeyCode.Space;              // 靴着脱キー
-    [SerializeField]
-    KeyCode lookBackKey = KeyCode.Q;            // 振り返りキー
 
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
@@ -315,6 +316,20 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
+    /// 人形ゲット検知
+    /// </summary>
+    void CheckIDollGet()
+    {
+        if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Doll"))
+        {
+            EventStop();
+            dollGetController.SetInfo(rayObject);
+            State = ActionStateType.DOLLGET;
+            EventStart();
+        }
+    }
+
+    /// <summary>
     /// イベント再生
     /// </summary>
     void EventPlay()
@@ -334,6 +349,8 @@ public class PlayerStateController : MonoBehaviour
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckShooesState();
+                CheckBrethlessnessState();
+                CheckIDollGet();
                 break;
             case ActionStateType.WALK:
                 // 各イベント処理
@@ -348,6 +365,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckHideState();
                 CheckShooesState();
                 CheckDeepBreathState();
+                CheckIDollGet();
                 break;
             case ActionStateType.DASH:
                 // 各イベント処理
@@ -361,6 +379,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckHideState();
                 CheckBrethlessnessState();
                 CheckDeepBreathState();
+                CheckIDollGet();
                 break;
             case ActionStateType.STEALTH:
                 // 各イベント処理
@@ -377,6 +396,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckShooesState();
                 CheckDeepBreathState();
                 CheckStealthMoveState();
+                CheckIDollGet();
                 break;
             case ActionStateType.STEALTHMOVE:
                 // 各イベント処理
@@ -393,6 +413,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckBrethlessnessState();
                 CheckShooesState();
                 CheckDeepBreathState();
+                CheckIDollGet();
                 break;
             case ActionStateType.DOOROPEN:
                 // 各イベント処理
@@ -442,6 +463,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckStealthState();
                     CheckDoorOpenState();
                     CheckHideState();
+                    CheckIDollGet();
                 }
                 break;
             case ActionStateType.BREATHLESSNESS:
@@ -465,6 +487,16 @@ public class PlayerStateController : MonoBehaviour
                     CheckDeepBreathState();
                 }
                 break;
+            case ActionStateType.DOLLGET:
+                // 各イベント処理
+                eventCaller.Invoke(EventType.GETDOLL);
+
+                // 人形ゲットクラスが停止しているなら終了し、各処理の検知
+                if (!dollGetController.enabled && State == ActionStateType.DOLLGET)
+                {
+                    CheckWaitState();
+                }
+                break;
         }
     }
 
@@ -484,6 +516,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
             case ActionStateType.BREATHLESSNESS: eventEndCaller.Invoke(EventEndType.BREATHLESSNESSEND); break;
             case ActionStateType.DAMAGE: eventEndCaller.Invoke(EventEndType.DAMAGEEND); break;
+            case ActionStateType.DOLLGET: eventEndCaller.Invoke(EventEndType.GETDOOLEND); break;
         }
     }
 
@@ -501,7 +534,8 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
             case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;
             case ActionStateType.BREATHLESSNESS: eventStartCaller.Invoke(EventStartType.BREATHLESSNESSSTART); break;
-            case ActionStateType.DAMAGE: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
+            case ActionStateType.DAMAGE: eventStartCaller.Invoke(EventStartType.DAMAGESTART); break;
+            case ActionStateType.DOLLGET: eventStartCaller.Invoke(EventStartType.GETDOLLSTART); break;
         }
     }
 

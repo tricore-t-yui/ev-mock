@@ -28,6 +28,7 @@ public class PlayerAnimationContoller : MonoBehaviour
         OPENDOOR,           // ドア開閉
         DASHOPENDOOR,       // ダッシュでドア開閉
         REVERSEOPENDOOR,    // 逆からドア開閉
+        GETDOLL,            // 人形ゲット
     }
 
     /// <summary>
@@ -88,6 +89,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); DisplayRightArm(true); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); break;
             case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; DisplayShoesArm(true, true); break;
+            case AnimationType.GETDOLL: animator.SetTrigger("GetDoll"); DisplayRightArm(true); break;
         }
     }
 
@@ -113,6 +115,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.DASHOPENDOOR: animator.ResetTrigger("DashDoorOpen"); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", false); break;
             case AnimationType.SHOES: animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
+            case AnimationType.GETDOLL: animator.ResetTrigger("GetDoll"); break;
         }
     }
 

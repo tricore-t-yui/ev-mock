@@ -24,6 +24,7 @@ public class PlayerEndEventCaller : MonoBehaviour
         BREATHLESSNESSEND,  // 息切れ終了
         DAMAGEEND,          // ダメージ終了
         BAREFOOTEND,        // 裸足終了
+        GETDOOLEND,         // 人形ゲット終了
     }
 
     [SerializeField]
@@ -48,6 +49,8 @@ public class PlayerEndEventCaller : MonoBehaviour
     UnityEvent damageEnd = new UnityEvent();        // ダメージ終了イベント
     [SerializeField]
     UnityEvent barefootEnd = new UnityEvent();      // 裸足終了イベント
+    [SerializeField]
+    UnityEvent getdollEnd = new UnityEvent();       // 人形ゲット終了イベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -68,6 +71,7 @@ public class PlayerEndEventCaller : MonoBehaviour
             case EventType.BREATHLESSNESSEND: brethressnessEnd.Invoke(); break;
             case EventType.DAMAGEEND: damageEnd.Invoke(); break;
             case EventType.BAREFOOTEND: barefootEnd.Invoke(); break;
+            case EventType.GETDOOLEND: getdollEnd.Invoke(); break;
         }
     }
 }

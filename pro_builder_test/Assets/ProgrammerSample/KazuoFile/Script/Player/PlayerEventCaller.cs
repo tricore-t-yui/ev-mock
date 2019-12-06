@@ -25,6 +25,7 @@ public class PlayerEventCaller : MonoBehaviour
         BREATHLESSNESS,     // 息切れ
         DAMAGE,             // ダメージ
         BAREFOOT,           // 裸足
+        GETDOLL,            // 人形ゲット
     }
 
     [SerializeField]
@@ -51,6 +52,8 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent damage           = new UnityEvent();     // ダメージイベント
     [SerializeField]
     UnityEvent barefoot         = new UnityEvent();     // 裸足イベント
+    [SerializeField]
+    UnityEvent getDoll          = new UnityEvent();     // 人形ゲットイベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -72,6 +75,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.BREATHLESSNESS:    brethressness.Invoke();    break;
             case EventType.DAMAGE:            damage.Invoke();           break;
             case EventType.BAREFOOT:          barefoot.Invoke();         break;
+            case EventType.GETDOLL:           getDoll.Invoke();          break;
         }
     }
 }

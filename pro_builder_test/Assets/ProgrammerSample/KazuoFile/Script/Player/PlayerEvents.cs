@@ -344,12 +344,34 @@ public class PlayerEvents : MonoBehaviour
     public void DamageEnd() { }
 
     /// <summary>
+    /// 人形ゲット開始
+    /// </summary>
+    public void DollGetStart()
+    {
+        playerAnimationContoller.AnimStart(PlayerAnimType.GETDOLL);
+    }
+    /// <summary>
+    /// 人形ゲット
+    /// </summary>
+    public void DollGet()
+    {
+        moveController.IsRootMotion(true, true);
+    }
+    /// <summary>
+    /// 人形ゲット終了
+    /// </summary>
+    public void DollGetEnd()
+    {
+        playerAnimationContoller.AnimStop(PlayerAnimType.GETDOLL);
+        moveController.IsRootMotion(false, false);
+    }
+
+    /// <summary>
     /// 裸足開始
     /// </summary>
     public void BarefootStart()
     {
         playerAnimationContoller.AnimStart(PlayerAnimType.SHOES);
-        moveCamera.IsRotationCamera(false);
         moveController.IsRootMotion(true, true);
     }
     /// <summary>

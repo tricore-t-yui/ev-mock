@@ -28,12 +28,14 @@ public class PlayerHideController : MonoBehaviour
     CameraController moveCamera = default;                      // 移動カメラクラス
     [SerializeField]
     HideStateController hideStateController = default;          // 隠れた時の状態変化クラス
+    [SerializeField]
+    PlayerBreathController breathController = default;          // 息クラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
     bool isStealth = false;                                     // 息止めフラグ
-    public bool IsHideLocker { get; private set; } = false;                                  // ロッカーに隠れているかどうかのフラグ
-    bool isHideBed = false;                                     // ベッドに隠れているかどうかのフラグ
+    public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
+    public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
@@ -92,7 +94,7 @@ public class PlayerHideController : MonoBehaviour
     /// </summary>
     public void HideCameraMove()
     {
-        if (isHideBed)
+        if (IsHideBed)
         {
             moveCamera.Rotation(CameraController.RotationType.HIDEBED);
         }
@@ -119,7 +121,7 @@ public class PlayerHideController : MonoBehaviour
                 IsHideLocker = true; break;
             // ベッド
             case HideObjectType.BED:
-                isHideBed = true; break;
+                IsHideBed = true; break;
         }
     }
 
@@ -138,7 +140,7 @@ public class PlayerHideController : MonoBehaviour
                 IsHideLocker = false; break;
             // ベッド
             case HideObjectType.BED:
-                isHideBed = false; break;
+                IsHideBed = false; break;
         }
     }
 
@@ -212,7 +214,7 @@ public class PlayerHideController : MonoBehaviour
     /// </summary>
     public bool IsHideStealth()
     {
-        if(isStealth && (IsHideLocker || isHideBed))
+        if(isStealth && (IsHideLocker || IsHideBed))
         {
             return true;
         }
@@ -220,6 +222,15 @@ public class PlayerHideController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// 息切れしてしまったかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsBreathlessness()
+    {
+        return breathController.IsDisappear;
     }
 
     /// <summary>
