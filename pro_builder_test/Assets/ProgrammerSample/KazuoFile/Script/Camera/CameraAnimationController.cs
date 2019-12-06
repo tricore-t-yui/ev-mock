@@ -28,9 +28,6 @@ public class CameraAnimationController : MonoBehaviour
     [SerializeField]
     GameObject[] playerArm = default;                       // カメラについているプレイヤーの腕
 
-    [SerializeField]
-    PlayerStatusController statusController = default;      // ステータス管理クラス
-
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -95,14 +92,5 @@ public class CameraAnimationController : MonoBehaviour
     public void DisplayArm()
     {
         DisplayPlayerArm(true);
-    }
-
-    /// <summary>
-    /// 深呼吸回復
-    /// </summary>
-    /// NOTE:k.oishi アニメーション用関数
-    public void DeepBreathRecovery()
-    {
-        statusController.DeepBreathRecovery();
     }
 }

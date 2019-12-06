@@ -23,7 +23,7 @@ public class BedStealthState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (!Input.GetKey(KeyCode.LeftControl))
+        if (!Input.GetKey(KeyCode.E))
         {
             animator.SetBool("Stealth", false);
         }

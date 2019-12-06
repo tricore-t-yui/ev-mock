@@ -35,7 +35,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     /// <summary>
     /// 障害物に当たっている間
     /// </summary>
-    void OnCollisionStay(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         // ダメージオブジェクト触れているかどうか
         if (LayerMask.LayerToName(collision.gameObject.layer) == "Damage")

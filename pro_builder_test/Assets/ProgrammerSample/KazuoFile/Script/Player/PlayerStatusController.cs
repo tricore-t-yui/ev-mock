@@ -36,5 +36,6 @@ public class PlayerStatusController : MonoBehaviour
         breathController.DeepBreathRecovery();
         staminaController.DeepBreathRecovery();
         objectDamageController.DeepBreathRecovery();
+        healthController.HealthRecovery();
     }
 }
