@@ -57,9 +57,9 @@ public class SoundController : MonoBehaviour
     {
         switch(hideStateController.HeartSound)
         {
-            case HeartSoundType.NORMAL: audioSource.pitch = 0.25f; break;
-            case HeartSoundType.MEDIUM: audioSource.pitch = 0.75f; break;
-            case HeartSoundType.LARGE: audioSource.pitch = 1.5f; break;
+            case HeartSoundType.NORMAL: audioSource.volume = 0.5f; audioSource.pitch = 0.75f; break;
+            case HeartSoundType.MEDIUM: audioSource.volume = 1f; audioSource.pitch = 0.75f; break;
+            case HeartSoundType.LARGE: audioSource.volume = 1f; audioSource.pitch = 1.5f; break;
         }
     }
 
