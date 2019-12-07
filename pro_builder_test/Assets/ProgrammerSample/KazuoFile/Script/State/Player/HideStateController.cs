@@ -64,8 +64,6 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        Debug.Log(isSafetyArea);
-        Debug.Log(isLookEnemy);
         // ステートの変更
         ChangeHideState();
 
@@ -132,7 +130,7 @@ public class HideStateController : MonoBehaviour
         float distance = 0.0f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Locker") | 1 << LayerMask.NameToLayer("Bed");
+        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Locker") | 1 << LayerMask.NameToLayer("Bed") | 1 << LayerMask.NameToLayer("SafetyArea");
         layerMask = ~layerMask;
 
         for (int i = 0; i < 3; i++)

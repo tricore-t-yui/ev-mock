@@ -131,9 +131,6 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.WAIT: addLevel = 1; break;
             case ActionSoundType.WALK: addLevel = 4; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
-            //case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
-            //case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.5f; break;
-            //case ActionSoundType.LARGECONFUSION: addLevel = 2; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 1; break;
             case ActionSoundType.LARGECONFUSION: addLevel = 1; break;

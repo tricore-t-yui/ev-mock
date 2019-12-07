@@ -186,7 +186,7 @@ public class PlayerMoveController : MonoBehaviour
         float distance = playerCollider.radius * 2;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = (1 << LayerMask.NameToLayer("Player"));
+        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
         layerMask = ~layerMask;
 
         // レイのタイプによって向き変更

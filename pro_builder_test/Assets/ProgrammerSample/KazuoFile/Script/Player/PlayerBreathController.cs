@@ -36,15 +36,15 @@ public class PlayerBreathController : MonoBehaviour
     float breathlessnessRecovery = 0.3f;                       // 息切れ時の息の回復量
 
     [SerializeField]
-    float stealthDecrement = 0.15f;                             // 息止め時の息消費量
+    float stealthDecrement = 0.1f;                             // 息止め時の息消費量
     [SerializeField]
-    float hideSmallDecrement = 0.15f;                           // 隠れる＋息止め時の息消費量(小)
+    float hideSmallDecrement = 0.1f;                           // 隠れる＋息止め時の息消費量(小)
     [SerializeField]
-    float hideMediumDecrement = 0.2f;                          // 隠れる＋息止め時の息消費量(中)
+    float hideMediumDecrement = 0.1f;                           // 隠れる＋息止め時の息消費量(中)
     [SerializeField]
-    float hideLargeDecrement = 0.3f;                            // 隠れる＋息止め時の息消費量(大)
+    float hideLargeDecrement = 0.1f;                            // 隠れる＋息止め時の息消費量(大)
     [SerializeField]
-    float buttonPatienceDecrement = 0.05f;                      // 息我慢時(連打あり)の息消費量
+    float buttonPatienceDecrement = 0.01f;                      // 息我慢時(連打あり)の息消費量
 
     [SerializeField]
     float smallDisturbance = 75;                                // 息の乱れ(小)の基準値
