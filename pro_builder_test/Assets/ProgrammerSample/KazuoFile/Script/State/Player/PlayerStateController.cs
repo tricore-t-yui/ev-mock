@@ -95,7 +95,6 @@ public class PlayerStateController : MonoBehaviour
         {
             EventPlay();
         }
-        Debug.Log(State);
     }
 
     /// <summary>

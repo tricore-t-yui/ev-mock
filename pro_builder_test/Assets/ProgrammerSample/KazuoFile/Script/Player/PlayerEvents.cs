@@ -371,6 +371,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BarefootStart()
     {
+        moveCamera.IsRotationCamera(false);
         playerAnimationContoller.AnimStart(PlayerAnimType.SHOES);
         moveController.IsRootMotion(true, true);
     }
