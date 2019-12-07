@@ -31,8 +31,11 @@ public class OniViewingRay : MonoBehaviour
     /// </summary>
     void Update()
     {
+        Vector3 origin = transform.position + new Vector3(0, 1, 0);
+        Vector3 dir = player.position - new Vector3(transform.position.x, player.position.y, transform.position.z);
         // 鬼からプレイヤーに向かってレイを飛ばす
-        Ray ray = new Ray(transform.position, (player.transform.position - transform.position).normalized);
+        Ray ray = new Ray(origin,dir);
+        Debug.DrawRay(origin, dir, Color.yellow);
 
         // プレイヤーに向かってレイを飛ばして、プレイヤーにヒットしたか判定する
         RaycastHit hit;
