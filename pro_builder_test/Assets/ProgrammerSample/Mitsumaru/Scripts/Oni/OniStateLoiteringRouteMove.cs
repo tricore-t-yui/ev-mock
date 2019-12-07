@@ -3,25 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 徘徊ルートを移動
+/// </summary>
 public class OniStateLoiteringRouteMove : StateMachineBehaviour
 {
-    OniSearchingRouteManager searchingRouteManager = null;
+    // 徘徊ルートマネージャー
+    OniLoiteringRouteManager searchingRouteManager = null;
 
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
+    // 現在のチェックポイントのインデックス
     int currentCheckPointIndex = 0;
 
+    /// <summary>
+    /// ステートの開始
+    /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // ナビメッシュのコンポーネントを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
-        searchingRouteManager = FindObjectOfType<OniSearchingRouteManager>() ?? searchingRouteManager;
+        // ルートマネージャーを取得
+        searchingRouteManager = FindObjectOfType<OniLoiteringRouteManager>() ?? searchingRouteManager;
 
+        // 最初のチェックポイントのインデックスをセット
         currentCheckPointIndex = searchingRouteManager.NearCheckPointOfIndex;
     }
 
+    /// <summary>
+    /// ステートの更新
+    /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 目標のチェックポイントに着いたら
@@ -49,8 +62,12 @@ public class OniStateLoiteringRouteMove : StateMachineBehaviour
         }
     }
 
+    /// <summary>
+    /// ステートの終了
+    /// </summary>
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // トリガーをリセット
         animator.SetBool("isLoiteringRouteMove", false);
     }
 }

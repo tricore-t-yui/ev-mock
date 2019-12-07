@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 鬼の状態ごとのパラメータ
+/// </summary>
 [System.Serializable]
 class OniParameter
 {
@@ -12,8 +15,12 @@ class OniParameter
     public int rayBlockingTimeToVigilance;
 }
 
+/// <summary>
+/// 状態によって鬼のパラメータを変更する
+/// </summary>
 public class OniStateParameterChanger : StateMachineBehaviour
 {
+    // 鬼の状態の種類
     public enum StateKind
     {
         Vigilance,   // 警戒状態
@@ -24,9 +31,13 @@ public class OniStateParameterChanger : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
+    // 鬼の視野のレイ
     OniViewingRay viewingRay = null;
+
+    // 鬼の聴覚範囲コライダーのイベント
     ColliderEvent noiseListenerColliderEvent = null;
 
+    // 状態ごとの鬼のパラメータ
     [SerializeField]
     OniParameter[] parameters = new OniParameter[(int)StateKind.Num];
 
@@ -35,8 +46,12 @@ public class OniStateParameterChanger : StateMachineBehaviour
     // レイの遮断時間
     int rayBlockingTimeToVigilance = 0;
 
+    /// <summary>
+    /// ステートの開始
+    /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 鬼のレイを取得
         viewingRay = FindObjectOfType<OniViewingRay>() ?? viewingRay;
 
         // プレイヤーのハイドコントローラーを取得
@@ -45,67 +60,13 @@ public class OniStateParameterChanger : StateMachineBehaviour
         noiseListenerColliderEvent = animator.transform.Find("Collider").Find("NoiseListenerRange").GetComponent<ColliderEvent>() ?? noiseListenerColliderEvent;
     }
 
+    /// <summary>
+    /// ステートの更新
+    /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // ステートのIDを取得
         int currentStateId = animator.GetInteger("oniStateKindId");
-
-        // プレイヤーがハイドポイントに入ったら
-        if (playerHideController.IsHideLocker || playerHideController.IsHideBed)
-        {
-            // ステートを変更
-            animator.SetBool("isPlayerHide", true);
-
-            if (rayIrradiationCounter > parameters[currentStateId].rayIrradiationTimeToFighting)
-            {
-                animator.SetBool("isPlayerDiscover", true);
-                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
-            }
-        }
-        else
-        {
-            // ステートを変更
-            animator.SetBool("isPlayerHide", false);
-
-            if (viewingRay.HitObject.tag == "Player")
-            {
-                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
-                animator.SetBool("isPlayerDiscover", true);
-            }
-        }
-
-        if (rayBlockingTimeToVigilance > parameters[currentStateId].rayBlockingTimeToVigilance)
-        {
-            animator.SetInteger("oniStateKindId", (int)StateKind.Vigilance);
-        }
-
-        if (viewingRay.HitObject.tag == "Player")
-        {
-            rayBlockingTimeToVigilance = 0;
-            rayIrradiationCounter++;
-        }
-        else
-        {
-            rayIrradiationCounter = 0;
-            rayBlockingTimeToVigilance++;
-        }
-
-        rayIrradiationCounter++;
-        rayBlockingTimeToVigilance++;
-
-        if (animator.GetBool("isNoiseListener"))
-        {
-            if (animator.GetBool("isPlayerHide"))
-            {
-                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
-                animator.SetBool("isPlayerDiscover", true);
-            }
-            else
-            {
-                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
-            }
-            animator.SetBool("isNoiseListener", false);
-        }
 
         // 各パラメータを状態によって切り替える
         animator.SetFloat("moveSpeed", parameters[currentStateId].moveSpeed);
@@ -113,5 +74,80 @@ public class OniStateParameterChanger : StateMachineBehaviour
         animator.SetFloat("searchingRange", parameters[currentStateId].searchingRange);
         animator.SetInteger("rayIrradiationTimeToFighting", parameters[currentStateId].rayIrradiationTimeToFighting);
         animator.SetInteger("rayBlockingTimeToVigilance", parameters[currentStateId].rayBlockingTimeToVigilance);
+
+        // プレイヤーがハイドポイントに入ったら
+        if (playerHideController.IsHideLocker || playerHideController.IsHideBed)
+        {
+            // ステートを変更
+            animator.SetBool("isPlayerHide", true);
+
+            // レイが一定時間照射され続けていたら
+            if (rayIrradiationCounter > parameters[currentStateId].rayIrradiationTimeToFighting)
+            {
+                // プレイヤーを発見して、戦闘状態へ
+                animator.SetBool("isPlayerDiscover", true);
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+            }
+
+            // 鬼のレイの遮断時間が一定時間経過したら
+            if (rayBlockingTimeToVigilance > parameters[currentStateId].rayBlockingTimeToVigilance)
+            {
+                // 警戒状態に戻す
+                animator.SetInteger("oniStateKindId", (int)StateKind.Vigilance);
+            }
+
+            // 鬼のレイが当たり続けている間
+            if (viewingRay.HitObject.tag == "Player")
+            {
+                rayBlockingTimeToVigilance = 0;
+                rayIrradiationCounter++;
+            }
+            // レイが遮断され続けている間
+            else
+            {
+                rayIrradiationCounter = 0;
+                rayBlockingTimeToVigilance++;
+            }
+
+            rayIrradiationCounter++;
+            rayBlockingTimeToVigilance++;
+        }
+        // ハイドポイントに隠れていない
+        else
+        {
+            // カウンターをリセット
+            rayIrradiationCounter = 0;
+            rayBlockingTimeToVigilance = 0;
+
+            // ステートを変更
+            animator.SetBool("isPlayerHide", false);
+
+            // レイがプレイヤーに当たったら
+            if (viewingRay.HitObject.tag == "Player")
+            {
+                // プレイヤーを発見して、戦闘状態へ
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+                animator.SetBool("isPlayerDiscover", true);
+            }
+        }
+
+        // プレイヤーの物音を聴いたら
+        if (animator.GetBool("isNoiseListener"))
+        {
+            // ハイドポイントに隠れいている場合
+            if (animator.GetBool("isPlayerHide"))
+            {
+                // プレイヤーを発見して、戦闘状態へ
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+                animator.SetBool("isPlayerDiscover", true);
+            }
+            else
+            {
+                // 戦闘状態に切り替える
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+            }
+            // 物音を聴いたフラグをリセット
+            animator.SetBool("isNoiseListener", false);
+        }
     }
 }

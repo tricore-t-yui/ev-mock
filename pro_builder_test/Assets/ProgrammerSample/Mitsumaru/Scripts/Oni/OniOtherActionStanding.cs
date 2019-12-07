@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 鬼の探索中のその他の行動：待機
+/// </summary>
 public class OniOtherActionStanding : StateMachineBehaviour
 {
     // ナビメッシュ

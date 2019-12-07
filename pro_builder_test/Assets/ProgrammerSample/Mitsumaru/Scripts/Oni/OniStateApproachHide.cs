@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class KageStateApproachHide : StateMachineBehaviour
+/// <summary>
+/// ハイドポイントまで接近
+/// </summary>
+public class OniStateApproachHide : StateMachineBehaviour
 {
     [SerializeField]
     float nearDistance = 0;
@@ -16,6 +19,9 @@ public class KageStateApproachHide : StateMachineBehaviour
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
+    /// <summary>
+    /// ステートの開始
+    /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // プレイヤーのハイドコントローラーを取得
@@ -25,6 +31,9 @@ public class KageStateApproachHide : StateMachineBehaviour
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
     }
 
+    /// <summary>
+    /// ステートの更新
+    /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         viewingRay = FindObjectOfType<OniViewingRay>() ?? viewingRay;

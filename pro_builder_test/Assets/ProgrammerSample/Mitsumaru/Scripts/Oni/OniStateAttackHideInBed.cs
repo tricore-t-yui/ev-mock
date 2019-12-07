@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// ベッドでの攻撃処理
+/// </summary>
 public class OniStateAttackHideInBed : StateMachineBehaviour
 {
     // ダメージ量
@@ -43,6 +46,7 @@ public class OniStateAttackHideInBed : StateMachineBehaviour
     /// </summary>
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 消したコライダーを戻す
         colliderParent.gameObject.SetActive(true);
     }
 }

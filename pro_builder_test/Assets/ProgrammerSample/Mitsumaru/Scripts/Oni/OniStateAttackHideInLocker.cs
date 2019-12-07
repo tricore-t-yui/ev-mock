@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// ロッカーでの攻撃処理
+/// </summary>
 public class OniStateAttackHideInLocker : StateMachineBehaviour
 {
     // ダメージ量
@@ -69,6 +72,7 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
         // カウンターリセット
         counter = 0;
 
+        // ドアを閉める
         lockerAnimator.SetBool("DragOut", false);
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 隠れていない状態での攻撃処理
+/// </summary>
 public class OniStateAttackNormal : StateMachineBehaviour
 {
     // ダメージ量
@@ -25,6 +28,7 @@ public class OniStateAttackNormal : StateMachineBehaviour
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
+        // 移動を止める
         navMesh.isStopped = true;
 
         // ダメージイベントのクラスを取得

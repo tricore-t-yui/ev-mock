@@ -38,6 +38,7 @@ public class OniViewingRay : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray,out hit,Mathf.Infinity,layerMask))
         {
+            // レイに当たっているオブジェクトをセット
             HitObject = hit.collider.transform;
         }
     }
