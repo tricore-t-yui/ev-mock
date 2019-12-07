@@ -20,6 +20,9 @@ public class OniViewingRay : MonoBehaviour
     // プレイヤーを見つけたかどうか
     public Transform HitObject { get; private set; } = default;
 
+    /// <summary>
+    /// 開始
+    /// </summary>
     private void Start()
     {
         // レイに衝突する対象のレイヤーを取得
