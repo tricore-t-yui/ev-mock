@@ -576,7 +576,7 @@ public class PlayerStateController : MonoBehaviour
         float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = (1 << LayerMask.GetMask(new string[] { "Player", "Stage" }));
+        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
         layerMask = ~layerMask;
 
         // レイ作成
