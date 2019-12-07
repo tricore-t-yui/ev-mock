@@ -31,6 +31,11 @@ public class KageStateLoitering : StateMachineBehaviour
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId", animator.GetInteger("currentStateKindId"));
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId", 0);
+
         // ステートパラメータを取得
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
         // パラメータクラスを取得

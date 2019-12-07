@@ -19,6 +19,9 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     // 目標地点での停止時間
     [SerializeField]
     int targetPosStopTime = 0;
@@ -30,8 +33,22 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId", animator.GetInteger("currentStateKindId"));
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId", 1);
+
         // ナビメッシュのコンポーネントを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
+        if (animator.GetInteger("prevStateKindId") == 0)
+        {
+            // 状態変化サウンドを再生
+            soundPlayer.Play("StateChange");
+        }
+       
 
         // 移動速度をセット
         navMesh.speed = speed;

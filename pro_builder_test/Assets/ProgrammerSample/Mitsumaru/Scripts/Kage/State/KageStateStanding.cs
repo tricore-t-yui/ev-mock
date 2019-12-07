@@ -40,6 +40,11 @@ public class KageStateStanding : StateMachineBehaviour
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId", animator.GetInteger("currentStateKindId"));
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId", 0);
+
         // 待機位置を保存
         if (!isSaveToStandingPos)
         {
