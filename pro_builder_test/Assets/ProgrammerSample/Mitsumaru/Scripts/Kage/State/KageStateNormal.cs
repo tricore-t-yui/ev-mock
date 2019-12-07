@@ -45,10 +45,6 @@ public class KageStateNormal : StateMachineBehaviour
 
     GameObject player = null;
 
-    public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
-    {
-    }
-
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -67,6 +63,9 @@ public class KageStateNormal : StateMachineBehaviour
         fightingRangeCollider = animator.transform.Find("Collider").Find("KageFightingRange").GetComponent<ColliderEvent>() ?? fightingRangeCollider;
         // コライダークラスを追加
         kageBodyCollider = animator.transform.Find("Collider").Find("KageAttackRange").GetComponent<ColliderEvent>() ?? kageBodyCollider;
+
+        // 初期位置をリセット
+        animator.transform.position = stateParameter.InitializePos;
 
         // ハイドコントローラーを取得
         playerHideController = FindObjectOfType<PlayerHideController>() ?? playerHideController;

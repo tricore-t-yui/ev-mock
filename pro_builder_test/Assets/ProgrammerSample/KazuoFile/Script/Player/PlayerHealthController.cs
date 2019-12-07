@@ -105,4 +105,15 @@ public class PlayerHealthController : MonoBehaviour
             IsDamage = true;
         }
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetAmount()
+    {
+        IsDeath = false;
+        IsDamage = false;
+        damageFrame = 0;
+        NowAmount = 100;
+    }
 }

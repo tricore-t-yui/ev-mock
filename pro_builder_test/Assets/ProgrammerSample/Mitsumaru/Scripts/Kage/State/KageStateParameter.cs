@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class KageStateParameter : MonoBehaviour
 {
+    // 初期位置
+    public Vector3 InitializePos { get; private set; } = Vector3.zero;
+
     // 通常状態の種類
     [SerializeField]
     KageStateNormal.StateKind stateNormalOfType = default;
@@ -28,6 +31,15 @@ public class KageStateParameter : MonoBehaviour
         {
             return routeCheckPointList;
         }
+    }
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    void Start()
+    {
+        // 初期位置をセット
+        InitializePos = transform.position;
     }
 
 #if UNITY_EDITOR

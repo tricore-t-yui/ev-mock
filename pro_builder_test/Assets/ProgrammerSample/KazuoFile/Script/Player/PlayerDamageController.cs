@@ -90,8 +90,9 @@ public class PlayerDamageController : MonoBehaviour
         // 死んでしまうならトドメアニメーション
         if (healthController.IsDeath)
         {
-            Type = DamageType.DEATH;
-            animationContoller.AnimStart(AnimationType.DEATH);
+            // NOTE: k.oishi リセットが入るため今のところトドメのアニメーションは無し
+            //Type = DamageType.DEATH;
+            //animationContoller.AnimStart(AnimationType.DEATH);
         }
         // 生きているなら立ち上がる
         else

@@ -92,6 +92,8 @@ public class PlayerMoveController : MonoBehaviour
     Vector3 moveSpeed = Vector3.zero;           // 移動速度
     bool isAnimPosition = false;                // アニメーションに座標移動をまかせるかどうか
     bool isAnimRotation = false;                // アニメーションに回転をまかせるかどうか
+    Vector3 initPos = default;                  // 初期位置
+    Quaternion initRota = default;              // 初期の向き
 
     /// <summary>
     /// アニメーション中の移動方法
@@ -109,6 +111,15 @@ public class PlayerMoveController : MonoBehaviour
             // 回転をanimatorに任せる
             transform.rotation = playerAnim.rootRotation;
         }
+    }
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        initPos = transform.position;
+        initRota = transform.rotation;
     }
 
     /// <summary>
@@ -276,5 +287,14 @@ public class PlayerMoveController : MonoBehaviour
         {
             isAnimRotation = false;
         }
+    }
+
+    /// <summary>
+    /// 位置、回転のリセット
+    /// </summary>
+    public void ResetPos()
+    {
+        transform.position = initPos;
+        transform.rotation = initRota;
     }
 }

@@ -37,4 +37,15 @@ public class KageSpawn : MonoBehaviour
             case "Area14": kage[3].SetActive(true); break;
         }
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetKage()
+    {
+        foreach (var item in kage)
+        {
+            item.SetActive(false);
+        }
+    }
 }

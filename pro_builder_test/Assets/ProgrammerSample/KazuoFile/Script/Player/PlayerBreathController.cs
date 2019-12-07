@@ -217,4 +217,13 @@ public class PlayerBreathController : MonoBehaviour
     {
         NowAmount += deepBreathRecovery;
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetAmount()
+    {
+        IsDisappear = false;
+        NowAmount = 100;
+    }
 }

@@ -10,18 +10,27 @@ public class playerStaminaController : MonoBehaviour
 {
     [SerializeField]
     float dashDecrement = 0.5f;                             // 息止め時の息消費量
-                                                            
-    [SerializeField]                                        
+
+    [SerializeField]
     float normalRecovery = 0.3f;                            // 通常の息の回復量
-    [SerializeField]                                        
+    [SerializeField]
     float walkRecovery = 0.15f;                             // 通常の息の回復量
-    [SerializeField]                                        
+    [SerializeField]
     float squatRecovery = 0.3f;                             // 通常の息の回復量
-    [SerializeField]                                        
+    [SerializeField]
     float deepBreathRecovery = 0.5f;                        // 深呼吸時の息の回復量
 
     public float NowAmount { get; private set; } = 100;     // 現在量
     public bool IsDisappear { get; private set; } = false;  // スタミナ切れフラグ
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        IsDisappear = false;
+        NowAmount = 100;
+    }
 
     /// <summary>
     /// 各ステートに合わせた処理
@@ -79,5 +88,14 @@ public class playerStaminaController : MonoBehaviour
         {
             IsDisappear = false;
         }
+    }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetAmount()
+    {
+        IsDisappear = false;
+        NowAmount = 100;
     }
 }
