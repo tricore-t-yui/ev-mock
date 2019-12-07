@@ -23,10 +23,10 @@ public class PlayerObjectDamageController : MonoBehaviour
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
 
     [SerializeField]
-    float damageAmount = 0.1f;                                  // ダメージ量
+    float damageAmount = 0.05f;                                  // ダメージ量
 
     [SerializeField]
-    float deepBreathRecovery = 0.5f;                            // 深呼吸時の回復量
+    float deepBreathRecovery = 0.15f;                            // 深呼吸時の回復量
 
     public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
     public bool IsDamage { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
@@ -35,7 +35,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     /// <summary>
     /// 障害物に当たっている間
     /// </summary>
-    void OnCollisionStay(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         // ダメージオブジェクト触れているかどうか
         if (LayerMask.LayerToName(collision.gameObject.layer) == "Damage")

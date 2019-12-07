@@ -102,13 +102,11 @@ public class PlayerMoveController : MonoBehaviour
         if (isAnimPosition)
         {
             // 座標移動をanimatorに任せる
-            animCamera.position = playerAnim.rootPosition;
             transform.position = playerAnim.rootPosition;
         }
         if (isAnimRotation)
         {
             // 回転をanimatorに任せる
-            animCamera.rotation = playerAnim.rootRotation;
             transform.rotation = playerAnim.rootRotation;
         }
     }
@@ -199,7 +197,7 @@ public class PlayerMoveController : MonoBehaviour
                 start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
                 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
             case RayType.DIAGONALDIRECTION:
-                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
+                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.2f)), transform.position.z);
                 dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
         }
 

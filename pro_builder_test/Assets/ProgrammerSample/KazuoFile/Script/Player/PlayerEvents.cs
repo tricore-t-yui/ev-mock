@@ -196,10 +196,11 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DeepBreath()
     {
+        SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
-        statusController.StateUpdate(MoveType.DEEPBREATH, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL);
+        statusController.DeepBreathRecovery();
     }
     /// <summary>
     /// 深呼吸
@@ -238,7 +239,10 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ドア開閉開始
     /// </summary>
-    public void DoorOpenStart() { }
+    public void DoorOpenStart()
+    {
+        moveController.IsRootMotion(true, true);
+    }
     /// <summary>
     /// ドア開閉
     /// </summary>
@@ -271,6 +275,7 @@ public class PlayerEvents : MonoBehaviour
     public void HideStart()
     {
         sound.Play(SoundSpawner.SoundType.HeartSound);
+        moveController.IsRootMotion(true, true);
     }
     /// <summary>
     /// 隠れる
@@ -286,29 +291,7 @@ public class PlayerEvents : MonoBehaviour
             soundArea.AddSoundLevel(ActionSoundType.STEALTH);
         }
 
-        switch (LayerMask.LayerToName(hideController.HideObj.layer))
-        {
-            case "Locker":
-                if (hideController.IsAnimRotation)
-                {
-                    moveController.IsRootMotion(true, true);
-                }
-                else
-                {
-                    moveController.IsRootMotion(true, false);
-                }
-                break;
-            case "Bed":
-                if (hideController.IsAnimRotation)
-                {
-                    moveController.IsRootMotion(false, true);
-                }
-                else
-                {
-                    moveController.IsRootMotion(false, false);
-                }
-                break;
-        }
+        hideController.ChangeRootMotion();
     }
     /// <summary>
     /// 隠れる終了
@@ -361,12 +344,34 @@ public class PlayerEvents : MonoBehaviour
     public void DamageEnd() { }
 
     /// <summary>
+    /// 人形ゲット開始
+    /// </summary>
+    public void DollGetStart()
+    {
+        playerAnimationContoller.AnimStart(PlayerAnimType.GETDOLL);
+    }
+    /// <summary>
+    /// 人形ゲット
+    /// </summary>
+    public void DollGet()
+    {
+        moveController.IsRootMotion(true, true);
+    }
+    /// <summary>
+    /// 人形ゲット終了
+    /// </summary>
+    public void DollGetEnd()
+    {
+        playerAnimationContoller.AnimStop(PlayerAnimType.GETDOLL);
+        moveController.IsRootMotion(false, false);
+    }
+
+    /// <summary>
     /// 裸足開始
     /// </summary>
     public void BarefootStart()
     {
         playerAnimationContoller.AnimStart(PlayerAnimType.SHOES);
-        moveCamera.IsRotationCamera(false);
         moveController.IsRootMotion(true, true);
     }
     /// <summary>

@@ -74,7 +74,7 @@ public class AreaManager : MonoBehaviour
         }
 
         // 見つからなかったらintの規定値を返す
-        Debug.Log("character not found");
+        //Debug.Log("character not found");
         return default;
     }
 }
