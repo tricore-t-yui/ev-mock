@@ -4,17 +4,23 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class OniSearchingRouteManager : MonoBehaviour
+/// <summary>
+/// 鬼の徘徊ルートマネージャー
+/// </summary>
+public class OniLoiteringRouteManager : MonoBehaviour
 {
+    // 鬼のオブジェクト
     [SerializeField]
     Transform oni = default;
 
-
+    // 徘徊ルート
     [SerializeField]
-    List<OniSearchingRoute> routes = default;
+    List<OniLoiteringRoute> routes = default;
 
+    // 一番近いチェックポイントのインデックス
     public int NearCheckPointOfIndex { get; private set; } = 0;
-    public OniSearchingRoute NearCheckPointOfRoute { get; private set; }
+    // 一番近いチェックポイントのルート
+    public OniLoiteringRoute NearCheckPointOfRoute { get; private set; }
 
     /// <summary>
     /// 鬼に一番近いルートを更新
@@ -22,20 +28,23 @@ public class OniSearchingRouteManager : MonoBehaviour
     public void UpdateNearRoute()
     {
         // それぞれのチェックポイントとの距離
-        List<Tuple<float, Vector3, OniSearchingRoute>> checkPointDistances = new List<Tuple<float, Vector3, OniSearchingRoute>>();
+        List<Tuple<float, Vector3, OniLoiteringRoute>> checkPointDistances = new List<Tuple<float, Vector3, OniLoiteringRoute>>();
 
         routes.ForEach(route =>
         {
             foreach(Vector3 checkPoint in route.CheckPoints)
             {
-                Tuple<float, Vector3, OniSearchingRoute> checkPointDistance;
-                checkPointDistance = new Tuple<float, Vector3, OniSearchingRoute>((checkPoint - oni.position).sqrMagnitude, checkPoint, route);
+                // チェックポイントとの距離
+                Tuple<float, Vector3, OniLoiteringRoute> checkPointDistance;
+                // それぞれの距離を算出
+                checkPointDistance = new Tuple<float, Vector3, OniLoiteringRoute>((checkPoint - oni.position).sqrMagnitude, checkPoint, route);
+                // 算出した距離を格納
                 checkPointDistances.Add(checkPointDistance);
             }
         });
 
         // 一番距離が近い要素を返す
-        Tuple<float, Vector3, OniSearchingRoute> near = checkPointDistances.OrderBy(s => s.Item1).FirstOrDefault();
+        Tuple<float, Vector3, OniLoiteringRoute> near = checkPointDistances.OrderBy(s => s.Item1).FirstOrDefault();
 
         // それぞれをセット
         NearCheckPointOfIndex = near.Item3.CheckPoints.ToList().IndexOf(near.Item2);

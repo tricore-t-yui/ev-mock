@@ -5,15 +5,24 @@ using System.Linq;
 
 public class OniLottyryOtherAction : StateMachineBehaviour
 {
+    // 行動の抽選確率：移動続行
     [SerializeField,Range(0,100)]
     float moveContinue = 0;
+
+    // 行動の抽選確率：待機
     [SerializeField, Range(0, 100)]
     float standing = 0;
+
+    // 行動の抽選確率：あたりを見回す
     [SerializeField, Range(0, 100)]
     float turnAround = 0;
 
+    /// <summary>
+    /// ステートの開始
+    /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // それぞれの確立をリストにセット
         List<float> rates = new List<float>();
         rates.Add(moveContinue);
         rates.Add(standing);
@@ -39,11 +48,16 @@ public class OniLottyryOtherAction : StateMachineBehaviour
             }
         }
 
+        // 決まったidをパラメータにセット
         animator.SetInteger("searchingOtherActionKindId", kindId);
     }
 
+    /// <summary>
+    /// ステートの終了
+    /// </summary>
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // 徘徊開始のトリガーをリセット
         animator.ResetTrigger("lotteryStart");
     }
 }
