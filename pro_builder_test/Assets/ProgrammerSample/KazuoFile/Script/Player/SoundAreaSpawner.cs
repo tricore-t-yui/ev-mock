@@ -41,7 +41,7 @@ public class SoundAreaSpawner : MonoBehaviour
     float areaMagnification = 0.3f;                         // 拡大倍率
 
     [SerializeField]
-    float spawnframe = 45;                                  // スポーンするまでのフレーム数
+    float spawnframe = 75;                                  // スポーンするまでのフレーム数
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
@@ -54,8 +54,8 @@ public class SoundAreaSpawner : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // 音量レベルが大きくなるか、スポーンまでのフレーム数に達したら
-        if (spawnframeCount >= spawnframe)
+        // 音量レベルが変わるか、スポーンまでのフレーム数に達したら
+        if (totalSoundLevel != soundLevel || spawnframeCount >= spawnframe)
         {
             // スポーン
             Spawn();
@@ -131,9 +131,9 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.WAIT: addLevel = 1; break;
             case ActionSoundType.WALK: addLevel = 6; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
-            case ActionSoundType.SMALLCONFUSION: addLevel = 2; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = 3; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = 4; break;
+            case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
+            case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.5f; break;
+            case ActionSoundType.LARGECONFUSION: addLevel = 2; break;
             case ActionSoundType.HIDE: addLevel = -2; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 3; break;

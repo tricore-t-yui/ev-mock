@@ -22,15 +22,13 @@ public class HideObjectController : MonoBehaviour
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
-    PlayerDamageController damageController  = default;                     // プレイヤー
-    [SerializeField]
-    BoxCollider objectCollider = default;           // コライダー
-    [SerializeField]
     PlayerHideController hideController = default;
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
     [SerializeField]
     DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
+    [SerializeField]
+    BoxCollider[] objectCollider = default;         // コライダー
     [SerializeField]
     List<DirType> wallContactDir = new List<DirType>();             // 壁に接触している向きのタイプ
 
@@ -116,15 +114,16 @@ public class HideObjectController : MonoBehaviour
     /// </summary>
     public void SetActiveCollider(bool flag)
     {
-        if (objType == ObjectType.BED)
-            Debug.Log(flag);
-        if(flag)
+        foreach (var item in objectCollider)
         {
-            objectCollider.isTrigger = false;
-        }
-        else
-        {
-            objectCollider.isTrigger = true;
+            if (flag)
+            {
+                item.isTrigger = false;
+            }
+            else
+            {
+                item.isTrigger = true;
+            }
         }
     }
 

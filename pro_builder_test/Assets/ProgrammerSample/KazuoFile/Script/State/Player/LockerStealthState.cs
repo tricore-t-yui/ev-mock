@@ -24,13 +24,13 @@ public class LockerStealthState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 息止めキーが押されていなかったら息止め解除
-        if (!Input.GetKey(KeyCode.LeftControl))
+        if (!Input.GetKey(KeyCode.E))
         {
             animator.SetBool("Stealth", false);
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
+        if ((!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f) || hideController.IsBreathlessness())
         {
             animator.SetTrigger("LockerOut");
             hideController.SetIsStealth(false);

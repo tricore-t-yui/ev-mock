@@ -100,10 +100,10 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
     public void ReturnVigilancePoint(Animator animator)
     {
         // 一番近いチェックポイントを取得する
-        Vector3 returnPos = checkPointList.OrderByDescending(elem => (animator.transform.position-elem).magnitude * -1).FirstOrDefault();
-        currentCheckPointIndex = checkPointList.ToList().IndexOf(returnPos);
+        //Vector3 returnPos = checkPointList.OrderByDescending(elem => (animator.transform.position-elem).magnitude * -1).FirstOrDefault();
+        //currentCheckPointIndex = checkPointList.ToList().IndexOf(returnPos);
         // 次の目標位置にセット
-        navMesh.SetDestination(returnPos);
+        navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
     }
 
     /// <summary>

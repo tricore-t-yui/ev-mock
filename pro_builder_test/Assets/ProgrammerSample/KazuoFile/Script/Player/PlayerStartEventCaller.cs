@@ -24,6 +24,7 @@ public class PlayerStartEventCaller : MonoBehaviour
         BREATHLESSNESSSTART,    // 息切れ
         DAMAGESTART,            // ダメージ
         BAREFOOTSTART,          // 裸足開始
+        GETDOLLSTART,           // 人形ゲット開始
     }
 
     [SerializeField]
@@ -48,6 +49,8 @@ public class PlayerStartEventCaller : MonoBehaviour
     UnityEvent damageStart = new UnityEvent();          // ダメージイベント
     [SerializeField]
     UnityEvent barefootStart = new UnityEvent();        // 裸足イベント
+    [SerializeField]
+    UnityEvent getDollStart = new UnityEvent();         // 人形ゲットイベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -68,6 +71,7 @@ public class PlayerStartEventCaller : MonoBehaviour
             case EventType.BREATHLESSNESSSTART: brethressnessStart.Invoke(); break;
             case EventType.DAMAGESTART: damageStart.Invoke(); break;
             case EventType.BAREFOOTSTART: barefootStart.Invoke(); break;
+            case EventType.GETDOLLSTART: getDollStart.Invoke(); break;
         }
     }
 }

@@ -18,13 +18,13 @@ public class BedLoopState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 息止めキーをおされたら息止め開始
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.E))
         {
             animator.SetBool("Stealth", true);
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f)
+        if (!Input.GetMouseButton(0))
         {
             animator.SetTrigger("BedOut");
         }

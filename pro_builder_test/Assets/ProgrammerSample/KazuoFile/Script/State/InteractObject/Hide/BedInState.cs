@@ -24,12 +24,9 @@ public class BedInState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.normalizedTime > 0.15f)
-        {
-            // ベッドに向かって座標移動
-            Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
-            animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.015f;
-        }
+        // ベッドに向かって座標移動
+        Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
+        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.025f;
     }
 
     /// <summary>

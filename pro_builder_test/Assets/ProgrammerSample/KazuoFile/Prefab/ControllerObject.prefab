@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2286411244270648134}
+  - component: {fileID: 132313234}
   m_Layer: 0
   m_Name: ControllerObject
   m_TagString: Untagged
@@ -33,6 +34,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &132313234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7458615314284898727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aee9b5e18944444984b2652f11e1c84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashKey: 304
+  squatKey: 310
+  stealthKey: 306
+  deepBreathKey: 32
+  shoeshKey: 118
+  breathReductionKey: 113
 --- !u!1001 &3803910018673373040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -351,7 +370,22 @@ PrefabInstance:
     - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
         type: 3}
       propertyPath: squatKey
-      value: 113
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: stealthKey
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: deepBreathKey
+      value: 306
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: shoeshKey
+      value: 32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af8161f40d30549eb862f0d46dfadbe9, type: 3}
