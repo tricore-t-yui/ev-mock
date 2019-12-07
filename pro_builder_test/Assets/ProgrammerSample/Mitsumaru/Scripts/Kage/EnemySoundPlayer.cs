@@ -38,4 +38,14 @@ public class EnemySoundPlayer : MonoBehaviour
         // オブジェクトをオンにする
         transform.Find(soundName).gameObject.SetActive(true);
     }
+
+    /// <summary>
+    /// 指定のサウンドが再生中かどうか
+    /// </summary>
+    public bool IsPlaying(string soundName)
+    {
+        // オーディオ取得
+        AudioSource audioSource = System.Array.Find(sounds, sound => sound.gameObject.name == soundName);
+        return audioSource.isPlaying;
+    }
 }

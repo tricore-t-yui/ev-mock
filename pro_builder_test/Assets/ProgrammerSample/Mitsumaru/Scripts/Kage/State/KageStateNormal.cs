@@ -45,6 +45,10 @@ public class KageStateNormal : StateMachineBehaviour
 
     GameObject player = null;
 
+    public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
+    {
+    }
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -90,9 +94,6 @@ public class KageStateNormal : StateMachineBehaviour
 
         // 指定された状態に変更
         animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)stateType);
-
-        // マウスロック
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>

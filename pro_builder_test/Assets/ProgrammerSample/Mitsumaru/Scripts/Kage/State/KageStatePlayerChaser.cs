@@ -31,6 +31,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     // 視野の範囲内にいるかどうか
     bool isInFieldOfView = false;
 
@@ -43,6 +46,16 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         isDamage = false;
+
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId",animator.GetInteger("currentStateKindId"));
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId", 2);
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
+        // 状態変化サウンドを再生
+        soundPlayer.Play("StateChange");
 
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
