@@ -15,6 +15,9 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
     // ダメージイベント
     PlayerDamageEvent damageEvent = null;
 
+    // プレイヤーハイドコントローラー
+    PlayerHideController hideController = null;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
     // ロッカーのアニメーター
@@ -35,6 +38,9 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
+        // ハイドコントローラーを取得
+        hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
+
         // 影人間を停止させる
         navMesh.isStopped = true;
 
@@ -42,7 +48,18 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
 
         // ロッカーのアニメーターを取得
-        lockerAnimator = GameObject.FindGameObjectWithTag("Locker").GetComponent<Animator>() ?? lockerAnimator;
+        if (hideController.HideObj.tag == "Locker")
+        {
+            lockerAnimator = hideController.HideObj.GetComponent<Animator>() ?? lockerAnimator;
+        }
+        else
+        {
+            // そもそもロッカーじゃなかったらエラー
+            Debug.LogError("The object is not a locker.");
+        }
+
+        // 敵の位置を補正
+        animator.transform.position = lockerAnimator.transform.position + (lockerAnimator.transform.forward * -1) * 0.6f;
     }
 
 
