@@ -545,6 +545,16 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
+    /// ステートのリセット
+    /// </summary>
+    public void ResetState()
+    {
+        EventStop();
+        State = ActionStateType.WAIT;
+        EventStart();
+    }
+
+    /// <summary>
     /// 方向キー検知
     /// </summary>
     /// <returns>方向キーのどれか１つが押されたかどうか</returns>
@@ -576,7 +586,7 @@ public class PlayerStateController : MonoBehaviour
         float distance = playerCollider.radius * 3.5f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
+        int layerMask = 1 << LayerMask.GetMask(new string[] { "Player", "Stage", "SafetyArea" });
         layerMask = ~layerMask;
 
         // レイ作成
@@ -590,6 +600,7 @@ public class PlayerStateController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
             rayObject = hit.collider.gameObject;
+            Debug.Log(hit.collider.gameObject.layer);
             return hit.collider.gameObject.layer;
         }
         else

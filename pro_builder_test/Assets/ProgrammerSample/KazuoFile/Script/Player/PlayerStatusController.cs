@@ -38,4 +38,15 @@ public class PlayerStatusController : MonoBehaviour
         objectDamageController.DeepBreathRecovery();
         healthController.HealthRecovery();
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetStatus()
+    {
+        breathController.ResetAmount();
+        staminaController.ResetAmount();
+        objectDamageController.ResetDamage();
+        healthController.ResetAmount();
+    }
 }

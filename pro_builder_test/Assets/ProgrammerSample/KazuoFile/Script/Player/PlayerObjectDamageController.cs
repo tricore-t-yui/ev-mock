@@ -33,6 +33,16 @@ public class PlayerObjectDamageController : MonoBehaviour
     public float NowDamage { get; private set; } = 0;           // 今食らっているオブジェクトダメージ
 
     /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        IsDeepBreath = false;
+        IsDamage = false;
+        NowDamage = 0;
+    }
+
+    /// <summary>
     /// 障害物に当たっている間
     /// </summary>
     void OnCollisionEnter(Collision collision)
@@ -89,5 +99,15 @@ public class PlayerObjectDamageController : MonoBehaviour
             IsDeepBreath = false;
             IsDamage = false;
         }
+    }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetDamage()
+    {
+        IsDeepBreath = false;
+        IsDamage = false;
+        NowDamage = 0;
     }
 }
