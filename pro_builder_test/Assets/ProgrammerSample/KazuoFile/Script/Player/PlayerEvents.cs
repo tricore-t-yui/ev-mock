@@ -72,7 +72,7 @@ public class PlayerEvents : MonoBehaviour
     public void Walk()
     {
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
-        moveController.ChangeSpeedLimit(SpeedType.WALK);
+        moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
         soundArea.AddSoundLevel(ActionSoundType.WALK);
         moveCamera.Rotation(CameraType.NORMAL);
         moveController.Move();
@@ -100,7 +100,7 @@ public class PlayerEvents : MonoBehaviour
     {
         SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DASH);
-        moveController.ChangeSpeedLimit(SpeedType.DASH);
+        moveController.ChangeMoveTypeSpeedLimit(SpeedType.DASH);
         playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
         soundArea.AddSoundLevel(ActionSoundType.DASH);
         moveCamera.Rotation(CameraType.NORMAL);
@@ -129,7 +129,6 @@ public class PlayerEvents : MonoBehaviour
     public void Squat()
     {
         playerCollider.height = 0.4f;
-        moveController.ChangeSpeedLimit(SpeedType.SQUAT);
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
         soundArea.AddSoundLevel(ActionSoundType.SQUAT);
         moveCamera.Rotation(CameraType.NORMAL);
@@ -172,7 +171,7 @@ public class PlayerEvents : MonoBehaviour
         moveCamera.Rotation(CameraType.NORMAL);
         soundArea.AddSoundLevel(ActionSoundType.STEALTH);
         soundArea.AddSoundLevel(ActionSoundType.WALK);
-        moveController.ChangeSpeedLimit(SpeedType.STEALTH);
+        moveController.ChangeMoveTypeSpeedLimit(SpeedType.STEALTH);
         moveController.Move();
     }
     /// <summary>

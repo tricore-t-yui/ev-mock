@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DirType = InteractFunction.DirType;
+using KeyType = KeyController.KeyType;
 
 /// <summary>
 /// ロッカークラス
@@ -21,8 +22,10 @@ public class HideObjectController : MonoBehaviour
     Animator lockerAnim = default;                  // ロッカーのアニメーション ベッドの場合は不要
     [SerializeField]
     Transform player = default;                     // プレイヤー
+
     [SerializeField]
-    PlayerHideController hideController = default;
+    PlayerHideController hideController = default;  // 隠れるアクション管理クラス
+
     [SerializeField]
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
     [SerializeField]
@@ -141,6 +144,15 @@ public class HideObjectController : MonoBehaviour
     public List<DirType> GetWallContactDirType()
     {
         return wallContactDir;
+    }
+
+    /// <summary>
+    /// 隠れるキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsHideKey()
+    {
+        return hideController.IsHideKey();
     }
 }
         

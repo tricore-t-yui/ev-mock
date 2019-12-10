@@ -8,17 +8,31 @@ using UnityEngine;
 public class DoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    float openFrame = 30;                           // ドアが自動で開くフレーム
+    float openFrame = 30;                                   // ドアが自動で開くフレーム
     [SerializeField]
-    bool isPlayer = false;                          // このアニメーターの親がプレイヤーかどうか
+    bool isPlayer = false;                                  // このアニメーターの親がプレイヤーかどうか
 
-    float flame = 0;                                // アニメーションのフレーム
+    PlayerDoorController playerDoorController = default;    // プレイヤードア開閉クラス
+    DoorController doorController = default;                // ドア管理クラス
+
+    float flame = 0;                                        // アニメーションのフレーム
 
     /// <summary>
     /// ステートに入った瞬間
     /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (isPlayer)
+        {
+            // プレイヤードア開閉クラス取得
+            playerDoorController = animator.gameObject.GetComponent<PlayerDoorController>() ?? playerDoorController;
+        }
+        else
+        {
+            // ドア管理クラス取得
+            doorController = animator.gameObject.GetComponent<DoorController>() ?? doorController;
+        }
+
         // リセット
         flame = 0;
         animator.SetFloat("DoorOpenSpeed", 0);
@@ -29,8 +43,9 @@ public class DoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // アニメーションの進んだフレームをプラス
-        flame += UpdateAnimationSpeed(animator);
+        // アニメーションの進んだフレームをプラスしてドア開閉
+        flame += UpdateAnimationSpeed();
+        animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed());
 
         // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
         if (flame < 0)
@@ -38,9 +53,6 @@ public class DoorOpenState : StateMachineBehaviour
             // ドアから離れる
             animator.SetTrigger("AutoDoorClose");
         }
-
-        // アニメーションにスピードを適用してドア開閉
-        animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed(animator));
     }
 
     /// <summary>
@@ -54,7 +66,7 @@ public class DoorOpenState : StateMachineBehaviour
 
         // プレイヤーだったら閉じたフラグを立てる
         if (isPlayer)
-        { 
+        {
             animator.SetBool("DoorEnd", true);
         }
     }
@@ -62,44 +74,68 @@ public class DoorOpenState : StateMachineBehaviour
     /// <summary>
     /// アニメーションを進める
     /// </summary>
-    float UpdateAnimationSpeed(Animator animator)
+    float UpdateAnimationSpeed()
     {
-        // アニメーションの速度
-        float animSpeed = 0;
-
         // 自動で開けるフレームを超えたら自動で開ける
         if (flame >= openFrame)
         {
-            animSpeed = 0.5f;
+            return 0.5f;
         }
         else
         {
-            // マウスを押している間はキー操作で
-            if (Input.GetMouseButton(0))
+            if (isPlayer)
             {
-                // 開ける
-                if (Input.GetKey(KeyCode.W))
+                // マウスを押している間はキー操作でマウスが離れたら自動で閉める
+                if (playerDoorController.IsDoorKey())
                 {
-                    animSpeed = 0.5f;
-                }
-                // 閉める
-                else if (Input.GetKey(KeyCode.S))
-                {
-                    animSpeed = -0.5f;
-                }
-                // そのまま
-                else
-                {
-                    animSpeed = 0;
+                    return DoorOpen();
                 }
             }
-            // マウスが離れたら自動で閉める
             else
             {
-                animSpeed = -0.5f;
+                // マウスを押している間はキー操作でマウスが離れたら自動で閉める
+                if (doorController.IsDoorKey())
+                {
+                    return DoorOpen();
+                }
             }
         }
 
-        return animSpeed;
+        return -0.5f;
+    }
+
+    /// <summary>
+    /// ドア開閉
+    /// </summary>
+    float DoorOpen()
+    {
+        if (isPlayer)
+        {
+            // 開ける
+            if (playerDoorController.GetOpenStick().y > 0)
+            {
+                return 0.5f;
+            }
+            // 閉める
+            if (playerDoorController.GetOpenStick().y < 0)
+            {
+                return -0.5f;
+            }
+        }
+        else
+        {
+            // 開ける
+            if (doorController.GetOpenStick().y > 0)
+            {
+                return 0.5f;
+            }
+            // 閉める
+            if (doorController.GetOpenStick().y < 0)
+            {
+                return -0.5f;
+            }
+        }
+       
+        return 0;
     }
 }

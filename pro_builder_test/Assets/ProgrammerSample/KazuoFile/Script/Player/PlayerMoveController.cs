@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using KeyType = KeyController.KeyType;
+using StickType = KeyController.StickType;
 
 /// <summary>
 /// プレイヤー座標移動クラス
@@ -30,6 +32,8 @@ public class PlayerMoveController : MonoBehaviour
         SQUAT,
         STEALTH,
         BAREFOOT,
+        OBJECTDAMAGE,
+        STAMINA,
     }
 
     /// <summary>
@@ -41,8 +45,6 @@ public class PlayerMoveController : MonoBehaviour
         DIAGONALDIRECTION,
     }
 
-    [SerializeField]
-    Transform animCamera = default;             // アニメーターのトランスフォーム
     [SerializeField]
     Rigidbody playerRigidbody = default;        // リジットボディ
     [SerializeField]
@@ -56,11 +58,13 @@ public class PlayerMoveController : MonoBehaviour
     PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
     [SerializeField]
     PlayerStateController stateController = default;                // ステート管理クラス
+    [SerializeField]
+    KeyController keyController = default;                      // キー操作クラス
 
     [SerializeField]
     float forwardSpeed = 2f;                    // 前移動時のスピード
     [SerializeField]
-    float sideSpeed = 2f;                       // 横移動時のスピード
+    float sideSpeed = 1.75f;                    // 横移動時のスピード
     [SerializeField]
     float backSpeed = 1.5f;                     // 後ろ移動時のスピード
     [SerializeField]
@@ -88,7 +92,10 @@ public class PlayerMoveController : MonoBehaviour
     float stepUpPower = 1.45f;                  // 段差に当たった時に加える上方向の力
 
     float moveTypeSpeedLimit = 0;               // 移動タイプによる移動速度の限界
+    float statusTypeSpeedLimit = 0;             // 状態よる移動速度の限界
     float dirTypeSpeedLimit = 0;                // 移動方向による移動速度の限界
+    float stickSpeedLimit = 0;                  // スティックの入力加減による移動速度の限界
+
     Vector3 moveSpeed = Vector3.zero;           // 移動速度
     bool isAnimPosition = false;                // アニメーションに座標移動をまかせるかどうか
     bool isAnimRotation = false;                // アニメーションに回転をまかせるかどうか
@@ -131,13 +138,6 @@ public class PlayerMoveController : MonoBehaviour
 
         //　移動速度計算
         SpeedCalculation();
-
-        // 移動速度の限界を超えるまで力をくわえ続ける
-        float walkSpeed = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z).magnitude;
-        if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit)
-        {
-            playerRigidbody.AddForce(moveSpeed.normalized * speedMagnification);
-        }
     }
 
     /// <summary>
@@ -145,39 +145,32 @@ public class PlayerMoveController : MonoBehaviour
     /// </summary>
     void SpeedCalculation()
     {
-        // 計算前の初期化
-        moveSpeed = Vector3.zero;
+        // スティックの入力ベクトル取得
+        Vector2 stick = new Vector2(keyController.GetStick(StickType.LEFTSTICK).x, keyController.GetStick(StickType.LEFTSTICK).y);
 
-        // 前移動の移動量計算
-        if (Input.GetKey(KeyCode.W))
-        {
-            moveSpeed += transform.forward;
-            dirTypeSpeedLimit = forwardSpeed;
-        }
-        // 後ろ移動
-        else if (Input.GetKey(KeyCode.S))
-        {
-            moveSpeed -= transform.forward;
-            dirTypeSpeedLimit = backSpeed;
-        }
+        // 入力ベクトルの長さを取得してノーマライズ
+        float length = stick.magnitude;
+        stick = stick.normalized;
 
-        // 左移動
-        if (Input.GetKey(KeyCode.A))
+        // 移動キーが押されていたら移動
+        if (keyController.GetKey(KeyType.MOVE))
         {
-            moveSpeed -= Vector3.Cross(Vector3.up, transform.forward);
-            dirTypeSpeedLimit = sideSpeed;
-        }
-        // 右移動
-        else if (Input.GetKey(KeyCode.D))
-        {
-            moveSpeed += Vector3.Cross(Vector3.up, transform.forward);
-            dirTypeSpeedLimit = sideSpeed;
+            dirTypeSpeedLimit = ChangeDirTypeSpeedLimit(stick);
+            stickSpeedLimit = ChangeStickSpeedLimit(length);
+            moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit;
         }
 
         // 段差に当たったら上方向に力を加え登らせる
         if (!DirectionRay(RayType.DIAGONALDIRECTION) && DirectionRay(RayType.MOVEDIRECTION))
         {
             moveSpeed += Vector3.up * stepUpPower;
+        }
+
+        // 移動速度の限界を超えるまで力をくわえ続ける
+        float walkSpeed = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z).magnitude;
+        if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit * stickSpeedLimit)
+        {
+            playerRigidbody.AddForce(moveSpeed * speedMagnification);
         }
     }
 
@@ -231,35 +224,92 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     /// <summary>
-    /// 移動速度上限の変更
+    /// 移動タイプによって移動速度上限の変更
     /// </summary>
     /// <param name="type">移動タイプ</param>
-    public void ChangeSpeedLimit(SpeedLimitType type)
+    public void ChangeMoveTypeSpeedLimit(SpeedLimitType type)
     {
         switch (type)
         {
             case SpeedLimitType.NOTMOVE: moveTypeSpeedLimit = 0; break;
             case SpeedLimitType.WALK: moveTypeSpeedLimit = walkSpeedLimit; break;
             case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
-            case SpeedLimitType.SQUAT: moveTypeSpeedLimit = squatSpeedLimit; break;
             case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
         }
 
+        // 状態によって移動速度上限の変更
+        ChangeStatusTypeSpeedLimit();
+    }
+
+    /// <summary>
+    /// 状態によって移動速度上限の変更
+    /// </summary>
+    public void ChangeStatusTypeSpeedLimit()
+    {
+        if (stateController.IsSquat)
+        {
+            moveTypeSpeedLimit = moveTypeSpeedLimit * squatSpeedLimit;
+        }
         // 裸足
         if (!stateController.IsShoes)
         {
             moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction;
         }
         // ダメージ所持状態
-        if(objectDamageController.IsDamage)
+        if (objectDamageController.IsDamage)
         {
             moveTypeSpeedLimit = moveTypeSpeedLimit * objectDamageSpeedReduction;
         }
         // スタミナ切れ時
-        if(staminaController.IsDisappear)
+        if (staminaController.IsDisappear)
         {
             moveTypeSpeedLimit = moveTypeSpeedLimit * staminaSpeedReduction;
         }
+    }
+
+    /// <summary>
+    /// 入力ベクトルの長さによってスピード上限変更
+    /// </summary>
+    /// <param name="length">ベクトルの長さ</param>
+    float ChangeStickSpeedLimit(float length)
+    {
+        if(length > 0.75f)
+        {
+            return 1;
+        }
+        else if (length > 0.3f)
+        {
+            return 0.5f;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// 向きスピード上限変更
+    /// </summary>
+    /// <param name="vec">向きベクトル</param>
+    float ChangeDirTypeSpeedLimit(Vector2 vec)
+    {
+        float speed = 0;
+
+        if(vec.x != 0)
+        {
+            speed = sideSpeed;
+        }
+
+        if (vec.y > 0)
+        {
+            speed = forwardSpeed;
+        }
+        else if (vec.y < 0)
+        {
+            speed = backSpeed;
+        }
+
+        return speed;
     }
 
     /// <summary>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AnimationType = PlayerAnimationContoller.AnimationType;
+using KeyType = KeyController.KeyType;
+using StickType = KeyController.StickType;
 
 /// <summary>
 /// プレイヤーのドア開閉クラス
@@ -21,6 +23,8 @@ public class PlayerDoorController : MonoBehaviour
     PlayerAnimationContoller animationContoller = default;  // アニメーション管理クラス
     [SerializeField]
     InteractFunction interactController = default;          // インタラクト用関数クラス
+    [SerializeField]
+    KeyController keyController = default;                  // キー操作クラス
 
     DoorController door = default;                          // ドアの管理クラス
     GameObject doorObj = default;                           // 回転対象のドア
@@ -109,5 +113,23 @@ public class PlayerDoorController : MonoBehaviour
             interactController.CommonEndAction();
             enabled = false;
         }
+    }
+
+    /// <summary>
+    /// ドアキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsDoorKey()
+    {
+        return keyController.GetKey(KeyType.INTERACT);
+    }
+
+    /// <summary>
+    /// ドア開閉時のスティックの入力加減取得
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public Vector2 GetOpenStick()
+    {
+        return keyController.GetStick(StickType.LEFTSTICK);
     }
 }

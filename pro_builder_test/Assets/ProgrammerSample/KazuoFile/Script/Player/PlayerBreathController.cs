@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using MoveType = PlayerStateController.ActionStateType;
 using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 using HeartSoundType = HideStateController.HeartSoundType;
+using KeyType = KeyController.KeyType;
 
 /// <summary>
 /// プレイヤーの息管理クラス
@@ -27,6 +28,8 @@ public class PlayerBreathController : MonoBehaviour
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
+    [SerializeField]
+    KeyController keyController = default;                      // キー操作クラス
 
     [SerializeField]
     float normalRecovery = 0.3f;                               // 通常の息の回復量
@@ -184,7 +187,7 @@ public class PlayerBreathController : MonoBehaviour
     void StrikeButtonRepeatedly()
     {
         // 消費軽減キーを押したら
-        if (Input.GetKeyDown(KeyCode.R))
+        if (keyController.GetKey(KeyType.ENDUREBREATH))
         {
             // 連打処理の継続時間にプラス
             duration += durationPlus;
