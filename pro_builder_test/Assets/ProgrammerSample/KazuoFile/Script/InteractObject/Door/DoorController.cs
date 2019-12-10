@@ -9,19 +9,21 @@ using DirType = InteractFunction.DirType;
 public class DoorController : MonoBehaviour
 {
     [SerializeField]
-    Transform player = default;                 // プレイヤー
+    Transform player = default;                     // プレイヤー
     [SerializeField]
-    CapsuleCollider playerCollider = default;   // プレイヤーのコライダー
+    CapsuleCollider playerCollider = default;       // プレイヤーのコライダー
     [SerializeField]
-    Animator doorAnim = default;                // ドアのアニメーター
+    Animator doorAnim = default;                    // ドアのアニメーター
+    [SerializeField]
+    PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
 
     [SerializeField]
-    float closeDistance = 2;                    // ドアが自動で閉まる距離
+    float closeDistance = 2;                        // ドアが自動で閉まる距離
 
-    bool isAutoClose = true;                    // 自動でドアを閉めるフラグ
+    bool isAutoClose = true;                        // 自動でドアを閉めるフラグ
 
-    DirType type = default;                     // 現在のドアの開ける方向のタイプ
-    DirType firstType = default;                // 開始時のドアの開ける方向のタイプ
+    DirType type = default;                         // 現在のドアの開ける方向のタイプ
+    DirType firstType = default;                    // 開始時のドアの開ける方向のタイプ
 
     // ドアを逆に開けることができる部屋番号
     // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開くことになる部屋番号を入力してください
@@ -153,5 +155,23 @@ public class DoorController : MonoBehaviour
     public DirType GetDirType()
     {
         return type;
+    }
+
+    /// <summary>
+    /// ドアキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsDoorKey()
+    {
+        return doorController.IsDoorKey();
+    }
+
+    /// <summary>
+    /// ドア開閉時のスティックの入力加減取得
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public Vector2 GetOpenStick()
+    {
+        return doorController.GetOpenStick();
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DirType = InteractFunction.DirType;
+using KeyType = KeyController.KeyType;
+using StickType = KeyController.StickType;
 
 /// <summary>
 /// カメラクラス
@@ -37,12 +39,15 @@ public class CameraController : MonoBehaviour
     PlayerDamageController damageController = default;  // ダメージクラス
     [SerializeField]
     PlayerHideController hideController = default;      // 隠れるアクション管理クラス
-
     [SerializeField]
-    KeyCode lookBackKey = KeyCode.Q;                    // 振り返りキー
+    KeyController keyController = default;              // キー操作クラス
 
     [SerializeField]
     float sensitivity = 2;                              // カメラの感度
+    [SerializeField]
+    float lookbackSensitivity = 20;                     // 振り返りの感度
+
+    float lookBackAngle = 0;                            // 振り返りのアングル
 
     /// <summary>
     /// 起動処理
@@ -52,6 +57,7 @@ public class CameraController : MonoBehaviour
         transform.parent.position = player.position;
         transform.parent.rotation = player.rotation;
         transform.rotation = animCamera.transform.rotation;
+        lookBackAngle = 0;
     }
 
     /// <summary>
@@ -62,10 +68,10 @@ public class CameraController : MonoBehaviour
         transform.parent.position = player.position;
 
         // 回転量を求める
-        float Y_Rotation = Input.GetAxis("Mouse Y") * sensitivity;
-        float X_Rotation = Input.GetAxis("Mouse X") * sensitivity;
+        float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity;
+        float X_Rotation = keyController.GetStick(StickType.RIGHTSTICK).x * sensitivity;
 
-        switch(type)
+        switch (type)
         {
             case RotationType.NORMAL:
                 player.Rotate(0, X_Rotation, 0);
@@ -73,10 +79,13 @@ public class CameraController : MonoBehaviour
                 transform.Rotate(-Y_Rotation, 0, 0);
 
                 // 振り返り
-                if (Input.GetKeyDown(lookBackKey))
+                if (keyController.GetKey(KeyType.LOOKBACK))
                 {
-                    player.Rotate(0, 180, 0);
-                    transform.parent.Rotate(0, 180, 0);
+                    LookBack();
+                }
+                else
+                {
+                    LookFront();
                 }
 
                 // 回転制限
@@ -199,5 +208,37 @@ public class CameraController : MonoBehaviour
         }
 
         return angle;
+    }
+
+    /// <summary>
+    /// 振り返り
+    /// </summary>
+    void LookBack()
+    {
+        if (lookBackAngle < 180)
+        {
+            lookBackAngle += lookbackSensitivity;
+            transform.parent.Rotate(0, lookbackSensitivity, 0);
+            if (lookBackAngle > 180)
+            {
+                lookBackAngle = 180;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 正面を向く
+    /// </summary>
+    void LookFront()
+    {
+        if (lookBackAngle > 0)
+        {
+            lookBackAngle -= lookbackSensitivity;
+            transform.parent.Rotate(0, -lookbackSensitivity, 0);
+            if (lookBackAngle < 0)
+            {
+                lookBackAngle = 0;
+            }
+        }
     }
 }

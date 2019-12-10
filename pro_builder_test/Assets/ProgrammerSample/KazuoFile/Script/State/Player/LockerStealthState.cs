@@ -12,7 +12,7 @@ public class LockerStealthState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 隠れるアクションクラス取得
-        hideController = animator.gameObject.GetComponent<PlayerHideController>();
+        hideController = animator.gameObject.GetComponent<PlayerHideController>() ?? hideController;
 
         // 息止め開始
         hideController.SetIsStealth(true);
@@ -24,13 +24,13 @@ public class LockerStealthState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 息止めキーが押されていなかったら息止め解除
-        if (!Input.GetKey(KeyCode.E))
+        if (!hideController.IsHoldBreathKey())
         {
             animator.SetBool("Stealth", false);
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if ((!Input.GetMouseButton(0) && stateInfo.normalizedTime > 1.0f) || hideController.IsBreathlessness())
+        if ((!hideController.IsHideKey() && stateInfo.normalizedTime > 1.0f) || hideController.IsBreathlessness())
         {
             animator.SetTrigger("LockerOut");
             hideController.SetIsStealth(false);

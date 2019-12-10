@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DirType = InteractFunction.DirType;
 using AnimationType = PlayerAnimationContoller.AnimationType;
+using KeyType = KeyController.KeyType;
 
 /// <summary>
 /// 隠れるアクション管理クラス
@@ -30,6 +31,8 @@ public class PlayerHideController : MonoBehaviour
     HideStateController hideStateController = default;          // 隠れた時の状態変化クラス
     [SerializeField]
     PlayerBreathController breathController = default;          // 息クラス
+    [SerializeField]
+    KeyController keyController = default;                      // キー操作クラス
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -254,8 +257,27 @@ public class PlayerHideController : MonoBehaviour
     }
 
     /// <summary>
+    /// 息止めキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsHoldBreathKey()
+    {
+        return keyController.GetKey(KeyType.HOLDBREATH);
+    }
+
+    /// <summary>
+    /// 隠れるキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool IsHideKey()
+    {
+        return keyController.GetKey(KeyType.INTERACT);
+    }
+
+    /// <summary>
     /// ロッカーの向きタイプのゲット関数
     /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
     public List<DirType> GetHideObjWallContactDir()
     {
         return hideObjWallContactDir;

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AnimType = PlayerAnimationContoller.AnimationType;
 using EventStartType = PlayerStartEventCaller.EventType;
 using EventType = PlayerEventCaller.EventType;
 using EventEndType = PlayerEndEventCaller.EventType;
+using KeyType = KeyController.KeyType;
 
 public class PlayerStateController : MonoBehaviour
 {
@@ -55,6 +55,8 @@ public class PlayerStateController : MonoBehaviour
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
     [SerializeField]
     DollGetController dollGetController = default;          // 人形ゲットクラス
+    [SerializeField]
+    KeyController keyController = default;                      // キー操作クラス
 
     // プレイヤーのダメージイベント（Added by Mitsumaru）
     // note : このクラスから受け取ったダメージのイベント関数を保存しておく
@@ -103,7 +105,7 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi しゃがみはステートを持っていないので検知と同時に処理
     void CheckSquatState()
     {
-        if (Input.GetKey(squatKey))
+        if (keyController.GetKey(KeyType.SQUAT))
         {
             eventCaller.Invoke(EventType.SQUAT);
             IsSquat = true;
@@ -121,7 +123,7 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi 靴着脱はステートを持っていないので検知と同時に処理
     void CheckShooesState()
     {
-        if (Input.GetKeyDown(shoeshKey))
+        if (keyController.GetKey(KeyType.SHOES))
         {
             if (IsShoes)
             {
@@ -147,7 +149,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWaitState()
     {
-        if (!GetDirectionKey() && !Input.GetMouseButton(0) && !Input.GetKey(stealthKey))
+        if (!keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.INTERACT) && !keyController.GetKey(KeyType.HOLDBREATH))
         {
             EventStop();
             State = ActionStateType.WAIT;
@@ -159,7 +161,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWalkState()
     {
-        if (GetDirectionKey() && (staminaController.IsDisappear || !Input.GetKey(dashKey)) && !Input.GetKey(stealthKey) && State != ActionStateType.BREATHLESSNESS)
+        if (keyController.GetKey(KeyType.MOVE) && (staminaController.IsDisappear || !keyController.GetKey(KeyType.DASH)) && !keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
         {
             EventStop();
             State = ActionStateType.WALK;
@@ -173,7 +175,7 @@ public class PlayerStateController : MonoBehaviour
     void CheckDashState()
     {
         // 方向キーが押されている時
-        if (GetDirectionKey() && Input.GetKey(dashKey) && State != ActionStateType.BREATHLESSNESS && !staminaController.IsDisappear)
+        if (keyController.GetKey(KeyType.MOVE) && keyController.GetKey(KeyType.DASH) && State != ActionStateType.BREATHLESSNESS && !staminaController.IsDisappear)
         {
             EventStop();
             State = ActionStateType.DASH;
@@ -186,7 +188,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthState()
     {
-        if (!Input.GetKey(dashKey) && Input.GetKey(stealthKey) && State != ActionStateType.BREATHLESSNESS)
+        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
         {
             EventStop();
             State = ActionStateType.STEALTH;
@@ -199,11 +201,11 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthMoveState()
     {
-        if (GetDirectionKey())
+        if (keyController.GetKey(KeyType.MOVE))
         {
             State = ActionStateType.STEALTHMOVE;
         }
-        else
+        else if(State == ActionStateType.STEALTHMOVE)
         {
             State = ActionStateType.STEALTH;
             EventStart();
@@ -215,7 +217,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDeepBreathState()
     {
-        if ((!GetDirectionKey() && Input.GetKey(deepBreathKey)) || objectDamageController.IsDeepBreath)
+        if ((!keyController.GetKey(KeyType.MOVE) && keyController.GetKey(KeyType.DEEPBREATH)) || objectDamageController.IsDeepBreath)
         {
             EventStop();
             State = ActionStateType.DEEPBREATH;
@@ -256,7 +258,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckHideState()
     {
-        if (Input.GetMouseButton(0) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
+        if (keyController.GetKey(KeyType.INTERACT) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
         {
             EventStop();
             State = ActionStateType.HIDE;
@@ -270,7 +272,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDoorOpenState()
     {
-        if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Door"))
+        if (keyController.GetKey(KeyType.INTERACT) && ObjectLayer() == LayerMask.NameToLayer("Door"))
         {
             EventStop();
             if (State == ActionStateType.DASH)
@@ -325,7 +327,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckIDollGet()
     {
-        if (Input.GetMouseButton(0) && ObjectLayer() == LayerMask.NameToLayer("Doll"))
+        if (keyController.GetKey(KeyType.INTERACT) && ObjectLayer() == LayerMask.NameToLayer("Doll"))
         {
             EventStop();
             dollGetController.SetInfo(rayObject);
@@ -339,6 +341,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void EventPlay()
     {
+        Debug.Log(State);
         switch (State)
         {
             case ActionStateType.WAIT:
@@ -459,7 +462,7 @@ public class PlayerStateController : MonoBehaviour
                 // 各イベント処理
                 eventCaller.Invoke(EventType.DEEPBREATH);
 
-                if (!Input.GetKey(deepBreathKey) && !objectDamageController.IsDeepBreath)
+                if (!keyController.GetKey(KeyType.DEEPBREATH) && !objectDamageController.IsDeepBreath)
                 {
                     // 各処理の検知
                     CheckWaitState();
@@ -552,22 +555,6 @@ public class PlayerStateController : MonoBehaviour
         EventStop();
         State = ActionStateType.WAIT;
         EventStart();
-    }
-
-    /// <summary>
-    /// 方向キー検知
-    /// </summary>
-    /// <returns>方向キーのどれか１つが押されたかどうか</returns>
-    public bool GetDirectionKey()
-    {
-        if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     /// <summary>

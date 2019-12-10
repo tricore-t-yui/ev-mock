@@ -113,6 +113,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  stealthMove:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: StealthMove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   doorOpen:
     m_PersistentCalls:
       m_Calls:
@@ -197,6 +211,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  getDoll:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: DollGet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6300630399015724226
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,7 +273,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCollider: {fileID: 0}
   moveController: {fileID: 0}
-  breathController: {fileID: 0}
   hideController: {fileID: 0}
   doorController: {fileID: 0}
   moveCamera: {fileID: 0}
@@ -253,8 +280,9 @@ MonoBehaviour:
   playerAnimationContoller: {fileID: 0}
   stateController: {fileID: 0}
   soundArea: {fileID: 0}
-  objectDamageController: {fileID: 0}
+  sound: {fileID: 0}
   cameraAnimationController: {fileID: 0}
+  statusController: {fileID: 0}
 --- !u!1 &6300630399335478063
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +480,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  getdollEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: DollGetEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6300630399452221998
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +682,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
         m_MethodName: BarefootStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  getDollStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: DollGetStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -14,7 +14,7 @@ public class KeyController : MonoBehaviour
     {
         LOOKBACK,       // 振り返り
         MOVE,           // 移動
-        ENDUREBREATH,   // 行き我慢
+        ENDUREBREATH,   // 息我慢
         INTERACT,       // インタラクト
         HOLDBREATH,     // 息止め
         OPTION,         // スタート画面
@@ -32,7 +32,6 @@ public class KeyController : MonoBehaviour
     {
         RIGHTSTICK,     // 右スティック
         LEFTSTICK,      // 左スティック
-        DPAD,           // 十字キー
     }
 
     [SerializeField]
@@ -109,14 +108,14 @@ public class KeyController : MonoBehaviour
     {
         if (isUseController)
         {
-            if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
+            if (((Input.GetAxis("L_Stick_H") != 0) || (Input.GetAxis("L_Stick_V") != 0)) || ((Input.GetAxis("D_Pad_H") != 0) || (Input.GetAxis("D_Pad_V") != 0)))
             {
                 return true;
             }
         }
         else
         {
-            if (((Input.GetAxis("L_Stick_H") != 0) || (Input.GetAxis("L_Stick_V") != 0)) || ((Input.GetAxis("D_Pad_H") != 0) || (Input.GetAxis("D_Pad_V") != 0)))
+            if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.D)))
             {
                 return true;
             }
@@ -128,28 +127,65 @@ public class KeyController : MonoBehaviour
     /// <summary>
     /// スティックの入力加減を取得
     /// </summary>
-    Vector2 GetStick(StickType type)
+    public Vector2 GetStick(StickType type)
     {
         if (isUseController)
         {
             switch (type)
             {
                 case StickType.RIGHTSTICK: return new Vector2(Input.GetAxis("R_Stick_H"), Input.GetAxis("R_Stick_V"));
-                case StickType.LEFTSTICK: return new Vector2(Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"));
-                case StickType.DPAD: return new Vector2(Input.GetAxis("D_Pad_H"), Input.GetAxis("D_Pad_V"));
+                case StickType.LEFTSTICK:
+                    if (Input.GetAxis("L_Stick_H") == 0 && Input.GetAxis("L_Stick_V") == 0)
+                    {
+                        return new Vector2(Input.GetAxis("D_Pad_H"), Input.GetAxis("D_Pad_V"));
+                    }
+                    else
+                    {
+                        return new Vector2(Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"));
+                    }
             }
         }
         else
         {
             switch (type)
             {
-                case StickType.RIGHTSTICK: return new Vector2(Input.GetAxis("R_Stick_H"), Input.GetAxis("R_Stick_V"));
-                case StickType.LEFTSTICK: return new Vector2(Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"));
-                case StickType.DPAD: return new Vector2(Input.GetAxis("D_Pad_H"), Input.GetAxis("D_Pad_V"));
+                case StickType.RIGHTSTICK: return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                case StickType.LEFTSTICK: return GetKeyboard();
             }
         }
 
         return Vector2.zero;
+    }
+
+    /// <summary>
+    /// キーボードの入力加減
+    /// </summary>
+    Vector2 GetKeyboard()
+    {
+        float x = 0;
+        float y = 0;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            y += 1;
+        }
+        // 後ろ移動
+        else if (Input.GetKey(KeyCode.S))
+        {
+            y -= 1;
+        }
+
+        // 左移動
+        if (Input.GetKey(KeyCode.A))
+        {
+            x -= 1;
+        }
+        // 右移動
+        else if (Input.GetKey(KeyCode.D))
+        {
+            x += 1;
+        }
+        return new Vector2(x, y);
     }
 
     /// <summary>
