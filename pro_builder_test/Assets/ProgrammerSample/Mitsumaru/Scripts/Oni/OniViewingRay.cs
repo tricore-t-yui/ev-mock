@@ -20,6 +20,9 @@ public class OniViewingRay : MonoBehaviour
     // プレイヤーを見つけたかどうか
     public Transform HitObject { get; private set; } = default;
 
+    public int RayIrradiationTimeToPlayer { get; private set; } = 0;
+    public int RayBlockingTimeToPlayer { get; private set; } = 0;
+
     /// <summary>
     /// 開始
     /// </summary>
@@ -46,6 +49,22 @@ public class OniViewingRay : MonoBehaviour
         {
             // レイに当たっているオブジェクトをセット
             HitObject = hit.collider.transform;
+            
+            if (hit.collider.tag == "Player")
+            {
+                RayIrradiationTimeToPlayer++;
+                RayBlockingTimeToPlayer = 0;
+            }
+            else
+            {
+                RayIrradiationTimeToPlayer = 0;
+                RayBlockingTimeToPlayer++;
+            }
+        }
+        else
+        {
+            RayIrradiationTimeToPlayer = 0;
+            RayBlockingTimeToPlayer++;
         }
     }
 }

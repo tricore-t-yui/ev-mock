@@ -81,6 +81,17 @@ public class OniStateParameterChanger : StateMachineBehaviour
             // ステートを変更
             animator.SetBool("isPlayerHide", true);
 
+            if (viewingRay.RayBlockingTimeToPlayer < 120)
+            {
+                // プレイヤーを発見して、戦闘状態へ
+                animator.SetBool("isPlayerDiscover", true);
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+            }
+            else
+            {
+                animator.SetBool("isPlayerDiscover", false);
+            }
+
             // レイが一定時間照射され続けていたら
             if (rayIrradiationCounter > parameters[currentStateId].rayIrradiationTimeToFighting)
             {
@@ -94,6 +105,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
             {
                 // 警戒状態に戻す
                 animator.SetInteger("oniStateKindId", (int)StateKind.Vigilance);
+                animator.SetBool("isPlayerDiscover", false);
             }
 
             // 鬼のレイが当たり続けている間
