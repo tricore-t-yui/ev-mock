@@ -58,6 +58,9 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
 
         // 移動を開始する
         animParameterList.SetBool(ParameterType.isLoiteringMove, true);
+
+        // 新たに目標位置を設定
+        navMesh.SetDestination(GetNextTargetPos());
     }
 
     /// <summary>

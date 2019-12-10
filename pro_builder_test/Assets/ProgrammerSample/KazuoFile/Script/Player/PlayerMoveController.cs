@@ -161,7 +161,7 @@ public class PlayerMoveController : MonoBehaviour
         }
 
         // 段差に当たったら上方向に力を加え登らせる
-        if (!DirectionRay(RayType.DIAGONALDIRECTION) && DirectionRay(RayType.MOVEDIRECTION))
+        if (DirectionRay(RayType.MOVEDIRECTION) && !DirectionRay(RayType.DIAGONALDIRECTION))
         {
             moveSpeed += Vector3.up * stepUpPower;
         }
@@ -187,7 +187,7 @@ public class PlayerMoveController : MonoBehaviour
         Vector3 dir = Vector3.zero;
 
         // レイの距離
-        float distance = playerCollider.radius * 2;
+        float distance = playerCollider.radius * 1.1f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
         int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
