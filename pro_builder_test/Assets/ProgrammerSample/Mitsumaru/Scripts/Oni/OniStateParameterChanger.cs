@@ -41,6 +41,9 @@ public class OniStateParameterChanger : StateMachineBehaviour
     [SerializeField]
     OniParameter[] parameters = new OniParameter[(int)StateKind.Num];
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     // レイの照射時間
     int rayIrradiationCounter = 0;
     // レイの遮断時間
@@ -58,6 +61,14 @@ public class OniStateParameterChanger : StateMachineBehaviour
         playerHideController = FindObjectOfType<PlayerHideController>() ?? playerHideController;
         // コライダーイベントを取得
         noiseListenerColliderEvent = animator.transform.Find("Collider").Find("NoiseListenerRange").GetComponent<ColliderEvent>() ?? noiseListenerColliderEvent;
+
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId", (int)StateKind.Vigilance);
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId", (int)StateKind.Vigilance);
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
     }
 
     /// <summary>
@@ -75,11 +86,34 @@ public class OniStateParameterChanger : StateMachineBehaviour
         animator.SetInteger("rayIrradiationTimeToFighting", parameters[currentStateId].rayIrradiationTimeToFighting);
         animator.SetInteger("rayBlockingTimeToVigilance", parameters[currentStateId].rayBlockingTimeToVigilance);
 
+        // 前回のステートとしてセット
+        animator.SetInteger("prevStateKindId", animator.GetInteger("currentStateKindId"));
+        // 現在のステートのIDをセット
+        animator.SetInteger("currentStateKindId",currentStateId);
+
+        if (animator.GetInteger("prevStateKindId") == (int)StateKind.Vigilance &&
+            animator.GetInteger("currentStateKindId") == (int)StateKind.Fighting)
+        {
+            // 状態変化サウンドを再生
+            soundPlayer.Play("StateChange");
+        }
+
         // プレイヤーがハイドポイントに入ったら
         if (playerHideController.IsHideLocker || playerHideController.IsHideBed)
         {
             // ステートを変更
             animator.SetBool("isPlayerHide", true);
+
+            if (viewingRay.RayBlockingTimeToPlayer < 120)
+            {
+                // プレイヤーを発見して、戦闘状態へ
+                animator.SetBool("isPlayerDiscover", true);
+                animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
+            }
+            else
+            {
+                animator.SetBool("isPlayerDiscover", false);
+            }
 
             // レイが一定時間照射され続けていたら
             if (rayIrradiationCounter > parameters[currentStateId].rayIrradiationTimeToFighting)
@@ -94,6 +128,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
             {
                 // 警戒状態に戻す
                 animator.SetInteger("oniStateKindId", (int)StateKind.Vigilance);
+                animator.SetBool("isPlayerDiscover", false);
             }
 
             // 鬼のレイが当たり続けている間

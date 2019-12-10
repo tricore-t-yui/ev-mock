@@ -22,6 +22,9 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
     // ロッカーのアニメーター
     Animator lockerAnimator = null;
 
+    // プレイヤーハイドコントローラー
+    PlayerHideController hideController = null;
+
     [SerializeField]
     int lockerOpenTime = 0;
     [SerializeField]
@@ -47,6 +50,20 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
 
         // ロッカーのアニメーターを取得
         lockerAnimator = GameObject.FindGameObjectWithTag("Locker").GetComponent<Animator>() ?? lockerAnimator;
+
+        // ロッカーのアニメーターを取得
+        if (hideController.HideObj.tag == "Locker")
+        {
+            lockerAnimator = hideController.HideObj.GetComponent<Animator>() ?? lockerAnimator;
+        }
+        else
+        {
+            // そもそもロッカーじゃなかったらエラー
+            Debug.LogError("The object is not a locker.");
+        }
+
+        // 敵の位置を補正
+        animator.transform.position = lockerAnimator.transform.position + (lockerAnimator.transform.forward * -1) * 0.6f;
     }
 
 
