@@ -37,5 +37,9 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
             // 徘徊中の専用のアクションを開始する
             animParameterList.SetTrigger(ParameterType.loiteringOtherActionStart);
         }
+        else
+        {
+            animParameterList.SetBool(ParameterType.isLoiteringMove, true);
+        }
     }
 }
