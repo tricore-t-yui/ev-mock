@@ -345,13 +345,16 @@ namespace AmplifyShaderEditor
 		public static readonly string TemplateMPPassTag = "\\bPass\\b\\s*{";
 		public static readonly string TemplateLocalVarTag = "/*ase_local_var*/";
 		public static readonly string TemplateDependenciesListTag = "/*ase_dependencies_list*/";
+		public static readonly string TemplatePragmaBeforeTag = "/*ase_pragma_before*/";
 		public static readonly string TemplatePragmaTag = "/*ase_pragma*/";
 		public static readonly string TemplatePassTag = "/*ase_pass*/";
 		public static readonly string TemplatePassesEndTag = "/*ase_pass_end*/";
+		public static readonly string TemplateLODsTag = "/*ase_lod*/";
 		//public static readonly string TemplatePassTagPattern = @"\s\/\*ase_pass\*\/";
 		public static readonly string TemplatePassTagPattern = @"\s\/\*ase_pass[:\*]+";
-		public static readonly string TemplatePropertyTag = "/*ase_props*/\n";
-		public static readonly string TemplateGlobalsTag = "/*ase_globals*/\n";
+		public static readonly string TemplatePropertyTag = "/*ase_props*/";
+		public static readonly string TemplateGlobalsTag = "/*ase_globals*/";
+		public static readonly string TemplateSRPBatcherTag = "/*ase_srp_batcher*/\n";
 		public static readonly string TemplateInterpolatorBeginTag = "/*ase_interp(";
 		public static readonly string TemplateVertexDataTag = "/*ase_vdata:";
 
@@ -393,32 +396,45 @@ namespace AmplifyShaderEditor
 
 		public static readonly TemplateTagData[] CommonTags = { new TemplateTagData( TemplatePropertyTag,true),
 																new TemplateTagData( TemplateGlobalsTag,true),
+																new TemplateTagData( TemplateSRPBatcherTag,true),
 																new TemplateTagData( TemplateFunctionsTag,true),
 																//new TemplateTagData( TemplateTagsTag,false," "),
+																new TemplateTagData( TemplatePragmaBeforeTag,true),
 																new TemplateTagData( TemplatePragmaTag,true),
 																new TemplateTagData( TemplatePassTag,true),
 																new TemplateTagData( TemplateInputsVertParamsTag,false),
-																new TemplateTagData( TemplateInputsFragParamsTag,false)
+																new TemplateTagData( TemplateInputsFragParamsTag,false),
+																new TemplateTagData( TemplateLODsTag,true)
 																//new TemplateTagData( TemplateCullModeTag,false),
 																//new TemplateTagData( TemplateBlendModeTag,false),
 																//new TemplateTagData( TemplateBlendOpTag,false),
 																//new TemplateTagData( TemplateColorMaskTag,false),
 																//new TemplateTagData( TemplateStencilOpTag,true),
 																};
+		public static string LightweigthPBRGUID = "1976390536c6c564abb90fe41f6ee334";
+		public static string LightweigthUnlitGUID = "e2514bdcf5e5399499a9eb24d175b9db";
+		public static string UniversalPBRGUID = "94348b07e5e8bab40bd6c8a1e3df54cd";
+		public static string UniversalUnlitGUID = "2992e84f91cbeb14eab234972e07ea9d";
+		public static string HDLitGUID = "091c43ba8bd92c9459798d59b089ce4e";
+		public static string HDPBRGUID = "bb308bce79762c34e823049efce65141";
+		public static string HDUnlitGUID = "dfe2f27ac20b08c469b2f95c236be0c3";
 
 		public static Dictionary<string, string> OfficialTemplates = new Dictionary<string, string>()
 		{
-			{ "0770190933193b94aaa3065e307002fa","Unlit"},
-			{ "32139be9c1eb75640a847f011acf3bcf","Post-Processing Stack"},
-			{ "6ce779933eb99f049b78d6163735e06f","Custom RT Init"},
-			{ "32120270d1b3a8746af2aca8bc749736","Custom RT Update"},
-			{ "1976390536c6c564abb90fe41f6ee334","Lightweight PBR"},
-			{ "e2514bdcf5e5399499a9eb24d175b9db","Lightweight Unlit"},
-			{ "091c43ba8bd92c9459798d59b089ce4e","HD Lit"},
-			{ "bb308bce79762c34e823049efce65141","HD PBR"},
-			{ "dfe2f27ac20b08c469b2f95c236be0c3","HD Unlit"},
+			{ "0770190933193b94aaa3065e307002fa","Legacy/Unlit"},
+			{ "32139be9c1eb75640a847f011acf3bcf","Legacy/Post-Processing Stack"},
+			{ "6ce779933eb99f049b78d6163735e06f","Legacy/Custom RT Init"},
+			{ "32120270d1b3a8746af2aca8bc749736","Legacy/Custom RT Update"},
+			{ LightweigthPBRGUID,"LW/PBR"},
+			{ LightweigthUnlitGUID,"LW/Unlit"},
+			{ UniversalPBRGUID,"Universal/PBR"},
+			{ UniversalUnlitGUID,"Universal/Unlit"},
+			{ "53b46d85872c5b24c8f4f0a1c3fe4c87","HD/Lit"},
+			{ HDLitGUID,"Deprecated/HD/Lit"},
+			{ HDPBRGUID,"Deprecated/HD/PBR"},
+			{ HDUnlitGUID,"Deprecated/HD/Unlit"},
 			{ "c71b220b631b6344493ea3cf87110c93","Legacy/Post Process" },
-			{ "6e114a916ca3e4b4bb51972669d463bf","Legacy/Default Unlit" },
+			{ "6e114a916ca3e4b4bb51972669d463bf","Deprecated/Legacy/Default Unlit" },
 			{ "5056123faa0c79b47ab6ad7e8bf059a4","Legacy/Default UI" },
 			{ "899e609c083c74c4ca567477c39edef0","Legacy/Unlit Lightmap" },
 			{ "0f8ba0101102bb14ebf021ddadce9b49","Legacy/Default Sprites" },
@@ -506,6 +522,12 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		//[MenuItem( "Window/Amplify Shader Editor/Create Menu Items", false, 1000 )]
+		//public static void ForceCreateTemplateMenuItems()
+		//{
+		//	UIUtils.CurrentWindow.TemplatesManagerInstance.CreateTemplateMenuItems();
+		//}
+
 		public void CreateTemplateMenuItems()
 		{
 			if( m_sortedTemplates == null || m_sortedTemplates.Count == 0 )
@@ -526,7 +548,8 @@ namespace AmplifyShaderEditor
 				fileContents.AppendFormat( "\t\t[MenuItem( \"Assets/Create/Amplify Shader/{0}\", false, {1} )]\n", m_sortedTemplates[ i ].Name, fixedPriority );
 				fileContents.AppendFormat( "\t\tpublic static void ApplyTemplate{0}()\n", i );
 				fileContents.Append( "\t\t{\n" );
-				fileContents.AppendFormat( "\t\t\tAmplifyShaderEditorWindow.CreateNewTemplateShader( \"{0}\" );\n", m_sortedTemplates[ i ].GUID );
+				//fileContents.AppendFormat( "\t\t\tAmplifyShaderEditorWindow.CreateNewTemplateShader( \"{0}\" );\n", m_sortedTemplates[ i ].GUID );
+				fileContents.AppendFormat( "\t\t\tAmplifyShaderEditorWindow.CreateConfirmationTemplateShader( \"{0}\" );\n", m_sortedTemplates[ i ].GUID );
 				fileContents.Append( "\t\t}\n" );
 			}
 			fileContents.Append( "\t}\n" );

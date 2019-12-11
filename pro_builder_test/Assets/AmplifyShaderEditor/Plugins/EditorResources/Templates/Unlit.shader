@@ -23,8 +23,13 @@ Shader /*ase_name*/ "Hidden/Templates/Unlit" /*end*/
 		Pass
 		{
 			Name "Unlit"
-			Tags { }
+			Tags { "LightMode" = "ForwardBase" }
 			CGPROGRAM
+
+			#ifndef UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX
+			//only defining to not throw compilation error over Unity 5.5
+			#define UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
+			#endif
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
@@ -57,7 +62,11 @@ Shader /*ase_name*/ "Hidden/Templates/Unlit" /*end*/
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 
 				/*ase_vert_code:v=appdata;o=v2f*/
-				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3*/ float3(0,0,0) /*end*/;
+				float3 vertexValue = float3(0, 0, 0);
+				#if ASE_ABSOLUTE_VERTEX_POS
+				vertexValue = v.vertex.xyz;
+				#endif
+				vertexValue = /*ase_vert_out:Vertex Offset;Float3*/vertexValue/*end*/;
 				#if ASE_ABSOLUTE_VERTEX_POS
 				v.vertex.xyz = vertexValue;
 				#else
@@ -70,6 +79,7 @@ Shader /*ase_name*/ "Hidden/Templates/Unlit" /*end*/
 			fixed4 frag (v2f i /*ase_frag_input*/) : SV_Target
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
+				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 				fixed4 finalColor;
 				/*ase_frag_code:i=v2f*/
 				
