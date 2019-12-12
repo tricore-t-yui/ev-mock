@@ -9,7 +9,12 @@ namespace AmplifyShaderEditor
     public sealed class TextureTransformNode : ParentNode
     {
         private readonly string[] Dummy = { string.Empty };
-        [SerializeField]
+		private const string InstancedLabelStr = "Instanced";
+
+		[SerializeField]
+		private bool m_instanced = false;
+
+		[SerializeField]
         private int m_referenceSamplerId = -1;
 
         [SerializeField]
@@ -20,7 +25,9 @@ namespace AmplifyShaderEditor
 
         private TexturePropertyNode m_referenceNode = null;
 
-        private UpperLeftWidgetHelper m_upperLeftWidget = new UpperLeftWidgetHelper();
+		private Vector4Node m_texCoordsHelper;
+
+		private UpperLeftWidgetHelper m_upperLeftWidget = new UpperLeftWidgetHelper();
         protected override void CommonInit( int uniqueId )
         {
             base.CommonInit( uniqueId );
@@ -103,36 +110,64 @@ namespace AmplifyShaderEditor
                 m_referenceNodeId = m_referenceNode.UniqueId;
                 UpdateTitle();
             }
+
+			m_instanced = EditorGUILayoutToggle( InstancedLabelStr, m_instanced );
         }
 
         public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )
         {
-            base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
-            m_inputPorts[ 0 ].GeneratePortInstructions( ref dataCollector );
-            string texTransform = string.Empty;
+			if( !m_outputPorts[ 0 ].IsLocalValue( dataCollector.PortCategory ) )
+			{
+				base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
+				m_inputPorts[ 0 ].GeneratePortInstructions( ref dataCollector );
+				string texTransform = string.Empty;
 
-            if( m_inputPorts[ 0 ].IsConnected )
-            {
-                texTransform = m_inputPorts[ 0 ].GeneratePortInstructions( ref dataCollector ) + "_ST";
-            }
-            else if( m_referenceNode != null )
-            {
-                m_referenceNode.BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
-                texTransform = m_referenceNode.PropertyName + "_ST";
-            }
-            else
-            {
-                texTransform = "_ST";
-                UIUtils.ShowMessage( "Please specify a texture sample on the Texture Transform Size node", MessageSeverity.Warning );
-            }
+				if( m_inputPorts[ 0 ].IsConnected )
+				{
+					texTransform = m_inputPorts[ 0 ].GeneratePortInstructions( ref dataCollector ) + "_ST";
+				}
+				else if( m_referenceNode != null )
+				{
+					m_referenceNode.BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
+					texTransform = m_referenceNode.PropertyName + "_ST";
+				}
+				else
+				{
+					texTransform = "_ST";
+					UIUtils.ShowMessage( UniqueId, "Please specify a texture sample on the Texture Transform Size node", MessageSeverity.Warning );
+				}
 
-            dataCollector.AddToUniforms( UniqueId, "uniform float4 " + texTransform + ";" );
+				//bool excludeUniformKeyword = UIUtils.CurrentWindow.OutsideGraph.IsInstancedShader || UIUtils.CurrentWindow.OutsideGraph.IsSRP;
+				//string uniformRegister = UIUtils.GenerateUniformName( excludeUniformKeyword, WirePortDataType.FLOAT4, texTransform );
+				//dataCollector.AddToUniforms( UniqueId, uniformRegister, true );
+				if( m_texCoordsHelper == null )
+				{
+					m_texCoordsHelper = CreateInstance<Vector4Node>();
+					m_texCoordsHelper.ContainerGraph = ContainerGraph;
+					m_texCoordsHelper.SetBaseUniqueId( UniqueId, true );
+					m_texCoordsHelper.RegisterPropertyOnInstancing = false;
+					m_texCoordsHelper.AddGlobalToSRPBatcher = true;
+				}
+
+				if( m_instanced )
+				{
+					m_texCoordsHelper.CurrentParameterType = PropertyType.InstancedProperty;
+				}
+				else
+				{
+					m_texCoordsHelper.CurrentParameterType = PropertyType.Global;
+				}
+				m_texCoordsHelper.ResetOutputLocals();
+				m_texCoordsHelper.SetRawPropertyName( texTransform );
+				texTransform = m_texCoordsHelper.GenerateShaderForOutput( 0, ref dataCollector, false );
+
+				m_outputPorts[ 0 ].SetLocalValue( texTransform, dataCollector.PortCategory );
+			}
 
             switch( outputId )
             {
-                case 0: return ( texTransform + ".xy" );
-                case 1: return ( texTransform + ".zw" );
-                
+                case 0: return ( m_outputPorts[ 0 ].LocalValue( dataCollector.PortCategory ) + ".xy" );
+                case 1: return ( m_outputPorts[ 0 ].LocalValue( dataCollector.PortCategory ) + ".zw" );
             }
 
             return string.Empty;
@@ -187,14 +222,18 @@ namespace AmplifyShaderEditor
         {
             base.ReadFromString( ref nodeParams );
             m_referenceNodeId = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
-            
+			if( UIUtils.CurrentShaderVersion() > 17200 )
+			{
+				m_instanced = Convert.ToBoolean( GetCurrentParam( ref nodeParams ) );
+			}
         }
 
         public override void WriteToString( ref string nodeInfo, ref string connectionsInfo )
         {
             base.WriteToString( ref nodeInfo, ref connectionsInfo );
             IOUtils.AddFieldValueToString( ref nodeInfo, m_referenceNodeId );
-        }
+			IOUtils.AddFieldValueToString( ref nodeInfo, m_instanced );
+		}
 
         public override void Destroy()
         {
@@ -202,6 +241,12 @@ namespace AmplifyShaderEditor
             m_referenceNode = null;
             m_inputReferenceNode = null;
             m_upperLeftWidget = null;
-        }
+			if( m_texCoordsHelper != null )
+			{
+				//Not calling m_texCoordsHelper.Destroy() on purpose so UIUtils does not incorrectly unregister stuff
+				DestroyImmediate( m_texCoordsHelper );
+				m_texCoordsHelper = null;
+			}
+		}
     }
 }

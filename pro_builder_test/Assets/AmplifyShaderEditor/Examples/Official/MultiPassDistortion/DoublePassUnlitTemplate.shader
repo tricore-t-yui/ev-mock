@@ -1,4 +1,4 @@
-Shader /*ase_name*/ "ASESampleTemplates/DoublePassUnlit" /*end*/
+Shader /*ase_name*/ "Hidden/Legacy/Samples/DoublePassUnlit" /*end*/
 {
 	Properties
 	{

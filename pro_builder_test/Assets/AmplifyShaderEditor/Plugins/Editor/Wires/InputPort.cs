@@ -360,6 +360,15 @@ namespace AmplifyShaderEditor
 				}
 				break;
 				case WirePortDataType.FLOAT3x3:
+				{
+					m_internalData = m_previewInternalMatrix4x4[ 0, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 0, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 0, 2 ].ToString() + IOUtils.VECTOR_SEPARATOR +
+									 m_previewInternalMatrix4x4[ 1, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 1, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 1, 2 ].ToString() + IOUtils.VECTOR_SEPARATOR +
+									 m_previewInternalMatrix4x4[ 2, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 2, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 2, 2 ].ToString();
+
+						m_internalDataWrapper = "float3x3( {0} )";
+	
+				}
+				break;
 				case WirePortDataType.FLOAT4x4:
 				{
 					m_internalData = m_previewInternalMatrix4x4[ 0, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 0, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 0, 2 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 0, 3 ].ToString() + IOUtils.VECTOR_SEPARATOR +
@@ -367,9 +376,6 @@ namespace AmplifyShaderEditor
 									 m_previewInternalMatrix4x4[ 2, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 2, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 2, 2 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 2, 3 ].ToString() + IOUtils.VECTOR_SEPARATOR +
 									 m_previewInternalMatrix4x4[ 3, 0 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 3, 1 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 3, 2 ].ToString() + IOUtils.VECTOR_SEPARATOR + m_previewInternalMatrix4x4[ 3, 3 ].ToString();
 
-					if( m_dataType == WirePortDataType.FLOAT3x3 )
-						m_internalDataWrapper = "float3x3( {0} )";
-					else
 						m_internalDataWrapper = "float4x4( {0} )";
 				}
 				break;
@@ -405,7 +411,22 @@ namespace AmplifyShaderEditor
 		private string SamplerWrappedData( ref MasterNodeDataCollector dataCollector )
 		{
 			m_internalData = "_Sampler" + PortId + UIUtils.GetNode( m_nodeId ).OutputId;
-			dataCollector.AddToUniforms( m_nodeId, "uniform sampler2D " + m_internalData + ";" );
+			ParentGraph outsideGraph = UIUtils.CurrentWindow.OutsideGraph;
+			if( outsideGraph.SamplingThroughMacros )
+			{
+				if( outsideGraph.IsSRP )
+				{
+					dataCollector.AddToUniforms( m_nodeId, string.Format( Constants.TexDeclarationNoSamplerSRPMacros[ TextureType.Texture2D ], m_internalData ));
+				}
+				else
+				{
+					dataCollector.AddToUniforms( m_nodeId, string.Format( Constants.TexDeclarationNoSamplerStandardMacros[ TextureType.Texture2D ], m_internalData ));
+				}
+			}
+			else
+			{
+				dataCollector.AddToUniforms( m_nodeId, "uniform sampler2D " + m_internalData + ";" );
+			}
 
 			return m_internalData;
 		}
@@ -514,6 +535,21 @@ namespace AmplifyShaderEditor
 			if( connID < m_externalReferences.Count )
 			{
 				return UIUtils.GetNode( m_externalReferences[ connID ].NodeId ).GetOutputPortByUniqueId( m_externalReferences[ connID ].PortId );
+			}
+			return null;
+		}
+
+		public ParentNode GetOutputNodeWhichIsNotRelay( int connID = 0 )
+		{
+			if( connID < m_externalReferences.Count )
+			{
+				ParentNode node = UIUtils.GetNode( m_externalReferences[ connID ].NodeId );
+				if( node is WireNode || node is RelayNode )
+				{
+					return node.InputPorts[ 0 ].GetOutputNodeWhichIsNotRelay( connID );
+				}
+
+				return node;
 			}
 			return null;
 		}
