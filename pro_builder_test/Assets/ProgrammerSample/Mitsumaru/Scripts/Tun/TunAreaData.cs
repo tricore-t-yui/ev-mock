@@ -10,10 +10,15 @@ public class TunAreaData : MonoBehaviour
     // スポーン位置
     [SerializeField]
     Vector3 spawnPos = Vector3.zero;
+    public Vector3 SpawnPos => spawnPos;
 
     // ハイドオブジェクト
     [SerializeField]
     List<GameObject> hideObject = default;
+    public IReadOnlyList<GameObject> HideObject => hideObject;
 
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(spawnPos, 0.5f);
+    }
 }
