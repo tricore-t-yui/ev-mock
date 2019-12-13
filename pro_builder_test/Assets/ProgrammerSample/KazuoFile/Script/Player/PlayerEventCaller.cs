@@ -26,6 +26,7 @@ public class PlayerEventCaller : MonoBehaviour
         DAMAGE,             // ダメージ
         BAREFOOT,           // 裸足
         GETDOLL,            // 人形ゲット
+        TRAP,               // 罠
     }
 
     [SerializeField]
@@ -54,6 +55,8 @@ public class PlayerEventCaller : MonoBehaviour
     UnityEvent barefoot         = new UnityEvent();     // 裸足イベント
     [SerializeField]
     UnityEvent getDoll          = new UnityEvent();     // 人形ゲットイベント
+    [SerializeField]
+    UnityEvent trap             = new UnityEvent();     // 罠イベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -76,6 +79,7 @@ public class PlayerEventCaller : MonoBehaviour
             case EventType.DAMAGE:            damage.Invoke();           break;
             case EventType.BAREFOOT:          barefoot.Invoke();         break;
             case EventType.GETDOLL:           getDoll.Invoke();          break;
+            case EventType.TRAP:              trap.Invoke();             break;
         }
     }
 }

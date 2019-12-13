@@ -37,6 +37,8 @@ public class PlayerEvents : MonoBehaviour
     CameraAnimationController cameraAnimationController = default;  // カメラアニメーションクラス
     [SerializeField]
     PlayerStatusController statusController = default;              // ステータス管理クラス
+    [SerializeField]
+    PlayerTrapController trapController = default;                  // 罠アクションクラス
 
     /// <summary>
     /// 待機
@@ -391,4 +393,20 @@ public class PlayerEvents : MonoBehaviour
         moveCamera.IsRotationCamera(false);
         moveController.IsRootMotion(true, true);
     }
+
+    /// <summary>
+    /// 罠アクション開始
+    /// </summary>
+    public void TrapStart() { }
+    /// <summary>
+    /// 罠アクション
+    /// </summary>
+    public void Trap()
+    {
+        trapController.EndTrapAction();
+    }
+    /// <summary>
+    /// 罠アクション終了
+    /// </summary>
+    public void TrapEnd() { }
 }

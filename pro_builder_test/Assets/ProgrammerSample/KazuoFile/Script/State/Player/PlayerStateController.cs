@@ -25,6 +25,7 @@ public class PlayerStateController : MonoBehaviour
         DAMAGE,         // ダメージ
         SHOES,          // 靴
         DOLLGET,        // 人形ゲット
+        TRAP,           // 罠
     }
 
     GameObject rayObject = default;                         // レイに当たったオブジェクト
@@ -52,27 +53,18 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     playerStaminaController staminaController = default;    // スタミナクラス
     [SerializeField]
-    PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
-    [SerializeField]
     DollGetController dollGetController = default;          // 人形ゲットクラス
     [SerializeField]
-    KeyController keyController = default;                      // キー操作クラス
+    KeyController keyController = default;                  // キー操作クラス
+    [SerializeField]
+    PlayerTrapController trapController = default;          // トラップアクションクラス
+    [SerializeField]
+    PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
 
     // プレイヤーのダメージイベント（Added by Mitsumaru）
     // note : このクラスから受け取ったダメージのイベント関数を保存しておく
     [SerializeField]
     PlayerDamageEvent playerDamageEvent = default;
-
-    [SerializeField]
-    KeyCode dashKey = KeyCode.LeftShift;            // ダッシュキー
-    [SerializeField]
-    KeyCode squatKey = KeyCode.C;                   // しゃがみキー
-    [SerializeField]
-    KeyCode stealthKey = KeyCode.E;                 // 忍び足キー
-    [SerializeField]
-    KeyCode deepBreathKey = KeyCode.LeftControl;    // 深呼吸キー
-    [SerializeField]
-    KeyCode shoeshKey = KeyCode.Space;              // 靴着脱キー
 
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
@@ -291,7 +283,7 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
-    /// ダメージ処理
+    /// ダメージ検知
     /// </summary>
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
     public void ChangeDamageState(Transform enemyPos, float damage)
@@ -323,6 +315,30 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
+    /// 罠検知
+    /// </summary>
+    public void CheckTrapState(Transform trapPos)
+    {
+        // 罠アクションが行われていないならアクション開始
+        if(!trapController.enabled)
+        {
+            EventStop();
+            trapController.SetInfo(trapPos);
+            State = ActionStateType.TRAP;
+            EventStart();
+        }
+    }
+
+    /// <summary>
+    /// 罠停止
+    /// </summary>
+    public void CheckEndTrapState()
+    {
+        EventStop();
+        State = ActionStateType.WAIT;
+    }
+
+    /// <summary>
     /// 人形ゲット検知
     /// </summary>
     void CheckIDollGet()
@@ -341,7 +357,6 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void EventPlay()
     {
-        Debug.Log(State);
         switch (State)
         {
             case ActionStateType.WAIT:
@@ -505,6 +520,10 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                 }
                 break;
+            case ActionStateType.TRAP:
+                // 各イベント処理
+                eventCaller.Invoke(EventType.TRAP);
+                break;
         }
     }
 
@@ -525,6 +544,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.BREATHLESSNESS: eventEndCaller.Invoke(EventEndType.BREATHLESSNESSEND); break;
             case ActionStateType.DAMAGE: eventEndCaller.Invoke(EventEndType.DAMAGEEND); break;
             case ActionStateType.DOLLGET: eventEndCaller.Invoke(EventEndType.GETDOOLEND); break;
+            case ActionStateType.TRAP: eventEndCaller.Invoke(EventEndType.TRAPEND); break;
         }
     }
 
@@ -544,6 +564,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.BREATHLESSNESS: eventStartCaller.Invoke(EventStartType.BREATHLESSNESSSTART); break;
             case ActionStateType.DAMAGE: eventStartCaller.Invoke(EventStartType.DAMAGESTART); break;
             case ActionStateType.DOLLGET: eventStartCaller.Invoke(EventStartType.GETDOLLSTART); break;
+            case ActionStateType.TRAP: eventStartCaller.Invoke(EventStartType.TRAPSTART); break;
         }
     }
 
@@ -587,7 +608,6 @@ public class PlayerStateController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
             rayObject = hit.collider.gameObject;
-            Debug.Log(hit.collider.gameObject.layer);
             return hit.collider.gameObject.layer;
         }
         else

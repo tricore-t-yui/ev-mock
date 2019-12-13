@@ -29,6 +29,7 @@ public class PlayerAnimationContoller : MonoBehaviour
         DASHOPENDOOR,       // ダッシュでドア開閉
         REVERSEOPENDOOR,    // 逆からドア開閉
         GETDOLL,            // 人形ゲット
+        TRAP,               // 罠
     }
 
     /// <summary>
@@ -40,6 +41,7 @@ public class PlayerAnimationContoller : MonoBehaviour
         HIDE,
         DAMAGE,
         SHOES,
+        TRAP,
     }
 
     [SerializeField]
@@ -89,7 +91,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); DisplayRightArm(true); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); break;
             case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; DisplayShoesArm(true, true); break;
-            case AnimationType.GETDOLL: animator.SetTrigger("GetDoll"); DisplayRightArm(true); break;
+            case AnimationType.TRAP: animator.SetTrigger("TrapOperate"); DisplayRightArm(true); break;
         }
     }
 
@@ -106,13 +108,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.STEALTH: animator.SetBool("Stealth", false); break;
             case AnimationType.SQUAT: animator.SetBool("Squat", false); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", false); break;
-            case AnimationType.DAMAGE: animator.ResetTrigger("Damage"); break;
-            case AnimationType.DRAGOUT: animator.SetBool("DragOut", false); break;
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
-            case AnimationType.HIDELOCKER: animator.ResetTrigger("LockerIn"); break;
-            case AnimationType.HIDEBED: animator.ResetTrigger("BedIn"); break;
-            case AnimationType.OPENDOOR: animator.ResetTrigger("DoorOpen"); break;
-            case AnimationType.DASHOPENDOOR: animator.ResetTrigger("DashDoorOpen"); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", false); break;
             case AnimationType.SHOES: animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
             case AnimationType.GETDOLL: animator.ResetTrigger("GetDoll"); break;
@@ -145,6 +141,12 @@ public class PlayerAnimationContoller : MonoBehaviour
                     return true;
                 }
                 return false;
+            case EndAnimationType.TRAP:
+                if (animator.GetBool("TrapEnd"))
+                {
+                    return true;
+                }
+                return false;
             default:
                 IsEndAnim = true;
                 return true;
@@ -163,6 +165,12 @@ public class PlayerAnimationContoller : MonoBehaviour
             case EndAnimationType.HIDE:animator.SetBool("HideEnd", false); break;
             case EndAnimationType.DAMAGE:
                 animator.SetBool("DamageEnd", false);
+                animator.SetBool("DoorEnd", false);
+                animator.SetBool("HideEnd", false);
+                animator.SetBool("DragOut", false);
+                break;
+            case EndAnimationType.TRAP:
+                animator.SetBool("TrapEnd", false);
                 animator.SetBool("DoorEnd", false);
                 animator.SetBool("HideEnd", false);
                 animator.SetBool("DragOut", false);
