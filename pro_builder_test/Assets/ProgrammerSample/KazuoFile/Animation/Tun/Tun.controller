@@ -31,6 +31,19 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 3659466036853164977}
+--- !u!114 &-8123478928278714854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98d52d2b971444a119362ca8154828ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayer: 0
 --- !u!1102 &-6629583748523874808
 AnimatorState:
   serializedVersion: 5
@@ -70,7 +83,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2585187421836344719}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -8123478928278714854}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -94,7 +108,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsTrap
+    m_ConditionEvent: TrapOperate
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6629583748523874808}
@@ -118,8 +132,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsTrap
+  - m_ConditionMode: 1
+    m_ConditionEvent: TrapStop
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6281557060200935764}
@@ -166,8 +180,14 @@ AnimatorController:
   m_Name: Tun
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: IsTrap
-    m_Type: 4
+  - m_Name: TrapOperate
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: TrapStop
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
