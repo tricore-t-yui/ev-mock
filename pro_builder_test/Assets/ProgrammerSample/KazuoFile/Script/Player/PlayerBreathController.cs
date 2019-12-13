@@ -126,6 +126,7 @@ public class PlayerBreathController : MonoBehaviour
             case MoveType.WAIT: NowAmount += normalRecovery; break;
             case MoveType.WALK: NowAmount += normalRecovery; break;
             case MoveType.STEALTH: NowAmount -= stealthDecrement; break;
+            case MoveType.STEALTHMOVE: NowAmount -= stealthDecrement; break;
             case MoveType.HIDE: ConsumeHideBreath(); break;
             case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
             default: break;

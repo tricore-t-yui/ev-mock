@@ -8,15 +8,15 @@ using DirType = InteractFunction.DirType;
 /// </summary>
 public class LockerOutState : StateMachineBehaviour
 {
-    PlayerHideController hideController = default;  // 隠れるアクションクラス
+    PlayerHideController hideController = default;          // 隠れるアクションクラス
 
     [SerializeField]
-    bool isPlayer = default;                        // プレイヤーかどうか
+    bool isPlayer = default;                                // プレイヤーかどうか
 
     [SerializeField]
-    float exitRotationSpeed = 2;                    // 脱出方向へ向くスピード
+    float exitRotationSpeed = 2;                            // 脱出方向へ向くスピード
 
-    Quaternion exitRotation = default;              // 脱出方向
+    Quaternion exitRotation = default;                      // 脱出方向
 
     /// <summary>
     /// ステートに入った瞬間
@@ -27,7 +27,7 @@ public class LockerOutState : StateMachineBehaviour
         if (isPlayer)
         {
             // 隠れるアクションクラス取得
-            hideController = animator.gameObject.GetComponent<PlayerHideController>();
+            hideController = animator.gameObject.GetComponent<PlayerHideController>() ?? hideController;
 
             // アニメーション回転フラグを切る
             hideController.SetIsAnimRotation(false);
