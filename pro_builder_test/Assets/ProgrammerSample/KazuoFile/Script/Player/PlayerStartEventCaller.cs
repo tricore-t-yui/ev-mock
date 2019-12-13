@@ -23,8 +23,9 @@ public class PlayerStartEventCaller : MonoBehaviour
         DEEPBREATHSTART,        // 深呼吸
         BREATHLESSNESSSTART,    // 息切れ
         DAMAGESTART,            // ダメージ
-        BAREFOOTSTART,          // 裸足開始
-        GETDOLLSTART,           // 人形ゲット開始
+        BAREFOOTSTART,          // 裸足
+        GETDOLLSTART,           // 人形ゲット
+        TRAPSTART,              // 罠
     }
 
     [SerializeField]
@@ -51,6 +52,8 @@ public class PlayerStartEventCaller : MonoBehaviour
     UnityEvent barefootStart = new UnityEvent();        // 裸足イベント
     [SerializeField]
     UnityEvent getDollStart = new UnityEvent();         // 人形ゲットイベント
+    [SerializeField]
+    UnityEvent trapStart = new UnityEvent();            // 罠イベント
 
     /// <summary>
     /// 各タイプのイベント呼び出し
@@ -72,6 +75,7 @@ public class PlayerStartEventCaller : MonoBehaviour
             case EventType.DAMAGESTART: damageStart.Invoke(); break;
             case EventType.BAREFOOTSTART: barefootStart.Invoke(); break;
             case EventType.GETDOLLSTART: getDollStart.Invoke(); break;
+            case EventType.TRAPSTART: trapStart.Invoke(); break;
         }
     }
 }
