@@ -55,8 +55,14 @@ public class PlayerObjectDamageController : MonoBehaviour
                 IsDamage = true;
                 NowDamage += 50;
             }
-
-            soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.DAMAGEOBJECT);
+            if (stateController.IsShoes)
+            {
+                soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.SHOESDAMAGEOBJECT);
+            }
+            else
+            {
+                soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.BAREFOOTDAMAGEOBJECT);
+            }
         }
     }
 
@@ -76,6 +82,7 @@ public class PlayerObjectDamageController : MonoBehaviour
                 default: break;
             }
 
+            // 100を超えたら深呼吸を強制
             if (NowDamage >= 100)
             {
                 IsDeepBreath = true;

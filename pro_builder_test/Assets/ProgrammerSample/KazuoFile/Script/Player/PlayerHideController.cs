@@ -202,7 +202,7 @@ public class PlayerHideController : MonoBehaviour
         }
 
         // アニメーションが再生され終わったら終了処理
-        if (flag)
+        if (flag && enabled)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             interactController.CommonEndAction();

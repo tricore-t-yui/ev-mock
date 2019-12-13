@@ -40,10 +40,9 @@ public class playerStaminaController : MonoBehaviour
         // 各ステートに合わせた処理を実行
         switch (type)
         {
-            case MoveType.WAIT: NowAmount += normalRecovery; SquatRecovery(isSquat); break;
             case MoveType.WALK: NowAmount += walkRecovery; SquatRecovery(isSquat); break;
             case MoveType.DASH: NowAmount -= dashDecrement; break;
-            default: break;
+            default: NowAmount += normalRecovery; SquatRecovery(isSquat); break;
         }
 
         // スタミナの状態変更

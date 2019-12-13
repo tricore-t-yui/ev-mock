@@ -54,13 +54,13 @@ public class PlayerDamageController : MonoBehaviour
     /// <summary>
     /// 敵座標の登録
     /// </summary>
-    /// <param name="enemyPos"></param>
     public void SetInfo(Transform enemyPos, float damage, DamageType type)
     {
         // ダメージを食らう
         healthController.Damage(damage);
         Type = type;
         EnemyPos = enemyPos;
+        transform.LookAt(new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z));
 
         // ダメージによって吹き飛ばしてアニメーション開始
         switch (Type)

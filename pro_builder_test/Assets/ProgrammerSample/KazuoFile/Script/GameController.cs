@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ゲームの流れクラス
@@ -8,15 +9,32 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     [SerializeField]
-    PlayerStatusController statusController = default;
+    PlayerStatusController statusController = default;  // プレイヤーのステータスクラス
     [SerializeField]
-    KageSpawn kageSpawn = default;
+    KageSpawn kageSpawn = default;                      // 影人間生成クラス
     [SerializeField]
-    PlayerMoveController moveController = default;
+    PlayerMoveController moveController = default;      // プレイヤーの移動クラス
     [SerializeField]
-    PlayerStateController stateController = default;
+    PlayerStateController stateController = default;    // プレイヤーの状態クラス
     [SerializeField]
-    PlayerHealthController healthController = default;
+    PlayerHealthController healthController = default;  // プレイヤーの体力クラス
+
+    public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "ReturnScene")
+        {
+            IsReturn = true;
+        }
+        else
+        {
+            IsReturn = false;
+        }
+    }
 
     /// <summary>
     /// 更新処理
@@ -39,5 +57,21 @@ public class GameController : MonoBehaviour
         kageSpawn.ResetKage();
         moveController.ResetPos();
         stateController.ResetState();
+    }
+
+    /// <summary>
+    /// 次のシーンへ移動
+    /// </summary>
+    /// <param name="isEnd">次のシーンが終わりかどうか</param>
+    public void ChangeNextScene(bool isEnd)
+    {
+        if(isEnd)
+        {
+            SceneManager.LoadScene("GoingScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("ReturnScene");
+        }
     }
 }

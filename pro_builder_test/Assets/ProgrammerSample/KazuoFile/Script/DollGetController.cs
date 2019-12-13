@@ -8,13 +8,15 @@ using UnityEngine;
 public class DollGetController : MonoBehaviour
 {
     [SerializeField]
-    GameObject leftArm = default;   // 左手(人形を持つ手)
+    GameObject leftArm = default;                   // 左手(人形を持つ手)
     [SerializeField]
-    InteractFunction interactController = default;          // インタラクト用関数クラス
+    InteractFunction interactController = default;  // インタラクト用関数クラス
     [SerializeField]
-    float distance = 0.75f;         // 人形との距離
+    GameController gameController = default;        // ゲームの流れクラス
+    [SerializeField]
+    float distance = 0.75f;                         // 人形との距離
 
-    GameObject doll = default;      // 人形
+    GameObject doll = default;                      // 人形
 
     /// <summary>
     /// 起動処理
@@ -52,5 +54,6 @@ public class DollGetController : MonoBehaviour
     {
         interactController.CommonEndAction();
         enabled = false;
+        gameController.ChangeNextScene(false);
     }
 }

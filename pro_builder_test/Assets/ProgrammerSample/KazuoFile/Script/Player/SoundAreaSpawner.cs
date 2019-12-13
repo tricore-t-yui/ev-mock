@@ -13,33 +13,31 @@ public class SoundAreaSpawner : MonoBehaviour
     /// </summary>
     public enum ActionSoundType
     {
-        STEALTH,            // 息止め
-        HIDE,               // 隠れる
-        WAIT,               // 待機
-        WALK,               // 移動
-        SQUAT,              // しゃがみ 
-        DASH,               // ダッシュ
-        DOOROPEN,           // ドア開閉
-        DASHDOOROPEN,       // ダッシュでドア開閉
-        SMALLCONFUSION,     // 息の小さな乱れ
-        MEDIUMCONFUSION,    // 息の乱れ
-        LARGECONFUSION,     // 息の大きな乱れ
-        BREATHLESSNESS,     // 息切れ
-        DEEPBREATH,         // 深呼吸
-        DAMAGE,             // ダメージ
-        DAMAGEHALFHEALTH,   // 体力が半分
-        DAMAGEPINCHHEALTH,  // 体力がピンチ
-        BAREFOOT,           // 裸足
-        BAREFOOTDAMAGE,     // 裸足でダメージ
-        DAMAGEOBJECT,       // ダメージオブジェクトを踏んだとき
+        STEALTH,                // 息止め
+        HIDE,                   // 隠れる
+        WAIT,                   // 待機
+        WALK,                   // 移動
+        SQUAT,                  // しゃがみ 
+        DASH,                   // ダッシュ
+        DOOROPEN,               // ドア開閉
+        DASHDOOROPEN,           // ダッシュでドア開閉
+        SMALLCONFUSION,         // 息の小さな乱れ
+        MEDIUMCONFUSION,        // 息の乱れ
+        LARGECONFUSION,         // 息の大きな乱れ
+        BREATHLESSNESS,         // 息切れ
+        DEEPBREATH,             // 深呼吸
+        DAMAGE,                 // ダメージ
+        DAMAGEHALFHEALTH,       // 体力が半分
+        DAMAGEPINCHHEALTH,      // 体力がピンチ
+        BAREFOOT,               // 裸足
+        BAREFOOTDAMAGEOBJECT,   // 裸足でダメージオブジェクトを踏んだとき
+        SHOESDAMAGEOBJECT,      // 靴でダメージオブジェクトを踏んだとき
     }
 
     [SerializeField]
     GameObject areaCollider = default;                      // 音発生の領域
-
     [SerializeField]
     float areaMagnification = 0.3f;                         // 拡大倍率
-
     [SerializeField]
     float spawnframe = 75;                                  // スポーンするまでのフレーム数
 
@@ -129,22 +127,23 @@ public class SoundAreaSpawner : MonoBehaviour
         {
             case ActionSoundType.STEALTH: addLevel = -3; break;
             case ActionSoundType.WAIT: addLevel = 1; break;
-            case ActionSoundType.WALK: addLevel = 4; break;
+            case ActionSoundType.WALK: addLevel = 3; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 1; break;
             case ActionSoundType.LARGECONFUSION: addLevel = 1; break;
-            case ActionSoundType.HIDE: addLevel = -2; break;
+            case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 3; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 8; break;
-            case ActionSoundType.BREATHLESSNESS: addLevel = 5; break;
+            case ActionSoundType.DASH: addLevel = 7; break;
+            case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 5; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 8; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.DAMAGEOBJECT: addLevel = 10; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 2; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 10; break;
         }
 
         soundLevel += addLevel;
