@@ -141,7 +141,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWaitState()
     {
-        if (!keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.INTERACT) && !keyController.GetKey(KeyType.HOLDBREATH))
+        if (!keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.HOLDBREATH))
         {
             EventStop();
             State = ActionStateType.WAIT;
@@ -596,6 +596,12 @@ public class PlayerStateController : MonoBehaviour
     {
         // レイのスタート位置
         Vector3 start = player.position;
+
+        // しゃがんでいる場合は少し高めに
+        if (IsSquat)
+        {
+            start = player.position + Vector3.up * playerCollider.height;
+        }
 
         // レイの向き
         Vector3 dir = player.forward;
