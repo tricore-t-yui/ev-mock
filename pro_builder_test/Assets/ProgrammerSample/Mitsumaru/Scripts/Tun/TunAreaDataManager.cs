@@ -35,9 +35,5 @@ public class TunAreaDataManager : MonoBehaviour
         {
             tun.SetActive(true);
         }
-        else
-        {
-            tun.SetActive(false);
-        }
     }
 }
