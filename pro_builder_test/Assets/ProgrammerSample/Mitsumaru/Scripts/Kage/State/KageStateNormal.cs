@@ -102,7 +102,7 @@ public class KageStateNormal : StateMachineBehaviour
     void OnHearEnter(Transform self,Collider target)
     {
         // プレイヤー自身はスキップ
-        if (target.tag == "Player") { return; }
+        if (!animParameterList.GetBool(ParameterType.isVigilanceMode) && !animParameterList.GetBool(ParameterType.isFightingMode) && target.tag == "Player") { return; }
 
         if (playerHideController.IsHideBed || playerHideController.IsHideLocker)
         {
