@@ -21,6 +21,10 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     int currentHideIndex = 0;
     int checkedHideCount = 0;
 
+    [SerializeField]
+    int stopTime = 0;
+    int stopTimeCounter = 0;
+
     /// <summary>
     /// ステート開始
     /// </summary>
@@ -66,6 +70,23 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
             }
         }
 
+        if (navMesh.velocity.magnitude < 0.1f)
+        {
+            stopTimeCounter++;
+        }
+        if (stopTime < stopTimeCounter)
+        {
+            animator.SetBool("isApproachingHide", false);
+
+            if (hideController.enabled)
+            {
+                if (currentCheckingHide.GetInstanceID() == hideController.HideObj.GetInstanceID())
+                {
+                    animator.SetBool("isPlayerDiscover", true);
+                    animator.SetTrigger("attackStart");
+                }
+            }
+        }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
@@ -75,6 +96,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         {
             animator.SetBool("isHideCheckEnd",true);
             checkedHideCount = 0;
+            stopTimeCounter = 0;
         }
     }
 }
