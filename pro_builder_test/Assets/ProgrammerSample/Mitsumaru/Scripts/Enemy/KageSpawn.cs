@@ -34,10 +34,9 @@ public class KageSpawn : MonoBehaviour
         {
             switch (areaManager.GetExistAreaToCharacter("Player"))
             {
-                case "Area05": kage[0].SetActive(true); break;
-                case "Area12": kage[2].SetActive(true); break;
-                case "Area13": kage[3].SetActive(true); break;
-                case "Area21": kage[4].SetActive(true); kage[5].SetActive(true); break;
+                case "Area12": kage[0].SetActive(true); break;
+                case "Area13": kage[1].SetActive(true); break;
+                case "Area21": kage[2].SetActive(true); kage[3].SetActive(true); break;
             }
         }
         else
