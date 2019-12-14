@@ -213,6 +213,14 @@ public class PlayerHideController : MonoBehaviour
     }
 
     /// <summary>
+    /// 停止処理
+    /// </summary>
+    void OnDisable()
+    {
+        hideStateController.enabled = false;
+    }
+
+    /// <summary>
     /// 隠れている状態で息を止めいてるかどうか
     /// </summary>
     public bool IsHideStealth()

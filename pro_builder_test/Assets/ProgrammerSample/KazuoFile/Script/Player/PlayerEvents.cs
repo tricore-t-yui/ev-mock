@@ -249,6 +249,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void DoorOpen()
     {
+        SquatEnd();
         statusController.StateUpdate(MoveType.DOOROPEN, stateController.IsSquat);
         moveController.IsRootMotion(true, true);
         doorController.EndDoorAction(false);
@@ -283,6 +284,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
+        SquatEnd();
         statusController.StateUpdate(MoveType.HIDE, stateController.IsSquat);
         hideController.EndHideAction(false);
         soundArea.AddSoundLevel(ActionSoundType.HIDE);
@@ -313,6 +315,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Damage()
     {
+        SquatEnd();
         switch (damageController.Type)
         {
             case PlayerDamageController.DamageType.HIDELOCKER:
@@ -403,6 +406,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Trap()
     {
+        SquatEnd();
         trapController.EndTrapAction();
         moveController.IsRootMotion(true, true);
         moveCamera.IsRotationCamera(false);
