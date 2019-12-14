@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 罠アクションクラス
+/// </summary>
 public class PlayerTrapController : MonoBehaviour
 {
     [SerializeField]
