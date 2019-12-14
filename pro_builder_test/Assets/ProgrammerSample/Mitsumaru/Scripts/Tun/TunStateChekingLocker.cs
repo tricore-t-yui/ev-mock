@@ -6,7 +6,7 @@ public class TunStateChekingLocker : StateMachineBehaviour
 {
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        if (animator.GetBool("isHideCheckend"))
+        if (animator.GetBool("isHideCheckEnd"))
         {
             animator.gameObject.SetActive(false);
         }
