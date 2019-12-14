@@ -31,6 +31,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
+    // 
+    PlayerHideController hideController = null;
+
     // 敵のサウンドプレイヤー取得
     EnemySoundPlayer soundPlayer = null;
 
@@ -62,6 +65,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
+        hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
+
         // 移動速度をセット
         navMesh.speed = speed;
 
@@ -90,6 +95,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
 
         // 視界の中にいるときのコールバックをセット
         fieldOfView.SetOnInViewRangeEvent(OnInFieldOfView);
+        fieldOfView.SetOnOutViewRangeEvent(OnOutFieldOfView);
         // 警戒範囲内にいるときのコールバックをセット
         vigilanceRangeEvent.AddUpdateListener(OnInVigilanceRange);
     }
@@ -99,16 +105,12 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        Debug.DrawRay(animator.transform.position + new Vector3(0, 0.2f, 0), animator.transform.forward);
-
         // 影人間の移動が停止したら、見失ったとみなす
-        if (navMesh.remainingDistance < navMesh.stoppingDistance)
+        if (!isInFieldOfView && playerHideController.IsHideStealth())
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
         }
-
-       
     }
 
     /// <summary>
@@ -126,6 +128,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// </summary>
     void OnInFieldOfView(Transform self,Collider target)
     {
+        isInFieldOfView = true;
+
         // プレイヤーであれば
         if (target.tag == "Player")
         {
@@ -141,7 +145,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// <param name="target"></param>
     void OnOutFieldOfView(Transform self, Collider target)
     {
-
+        isInFieldOfView = false;
     }
 
     /// <summary>

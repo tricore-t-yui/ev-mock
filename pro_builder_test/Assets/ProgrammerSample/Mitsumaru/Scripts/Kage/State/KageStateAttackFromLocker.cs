@@ -45,6 +45,9 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
         // 影人間を停止させる
         navMesh.isStopped = true;
 
+        // ハイドコントローラー取得
+        hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
+
         // ダメージイベントのクラスを取得
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
 
