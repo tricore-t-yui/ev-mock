@@ -8,9 +8,11 @@ using UnityEngine;
 public class KageSpawn : MonoBehaviour
 {
     [SerializeField]
-    AreaManager areaManager = default;  // エリアマネージャー
+    AreaManager areaManager = default;          // エリアマネージャー
     [SerializeField]
-    GameObject[] kage = default;        // 影人間
+    GameController gameController = default;    // ゲームコントローラー
+    [SerializeField]
+    GameObject[] kage = default;                // 影人間
 
     /// <summary>
     /// 開始処理
@@ -28,13 +30,25 @@ public class KageSpawn : MonoBehaviour
     /// </summary>
     void Update()
     {
-        switch(areaManager.GetExistAreaToCharacter("Player"))
+        if (!gameController.IsReturn)
         {
-            case "Area05": kage[0].SetActive(true); break;
-            case "Area08": kage[1].SetActive(true); break;
-            case "Area12": kage[2].SetActive(true); break;
-            case "Area13": kage[3].SetActive(true); break;
-            case "Area21": kage[4].SetActive(true); kage[5].SetActive(true); break;
+            switch (areaManager.GetExistAreaToCharacter("Player"))
+            {
+                case "Area05": kage[0].SetActive(true); break;
+                case "Area12": kage[2].SetActive(true); break;
+                case "Area13": kage[3].SetActive(true); break;
+                case "Area21": kage[4].SetActive(true); kage[5].SetActive(true); break;
+            }
+        }
+        else
+        {
+            switch (areaManager.GetExistAreaToCharacter("Player"))
+            {
+                case "Area08": kage[0].SetActive(true); kage[1].SetActive(true); break;
+                case "Area12": kage[2].SetActive(true); break;
+                case "Area13": kage[3].SetActive(true); break;
+                case "Area21": kage[4].SetActive(true); kage[5].SetActive(true); break;
+            }
         }
     }
 
