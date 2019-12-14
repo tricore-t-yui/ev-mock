@@ -11,8 +11,6 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
-    CapsuleCollider playerCollider = default;       // プレイヤーのコライダー
-    [SerializeField]
     Animator doorAnim = default;                    // ドアのアニメーター
     [SerializeField]
     PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
