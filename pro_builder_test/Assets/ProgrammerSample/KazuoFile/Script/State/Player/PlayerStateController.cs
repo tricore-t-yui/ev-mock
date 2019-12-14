@@ -416,7 +416,6 @@ public class PlayerStateController : MonoBehaviour
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckBrethlessnessState();
-                CheckShooesState();
                 CheckDeepBreathState();
                 CheckStealthMoveState();
                 CheckIDollGet();
@@ -434,7 +433,6 @@ public class PlayerStateController : MonoBehaviour
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckBrethlessnessState();
-                CheckShooesState();
                 CheckDeepBreathState();
                 CheckIDollGet();
                 break;
@@ -461,7 +459,6 @@ public class PlayerStateController : MonoBehaviour
                 {
                     CheckSquatState();
                 }
-                CheckShooesState();
 
                 // 隠れるアクションクラスが停止しているなら終了し、各処理の検知
                 if (!hideController.enabled && State == ActionStateType.HIDE)
