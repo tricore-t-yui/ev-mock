@@ -523,6 +523,16 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.TRAP:
                 // 各イベント処理
                 eventCaller.Invoke(EventType.TRAP);
+
+                // 人形ゲットクラスが停止しているなら終了し、各処理の検知
+                if (!trapController.enabled && State == ActionStateType.TRAP)
+                {
+                    CheckWaitState();
+                    CheckWalkState();
+                    CheckDashState();
+                    CheckStealthState();
+                    CheckDeepBreathState();
+                }
                 break;
         }
     }

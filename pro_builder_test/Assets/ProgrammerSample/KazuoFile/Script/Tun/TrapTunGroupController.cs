@@ -17,6 +17,8 @@ public class TrapTunGroupController : MonoBehaviour
     bool isDemonHit = false;                            // 鬼がエリア内に入ったかどうか
     bool isOperate = false;                             // グループの中の罠ツンが作動したかどうか
 
+    Transform player = default;
+
     /// <summary>
     /// トリガーが当たったら
     /// </summary>
@@ -25,6 +27,7 @@ public class TrapTunGroupController : MonoBehaviour
         if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
         {
             isPlayerHit = true;
+            player = other.gameObject.transform;
         }
         if (LayerMask.LayerToName(other.gameObject.layer) == "Demon")
         {
@@ -69,6 +72,7 @@ public class TrapTunGroupController : MonoBehaviour
             {
                 if (item.IsHit)
                 {
+                    item.transform.LookAt(new Vector3(player.position.x, item.gameObject.transform.position.y, player.position.z));
                     item.TrapOperate();
                     stateController.CheckTrapState(item.gameObject.transform);
                     operateTun = item;
