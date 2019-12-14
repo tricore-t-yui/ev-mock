@@ -584,6 +584,10 @@ public class PlayerStateController : MonoBehaviour
     public void ResetState()
     {
         EventStop();
+        doorController.enabled = false;
+        hideController.enabled = false;
+        damageController.enabled = false;
+        dollGetController.enabled = false;
         State = ActionStateType.WAIT;
         EventStart();
     }
