@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 罠にかかっている間のステート
 /// </summary>
-public class TrapLoopState : StateMachineBehaviour
+public class TrapEndState : StateMachineBehaviour
 {
     [SerializeField]
     bool isPlayer = default;                        // プレイヤーかどうか
@@ -22,7 +22,11 @@ public class TrapLoopState : StateMachineBehaviour
     /// <summary>
     /// ステートに入っている間
     /// </summary>
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
+    /// <summary>
+    /// ステートを出た瞬間
+    /// </summary>
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // プレイヤーだったら
         if (isPlayer)
@@ -31,9 +35,4 @@ public class TrapLoopState : StateMachineBehaviour
         }
         animator.SetTrigger("TrapStop");
     }
-
-    /// <summary>
-    /// ステートを出た瞬間
-    /// </summary>
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
 }

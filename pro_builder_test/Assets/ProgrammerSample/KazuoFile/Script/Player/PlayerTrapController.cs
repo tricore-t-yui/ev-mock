@@ -29,6 +29,8 @@ public class PlayerTrapController : MonoBehaviour
         transform.LookAt(new Vector3(trapPos.position.x, transform.position.y, trapPos.position.z));
 
         animationContoller.AnimStart(PlayerAnimationContoller.AnimationType.TRAP);
+
+        enabled = true;
     }
 
     /// <summary>

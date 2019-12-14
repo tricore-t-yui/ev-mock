@@ -404,6 +404,8 @@ public class PlayerEvents : MonoBehaviour
     public void Trap()
     {
         trapController.EndTrapAction();
+        moveController.IsRootMotion(true, true);
+        moveCamera.IsRotationCamera(false);
     }
     /// <summary>
     /// 罠アクション終了

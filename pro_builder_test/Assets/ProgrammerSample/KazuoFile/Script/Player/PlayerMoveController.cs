@@ -105,20 +105,20 @@ public class PlayerMoveController : MonoBehaviour
     /// <summary>
     /// アニメーション中の移動方法
     /// </summary>
-    //public void OnAnimatorMove()
-    //{
-    //    // 各フラグが立ったら
-    //    if (isAnimPosition)
-    //    {
-    //        // 座標移動をanimatorに任せる
-    //        transform.position = playerAnim.rootPosition;
-    //    }
-    //    if (isAnimRotation)
-    //    {
-    //        // 回転をanimatorに任せる
-    //        transform.rotation = playerAnim.rootRotation;
-    //    }
-    //}
+    public void OnAnimatorMove()
+    {
+        // 各フラグが立ったら
+        if (isAnimPosition)
+        {
+            // 座標移動をanimatorに任せる
+            transform.position = playerAnim.rootPosition;
+        }
+        if (isAnimRotation)
+        {
+            // 回転をanimatorに任せる
+            transform.rotation = playerAnim.rootRotation;
+        }
+    }
 
     /// <summary>
     /// 開始処理
