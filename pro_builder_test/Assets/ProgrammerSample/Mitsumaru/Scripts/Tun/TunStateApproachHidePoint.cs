@@ -15,8 +15,10 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
 
     PlayerHideController hideController = null;
 
-    GameObject checkingHide = null;
-    int hidePointIdListIndex = 0;
+    TunAreaData areaData;
+    GameObject firstCheckingHide = null;
+    GameObject currentCheckingHide = null;
+    int currentHideIndex = 0;
     int checkedHideCount = 0;
 
     /// <summary>
@@ -29,11 +31,16 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
         hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
 
-        TunAreaData areaData = areaDataManager.GetTunAreaData(hideController.HideObj);
+        firstCheckingHide = hideController.HideObj ?? firstCheckingHide;
+
+        areaData = areaDataManager.GetTunAreaData(firstCheckingHide);
         List<GameObject> hideObjectToList = areaData.HideObject.ToList();
-        checkingHide = hideController.HideObj;
-        hidePointIdListIndex = hideObjectToList.IndexOf(checkingHide);
-        navMesh.SetDestination(checkingHide.transform.position + checkingHide.transform.forward * hideToTaegetDistance);
+        int firstHideIndex = hideObjectToList.IndexOf(firstCheckingHide);
+        currentHideIndex = firstHideIndex + checkedHideCount;
+        if (currentHideIndex > hideObjectToList.Count -1) { currentHideIndex = 0; }
+        currentCheckingHide = hideObjectToList[currentHideIndex];
+
+        navMesh.SetDestination(currentCheckingHide.transform.position + (currentCheckingHide.transform.forward *-1) * hideToTaegetDistance);
     }
 
     /// <summary>
@@ -42,14 +49,16 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         if (!(navMesh.remainingDistance < navMesh.stoppingDistance)) { return; }
+        Vector3 hideObjPos = currentCheckingHide.transform.position;
+        animator.transform.LookAt(new Vector3(hideObjPos.x,animator.transform.position.y,hideObjPos.z));
 
-        if (Vector3.Angle(animator.transform.forward, checkingHide.transform.forward * -1) < 0.1f)
+        if (Vector3.Angle(animator.transform.forward, currentCheckingHide.transform.forward) < 0.1f)
         {
             animator.SetBool("isApproachingHide", false);
 
             if (hideController.enabled)
             {
-                if (checkingHide.GetInstanceID() == hideController.HideObj.GetInstanceID())
+                if (currentCheckingHide.GetInstanceID() == hideController.HideObj.GetInstanceID())
                 {
                     animator.SetBool("isPlayerDiscover", true);
                     animator.SetTrigger("attackStart");
@@ -57,5 +66,15 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
             }
         }
 
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    {
+        checkedHideCount++;
+        if (checkedHideCount == areaData.HideObject.Count)
+        {
+            animator.SetBool("isHideCheckEnd",true);
+            checkedHideCount = 0;
+        }
     }
 }
