@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// ロッカーの確認
-/// </summary>
-public class TunStateChekingLocker : StateMachineBehaviour
+public class TunStateChekingBed : StateMachineBehaviour
 {
     /// <summary>
     /// ステートの開始
