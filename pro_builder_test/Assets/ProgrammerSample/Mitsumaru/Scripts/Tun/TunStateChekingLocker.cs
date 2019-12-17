@@ -13,12 +13,7 @@ public class TunStateChekingLocker : StateMachineBehaviour
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 既にすべてのハイドポイントを確認済みであれば、その場でツンを消す
-        if (animator.GetBool("isHideCheckEnd"))
-        {
-            animator.gameObject.SetActive(false);
-        }
-        // そうでなければ、ハイドポイントの探索開始
-        else
+        if (!animator.GetBool("isHideCheckEnd"))
         {
             animator.SetBool("isApproachingHide", true);
         }

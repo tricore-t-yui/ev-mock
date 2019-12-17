@@ -65,7 +65,7 @@ public class LockerOutState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // プレイヤーだったら初期化を始める
-        if (isPlayer)
+        if (isPlayer && !animator.GetBool("DragOut"))
         {
             animator.ResetTrigger("LockerIn");
             animator.ResetTrigger("LockerOut");

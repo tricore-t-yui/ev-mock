@@ -60,6 +60,8 @@ public class TunAreaDataManager : MonoBehaviour
         //        プレイヤーが隠れたかどうかの判定はここで行う。
         if (playerHideController.enabled)
         {
+            TunAreaData areaData = GetTunAreaData(playerHideController.HideObj);
+            tun.transform.position = areaData.SpawnPos;
             tun.SetActive(true);
         }
     }

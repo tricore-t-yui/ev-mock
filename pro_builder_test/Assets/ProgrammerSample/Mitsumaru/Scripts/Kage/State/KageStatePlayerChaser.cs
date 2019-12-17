@@ -31,9 +31,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
-    // 
-    PlayerHideController hideController = null;
-
     // 敵のサウンドプレイヤー取得
     EnemySoundPlayer soundPlayer = null;
 
@@ -64,8 +61,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
-
-        hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
 
         // 移動速度をセット
         navMesh.speed = speed;

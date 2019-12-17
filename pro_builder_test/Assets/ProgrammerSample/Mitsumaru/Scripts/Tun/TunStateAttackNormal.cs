@@ -35,6 +35,5 @@ public class TunStateAttackNormal : StateMachineBehaviour
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
         // プレイヤーのダメージイベントを呼ぶ
         damageEvent?.Invoke(animator.transform, damage);
-
     }
 }

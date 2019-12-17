@@ -19,6 +19,9 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     // エリアデータ管理クラス
     TunAreaDataManager areaDataManager = null;
 
+    // エリア管理クラス
+    AreaManager areaManager = null;
+
     // ハイドコントローラー
     PlayerHideController hideController = null;
 
@@ -30,8 +33,6 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     GameObject currentCheckingHide = null;
     // 現在確認しているハイドポイントのインデックス
     int currentHideIndex = 0;
-    // 確認済みのハイドポイントの数
-    int checkedHideCount = 0;
 
     /// <summary>
     /// ステート開始
@@ -41,8 +42,10 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         // ナビメッシュ取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
-        // エリア管理クラスを取得
+        // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
+        // エリア管理クラスを取得
+        areaManager = FindObjectOfType<AreaManager>() ?? areaManager;
         // ハイドコントローラーを取得
         hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
 
@@ -56,7 +59,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         // 一番最初に確認するハイドポイントのインデックスを取得
         int firstHideIndex = hideObjectToList.IndexOf(firstCheckingHide);
         // 現在のハイドポイントのインデックス = 最初のハイドポイントのインデックス + 確認済みのハイドポイントの数
-        currentHideIndex = firstHideIndex + checkedHideCount;
+        currentHideIndex = firstHideIndex + animator.GetInteger("checkedHideCount");
         // 算出したハイドポイントのインデックスがリスト範囲外だった場合は先頭へ
         if (currentHideIndex > hideObjectToList.Count -1) { currentHideIndex = 0; }
         // 算出したインデックスからハイドポイントを取得
@@ -105,14 +108,14 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 確認済みのハイドポイントの数を増やす
-        checkedHideCount++;
+        animator.SetInteger("checkedHideCount", animator.GetInteger("checkedHideCount") + 1);
         // そのエリア内のハイドポイントを全て調べたか
-        if (checkedHideCount == areaData.HideObject.Count)
+        if (animator.GetInteger("checkedHideCount") == areaData.HideObject.Count || areaManager.GetExistAreaToCharacter("Player") != areaData.gameObject.name)
         {
             // ハイド確認終了フラグをオンにする
             animator.SetBool("isHideCheckEnd",true);
             // 値をリセット
-            checkedHideCount = 0;
+            animator.SetInteger("checkedHideCount", 0);
         }
     }
 }
