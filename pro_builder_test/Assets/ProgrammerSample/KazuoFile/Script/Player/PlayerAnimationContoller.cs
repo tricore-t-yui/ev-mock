@@ -90,7 +90,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.OPENDOOR: animator.SetTrigger("DoorOpen"); DisplayRightArm(true); break;
             case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); DisplayRightArm(true); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); break;
-            case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; DisplayShoesArm(true, true); break;
+            case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
             case AnimationType.TRAP: animator.SetTrigger("TrapOperate"); DisplayRightArm(true); break;
         }
     }
@@ -110,7 +110,10 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", false); break;
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", false); break;
-            case AnimationType.SHOES: animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
+            case AnimationType.SHOES:
+                DisplayRightArm(true);
+                DisplayShoesArm(false, false);
+                animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
             case AnimationType.GETDOLL: animator.ResetTrigger("GetDoll"); break;
         }
     }
@@ -189,17 +192,20 @@ public class PlayerAnimationContoller : MonoBehaviour
 
             if (hideController.IsHideStealth())
             {
-                DisplayRightArm(false);
+                DisplayRightArm(true);
             }
             else
             {
                 DisplayRightArm(true);
             }
         }
-        else if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
+        else if (IsEndAnim && stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
         {
-            DisplayRightArm(false);
-            DisplayShoesArm(true, true);
+            if (!stateController.IsShoes)
+            {
+                DisplayRightArm(false);
+                DisplayShoesArm(true, true);
+            }
         }
     }
 
@@ -207,7 +213,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     /// 靴を持った腕表示するかどうか
     /// </summary>
     public void DisplayShoesArm(bool flag, bool isShoes)
-    {
+    { 
         // 表示
         if (flag)
         {
