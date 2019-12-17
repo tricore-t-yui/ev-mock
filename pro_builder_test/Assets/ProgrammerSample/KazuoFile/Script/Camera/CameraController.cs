@@ -122,16 +122,27 @@ public class CameraController : MonoBehaviour
         {
             case DirType.FORWARD:
                 // 上限設定
-                if (player.localEulerAngles.y >= 110)
+                if (player.localEulerAngles.y >= 200)
                 {
-                    angle = new Vector3(player.localEulerAngles.x, 110, player.localEulerAngles.z);
+                    angle = new Vector3(player.localEulerAngles.x, 200, player.localEulerAngles.z);
                 }
-                if (player.localEulerAngles.y <= 70)
+                if (player.localEulerAngles.y <= 160)
                 {
-                    angle = new Vector3(player.localEulerAngles.x, 70, player.localEulerAngles.z);
+                    angle = new Vector3(player.localEulerAngles.x, 160, player.localEulerAngles.z);
                 }
                 break;
             case DirType.BACK:
+                // 上限設定
+                if (player.localEulerAngles.y >= 20 && player.localEulerAngles.y <= 180)
+                {
+                    angle = new Vector3(player.localEulerAngles.x, 20, player.localEulerAngles.z);
+                }
+                if (player.localEulerAngles.y <= 340 && player.localEulerAngles.y >= 180)
+                {
+                    angle = new Vector3(player.localEulerAngles.x, 340, player.localEulerAngles.z);
+                }
+                break;
+            case DirType.RIGHT:
                 // 上限設定
                 if (player.localEulerAngles.y >= 290)
                 {
@@ -143,27 +154,15 @@ public class CameraController : MonoBehaviour
                 }
 
                 break;
-            case DirType.RIGHT:
-                // 上限設定
-                if (player.localEulerAngles.y >= 200)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 200, player.localEulerAngles.z);
-                }
-                if (player.localEulerAngles.y <= 160)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 160, player.localEulerAngles.z);
-                }
-
-                break;
             case DirType.LEFT:
                 // 上限設定
-                if (player.localEulerAngles.y >= 20 && player.localEulerAngles.y <= 180)
+                if (player.localEulerAngles.y >= 110)
                 {
-                    angle = new Vector3(player.localEulerAngles.x, 20, player.localEulerAngles.z);
+                    angle = new Vector3(player.localEulerAngles.x, 110, player.localEulerAngles.z);
                 }
-                if (player.localEulerAngles.y <= 340 && player.localEulerAngles.y >= 180)
+                if (player.localEulerAngles.y <= 70)
                 {
-                    angle = new Vector3(player.localEulerAngles.x, 340, player.localEulerAngles.z);
+                    angle = new Vector3(player.localEulerAngles.x, 70, player.localEulerAngles.z);
                 }
                 break;
         }

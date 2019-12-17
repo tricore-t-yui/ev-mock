@@ -186,7 +186,15 @@ public class PlayerAnimationContoller : MonoBehaviour
     /// </summary>
     public void BarefootRightArm()
     {
-        if (stateController.State == MoveType.HIDE)
+        if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH || stateController.State == MoveType.STEALTH)
+        {
+            if (IsEndAnim && !stateController.IsShoes)
+            {
+                DisplayRightArm(false);
+                DisplayShoesArm(true, true);
+            }
+        }
+        else
         {
             DisplayShoesArm(false, true);
 
@@ -197,14 +205,6 @@ public class PlayerAnimationContoller : MonoBehaviour
             else
             {
                 DisplayRightArm(true);
-            }
-        }
-        else if (IsEndAnim && stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH)
-        {
-            if (!stateController.IsShoes)
-            {
-                DisplayRightArm(false);
-                DisplayShoesArm(true, true);
             }
         }
     }
