@@ -19,6 +19,7 @@ public class TunAreaData : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        // スポーン位置に球体を表示
         Gizmos.DrawSphere(spawnPos, 0.5f);
     }
 }
