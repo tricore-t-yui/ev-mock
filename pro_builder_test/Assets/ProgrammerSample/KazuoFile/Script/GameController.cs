@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "ReturnScene")
+        if (SceneManager.GetActiveScene().name == "ReturnScene_1.2")
         {
             IsReturn = true;
         }
@@ -67,11 +67,11 @@ public class GameController : MonoBehaviour
     {
         if(isEnd)
         {
-            SceneManager.LoadScene("GoingScene");
+            SceneManager.LoadScene("GoingScene_1.3");
         }
         else
         {
-            SceneManager.LoadScene("ReturnScene");
+            SceneManager.LoadScene("ReturnScene_1.2");
         }
     }
 }
