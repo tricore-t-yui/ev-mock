@@ -7,9 +7,6 @@ using UnityEngine;
 /// </summary>
 public class InteractFunction : MonoBehaviour
 {
-    [SerializeField]
-    CameraController moveCamera = default;  // 移動カメラクラス
-
     /// <summary>
     /// 各オブジェクトの向きタイプ
     /// </summary>
@@ -19,24 +16,6 @@ public class InteractFunction : MonoBehaviour
         BACK,
         LEFT,
         RIGHT,
-    }
-
-    /// <summary>
-    /// 共通部分の初期化
-    /// </summary>
-    public void CommonInit()
-    {
-        // カメラの回転終了
-        moveCamera.IsRotationCamera(false);
-    }
-
-    /// <summary>
-    /// 共通している各アクションの終了
-    /// </summary>
-    public void CommonEndAction()
-    {
-        // カメラの回転開始
-        moveCamera.IsRotationCamera(true);
     }
 
     /// <summary>

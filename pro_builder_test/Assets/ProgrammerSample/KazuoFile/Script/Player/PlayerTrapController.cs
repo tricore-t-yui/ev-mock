@@ -19,8 +19,7 @@ public class PlayerTrapController : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
-        // 初期化
-        interactController.CommonInit();
+        animationContoller.AnimStart(PlayerAnimationContoller.AnimationType.TRAP);
     }
 
     /// <summary>
@@ -30,8 +29,6 @@ public class PlayerTrapController : MonoBehaviour
     {
         TrapPos = trapPos;
         transform.LookAt(new Vector3(trapPos.position.x, transform.position.y, trapPos.position.z));
-
-        animationContoller.AnimStart(PlayerAnimationContoller.AnimationType.TRAP);
 
         enabled = true;
     }
@@ -46,7 +43,6 @@ public class PlayerTrapController : MonoBehaviour
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.TRAP);
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-            interactController.CommonEndAction();
 
             // 処理終了
             enabled = false;

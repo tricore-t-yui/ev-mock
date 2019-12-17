@@ -47,7 +47,6 @@ public class PlayerDamageController : MonoBehaviour
     void OnEnable()
     {
         // 初期化
-        interactController.CommonInit();
         IsDeath();
     }
 
@@ -119,7 +118,6 @@ public class PlayerDamageController : MonoBehaviour
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DAMAGE);
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-            interactController.CommonEndAction();
 
             // 無敵時間開始
             IsInvincible = true;

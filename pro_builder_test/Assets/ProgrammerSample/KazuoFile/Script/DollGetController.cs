@@ -24,9 +24,6 @@ public class DollGetController : MonoBehaviour
     void OnEnable()
     {
         transform.position = new Vector3(doll.transform.position.x, transform.position.y,doll.transform.position.z - distance);
-
-        // 初期化
-        interactController.CommonInit();
     }
 
     /// <summary>
@@ -52,7 +49,6 @@ public class DollGetController : MonoBehaviour
     /// </summary>
     public void EndDollGet()
     {
-        interactController.CommonEndAction();
         enabled = false;
         gameController.ChangeNextScene(false);
     }

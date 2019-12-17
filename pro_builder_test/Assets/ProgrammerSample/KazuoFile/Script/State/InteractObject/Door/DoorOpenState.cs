@@ -8,7 +8,7 @@ using UnityEngine;
 public class DoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    float openFrame = 30;                                   // ドアが自動で開くフレーム
+    float openFrame = 15;                                   // ドアが自動で開くフレーム
     [SerializeField]
     bool isPlayer = false;                                  // このアニメーターの親がプレイヤーかどうか
 

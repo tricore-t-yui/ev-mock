@@ -455,7 +455,7 @@ public class PlayerStateController : MonoBehaviour
                 eventCaller.Invoke(EventType.HIDE);
 
                 // 隠れているオブジェクトがロッカーならしゃがみ検知
-                if (hideController.type == PlayerHideController.HideObjectType.LOCKER)
+                if (hideController.type == PlayerHideController.HideObjectType.LOCKER && hideController.IsHideLocker)
                 {
                     CheckSquatState();
                 }

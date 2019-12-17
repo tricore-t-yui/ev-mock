@@ -41,9 +41,6 @@ public class PlayerDoorController : MonoBehaviour
         // ドアに合わせたポジション合わせ
         transform.position = interactController.InitPosition(door.GetDirType(),transform, doorObj.transform);
         transform.rotation = interactController.InitRotation(door.GetDirType());
-
-        // 初期化
-        interactController.CommonInit();
     }
 
     /// <summary>
@@ -110,7 +107,6 @@ public class PlayerDoorController : MonoBehaviour
         if(flag)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DOOR);
-            interactController.CommonEndAction();
             enabled = false;
         }
     }

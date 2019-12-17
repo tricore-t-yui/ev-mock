@@ -16,7 +16,7 @@ public class DoorController : MonoBehaviour
     PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
 
     [SerializeField]
-    float closeDistance = 2;                        // ドアが自動で閉まる距離
+    float closeDistance = 0.3f;                        // ドアが自動で閉まる距離
 
     bool isAutoClose = true;                        // 自動でドアを閉めるフラグ
 

@@ -50,7 +50,6 @@ public class PlayerEvents : MonoBehaviour
     public void Wait()
     {
         moveController.IsRootMotion(false, false);
-        moveCamera.IsRotationCamera(true);
         moveCamera.Rotation(CameraType.NORMAL);
         soundArea.AddSoundLevel(ActionSoundType.WAIT);
         statusController.StateUpdate(MoveType.WAIT, stateController.IsSquat);
@@ -64,10 +63,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 歩く開始
     /// </summary>
-    public void WalkStart()
-    {
-        moveCamera.IsRotationCamera(true);
-    }
+    public void WalkStart() { }
     /// <summary>
     /// 歩く
     /// </summary>
@@ -91,10 +87,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ダッシュ開始
     /// </summary>
-    public void DashStart()
-    {
-        moveCamera.IsRotationCamera(true);
-    }
+    public void DashStart() { }
     /// <summary>
     /// ダッシュ
     /// </summary>
@@ -121,10 +114,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// しゃがみ開始
     /// </summary>
-    public void SquatStart()
-    {
-        moveCamera.IsRotationCamera(true);
-    }
+    public void SquatStart() { }
     /// <summary>
     /// しゃがみ
     /// </summary>
@@ -147,10 +137,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 忍び歩き開始
     /// </summary>
-    public void StealthStart()
-    {
-        moveCamera.IsRotationCamera(true);
-    }
+    public void StealthStart() {}
     /// <summary>
     /// 忍び歩き
     /// </summary>
@@ -188,10 +175,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 深呼吸開始
     /// </summary>
-    public void DeepBreathStart()
-    {
-        moveCamera.IsRotationCamera(true);
-    }
+    public void DeepBreathStart() { }
     /// <summary>
     /// 深呼吸
     /// </summary>
@@ -217,7 +201,6 @@ public class PlayerEvents : MonoBehaviour
     public void BrethlessnessStart()
     {
         moveController.IsRootMotion(true, true);
-        moveCamera.IsRotationCamera(false);
     }
     /// <summary>
     /// 息切れ
@@ -276,6 +259,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void HideStart()
     {
+        SquatEnd();
         sound.Play(SoundSpawner.SoundType.HeartSound);
         moveController.IsRootMotion(true, true);
     }
@@ -284,7 +268,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        SquatEnd();
         statusController.StateUpdate(MoveType.HIDE, stateController.IsSquat);
         hideController.EndHideAction(false);
         soundArea.AddSoundLevel(ActionSoundType.HIDE);
@@ -320,25 +303,22 @@ public class PlayerEvents : MonoBehaviour
         {
             case PlayerDamageController.DamageType.HIDELOCKER:
                 moveController.IsRootMotion(true, true);
-                moveCamera.IsRotationCamera(false);
                 break;
             case PlayerDamageController.DamageType.DEATH:
                 if(damageController.IsFinishBlow)
                 {
                     moveController.IsRootMotion(false, false);
-                    moveCamera.IsRotationCamera(true);
                     cameraAnimationController.AnimStart(CameraAnimType.DEATH);
                     moveCamera.Rotation(CameraType.DEATH);
                 }
                 else
                 {
                     moveController.IsRootMotion(false, true);
-                    moveCamera.IsRotationCamera(false);
                 }
                 break;
             default:
                 moveController.IsRootMotion(false, true);
-                moveCamera.IsRotationCamera(false); break;
+                break;
         }
         damageController.EndDamageAction();
     }
@@ -375,7 +355,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BarefootStart()
     {
-        moveCamera.IsRotationCamera(false);
         playerAnimationContoller.AnimStart(PlayerAnimType.SHOES);
         moveController.IsRootMotion(true, true);
     }
@@ -393,7 +372,6 @@ public class PlayerEvents : MonoBehaviour
     public void BarefootEnd()
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.SHOES);
-        moveCamera.IsRotationCamera(false);
         moveController.IsRootMotion(true, true);
     }
 
@@ -409,7 +387,6 @@ public class PlayerEvents : MonoBehaviour
         SquatEnd();
         trapController.EndTrapAction();
         moveController.IsRootMotion(true, true);
-        moveCamera.IsRotationCamera(false);
     }
     /// <summary>
     /// 罠アクション終了

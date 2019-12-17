@@ -54,9 +54,6 @@ public class PlayerHideController : MonoBehaviour
         // オブジェクトに合わせたポジション合わせ
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
-
-        // 初期化
-        interactController.CommonInit();
     }
 
     /// <summary>
@@ -114,7 +111,6 @@ public class PlayerHideController : MonoBehaviour
     public void HideObject()
     {
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
-        moveCamera.IsRotationCamera(true);
         IsAnimRotation = false;
         switch (type)
         {
@@ -135,7 +131,6 @@ public class PlayerHideController : MonoBehaviour
     public void ExitHideObject()
     {
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
-        moveCamera.IsRotationCamera(false);
         switch (type)
         {
             // ロッカー
@@ -205,7 +200,6 @@ public class PlayerHideController : MonoBehaviour
         if (flag && enabled)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
-            interactController.CommonEndAction();
             hideObjectController.SetActiveCollider(true);
             hideStateController.enabled = false;
             enabled = false;
