@@ -127,7 +127,6 @@ public class PlayerStateController : MonoBehaviour
                 eventEndCaller.Invoke(EventEndType.BAREFOOTEND);
                 IsShoes = true;
             }
-
         }
 
         if (!IsShoes)
