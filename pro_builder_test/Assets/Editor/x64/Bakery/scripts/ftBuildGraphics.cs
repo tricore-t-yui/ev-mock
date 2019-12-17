@@ -79,9 +79,6 @@ public class ftBuildGraphics : ScriptableWizard
     [DllImport ("frender", CallingConvention=CallingConvention.Cdecl)]
     public static extern int GetUVGBErrorCode();
 
-    [DllImport ("frender", CallingConvention=CallingConvention.Cdecl)]
-    public static extern void ResetBlendState();
-
     [DllImport ("uvrepack", CallingConvention=CallingConvention.Cdecl)]
     public static extern int uvrLoad(float[] inputUVs, int numVerts, int[] inputIndices, int numIndices);
 
@@ -162,7 +159,7 @@ public class ftBuildGraphics : ScriptableWizard
     public static List<float> vbtraceTexUVArray; // global vbTraceTex.bin UVs
     public static float[] vbtraceTexUVArrayLOD; // global vbTraceTex.bin LOD UVs
 
-    public static List<MeshRenderer> atlasOnlyObj;
+    public static List<Renderer> atlasOnlyObj;
     public static List<Vector4> atlasOnlyScaleOffset;
     public static List<int> atlasOnlySize;
     public static List<int> atlasOnlyID;
@@ -262,7 +259,7 @@ public class ftBuildGraphics : ScriptableWizard
     {
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             f.Write(pos.x);
             f.Write(pos.y);
             f.Write(pos.z);
@@ -273,7 +270,7 @@ public class ftBuildGraphics : ScriptableWizard
     {
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             f.Write(pos.x);
             f.Write(pos.y);
             f.Write(pos.z);
@@ -364,7 +361,7 @@ public class ftBuildGraphics : ScriptableWizard
     {
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             f.Write(pos.x);
             f.Write(pos.y);
             f.Write(pos.z);
@@ -410,7 +407,7 @@ public class ftBuildGraphics : ScriptableWizard
     {
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             arrPosNormal.Add(pos.x);
             arrPosNormal.Add(pos.y);
             arrPosNormal.Add(pos.z);
@@ -481,7 +478,7 @@ public class ftBuildGraphics : ScriptableWizard
     {
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             f.Write(pos.x);
             f.Write(pos.y);
             f.Write(pos.z);
@@ -511,7 +508,7 @@ public class ftBuildGraphics : ScriptableWizard
 
         for(int i=0;i<vertices.Length;i++)
         {
-            Vector3 pos = vertices[i];//t.TransformPoint(vertices[i]);
+            Vector3 pos = vertices[i];//t.(vertices[i]);
             f.Write(pos.x);
             f.Write(pos.y);
             f.Write(pos.z);
@@ -665,34 +662,31 @@ public class ftBuildGraphics : ScriptableWizard
 
     static int exportLMID(BinaryWriter f, GameObject obj, BakeryLightmapGroup lmgroup)
     {
-        if (lmgroup!=null)
+        var areaLight =  obj.GetComponent<BakeryLightMesh>();
+        if (areaLight == null)
+        {
+            int index = temporaryAreaLightMeshList.IndexOf(obj);
+            if (index >= 0)
+            {
+                areaLight = temporaryAreaLightMeshList2[index];
+            }
+        }
+        if (areaLight != null)
+        {
+            f.Write(areaLightCounter);
+            areaLight.lmid = areaLightCounter;
+            areaLightCounter--;
+            return areaLightCounter;
+        }
+        else if (lmgroup != null)
         {
             f.Write(lmgroup.id);
             return lmgroup.id;
         }
         else
         {
-            var areaLight =  obj.GetComponent<BakeryLightMesh>();
-            if (areaLight == null)
-            {
-                int index = temporaryAreaLightMeshList.IndexOf(obj);
-                if (index >= 0)
-                {
-                    areaLight = temporaryAreaLightMeshList2[index];
-                }
-            }
-            if (areaLight != null)
-            {
-                f.Write(areaLightCounter);
-                areaLight.lmid = areaLightCounter;
-                areaLightCounter--;
-                return areaLightCounter;
-            }
-            else
-            {
-                f.Write(0xFFFFFFFF);
-                return -1;
-            }
+            f.Write(0xFFFFFFFF);
+            return -1;
         }
     }
 
@@ -710,6 +704,41 @@ public class ftBuildGraphics : ScriptableWizard
             uvs[i] = new Vector2(x * mul + add, y * mul + add);// - 1.0f);
         }
         return uvs;
+    }
+
+    public static Mesh GetSharedMesh(Renderer mr)
+    {
+        if (mr == null) return null;
+        var mrSkin = mr as SkinnedMeshRenderer;
+        var mf = mr.gameObject.GetComponent<MeshFilter>();
+        return mrSkin != null ? mrSkin.sharedMesh : (mf != null ? mf.sharedMesh : null);
+    }
+
+    public static Mesh GetSharedMesh(GameObject obj)
+    {
+        var mrSkin = obj.GetComponent<SkinnedMeshRenderer>();
+        var mf = obj.GetComponent<MeshFilter>();
+        return mrSkin != null ? mrSkin.sharedMesh : (mf != null ? mf.sharedMesh : null);
+    }
+
+    public static Mesh GetSharedMeshSkinned(GameObject obj, out bool isSkin)
+    {
+        var mrSkin = obj.GetComponent<SkinnedMeshRenderer>();
+        Mesh mesh;
+        if (mrSkin != null)
+        {
+            mesh = new Mesh();
+            mrSkin.BakeMesh(mesh);
+            isSkin = true;
+        }
+        else
+        {
+            isSkin = false;
+            var mf = obj.GetComponent<MeshFilter>();
+            if (mf == null) return null;
+            mesh = mf.sharedMesh;
+        }
+        return mesh;
     }
 
     static bool ModelUVsOverlap(ModelImporter importer, ftGlobalStorage store)
@@ -734,7 +763,7 @@ public class ftBuildGraphics : ScriptableWizard
             }
         }*/
         var index = store.assetList.IndexOf(path);
-        if (index >= 0)
+        if (index >= 0 && index < store.uvOverlapAssetList.Count)
         {
             if (store.uvOverlapAssetList[index] == 0)
             {
@@ -828,7 +857,7 @@ public class ftBuildGraphics : ScriptableWizard
             {
                 if (temporaryAreaLightMeshList[i] != null)
                 {
-                    //var mr = temporaryAreaLightMeshList[i].GetComponent<MeshRenderer>();
+                    //var mr = temporaryAreaLightMeshList[i].GetComponent<Renderer>();
                     //if (mr != null) DestroyImmediate(mr);
                     //var mf = temporaryAreaLightMeshList[i].GetComponent<MeshFilter>();
                     //if (mf != null) DestroyImmediate(mf);
@@ -839,29 +868,32 @@ public class ftBuildGraphics : ScriptableWizard
         }
     }
 
-    public static void ProgressBarEnd(bool isError = true)
+    public static void ProgressBarEnd(bool removeTempObjects)// bool isError = true)
     {
-        if (terrainObjectList != null)
+        if (removeTempObjects)
         {
-            for(int i=0; i<terrainObjectList.Count; i++)
+            if (terrainObjectList != null)
             {
-                if (terrainObjectList[i] != null) DestroyImmediate(terrainObjectList[i]);
+                for(int i=0; i<terrainObjectList.Count; i++)
+                {
+                    if (terrainObjectList[i] != null) DestroyImmediate(terrainObjectList[i]);
+                }
+                terrainObjectList = null;
             }
-            terrainObjectList = null;
-        }
 
-        if (treeObjectList != null)
-        {
-            for(int i=0; i<treeObjectList.Count; i++)
+            if (treeObjectList != null)
             {
-                if (treeObjectList[i] != null) DestroyImmediate(treeObjectList[i]);
+                for(int i=0; i<treeObjectList.Count; i++)
+                {
+                    if (treeObjectList[i] != null) DestroyImmediate(treeObjectList[i]);
+                }
+                treeObjectList = null;
             }
-            treeObjectList = null;
-        }
 
-        if (isError)
-        {
-            FreeTemporaryAreaLightMeshes();
+            //if (isError)
+            {
+                FreeTemporaryAreaLightMeshes();
+            }
         }
 
         //progressBarEnabled = false;
@@ -1077,7 +1109,7 @@ public class ftBuildGraphics : ScriptableWizard
                 storages[i] = gg.GetComponent<ftLightmapsStorage>();
                 if (modifyLightmapStorage)
                 {
-                    storages[i].bakedRenderers = new List<MeshRenderer>();
+                    storages[i].bakedRenderers = new List<Renderer>();
                     storages[i].bakedIDs = new List<int>();
                     storages[i].bakedScaleOffset = new List<Vector4>();
                     storages[i].bakedVertexOffset = new List<int>();
@@ -1089,7 +1121,7 @@ public class ftBuildGraphics : ScriptableWizard
                     storages[i].lmGroupLODResFlags = null;
                     storages[i].lmGroupMinLOD = null;
                     storages[i].lmGroupLODMatrix = null;
-                    storages[i].nonBakedRenderers = new List<MeshRenderer>();
+                    storages[i].nonBakedRenderers = new List<Renderer>();
                 }
                 storages[i].implicitGroups = new List<UnityEngine.Object>();
                 storages[i].implicitGroupedObjects = new List<GameObject>();
@@ -1106,7 +1138,7 @@ public class ftBuildGraphics : ScriptableWizard
             DebugLogError("Error exporting scene - see console for details");
             CloseAllFiles();
             userCanceled = true;
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             throw;
         }
 
@@ -1240,7 +1272,7 @@ public class ftBuildGraphics : ScriptableWizard
                             {
                                 CloseAllFiles();
                                 userCanceled = true;
-                                ProgressBarEnd();
+                                ProgressBarEnd(true);
                                 yield break;
                             }
                             ProgressBarInit("Exporting scene - preparing...", window);
@@ -1253,7 +1285,7 @@ public class ftBuildGraphics : ScriptableWizard
                     if (areaLightMesh != null)
                     {
                         var areaLight = obj.GetComponent<Light>();
-                        var mr = obj.GetComponent<MeshRenderer>();
+                        var mr = obj.GetComponent<Renderer>();
                         var mf = obj.GetComponent<MeshFilter>();
                         //var prevMR = mr;
                         //var prevMF = mf;
@@ -1679,7 +1711,7 @@ public class ftBuildGraphics : ScriptableWizard
                             var lodGroup = newObj.GetComponent<LODGroup>();
                             if (lodGroup == null)
                             {
-                                var renderers = newObj.GetComponentsInChildren<MeshRenderer>();
+                                var renderers = newObj.GetComponentsInChildren<Renderer>();
                                 for(int r=0; r<renderers.Length; r++)
                                 {
                                     GameObjectUtility.SetStaticEditorFlags(renderers[r].gameObject, StaticEditorFlags.ContributeGI);
@@ -1764,11 +1796,12 @@ public class ftBuildGraphics : ScriptableWizard
                             if ((r.gameObject.hideFlags & (HideFlags.DontSave|HideFlags.HideAndDontSave)) != 0) continue; // skip temp objects
                             if (r.gameObject.tag == "EditorOnly") continue; // skip temp objects
                             if ((GameObjectUtility.GetStaticEditorFlags(r.gameObject) & StaticEditorFlags.ContributeGI) == 0) continue; // skip dynamic
-                            var mr = r.gameObject.GetComponent<MeshRenderer>();
-                            var mf = r.gameObject.GetComponent<MeshFilter>();
-                            if (mr == null || mf == null) continue; // must have visible mesh
-                            if (!mr.enabled) continue;
-                            if (mf.sharedMesh == null) continue;
+                            var mr = r.gameObject.GetComponent<Renderer>();
+                            var sharedMesh = GetSharedMesh(mr);
+                            if (mr == null || sharedMesh == null) continue; // must have visible mesh
+                            var mrEnabled = mr.enabled || r.gameObject.GetComponent<BakeryAlwaysRender>() != null;
+                            if (!mrEnabled) continue;
+                            //if (mf.sharedMesh == null) continue;
 
                             var so = new SerializedObject(mr);
                             var scaleInLm = so.FindProperty("m_ScaleInLightmap").floatValue;
@@ -1980,9 +2013,17 @@ public class ftBuildGraphics : ScriptableWizard
                     }
 
                     if (areaLight != null && !areaLight.selfShadow) continue;
-                    var mr = obj.GetComponent<MeshRenderer>();
-                    var mf = obj.GetComponent<MeshFilter>();
-                    if (mr == null || mf == null) continue; // must have visible mesh
+                    var mr = obj.GetComponent<Renderer>();
+
+                    if (mr as MeshRenderer == null && mr as SkinnedMeshRenderer == null)
+                    {
+                        // must be MR or SMR
+                        continue;
+                    }
+
+                    var sharedMesh = GetSharedMesh(mr);
+                    if (sharedMesh == null) continue; // must have visible mesh
+
 #if UNITY_2018_1_OR_NEWER
                     if (mr.HasPropertyBlock())
                     {
@@ -2005,9 +2046,9 @@ public class ftBuildGraphics : ScriptableWizard
                         mr.lightmapIndex = 0xFFFF;
                         continue; // skip dynamic
                     }
-                    if (!mr.enabled && areaLight == null) continue;
-                    if (mf.sharedMesh == null) continue;
-                    //if (mf.sharedMesh.uv.Length == 0 && mf.sharedMesh.uv2.Length == 0 && areaLight==null) continue; // must have UVs
+
+                    var mrEnabled = mr.enabled || obj.GetComponent<BakeryAlwaysRender>() != null;
+                    if (!mrEnabled && areaLight == null) continue;
 
                     var so = new SerializedObject(obj.GetComponent<Renderer>());
                     var scaleInLm = so.FindProperty("m_ScaleInLightmap").floatValue;
@@ -2033,7 +2074,7 @@ public class ftBuildGraphics : ScriptableWizard
                                 {
                                     CloseAllFiles();
                                     userCanceled = true;
-                                    ProgressBarEnd();
+                                    ProgressBarEnd(true);
                                     yield break;
                                 }
                                 ProgressBarInit("Exporting scene - preparing...", window);
@@ -2052,7 +2093,8 @@ public class ftBuildGraphics : ScriptableWizard
                                     if (ptype == PrefabType.ModelPrefab)
                                     {
                                         // but if object is a part of prefab/model
-                                        var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj.GetComponent<MeshFilter>().sharedMesh)) as ModelImporter;
+                                        var sharedMesh2 = GetSharedMesh(obj);
+                                        var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sharedMesh2)) as ModelImporter;
                                         if (importer != null && !ModelUVsOverlap(importer, gstorage))
                                         {
                                             // or actually just non-overlapping model,
@@ -2102,8 +2144,8 @@ public class ftBuildGraphics : ScriptableWizard
 
                     bool vertexBake = (group != null && group.mode == BakeryLightmapGroup.ftLMGroupMode.Vertex);
                     // must have UVs or be arealight or vertexbaked
-                    var uv = mf.sharedMesh.uv;
-                    var uv2 = mf.sharedMesh.uv2;
+                    var uv = sharedMesh.uv;
+                    var uv2 = sharedMesh.uv2;
                     if (uv.Length == 0 && uv2.Length == 0 && areaLight==null && !vertexBake) continue;
 
                     var usedUVs = uv2.Length == 0 ? uv : uv2;
@@ -2112,7 +2154,7 @@ public class ftBuildGraphics : ScriptableWizard
                     {
                         if (usedUVs[v].x < -0.0001f || usedUVs[v].x > 1.0001f || usedUVs[v].y < -0.0001f || usedUVs[v].y > 1.0001f)
                         {
-                            Debug.LogWarning("Mesh " + mf.sharedMesh.name + " on object " + obj.name + " possibly has incorrect UVs (UV2: " + (uv2.Length == 0 ? "no" : "yes")+", U: " + usedUVs[v].x + ", V: " + usedUVs[v].y + ")");
+                            Debug.LogWarning("Mesh " + sharedMesh.name + " on object " + obj.name + " possibly has incorrect UVs (UV2: " + (uv2.Length == 0 ? "no" : "yes")+", U: " + usedUVs[v].x + ", V: " + usedUVs[v].y + ")");
                             //validUVs = false;
                             break;
                         }
@@ -2133,8 +2175,8 @@ public class ftBuildGraphics : ScriptableWizard
 
                     objsToWriteVerticesUV.Add(uv);
                     objsToWriteVerticesUV2.Add(uv2);
-                    var inds = new int[mf.sharedMesh.subMeshCount][];
-                    for(int n=0; n<inds.Length; n++) inds[n] = mf.sharedMesh.GetTriangles(n);
+                    var inds = new int[sharedMesh.subMeshCount][];
+                    for(int n=0; n<inds.Length; n++) inds[n] = sharedMesh.GetTriangles(n);
                     objsToWriteIndices.Add(inds);
                 }
 
@@ -2143,7 +2185,8 @@ public class ftBuildGraphics : ScriptableWizard
                 {
                     var lmgroup = objsToWriteGroup[i];
                     if (lmgroup == null || lmgroup.mode != BakeryLightmapGroup.ftLMGroupMode.Vertex) continue;
-                    lmgroup.totalVertexCount += objsToWrite[i].GetComponent<MeshFilter>().sharedMesh.vertexCount;
+                    var sharedMesh = GetSharedMesh(objsToWrite[i]);
+                    lmgroup.totalVertexCount += sharedMesh.vertexCount;
                 }
 
                 // Create implicit temp LMGroups.
@@ -2171,7 +2214,8 @@ public class ftBuildGraphics : ScriptableWizard
                         var ptype = PrefabUtility.GetPrefabType(prefabParent);
                         if (ptype == PrefabType.ModelPrefab)
                         {
-                            var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj.GetComponent<MeshFilter>().sharedMesh)) as ModelImporter;
+                            var sharedMesh = GetSharedMesh(obj);
+                            var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sharedMesh)) as ModelImporter;
 
                             if (importer != null && !ModelUVsOverlap(importer, gstorage))
                             {
@@ -2278,10 +2322,20 @@ public class ftBuildGraphics : ScriptableWizard
                 {
                     var obj = objsToWrite[i];
                     var lmgroup = objsToWriteGroup[i];
-                    var m = obj.GetComponent<MeshFilter>().sharedMesh;
+                    bool isSkin;
+                    var m = GetSharedMeshSkinned(obj, out isSkin);
                     var vertices = m.vertices;
                     var tform = obj.transform;
                     objsToWriteVerticesPosW.Add(new Vector3[vertices.Length]);
+                    if (isSkin)
+                    {
+                        var lossyScale = tform.lossyScale;
+                        var inverseWorldScale = new Vector3(1.0f/lossyScale.x, 1.0f/lossyScale.y, 1.0f/lossyScale.z);
+                        for(int t=0; t<vertices.Length; t++)
+                        {
+                            vertices[t].Scale(inverseWorldScale);
+                        }
+                    }
                     for(int t=0; t<vertices.Length; t++)
                     {
                         objsToWriteVerticesPosW[i][t] = tform.TransformPoint(vertices[t]);
@@ -2293,6 +2347,12 @@ public class ftBuildGraphics : ScriptableWizard
                     bool flipX = localScale.x < 0;
                     bool flipY = localScale.y < 0;
                     bool flipZ = localScale.z < 0;
+                    if (lmgroup != null && lmgroup.flipNormal)
+                    {
+                        flipX = !flipX;
+                        flipY = !flipY;
+                        flipZ = !flipZ;
+                    }
                     for(int t=0; t<vertices.Length; t++)
                     {
                         if (normals.Length == 0)
@@ -2353,12 +2413,13 @@ public class ftBuildGraphics : ScriptableWizard
                         //if (!lmgroup.isImplicit) continue;
                         var prefabParent = PrefabUtility.GetPrefabParent(objsToWrite[i]) as GameObject;
                         if (prefabParent == null) continue;
-                        var assetPath = AssetDatabase.GetAssetPath(objsToWrite[i].GetComponent<MeshFilter>().sharedMesh);
+                        var sharedMesh = GetSharedMesh(objsToWrite[i]);
+                        var assetPath = AssetDatabase.GetAssetPath(sharedMesh);
                         var importer = AssetImporter.GetAtPath(assetPath) as ModelImporter;
                         if (importer == null || !importer.generateSecondaryUV) continue;
                         // user doesn't care much about UVs - adjust
 
-                        var m = objsToWrite[i].GetComponent<MeshFilter>().sharedMesh;
+                        var m = sharedMesh;
                         var vpos = objsToWriteVerticesPosW[i];
                         float area = 0;
                         var inds = objsToWriteIndices[i];
@@ -2377,7 +2438,7 @@ public class ftBuildGraphics : ScriptableWizard
                                 area += Vector3.Cross(v2 - v1, v3 - v1).magnitude;
                             }
                         }
-                        var so = new SerializedObject(objsToWrite[i].GetComponent<MeshRenderer>());
+                        var so = new SerializedObject(objsToWrite[i].GetComponent<Renderer>());
                         var scaleInLm = so.FindProperty("m_ScaleInLightmap").floatValue;
                         area *= scaleInLm;
 
@@ -2431,7 +2492,7 @@ public class ftBuildGraphics : ScriptableWizard
                         var lmgroup = objsToWriteGroup[i];
                         float totalArea = explicitGroupTotalArea[lmgroup.id];
                         float twidth = (width / Mathf.Sqrt(totalArea)) * lmgroup.resolution;
-                        var m = objsToWrite[i].GetComponent<MeshFilter>().sharedMesh;
+                        var m = GetSharedMesh(objsToWrite[i]);
 
                         // Following is copy-pasted from the loop above
                         float requiredPadding = 4 * (1024.0f / (twidth * smallestMapScale));
@@ -2582,7 +2643,8 @@ public class ftBuildGraphics : ScriptableWizard
                         int i = dirtyObjList[d];
                         var obj = objsToWrite[i];
                         var lmgroup = objsToWriteGroup[i];
-                        var m = obj.GetComponent<MeshFilter>().sharedMesh;
+                        bool isSkin;
+                        var m = GetSharedMeshSkinned(obj, out isSkin);
 
                         // Refresh attributes and indices after reimport
                         objsToWriteVerticesUV[i] = m.uv;
@@ -2594,6 +2656,15 @@ public class ftBuildGraphics : ScriptableWizard
                         var vertices = m.vertices;
                         var tform = obj.transform;
                         objsToWriteVerticesPosW[i] = new Vector3[vertices.Length];
+                        if (isSkin)
+                        {
+                            var lossyScale = tform.lossyScale;
+                            var inverseWorldScale = new Vector3(1.0f/lossyScale.x, 1.0f/lossyScale.y, 1.0f/lossyScale.z);
+                            for(int t=0; t<vertices.Length; t++)
+                            {
+                                vertices[t].Scale(inverseWorldScale);
+                            }
+                        }
                         for(int t=0; t<vertices.Length; t++)
                         {
                             objsToWriteVerticesPosW[i][t] = tform.TransformPoint(vertices[t]);
@@ -2603,6 +2674,12 @@ public class ftBuildGraphics : ScriptableWizard
                         bool flipX = localScale.x < 0;
                         bool flipY = localScale.y < 0;
                         bool flipZ = localScale.z < 0;
+                        if (lmgroup != null && lmgroup.flipNormal)
+                        {
+                            flipX = !flipX;
+                            flipY = !flipY;
+                            flipZ = !flipZ;
+                        }
                         objsToWriteVerticesNormalW[i] = new Vector3[vertices.Length];
                         var nbuff = objsToWriteVerticesNormalW[i];
                         for(int t=0; t<vertices.Length; t++)
@@ -2661,8 +2738,8 @@ public class ftBuildGraphics : ScriptableWizard
                     if (!calculateArea) continue;
 
                     var holderObj = objsToWriteHolder[i];
-                    var m = obj.GetComponent<MeshFilter>().sharedMesh;
-                    var mr = obj.GetComponent<MeshRenderer>();
+                    var m = GetSharedMesh(obj);
+                    var mr = obj.GetComponent<Renderer>();
 
                     var vpos = objsToWriteVerticesPosW[i];
                     var vuv = objsToWriteVerticesUV2[i];//m.uv2;
@@ -2861,7 +2938,18 @@ public class ftBuildGraphics : ScriptableWizard
 
                         if (lodLevelA != lodLevelB) return lodLevelA.CompareTo(lodLevelB);
 
-                        return holderObjArea[b].CompareTo( holderObjArea[a] );
+                        float areaA = holderObjArea[a];
+                        float areaB = holderObjArea[b];
+
+                        // Workaround for "override resolution"
+                        // Always pack such rectangles first
+                        var comp = a.GetComponent<BakeryLightmapGroupSelector>();
+                        if (comp != null && comp.instanceResolutionOverride) areaA = comp.instanceResolution * 10000;
+
+                        comp = b.GetComponent<BakeryLightmapGroupSelector>();
+                        if (comp != null && comp.instanceResolutionOverride) areaB = comp.instanceResolution * 10000;
+
+                        return areaB.CompareTo(areaA);
                     });
 
                     //for(int i=0; i<holderObjs.Count; i++) Debug.LogError(holderObjs[i].name);
@@ -2957,7 +3045,7 @@ public class ftBuildGraphics : ScriptableWizard
                                 DebugLogError("NaN UVs detected for " + holderObjs[i].name+" "+rect.width+" "+rect.height+" "+width+" "+height+" "+lmgroup.resolution+" "+area+" "+(uvbounds.z - uvbounds.x)+" "+(uvbounds.w - uvbounds.y));
                                 CloseAllFiles();
                                 userCanceled = true;
-                                ProgressBarEnd();
+                                ProgressBarEnd(true);
                                 yield break;
                             }
 
@@ -3161,7 +3249,7 @@ public class ftBuildGraphics : ScriptableWizard
                                 DebugLogError("Can't fit " + holderObjs[i].name+" "+rect.width+" "+rect.height);
                                 CloseAllFiles();
                                 userCanceled = true;
-                                ProgressBarEnd();
+                                ProgressBarEnd(true);
                                 yield break;
                             }
                             else
@@ -3427,10 +3515,21 @@ public class ftBuildGraphics : ScriptableWizard
                     {
                         var obj = objsToWrite[i];
                         var lmgroup = objsToWriteGroup[i];
-                        var m = obj.GetComponent<MeshFilter>().sharedMesh;
+                        bool isSkin;
+                        var m = GetSharedMeshSkinned(obj, out isSkin);
+
                         var vertices = m.vertices;
                         var tform = obj.transform;
                         objsToWriteVerticesPosW.Add(new Vector3[vertices.Length]);
+                        if (isSkin)
+                        {
+                            var lossyScale = tform.lossyScale;
+                            var inverseWorldScale = new Vector3(1.0f/lossyScale.x, 1.0f/lossyScale.y, 1.0f/lossyScale.z);
+                            for(int t=0; t<vertices.Length; t++)
+                            {
+                                vertices[t].Scale(inverseWorldScale);
+                            }
+                        }
                         for(int t=0; t<vertices.Length; t++)
                         {
                             objsToWriteVerticesPosW[i][t] = tform.TransformPoint(vertices[t]);
@@ -3442,6 +3541,12 @@ public class ftBuildGraphics : ScriptableWizard
                         bool flipX = localScale.x < 0;
                         bool flipY = localScale.y < 0;
                         bool flipZ = localScale.z < 0;
+                        if (lmgroup != null && lmgroup.flipNormal)
+                        {
+                            flipX = !flipX;
+                            flipY = !flipY;
+                            flipZ = !flipZ;
+                        }
                         for(int t=0; t<vertices.Length; t++)
                         {
                             if (normals.Length == 0)
@@ -3500,7 +3605,7 @@ public class ftBuildGraphics : ScriptableWizard
                     DebugLogError("You need to mark some objects static or add Bakery Lightmap Group Selector components on them.");
                     CloseAllFiles();
                     userCanceled = true;
-                    ProgressBarEnd();
+                    ProgressBarEnd(true);
                     yield break;
                 }
 
@@ -3509,13 +3614,13 @@ public class ftBuildGraphics : ScriptableWizard
                     DebugLogError("You need to mark some objects static or add Bakery Lightmap Group Selector components on them.");
                     CloseAllFiles();
                     userCanceled = true;
-                    ProgressBarEnd();
+                    ProgressBarEnd(true);
                     yield break;
                 }
 
                 if (atlasOnly)
                 {
-                    atlasOnlyObj = new List<MeshRenderer>();
+                    atlasOnlyObj = new List<Renderer>();
                     atlasOnlySize = new List<int>();
                     atlasOnlyID = new List<int>();
                     atlasOnlyScaleOffset = new List<Vector4>();
@@ -3533,7 +3638,7 @@ public class ftBuildGraphics : ScriptableWizard
                             }
                         }
                         var scaleOffset = holderObj == null ? emptyVec4 : new Vector4(rc.width, rc.height, rc.x, rc.y);
-                        atlasOnlyObj.Add(objsToWrite[i].GetComponent<MeshRenderer>());
+                        atlasOnlyObj.Add(objsToWrite[i].GetComponent<Renderer>());
                         atlasOnlyScaleOffset.Add(scaleOffset);
                         atlasOnlySize.Add(lmgroup == null ? 0 : lmgroup.resolution);
                         atlasOnlyID.Add(lmgroup == null ? 0 : lmgroup.id);
@@ -3597,7 +3702,7 @@ public class ftBuildGraphics : ScriptableWizard
                         {
                             CloseAllFiles();
                             userCanceled = true;
-                            ProgressBarEnd();
+                            ProgressBarEnd(true);
                             yield break;
                         }
                         ProgressBarInit("Exporting scene - preparing...", window);
@@ -3614,7 +3719,7 @@ public class ftBuildGraphics : ScriptableWizard
                     {
                         CloseAllFiles();
                         userCanceled = true;
-                        ProgressBarEnd();
+                        ProgressBarEnd(true);
                         yield break;
                     }
                     ProgressBarInit("Exporting scene - preparing...", window);
@@ -3640,7 +3745,7 @@ public class ftBuildGraphics : ScriptableWizard
                     {
                         CloseAllFiles();
                         userCanceled = true;
-                        ProgressBarEnd();
+                        ProgressBarEnd(true);
                         yield break;
                     }
                     ProgressBarInit("Exporting scene - preparing...", window);
@@ -3949,7 +4054,7 @@ public class ftBuildGraphics : ScriptableWizard
                         DebugLogError("Can't load ftOverlapTest.shader");
                         CloseAllFiles();
                         userCanceled = true;
-                        ProgressBarEnd();
+                        ProgressBarEnd(true);
                         yield break;
                     }
                     for(int g=0; g<groupList.Count; g++)
@@ -3961,7 +4066,7 @@ public class ftBuildGraphics : ScriptableWizard
                             if (objsToWriteGroup[i] != lmgroup) continue;
                             var obj = objsToWrite[i];
 
-                            var mesh = obj.GetComponent<MeshFilter>().sharedMesh;
+                            var mesh = GetSharedMesh(obj);
                             if (mesh == qmesh || mesh == pmesh) continue;
 
                             var uv = objsToWriteVerticesUV[i];//mesh.uv;
@@ -3990,7 +4095,7 @@ public class ftBuildGraphics : ScriptableWizard
                                 {
                                     CloseAllFiles();
                                     userCanceled = true;
-                                    ProgressBarEnd();
+                                    ProgressBarEnd(true);
                                     yield break;
                                 }
                                 ProgressBarInit("Exporting scene - preparing...", window);
@@ -4014,7 +4119,7 @@ public class ftBuildGraphics : ScriptableWizard
                                     {
                                         CloseAllFiles();
                                         userCanceled = true;
-                                        ProgressBarEnd();
+                                        ProgressBarEnd(true);
                                         yield break;
                                     }
                                     ProgressBarInit("Exporting scene - preparing...", window);
@@ -4026,7 +4131,7 @@ public class ftBuildGraphics : ScriptableWizard
                                     {
                                         CloseAllFiles();
                                         userCanceled = true;
-                                        ProgressBarEnd();
+                                        ProgressBarEnd(true);
                                         yield break;
                                     }
                                     ProgressBarInit("Exporting scene - preparing...", window);
@@ -4134,12 +4239,12 @@ public class ftBuildGraphics : ScriptableWizard
                         DebugLogError("Object " + objsToWriteNames[i] + " was destroyed mid-export");
                         CloseAllFiles();
                         userCanceled = true;
-                        ProgressBarEnd();
+                        ProgressBarEnd(true);
                         yield break;
                     }
 
-                    var m = obj.GetComponent<MeshFilter>().sharedMesh;
-                    var mr = obj.GetComponent<MeshRenderer>();
+                    var mr = obj.GetComponent<Renderer>();
+                    var m = GetSharedMesh(mr);
 
                     var inds = objsToWriteIndices[i];
 
@@ -4421,6 +4526,7 @@ public class ftBuildGraphics : ScriptableWizard
 
                     // Check if mesh is flipped
                     bool isFlipped = Mathf.Sign(obj.transform.lossyScale.x*obj.transform.lossyScale.y*obj.transform.lossyScale.z) < 0;
+                    if (lmgroup != null && lmgroup.flipNormal) isFlipped = !isFlipped;
 
                     while(lmIndexArrays.Count <= id)
                     {
@@ -4429,7 +4535,7 @@ public class ftBuildGraphics : ScriptableWizard
                         lmVOffset.Add(0);
                     }
 
-                    var mmr = obj.GetComponent<MeshRenderer>();
+                    var mmr = obj.GetComponent<Renderer>();
                     var castsShadows = mmr.shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.Off;
                     if (exportTerrainAsHeightmap && obj.name == "__ExportTerrain") castsShadows = false; // prevent exporting placeholder quads to ftrace
 
@@ -4513,7 +4619,7 @@ public class ftBuildGraphics : ScriptableWizard
             DebugLogError("Error exporting scene - see console for details");
             CloseAllFiles();
             userCanceled = true;
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             throw;
         }
 
@@ -4521,7 +4627,7 @@ public class ftBuildGraphics : ScriptableWizard
         if (userCanceled)
         {
             CloseAllFiles();
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             yield break;
         }
         yield return null;
@@ -4534,7 +4640,7 @@ public class ftBuildGraphics : ScriptableWizard
                 for(int i=0; i<objsToWrite.Count; i++)
                 {
                     var obj = objsToWrite[i];
-                    var m = obj.GetComponent<MeshFilter>().sharedMesh;
+                    var m = GetSharedMesh(obj);
                     var lmgroup = objsToWriteGroup[i];
 
                     var id = lmgroup == null ? -1 : objsToWriteGroup[i].id;
@@ -4549,7 +4655,7 @@ public class ftBuildGraphics : ScriptableWizard
                     if (areaLight != null) id = areaLight.lmid;
 
                     var vertexBake = lmgroup != null ? (lmgroup.mode == BakeryLightmapGroup.ftLMGroupMode.Vertex) : false;
-                    //var castsShadows = obj.GetComponent<MeshRenderer>().shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.Off;
+                    //var castsShadows = obj.GetComponent<Renderer>().shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.Off;
 
                     var holderObj = objsToWriteHolder[i];
                     if (holderObj != null)
@@ -4674,7 +4780,7 @@ public class ftBuildGraphics : ScriptableWizard
                             }
                             if (!vertexImplicit)
                             {
-                                storages[sceneID].bakedRenderers.Add(obj.GetComponent<MeshRenderer>());
+                                storages[sceneID].bakedRenderers.Add(obj.GetComponent<Renderer>());
                                 storages[sceneID].bakedIDs.Add(id < 0 ? -1 : id);
                                 storages[sceneID].bakedScaleOffset.Add(scaleOffset);
                                 storages[sceneID].bakedVertexOffset.Add(vertexBake ? (lmgroup.vertexCounter - tformedPos.Length) : -1);
@@ -4946,7 +5052,7 @@ public class ftBuildGraphics : ScriptableWizard
             DebugLogError("Error exporting scene - see console for details");
             CloseAllFiles();
             userCanceled = true;
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             throw;
         }
 
@@ -4967,7 +5073,7 @@ public class ftBuildGraphics : ScriptableWizard
                         DebugLogError("Vertex lightmap group " + groupList[g].name + " has 0 static vertices. Make sure objects inside the group don't all have Scale In Lightmap == 0.");
                         CloseAllFiles();
                         userCanceled = true;
-                        ProgressBarEnd();
+                        ProgressBarEnd(true);
                         yield break;
                     }
                     int atlasTexSize = (int)Mathf.Ceil(Mathf.Sqrt((float)groupList[g].totalVertexCount));
@@ -4987,8 +5093,9 @@ public class ftBuildGraphics : ScriptableWizard
                     var lmgroup = objsToWriteGroup[i];
                     if (lmgroup == null) continue;
                     if (lmgroup.id != groupList[g].id) continue;
-                    ftUVGBufferGen.RenderUVGBuffer(obj.GetComponent<MeshFilter>().sharedMesh,
-                        obj.GetComponent<MeshRenderer>().sharedMaterials,
+                    var sharedMesh = GetSharedMesh(obj);
+                    ftUVGBufferGen.RenderUVGBuffer(sharedMesh,
+                        obj.GetComponent<Renderer>().sharedMaterials,
                         objsToWriteScaleOffset[i],
                         obj.transform.localToWorldMatrix,
                         vertexBake,
@@ -5053,7 +5160,7 @@ public class ftBuildGraphics : ScriptableWizard
         {
             CloseAllFiles();
             userCanceled = true;
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             yield break;
         }
         yield return null;
@@ -5105,7 +5212,7 @@ public class ftBuildGraphics : ScriptableWizard
                     DebugLogError("Failed to copy textures (" + cerr + ")");
                     CloseAllFiles();
                     userCanceled = true;
-                    ProgressBarEnd();
+                    ProgressBarEnd(true);
                     yield break;
                 }
             }
@@ -5135,13 +5242,13 @@ public class ftBuildGraphics : ScriptableWizard
             DebugLogError("ftGenerateAlphaBuffer error: " + uerr);
             CloseAllFiles();
             userCanceled = true;
-            ProgressBarEnd();
+            ProgressBarEnd(true);
             yield break;
         }
 
         if (!renderTextures)
         {
-            ProgressBarEnd(false);
+            ProgressBarEnd(true);//false);
             yield break;
         }
 
@@ -5163,7 +5270,7 @@ public class ftBuildGraphics : ScriptableWizard
                 DebugLogError("ftRenderUVGBuffer error: " + uerr);
                 CloseAllFiles();
                 userCanceled = true;
-                ProgressBarEnd();
+                ProgressBarEnd(true);
                 yield break;
             }
         }
@@ -5171,7 +5278,7 @@ public class ftBuildGraphics : ScriptableWizard
         ms = GetTime();
         Debug.Log("UVGB/fixPos/alpha time: " + ((ms - startMsU) / 1000.0) + " seconds");
 
-        ProgressBarEnd(false);
+        ProgressBarEnd(true);
 
         Debug.Log("Finished");
     }

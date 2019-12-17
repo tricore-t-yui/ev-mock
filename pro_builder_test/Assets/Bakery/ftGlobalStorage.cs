@@ -61,6 +61,9 @@ public class ftGlobalStorage : ScriptableObject
     [SerializeField]
     public bool xatlasWarningShown = false;
 
+    [SerializeField]
+    public bool checkerPreviewOn = false;
+
 
     // Defaults
     [SerializeField]
@@ -109,6 +112,8 @@ public class ftGlobalStorage : ScriptableObject
     public int renderSettingsMinAutoResolution = 16;
     [SerializeField]
     public bool renderSettingsUnloadScenes = true;
+    [SerializeField]
+    public bool renderSettingsAdjustSamples = true;
     [SerializeField]
     public int renderSettingsGILODMode = 0;
     [SerializeField]
@@ -185,7 +190,10 @@ public class ftGlobalStorage : ScriptableObject
     public bool renderSettingsExportTerrainTrees = false;
     [SerializeField]
     public bool renderSettingsShowPerf = true;
-
+    [SerializeField]
+    public int renderSettingsSampleDiv = 1;
+    [SerializeField]
+    public bool renderSettingsLegacyDenoiser = false;
 
     // Temp
 

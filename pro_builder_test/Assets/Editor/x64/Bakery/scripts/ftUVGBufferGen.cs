@@ -226,7 +226,7 @@ public class ftUVGBufferGen
                             }
                         }
                     }
-                    Shader.SetGlobalVector("unity_LightmapST", (isHDRP || isLWRP) ? scaleOffsetFlipped : scaleOffset);
+                    Shader.SetGlobalVector("unity_LightmapST", (isHDRP) ? scaleOffsetFlipped : scaleOffset);
                     Shader.SetGlobalVector("unity_MetaFragmentControl", pass == 0 ? metaControlAlbedo : metaControlEmission);
 
                     if (metaPass >= 0)
@@ -326,7 +326,7 @@ public class ftUVGBufferGen
                         else
                         {
                             // TODO: use in HDRP as well
-                            var srcVec = (isHDRP || isLWRP) ? scaleOffsetFlipped : scaleOffset;
+                            var srcVec = (isHDRP) ? scaleOffsetFlipped : scaleOffset;
                             var vec = new Vector4(srcVec.x, srcVec.y, srcVec.z + uvOffset[j*2] * texelSize, srcVec.w + uvOffset[j*2+1] * texelSize);
                             Shader.SetGlobalVector("unity_LightmapST", vec);
                             if (bakeryPass >= 0)

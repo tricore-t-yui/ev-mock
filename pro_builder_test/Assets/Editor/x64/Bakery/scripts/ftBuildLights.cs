@@ -26,7 +26,7 @@ public class ftBuildLights
         lightSaved = new Dictionary<string, bool>();
     }
 
-    static public void BuildDirectLight(BakeryDirectLight obj, bool ignoreNormal = false, string outName = "direct.bin")
+    static public void BuildDirectLight(BakeryDirectLight obj, int SAMPLES, bool ignoreNormal = false, string outName = "direct.bin")
     {
         if (!allowOverwrite && lightSaved.ContainsKey(outName)) return;
         lightSaved[outName] = true;
@@ -51,13 +51,13 @@ public class ftBuildLights
         #endif
 
         f.Write(obj.shadowSpread);
-        f.Write(obj.samples);
+        f.Write(SAMPLES);
         f.Write(ignoreNormal);
 
         f.Close();
     }
 
-    static public void BuildSkyLight(BakerySkyLight obj, bool texDirty, string outName = "sky.bin")
+    static public void BuildSkyLight(BakerySkyLight obj, int SAMPLES, bool texDirty, string outName = "sky.bin")
     {
         if (!allowOverwrite && lightSaved.ContainsKey(outName)) return;
         lightSaved[outName] = true;
@@ -77,7 +77,7 @@ public class ftBuildLights
             f.Write(obj.color.b * obj.intensity);
         #endif
 
-        f.Write(obj.samples);
+        f.Write(SAMPLES);
         f.Write(obj.hemispherical);
 
         f.Write("sky" + obj.UID + ".dds");

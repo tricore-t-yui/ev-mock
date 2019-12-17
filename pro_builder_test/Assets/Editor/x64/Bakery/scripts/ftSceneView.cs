@@ -59,7 +59,7 @@ public class ftSceneView
         }
         Debug.Log("Atlasing done");
         //ftRenderLightmap.simpleProgressBarEnd();
-        ftBuildGraphics.ProgressBarEnd();
+        ftBuildGraphics.ProgressBarEnd(true);
     }
 
     static void ApplyNewProperties()
@@ -118,6 +118,10 @@ public class ftSceneView
             sceneView.SetSceneViewShaderReplace(null, null);
             ftLightmaps.RefreshFull();
             enabled = false;
+
+            var gstorage = ftLightmaps.GetGlobalStorage();
+            gstorage.checkerPreviewOn = false;
+            EditorUtility.SetDirty(gstorage);
         }
         else
         {
@@ -134,6 +138,11 @@ public class ftSceneView
             //var sceneCameras = SceneView.GetAllSceneCameras();
             //for(int i=0; i<sceneCameras.Length; i++) sceneCameras[i].renderingPath = RenderingPath.Forward;
             enabled = true;
+
+            var gstorage = ftLightmaps.GetGlobalStorage();
+            gstorage.checkerPreviewOn = true;
+            EditorUtility.SetDirty(gstorage);
+
             Atlas();
             ApplyNewProperties();
         }

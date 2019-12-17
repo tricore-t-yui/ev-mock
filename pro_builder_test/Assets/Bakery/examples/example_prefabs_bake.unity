@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.54882824, g: 0.53613317, b: 0.6167009, a: 1}
+  m_IndirectSpecularColor: {r: 0.058136128, g: 0.05252071, b: 0.09783946, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -162,39 +162,6 @@ Light:
     type: 3}
   m_PrefabInstance: {fileID: 947203923}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &72437733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
-  m_Name: example_prefabs_bake_LMA1
-  m_EditorClassIdentifier: 
-  resolution: 512
-  bitmask: 1
-  id: 0
-  sortingID: 2
-  isImplicit: 1
-  area: 0
-  totalVertexCount: 0
-  vertexCounter: 0
-  sceneLodLevel: -1
-  sceneName: 
-  containsTerrains: 0
-  probes: 0
-  mode: 1
-  renderMode: 1000
-  renderDirMode: 1000
-  computeSSS: 0
-  sssSamples: 16
-  sssDensity: 10
-  sssColor: {r: 1, g: 1, b: 1, a: 1}
-  fakeShadowBias: 0
-  transparentSelfShadow: 0
 --- !u!1 &73472735
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +258,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -409,6 +377,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -512,6 +481,7 @@ MonoBehaviour:
   renderSettingsMaxAutoResolution: 4096
   renderSettingsMinAutoResolution: 512
   renderSettingsUnloadScenes: 0
+  renderSettingsAdjustSamples: 1
   renderSettingsGILODMode: 0
   renderSettingsGILODModeEnabled: 0
   renderSettingsCheckOverlaps: 0
@@ -550,10 +520,12 @@ MonoBehaviour:
   renderSettingsUnwrapper: 0
   renderSettingsExportTerrainTrees: 0
   renderSettingsShowPerf: 1
+  renderSettingsSampleDiv: 1
+  renderSettingsLegacyDenoiser: 0
   lastBakeTime: 31
   enlightenWarningShown: 0
   enlightenWarningShown2: 0
-  lightUIDs: 08f4c8bde91570fbe234d07a8a29d87d35d20077a71e05cdf929c598c66ea019e12618aa1225d38bcfe205f6fb7182b897230d02952eede77934a4c7571d1a54e757d25befdf43f4efeb76c1964990b4ef20975b69a23c25ab83ff8fee8ffadf2034539adcb4d5f2825378e324727a19f7210c15cf0bcec7b636fc165137b2deafaf210efc9ea47be639d713358fb9ba74d51765654a1e057d9d4b5f
+  lightUIDs: 08f4c8bde91570fbe234d07a8a29d87d35d20077a71e05cdf929c598c66ea019e12618aa1225d38bcfe205f6fb7182b897230d02952eede77934a4c7571d1a54e757d25befdf43f4efeb76c1964990b4ef20975b69a23c25ab83ff8fee8ffadf2034539adcb4d5f2825378e324727a19f7210c15cf0bcec7b636fc165137b2deafaf210efc9ea47be639d713358fb9ba74d51765654a1e057d9d4b5f978921a9254d3ea45aa38fe7355a1d755788c36a
   lights:
   - tform:
       e00: 0.04135853
@@ -1725,42 +1697,192 @@ MonoBehaviour:
     projMode: 0
     cookie: {fileID: 0}
     angle: 30
+  - tform:
+      e00: 0.04135853
+      e01: 0
+      e02: 0
+      e03: -0.485
+      e10: 0
+      e11: 0.041358545
+      e12: 0
+      e13: 0.35200006
+      e20: 0
+      e21: 0
+      e22: 0.041358545
+      e23: 1.46
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    color: {r: 1, g: 0.71625, b: 0.375, a: 1}
+    intensity: 4
+    range: 0.4
+    radius: 0.03
+    samples: 8
+    samples2: 0
+    bitmask: 0
+    bakeToIndirect: 0
+    selfShadow: 0
+    realisticFalloff: 0
+    projMode: 0
+    cookie: {fileID: 0}
+    angle: 30
+  - tform:
+      e00: 0.04135853
+      e01: 0
+      e02: 0
+      e03: 0.0343
+      e10: 0
+      e11: 0.041358545
+      e12: 0
+      e13: 0.35200006
+      e20: 0
+      e21: 0
+      e22: 0.041358545
+      e23: 1.46
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    color: {r: 1, g: 0.71625, b: 0.375, a: 1}
+    intensity: 4
+    range: 0.4
+    radius: 0.03
+    samples: 8
+    samples2: 0
+    bitmask: 0
+    bakeToIndirect: 0
+    selfShadow: 0
+    realisticFalloff: 0
+    projMode: 0
+    cookie: {fileID: 0}
+    angle: 30
+  - tform:
+      e00: 0.04135853
+      e01: 0
+      e02: 0
+      e03: -0.485
+      e10: 0
+      e11: 0.041358545
+      e12: 0
+      e13: 0.35200006
+      e20: 0
+      e21: 0
+      e22: 0.041358545
+      e23: -1.5400004
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    color: {r: 1, g: 0.71625, b: 0.375, a: 1}
+    intensity: 4
+    range: 0.4
+    radius: 0.03
+    samples: 8
+    samples2: 0
+    bitmask: 0
+    bakeToIndirect: 0
+    selfShadow: 0
+    realisticFalloff: 0
+    projMode: 0
+    cookie: {fileID: 0}
+    angle: 30
+  - tform:
+      e00: -0.0013230991
+      e01: -0.041015178
+      e02: -0.005162796
+      e03: 0.03703154
+      e10: -0.007931036
+      e11: 0.0053213374
+      e12: -0.040242177
+      e13: 0.4990095
+      e20: 0.040570915
+      e21: -0.00029734283
+      e22: -0.008035142
+      e23: -1.5510004
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    color: {r: 0.45334685, g: 1, b: 0.19117647, a: 1}
+    intensity: 4
+    range: 1
+    radius: 0.03
+    samples: 8
+    samples2: 0
+    bitmask: 0
+    bakeToIndirect: 0
+    selfShadow: 0
+    realisticFalloff: 0
+    projMode: 4
+    cookie: {fileID: 0}
+    angle: 85
+  - tform:
+      e00: -0.000000004930496
+      e01: 0
+      e02: -0.04136001
+      e03: 0.03703141
+      e10: 0
+      e11: 0.041360013
+      e12: 0.0000000049304973
+      e13: 0.3520001
+      e20: 0.041360006
+      e21: -0.0000000049304973
+      e22: 5.8776103e-16
+      e23: -2.0049005
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    color: {r: 1, g: 0.71625, b: 0.375, a: 1}
+    intensity: 4
+    range: 0.4
+    radius: 0.03
+    samples: 8
+    samples2: 0
+    bitmask: 0
+    bakeToIndirect: 0
+    selfShadow: 0
+    realisticFalloff: 0
+    projMode: 0
+    cookie: {fileID: 0}
+    angle: 30
   implicitGroups:
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 1161896815}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 72437733}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 506401286}
-  - {fileID: 72437733}
-  - {fileID: 506401286}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 923557952}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 1336185051}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 2102409568}
+  - {fileID: 1336185051}
+  - {fileID: 2102409568}
   implicitGroupedObjects:
   - {fileID: 84447580}
   - {fileID: 207403402}
@@ -1923,9 +2045,9 @@ MonoBehaviour:
   bakedLights:
   - {fileID: 44932049}
   - {fileID: 1794223535}
+  - {fileID: 1158081652}
   - {fileID: 1228306655}
   - {fileID: 905404063}
-  - {fileID: 1158081652}
   bakedLightChannels: ffffffffffffffffffffffffffffffffffffffff
   bakedRenderersTerrain: []
   bakedIDsTerrain: 
@@ -2073,6 +2195,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2099,39 +2222,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 90}
---- !u!114 &506401286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
-  m_Name: example_prefabs_bake_LM12
-  m_EditorClassIdentifier: 
-  resolution: 512
-  bitmask: 1
-  id: 1
-  sortingID: 1
-  isImplicit: 1
-  area: 41.49169
-  totalVertexCount: 0
-  vertexCounter: 0
-  sceneLodLevel: -1
-  sceneName: 
-  containsTerrains: 0
-  probes: 0
-  mode: 1
-  renderMode: 1000
-  renderDirMode: 1000
-  computeSSS: 0
-  sssSamples: 16
-  sssDensity: 10
-  sssColor: {r: 1, g: 1, b: 1, a: 1}
-  fakeShadowBias: 0
-  transparentSelfShadow: 0
 --- !u!1 &531275332 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1760638453575242, guid: 85bb0d58fd9bda743826dc3c4f4af691,
@@ -2288,6 +2378,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2533,6 +2624,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2575,6 +2667,41 @@ Light:
     type: 3}
   m_PrefabInstance: {fileID: 308302769}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &923557952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
+  m_Name: example_prefabs_bake_VLM
+  m_EditorClassIdentifier: 
+  resolution: 512
+  bitmask: 1
+  id: 2
+  sortingID: 0
+  isImplicit: 1
+  area: 0
+  totalVertexCount: 48
+  vertexCounter: 48
+  sceneLodLevel: -1
+  sceneName: 
+  containsTerrains: 0
+  probes: 0
+  mode: 2
+  renderMode: 1000
+  renderDirMode: 1000
+  computeSSS: 0
+  sssSamples: 16
+  sssDensity: 10
+  sssColor: {r: 1, g: 1, b: 1, a: 1}
+  fakeShadowBias: 0
+  transparentSelfShadow: 0
+  flipNormal: 0
+  overridePath: 
 --- !u!1001 &947203923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2689,6 +2816,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2771,6 +2899,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2840,39 +2969,6 @@ Light:
     type: 3}
   m_PrefabInstance: {fileID: 308302769}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1161896815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
-  m_Name: example_prefabs_bake_VLM
-  m_EditorClassIdentifier: 
-  resolution: 512
-  bitmask: 1
-  id: 2
-  sortingID: 0
-  isImplicit: 1
-  area: 0
-  totalVertexCount: 48
-  vertexCounter: 48
-  sceneLodLevel: -1
-  sceneName: 
-  containsTerrains: 0
-  probes: 0
-  mode: 2
-  renderMode: 1000
-  renderDirMode: 1000
-  computeSSS: 0
-  sssSamples: 16
-  sssDensity: 10
-  sssColor: {r: 1, g: 1, b: 1, a: 1}
-  fakeShadowBias: 0
-  transparentSelfShadow: 0
 --- !u!1 &1224974867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,6 +3030,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3037,6 +3134,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3073,6 +3171,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321389501}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1336185051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
+  m_Name: example_prefabs_bake_LMA1
+  m_EditorClassIdentifier: 
+  resolution: 512
+  bitmask: 1
+  id: 0
+  sortingID: 2
+  isImplicit: 1
+  area: 0
+  totalVertexCount: 0
+  vertexCounter: 0
+  sceneLodLevel: -1
+  sceneName: 
+  containsTerrains: 0
+  probes: 0
+  mode: 1
+  renderMode: 1000
+  renderDirMode: 1000
+  computeSSS: 0
+  sssSamples: 16
+  sssDensity: 10
+  sssColor: {r: 1, g: 1, b: 1, a: 1}
+  fakeShadowBias: 0
+  transparentSelfShadow: 0
+  flipNormal: 0
+  overridePath: 
 --- !u!1 &1352709561
 GameObject:
   m_ObjectHideFlags: 0
@@ -3212,6 +3345,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3392,6 +3526,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3519,6 +3654,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3601,6 +3737,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 0
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3652,3 +3789,38 @@ Transform:
   m_Father: {fileID: 1688497076}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 180, y: -90, z: 0}
+--- !u!114 &2102409568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
+  m_Name: example_prefabs_bake_LM12
+  m_EditorClassIdentifier: 
+  resolution: 512
+  bitmask: 1
+  id: 1
+  sortingID: 1
+  isImplicit: 1
+  area: 41.49169
+  totalVertexCount: 0
+  vertexCounter: 0
+  sceneLodLevel: -1
+  sceneName: 
+  containsTerrains: 0
+  probes: 0
+  mode: 1
+  renderMode: 1000
+  renderDirMode: 1000
+  computeSSS: 0
+  sssSamples: 16
+  sssDensity: 10
+  sssColor: {r: 1, g: 1, b: 1, a: 1}
+  fakeShadowBias: 0
+  transparentSelfShadow: 0
+  flipNormal: 0
+  overridePath: 

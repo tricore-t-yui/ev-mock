@@ -221,7 +221,17 @@ public class xatlas
         //EditorUtility.DisplayDialog("Bakery", "xatlas unwrap end", "OK");
 
         int vertCount = m.vertexCount;
-        //bool is32bit = newUVBuffer.Count >= 0xFFFF;// (vertCount + newUV2.Count) >= 0xFFFF;
+
+        bool origIs16bit = true;
+#if UNITY_2017_3_OR_NEWER
+        origIs16bit = m.indexFormat == UnityEngine.Rendering.IndexFormat.UInt16;
+#endif
+        bool is32bit = newUVBuffer.Count >= 65000;//0xFFFF;
+        if (is32bit && origIs16bit)
+        {
+            Debug.LogError("Unwrap failed: original mesh (" + m.name + ") has 16 bit indices, but unwrapped requires 32 bit.");
+            return;
+        }
 
         // Duplicate attributes
         //if (newXrefBuffer.Count > m.vertexCount) // commented because can be also swapped around

@@ -5,6 +5,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(BakeryLightmapGroupSelector))]
 [CanEditMultipleObjects]
@@ -125,7 +127,19 @@ public class ftLMGroupSelectorInspector : UnityEditor.Editor
                     newGroup.bitmask = newMask;
                     newGroup.mode = newMode;
                     newGroup.renderDirMode = newDirMode;
-                    AssetDatabase.CreateAsset(newGroup, "Assets/" + newName + ".asset");
+
+                    string fname;
+                    var activeScene = SceneManager.GetActiveScene();
+                    if (activeScene.path.Length > 0)
+                    {
+                        fname = Path.GetDirectoryName(activeScene.path) + "/" + newName;
+                    }
+                    else
+                    {
+                        fname = "Assets/" + newName;
+                    }
+
+                    AssetDatabase.CreateAsset(newGroup, fname + ".asset");
                     AssetDatabase.SaveAssets();
                     ftraceAsset.objectReferenceValue = newGroup;
                 }

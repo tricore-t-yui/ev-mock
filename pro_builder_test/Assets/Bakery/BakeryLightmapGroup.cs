@@ -18,6 +18,7 @@ public struct BakeryLightmapGroupPlain
     public float sssR, sssG, sssB;
     public float fakeShadowBias;
     public bool transparentSelfShadow;
+    public bool flipNormal;
 };
 
 [CreateAssetMenu(menuName = "Bakery lightmap group")]
@@ -116,6 +117,12 @@ public class BakeryLightmapGroup : ScriptableObject
     [SerializeField]
     public bool transparentSelfShadow = false;
 
+    [SerializeField]
+    public bool flipNormal = false;
+
+    [SerializeField]
+    public string overridePath = "";
+
     public BakeryLightmapGroupPlain GetPlainStruct()
     {
         BakeryLightmapGroupPlain str;
@@ -136,6 +143,7 @@ public class BakeryLightmapGroup : ScriptableObject
         str.probes = probes;
         str.fakeShadowBias = fakeShadowBias;
         str.transparentSelfShadow = transparentSelfShadow;
+        str.flipNormal = flipNormal;
         return str;
     }
 }

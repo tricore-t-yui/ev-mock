@@ -55,6 +55,7 @@ public class ftLightmapsStorage : MonoBehaviour{
         public int renderSettingsMaxAutoResolution = 4096;
         public int renderSettingsMinAutoResolution = 16;
         public bool renderSettingsUnloadScenes = true;
+        public bool renderSettingsAdjustSamples = true;
         public int renderSettingsGILODMode = 0;
         public bool renderSettingsGILODModeEnabled = true;
         public bool renderSettingsCheckOverlaps = false;
@@ -93,6 +94,8 @@ public class ftLightmapsStorage : MonoBehaviour{
         public int renderSettingsUnwrapper = 0;
         public bool renderSettingsExportTerrainTrees = false;
         public bool renderSettingsShowPerf = true;
+        public int renderSettingsSampleDiv = 1;
+        public bool renderSettingsLegacyDenoiser = false;
         public int lastBakeTime = 0;
 
         public bool enlightenWarningShown = false;
@@ -182,6 +185,7 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsMaxAutoResolution = src.renderSettingsMaxAutoResolution;
             dest.renderSettingsMinAutoResolution = src.renderSettingsMinAutoResolution;
             dest.renderSettingsUnloadScenes = src.renderSettingsUnloadScenes;
+            dest.renderSettingsAdjustSamples = src.renderSettingsAdjustSamples;
             dest.renderSettingsGILODMode = src.renderSettingsGILODMode;
             dest.renderSettingsGILODModeEnabled = src.renderSettingsGILODModeEnabled;
             dest.renderSettingsCheckOverlaps = src.renderSettingsCheckOverlaps;
@@ -219,6 +223,8 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsServerAddress = src.renderSettingsServerAddress;
             dest.renderSettingsUnwrapper = src.renderSettingsUnwrapper;
             dest.renderSettingsExportTerrainTrees = src.renderSettingsExportTerrainTrees;
+            dest.renderSettingsSampleDiv = src.renderSettingsSampleDiv;
+            dest.renderSettingsLegacyDenoiser = src.renderSettingsLegacyDenoiser;
             dest.renderSettingsShowPerf = src.renderSettingsShowPerf;
         }
 
@@ -247,6 +253,7 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsMaxAutoResolution = src.renderSettingsMaxAutoResolution;
             dest.renderSettingsMinAutoResolution = src.renderSettingsMinAutoResolution;
             dest.renderSettingsUnloadScenes = src.renderSettingsUnloadScenes;
+            dest.renderSettingsAdjustSamples = src.renderSettingsAdjustSamples;
             dest.renderSettingsGILODMode = src.renderSettingsGILODMode;
             dest.renderSettingsGILODModeEnabled = src.renderSettingsGILODModeEnabled;
             dest.renderSettingsCheckOverlaps = src.renderSettingsCheckOverlaps;
@@ -285,6 +292,8 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsUnwrapper = src.renderSettingsUnwrapper;
             dest.renderSettingsExportTerrainTrees = src.renderSettingsExportTerrainTrees;
             dest.renderSettingsShowPerf = src.renderSettingsShowPerf;
+            dest.renderSettingsSampleDiv = src.renderSettingsSampleDiv;
+            dest.renderSettingsLegacyDenoiser = src.renderSettingsLegacyDenoiser;
         }
 
         public static void CopySettings(ftGlobalStorage src, ftLightmapsStorage dest)
@@ -312,6 +321,7 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsMaxAutoResolution = src.renderSettingsMaxAutoResolution;
             dest.renderSettingsMinAutoResolution = src.renderSettingsMinAutoResolution;
             dest.renderSettingsUnloadScenes = src.renderSettingsUnloadScenes;
+            dest.renderSettingsAdjustSamples = src.renderSettingsAdjustSamples;
             dest.renderSettingsGILODMode = src.renderSettingsGILODMode;
             dest.renderSettingsGILODModeEnabled = src.renderSettingsGILODModeEnabled;
             dest.renderSettingsCheckOverlaps = src.renderSettingsCheckOverlaps;
@@ -350,6 +360,8 @@ public class ftLightmapsStorage : MonoBehaviour{
             dest.renderSettingsUnwrapper = src.renderSettingsUnwrapper;
             dest.renderSettingsExportTerrainTrees = src.renderSettingsExportTerrainTrees;
             dest.renderSettingsShowPerf = src.renderSettingsShowPerf;
+            dest.renderSettingsSampleDiv = src.renderSettingsSampleDiv;
+            dest.renderSettingsLegacyDenoiser = src.renderSettingsLegacyDenoiser;
         }
 #endif
 
@@ -363,7 +375,7 @@ public class ftLightmapsStorage : MonoBehaviour{
     public List<int> mapsMode = new List<int>();
 
     // new props
-    public List<MeshRenderer> bakedRenderers = new List<MeshRenderer>();
+    public List<Renderer> bakedRenderers = new List<Renderer>();
     public List<int> bakedIDs = new List<int>();
     public List<Vector4> bakedScaleOffset = new List<Vector4>();
 #if UNITY_EDITOR
@@ -371,7 +383,7 @@ public class ftLightmapsStorage : MonoBehaviour{
 #endif
     public List<Mesh> bakedVertexColorMesh = new List<Mesh>();
 
-    public List<MeshRenderer> nonBakedRenderers = new List<MeshRenderer>();
+    public List<Renderer> nonBakedRenderers = new List<Renderer>();
 
     public List<Light> bakedLights = new List<Light>();
     public List<int> bakedLightChannels = new List<int>();

@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -332,6 +332,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -525,6 +526,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -559,7 +561,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
---- !u!114 &936637865
+--- !u!114 &917702867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -569,14 +571,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
-  m_Name: example_directional_SH_LM0
+  m_Name: example_directional_SH_LMA1
   m_EditorClassIdentifier: 
   resolution: 512
   bitmask: 1
-  id: 1
-  sortingID: 1
+  id: 0
+  sortingID: 2
   isImplicit: 1
-  area: 647.2114
+  area: 0
   totalVertexCount: 0
   vertexCounter: 0
   sceneLodLevel: -1
@@ -592,6 +594,8 @@ MonoBehaviour:
   sssColor: {r: 1, g: 1, b: 1, a: 1}
   fakeShadowBias: 0
   transparentSelfShadow: 0
+  flipNormal: 0
+  overridePath: 
 --- !u!1 &1361227936
 GameObject:
   m_ObjectHideFlags: 1
@@ -644,6 +648,7 @@ MonoBehaviour:
   renderSettingsMaxAutoResolution: 4096
   renderSettingsMinAutoResolution: 16
   renderSettingsUnloadScenes: 0
+  renderSettingsAdjustSamples: 1
   renderSettingsGILODMode: 0
   renderSettingsGILODModeEnabled: 0
   renderSettingsCheckOverlaps: 0
@@ -682,7 +687,9 @@ MonoBehaviour:
   renderSettingsUnwrapper: 0
   renderSettingsExportTerrainTrees: 0
   renderSettingsShowPerf: 1
-  lastBakeTime: 38
+  renderSettingsSampleDiv: 1
+  renderSettingsLegacyDenoiser: 0
+  lastBakeTime: 37
   enlightenWarningShown: 0
   enlightenWarningShown2: 0
   lightUIDs: bfeaf8c42fc6ed35cc15aa7dec4bac48245ec10cb054f7fb8f42e1001eb7b0802ba45151989e355c2aecec39d929f97570ec147ced9f2f1b3a195599b33ed2d4ba8c5079f4fb0c1e8c1f268a5a866477ccae42e2f7ce335adebfaafb
@@ -1378,10 +1385,10 @@ MonoBehaviour:
     cookie: {fileID: 0}
     angle: 30
   implicitGroups:
-  - {fileID: 1529659099}
-  - {fileID: 1529659099}
-  - {fileID: 1529659099}
-  - {fileID: 936637865}
+  - {fileID: 917702867}
+  - {fileID: 917702867}
+  - {fileID: 917702867}
+  - {fileID: 1364759113}
   implicitGroupedObjects:
   - {fileID: 907125502}
   - {fileID: 1694763691}
@@ -1475,7 +1482,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1529659099
+--- !u!114 &1364759113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1485,14 +1492,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec0b4dd729a12d046982652f834580a2, type: 3}
-  m_Name: example_directional_SH_LMA1
+  m_Name: example_directional_SH_LM0
   m_EditorClassIdentifier: 
   resolution: 512
   bitmask: 1
-  id: 0
-  sortingID: 2
+  id: 1
+  sortingID: 1
   isImplicit: 1
-  area: 0
+  area: 647.2114
   totalVertexCount: 0
   vertexCounter: 0
   sceneLodLevel: -1
@@ -1508,6 +1515,8 @@ MonoBehaviour:
   sssColor: {r: 1, g: 1, b: 1, a: 1}
   fakeShadowBias: 0
   transparentSelfShadow: 0
+  flipNormal: 0
+  overridePath: 
 --- !u!1 &1694763691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,6 +1560,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1628,6 +1638,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1705,6 +1716,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
