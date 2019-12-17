@@ -11,16 +11,15 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
 {
     // ハイドポイントからツンが目の前に停止する位置までの距離
     [SerializeField]
-    float hideToTaegetDistance = 0;
+    float lockerToTaegetDistance = 0;
+    [SerializeField]
+    float bedCenterRadius = 0;
 
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
     // エリアデータ管理クラス
     TunAreaDataManager areaDataManager = null;
-
-    // エリア管理クラス
-    AreaManager areaManager = null;
 
     // ハイドコントローラー
     PlayerHideController hideController = null;
@@ -32,7 +31,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     // 現在確認しているハイドポイント
     GameObject currentCheckingHide = null;
     // 現在確認しているハイドポイントのインデックス
-    int currentHideIndex = 0;
+    int currentHideIndex = -1;
 
     /// <summary>
     /// ステート開始
@@ -44,8 +43,6 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
 
         // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
-        // エリア管理クラスを取得
-        areaManager = FindObjectOfType<AreaManager>() ?? areaManager;
         // ハイドコントローラーを取得
         hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
 
@@ -53,20 +50,35 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         firstCheckingHide = hideController.HideObj ?? firstCheckingHide;
 
         // ハイドポイントから属しているエリアデータを取得
-        areaData = areaDataManager.GetTunAreaData(firstCheckingHide);
+        areaData = areaDataManager.GetTunAreaData(firstCheckingHide.GetInstanceID());
+
         // エリアデータ内のハイドポイントをリストで取得
         List<GameObject> hideObjectToList = areaData.HideObject.ToList();
         // 一番最初に確認するハイドポイントのインデックスを取得
         int firstHideIndex = hideObjectToList.IndexOf(firstCheckingHide);
         // 現在のハイドポイントのインデックス = 最初のハイドポイントのインデックス + 確認済みのハイドポイントの数
-        currentHideIndex = firstHideIndex + animator.GetInteger("checkedHideCount");
+        if (currentHideIndex == -1)
+        {
+            currentHideIndex = firstHideIndex;
+        }
+        else
+        {
+            currentHideIndex++;
+        }
         // 算出したハイドポイントのインデックスがリスト範囲外だった場合は先頭へ
         if (currentHideIndex > hideObjectToList.Count -1) { currentHideIndex = 0; }
         // 算出したインデックスからハイドポイントを取得
         currentCheckingHide = hideObjectToList[currentHideIndex];
 
         // ナビメッシュに目標位置をセット（ハイドポイントの目の前が目標位置になるように）
-        navMesh.SetDestination(currentCheckingHide.transform.position + (currentCheckingHide.transform.forward *-1) * hideToTaegetDistance);
+        if (currentCheckingHide.tag == "Locker")
+        {
+            navMesh.SetDestination(currentCheckingHide.transform.position + (currentCheckingHide.transform.forward * -1) * lockerToTaegetDistance);
+        }
+        else if (currentCheckingHide.tag == "Bed")
+        {
+            navMesh.SetDestination(currentCheckingHide.transform.position);
+        }
     }
 
     /// <summary>
@@ -74,15 +86,26 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        // まだ目標位置に着いてなければスキップ
-        if (!(navMesh.remainingDistance < navMesh.stoppingDistance)) { return; }
+        bool isAngle = false;
         // ハイドポイントの位置を取得
         Vector3 hideObjPos = currentCheckingHide.transform.position;
-        // ハイドポイントのほうを向くようにツンを回転
-        animator.transform.LookAt(new Vector3(hideObjPos.x,animator.transform.position.y,hideObjPos.z));
+        // まだ目標位置に着いてなければスキップ
+        if (currentCheckingHide.tag == "Locker")
+        {
+            if (!(navMesh.remainingDistance < navMesh.stoppingDistance)) { return; }
 
+            isAngle = (Vector3.Angle(animator.transform.forward, currentCheckingHide.transform.forward) < 0.1f);
+        }
+        else
+        {
+            if (!(navMesh.remainingDistance < bedCenterRadius)) { return; }
+            Vector3 hideToTun = (new Vector3(hideObjPos.x, animator.transform.position.y, hideObjPos.z) - animator.transform.position).normalized;
+            isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.3f);
+        }
+        // ハイドポイントのほうを向くようにツンを回転
+        animator.transform.LookAt(new Vector3(hideObjPos.x, animator.transform.position.y, hideObjPos.z));
         // ハイドポイントに到着して、かつ向いているなら
-        if (Vector3.Angle(animator.transform.forward, currentCheckingHide.transform.forward) < 0.1f)
+        if (isAngle)
         {
             // ハイドポイント接近フラグをオフに
             animator.SetBool("isApproachingHide", false);
@@ -110,7 +133,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         // 確認済みのハイドポイントの数を増やす
         animator.SetInteger("checkedHideCount", animator.GetInteger("checkedHideCount") + 1);
         // そのエリア内のハイドポイントを全て調べたか
-        if (animator.GetInteger("checkedHideCount") == areaData.HideObject.Count || areaManager.GetExistAreaToCharacter("Player") != areaData.gameObject.name)
+        if (animator.GetInteger("checkedHideCount") == areaData.HideObject.Count)
         {
             // ハイド確認終了フラグをオンにする
             animator.SetBool("isHideCheckEnd",true);

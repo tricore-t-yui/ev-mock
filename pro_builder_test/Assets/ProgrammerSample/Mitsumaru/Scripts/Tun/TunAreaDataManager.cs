@@ -15,9 +15,15 @@ public class TunAreaDataManager : MonoBehaviour
     [SerializeField]
     PlayerHideController playerHideController = default;
 
+    [SerializeField]
+    int spawnTime = 0;
+    int spawnTimeCounter = 0;
+
     // ツンのオブジェクト
     [SerializeField]
     GameObject tun = default;
+
+    bool isSpawn = false;
 
     /// <summary>
     /// 起動
@@ -39,13 +45,11 @@ public class TunAreaDataManager : MonoBehaviour
     /// <summary>
     /// ハイドオブジェクトから属しているエリアデータを取得
     /// </summary>
-    /// <param name="hideObject"></param>
     /// <returns></returns>
-    public TunAreaData GetTunAreaData(GameObject hideObject)
+    public TunAreaData GetTunAreaData(int hideObjectInstanceId)
     {
-        if (hideObject == null) { return null; }
         // ハイドオブジェクトが属しているエリアデータを返す
-        return tunAreaDataTable[hideObject.GetInstanceID()];
+        return tunAreaDataTable[hideObjectInstanceId];
     }
 
     /// <summary>
@@ -60,9 +64,25 @@ public class TunAreaDataManager : MonoBehaviour
         //        プレイヤーが隠れたかどうかの判定はここで行う。
         if (playerHideController.enabled)
         {
-            TunAreaData areaData = GetTunAreaData(playerHideController.HideObj);
-            tun.transform.position = areaData.SpawnPos;
-            tun.SetActive(true);
+            spawnTimeCounter++;
+
+            if (spawnTime < spawnTimeCounter)
+            {
+                if (!isSpawn)
+                {
+                    TunAreaData areaData = GetTunAreaData(playerHideController.HideObj.GetInstanceID());
+                    tun.transform.position = areaData.SpawnPos;
+                    tun.SetActive(true);
+                    isSpawn = true;
+                    spawnTimeCounter = 0;
+                }
+            }
         }
+        else
+        {
+            spawnTimeCounter = 0;
+        }
+
+        if (!tun.activeSelf) { isSpawn = false; }
     }
 }

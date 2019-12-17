@@ -10,11 +10,22 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     [SerializeField]
     float speed = 0;
 
+    [SerializeField]
+    float attackRadius = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
     // プレイヤー
     Transform player = default;
+
+    // エリアデータ管理クラス
+    TunAreaDataManager areaDataManager = null;
+
+    // ハイドコントローラー
+    PlayerHideController hideController = null;
+
+    TunAreaData currentArea = null;
 
     /// <summary>
     /// ステートの開始
@@ -24,12 +35,22 @@ public class TunStatePlayerChaser : StateMachineBehaviour
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
 
+        // エリアデータ管理クラスを取得
+        areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
+        // ハイドコントローラーを取得
+        hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
+
+        // 現在のエリアを取得
+        currentArea = areaDataManager.GetTunAreaData(hideController.HideObj.GetInstanceID());
+
         // 移動速度をセット
         navMesh.speed = speed;
 
         navMesh.isStopped = false;
 
         player = GameObject.Find("Player").transform;
+
+
     }
 
     /// <summary>
@@ -39,6 +60,16 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     {
         // プレイヤーの位置を取得する
         navMesh.SetDestination(player.position);
+
+        if (navMesh.remainingDistance < attackRadius)
+        {
+            animator.SetTrigger("attackStart");
+        }
+
+        if (!currentArea.IsBoudsContains(player.position))
+        {
+            animator.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

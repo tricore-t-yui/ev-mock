@@ -41,15 +41,13 @@ public class TunParameterChanger : StateMachineBehaviour
         vigilanceRangeEvent = animator.transform.Find("Collider").Find("OniVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
         // 視界にとらえたときのイベントを追加
         fieldOfView.SetOnInViewRangeEvent(OnInFieldOfView);
-        // 視界から見失った時のイベントを追加
-        fieldOfView.SetOnOutViewRangeEvent(OnOutFieldOfView);
         // 何かしらの物音を聴いたとき
         vigilanceRangeEvent.AddEnterListener(OnInFieldOfView);
-        // 音のコライダーが範囲から外れたらオフにする
-        vigilanceRangeEvent.AddExitListener(OnOutFieldOfView);
 
         // ハイドポイントから属しているエリアデータを取得
-        areaData = areaDataManager.GetTunAreaData(hideController.HideObj);
+        areaData = areaDataManager.GetTunAreaData(hideController.HideObj.GetInstanceID());
+        // ハイドポイントのインスタンスIDをセット
+        animator.SetInteger("hideObjectInstanceId",hideController.HideObj.GetInstanceID());
     }
 
     /// <summary>
@@ -95,13 +93,6 @@ public class TunParameterChanger : StateMachineBehaviour
         {
             animator.SetBool("isPlayerDiscover", false);
         }
-
-        if (areaManager.GetExistAreaToCharacter("Player") != areaData.gameObject.name || animator.GetBool("isHideCheckEnd"))
-        {
-            animator.gameObject.SetActive(false);
-            // 値をリセット
-            animator.SetInteger("checkedHideCount", 0);
-        }
     }
 
     /// <summary>
@@ -111,16 +102,5 @@ public class TunParameterChanger : StateMachineBehaviour
     {
         // プレイヤーを見つけているフラグをオンに
         isInViewRange = true;
-    }
-
-    /// <summary>
-    /// 影人間の視野の範囲外にいる
-    /// </summary>
-    /// <param name="self"></param>
-    /// <param name="target"></param>
-    void OnOutFieldOfView(Transform self, Collider target)
-    {
-        // プレイヤーを見つけているフラグをオフに
-        isInViewRange = false;
     }
 }
