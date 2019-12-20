@@ -36,6 +36,15 @@ namespace Rewired.Data {
         private const string editorLoadedMessage = "\n***IMPORTANT:*** Changes made to the Rewired Input Manager configuration after the last time XML data was saved WILL NOT be used because the loaded old saved data has overwritten these values. If you change something in the Rewired Input Manager such as a Joystick Map or Input Behavior settings, you will not see these changes reflected in the current configuration. Clear PlayerPrefs using the inspector option on the UserDataStore_PlayerPrefs component.";
         private const string playerPrefsKeySuffix_controllerAssignments = "ControllerAssignments";
 
+        // 0 = original
+        // 1 = include duplicate joystick index
+        // 2 = support for loading maps for disconnected recognized controllers
+        private const int controllerMapPPKeyVersion_original = 0;
+        private const int controllerMapPPKeyVersion_includeDuplicateJoystickIndex = 1;
+        private const int controllerMapPPKeyVersion_supportDisconnectedControllers = 2;
+        private const int controllerMapPPKeyVersion_includeFormatVersion = 2;
+        private const int controllerMapPPKeyVersion = 2;
+
 #if UNITY_4_6_PLUS
         [Tooltip("Should this script be used? If disabled, nothing will be saved or loaded.")]
 #endif
@@ -426,10 +435,7 @@ namespace Rewired.Data {
         public override ControllerMap LoadControllerMap(int playerId, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId) {
             Player player = ReInput.players.GetPlayer(playerId);
             if (player == null) return null;
-            Controller controller = ReInput.controllers.GetController(controllerIdentifier);
-            if (controller == null) return null;
-            ControllerMap map = LoadControllerMap(player, controller, categoryId, layoutId);
-            return map;
+            return LoadControllerMap(player, controllerIdentifier, categoryId, layoutId);
         }
 
         #endregion
@@ -567,7 +573,7 @@ namespace Rewired.Data {
                     InputLayout layout = layouts[j];
 
                     // Load the Controller Map
-                    ControllerMap controllerMap = LoadControllerMap(player, controller, category.id, layout.id);
+                    ControllerMap controllerMap = LoadControllerMap(player, controller.identifier, category.id, layout.id);
                     if (controllerMap == null) continue;
 
                     // Add the map to the Player
@@ -579,19 +585,19 @@ namespace Rewired.Data {
             return count;
         }
 
-        private ControllerMap LoadControllerMap(Player player, Controller controller, int categoryId, int layoutId) {
-            if (player == null || controller == null) return null;          
+        private ControllerMap LoadControllerMap(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId) {
+            if (player == null) return null;
 
             // Get the XML for the Controller Map
-            string xml = GetControllerMapXml(player, controller, categoryId, layoutId);
+            string xml = GetControllerMapXml(player, controllerIdentifier, categoryId, layoutId);
             if (string.IsNullOrEmpty(xml)) return null;
 
-            ControllerMap controllerMap = ControllerMap.CreateFromXml(controller.type, xml);
+            ControllerMap controllerMap = ControllerMap.CreateFromXml(controllerIdentifier.controllerType, xml);         
             if (controllerMap == null) return null;
 
             // Load default mappings for new Actions
-            List<int> knownActionIds = GetControllerMapKnownActionIds(player, controller, categoryId, layoutId);
-            AddDefaultMappingsForNewActions(controllerMap, knownActionIds);
+            List<int> knownActionIds = GetControllerMapKnownActionIds(player, controllerIdentifier, categoryId, layoutId);
+            AddDefaultMappingsForNewActions(controllerIdentifier, controllerMap, knownActionIds);
 
             return controllerMap;
         }
@@ -943,12 +949,12 @@ namespace Rewired.Data {
         private void SaveControllerMap(Player player, ControllerMap controllerMap) {
 
             // Save the Controller Map
-            string key = GetControllerMapPlayerPrefsKey(player, controllerMap.controller, controllerMap.categoryId, controllerMap.layoutId, true);
+            string key = GetControllerMapPlayerPrefsKey(player, controllerMap.controller.identifier, controllerMap.categoryId, controllerMap.layoutId, controllerMapPPKeyVersion);
             PlayerPrefs.SetString(key, controllerMap.ToXmlString()); // save the map to player prefs in XML format
 
             // Save the Action ids list for this Controller Map used to allow new Actions to be added to the
             // Rewired Input Manager and have the new mappings show up when saved data is loaded
-            key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerMap.controller, controllerMap.categoryId, controllerMap.layoutId, true);
+            key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerMap.controller.identifier, controllerMap.categoryId, controllerMap.layoutId, controllerMapPPKeyVersion);
             PlayerPrefs.SetString(key, allActionIdsString);
         }
 
@@ -1066,32 +1072,50 @@ namespace Rewired.Data {
             return key;
         }
 
-        private string GetControllerMapPlayerPrefsKey(Player player, Controller controller, int categoryId, int layoutId, bool includeDuplicateIndex) {
+        private string GetControllerMapPlayerPrefsKey(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion) {
             // Create a player prefs key like a web querystring so we can search for player prefs key when loading maps
             string key = GetBasePlayerPrefsKey(player);
             key += "|dataType=ControllerMap";
-            key += "|controllerMapType=" + controller.mapTypeString;
-            key += "|categoryId=" + categoryId + "|" + "layoutId=" + layoutId;
-            key += "|hardwareIdentifier=" + controller.hardwareIdentifier; // the hardware identifier string helps us identify maps for unknown hardware because it doesn't have a Guid
-            if(controller.type == ControllerType.Joystick) { // store special info for joystick maps
-                key += "|hardwareGuid=" + ((Joystick)controller).hardwareTypeGuid.ToString(); // the identifying GUID that determines which known joystick this is
-                // Added in Rewired 1.1.19.0
-                if(includeDuplicateIndex) key += "|duplicate=" + GetDuplicateIndex(player, controller).ToString();
-            }
+            key += GetControllerMapPlayerPrefsKeyCommonSuffix(player, controllerIdentifier, categoryId, layoutId, ppKeyVersion);
             return key;
         }
 
-        private string GetControllerMapKnownActionIdsPlayerPrefsKey(Player player, Controller controller, int categoryId, int layoutId, bool includeDuplicateIndex) {
+        private string GetControllerMapKnownActionIdsPlayerPrefsKey(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion) {
             // Create a player prefs key like a web querystring so we can search for player prefs key when loading maps
             string key = GetBasePlayerPrefsKey(player);
             key += "|dataType=ControllerMap_KnownActionIds";
-            key += "|controllerMapType=" + controller.mapTypeString;
+            key += GetControllerMapPlayerPrefsKeyCommonSuffix(player, controllerIdentifier, categoryId, layoutId, ppKeyVersion);
+            return key;
+        }
+
+        private static string GetControllerMapPlayerPrefsKeyCommonSuffix(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId, int ppKeyVersion) {
+            string key = "";
+            if (ppKeyVersion >= controllerMapPPKeyVersion_includeFormatVersion) key += "|kv=" + ppKeyVersion; // include the key version in the string
+            key += "|controllerMapType=" + GetControllerMapType(controllerIdentifier.controllerType).Name;
             key += "|categoryId=" + categoryId + "|" + "layoutId=" + layoutId;
-            key += "|hardwareIdentifier=" + controller.hardwareIdentifier; // the hardware identifier string helps us identify maps for unknown hardware because it doesn't have a Guid
-            if(controller.type == ControllerType.Joystick) { // store special info for joystick maps
-                key += "|hardwareGuid=" + ((Joystick)controller).hardwareTypeGuid.ToString(); // the identifying GUID that determines which known joystick this is
-                // Added in Rewired 1.1.19.0
-                if(includeDuplicateIndex) key += "|duplicate=" + GetDuplicateIndex(player, controller).ToString();
+
+            // Choose the key based on the key format version id
+            if (ppKeyVersion >= controllerMapPPKeyVersion_supportDisconnectedControllers) {
+
+                // Added in Rewired 1.1.27.0 to support loading controller maps for disconnected controllers
+                key += "|hardwareGuid=" + controllerIdentifier.hardwareTypeGuid; // the identifying GUID that determines which known controller this is
+                if (controllerIdentifier.hardwareTypeGuid == Guid.Empty) { // not recognized, Hardware Idenfitier is required
+                    // This is no longer included for recognized controllers because it makes it impossible to lookup the map when the controller is not attached because the hardware identifier cannot be known without the device present.
+                    key += "|hardwareIdentifier=" + controllerIdentifier.hardwareIdentifier; // the hardware identifier string helps us identify maps for unknown hardware because it doesn't have a Guid
+                }
+                if (controllerIdentifier.controllerType == ControllerType.Joystick) { // store special info for joystick maps
+                    key += "|duplicate=" + GetDuplicateIndex(player, controllerIdentifier).ToString();
+                }
+
+            } else {
+
+                // Old version prior to 1.1.27.0
+                key += "|hardwareIdentifier=" + controllerIdentifier.hardwareIdentifier; // the hardware identifier string helps us identify maps for unknown hardware because it doesn't have a Guid
+                if (controllerIdentifier.controllerType == ControllerType.Joystick) { // store special info for joystick maps
+                    key += "|hardwareGuid=" + controllerIdentifier.hardwareTypeGuid; // the identifying GUID that determines which known joystick this is
+                    // Added in Rewired 1.1.19.0
+                    if (ppKeyVersion >= controllerMapPPKeyVersion_includeDuplicateJoystickIndex) key += "|duplicate=" + GetDuplicateIndex(player, controllerIdentifier).ToString();
+                }
             }
             return key;
         }
@@ -1114,31 +1138,30 @@ namespace Rewired.Data {
             return key;
         }
 
-        private string GetControllerMapXml(Player player, Controller controller, int categoryId, int layoutId) {
+        private string GetControllerMapXml(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId) {
             string key;
-            
-            // Must try twice because of new additions in 1.1.19.0 to keep backward compatibility
-            key = GetControllerMapPlayerPrefsKey(player, controller, categoryId, layoutId, true);
-            if(!PlayerPrefs.HasKey(key)) {
-                if(controller.type != ControllerType.Joystick) return string.Empty; // key does not exist
-                // Fall back to old version for data saved before 1.1.19.0
-                key = GetControllerMapPlayerPrefsKey(player, controller, categoryId, layoutId, false);
-                if(!PlayerPrefs.HasKey(key)) return string.Empty; // key does not exist
+            // Must try many times because of new additions in various versions
+            for(int i = controllerMapPPKeyVersion; i >= 0; i--) {
+                key = GetControllerMapPlayerPrefsKey(player, controllerIdentifier, categoryId, layoutId, i);
+                if (PlayerPrefs.HasKey(key)) return PlayerPrefs.GetString(key); // return the data
             }
-            return PlayerPrefs.GetString(key); // return the data
+            return null;
         }
 
-        private List<int> GetControllerMapKnownActionIds(Player player, Controller controller, int categoryId, int layoutId) {
+        private List<int> GetControllerMapKnownActionIds(Player player, ControllerIdentifier controllerIdentifier, int categoryId, int layoutId) {
             List<int> actionIds = new List<int>();
+            string key = null;
+            bool found = false;
 
-            // Must try twice because of new additions in 1.1.19.0 to keep backward compatibility
-            string key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controller, categoryId, layoutId, true);
-            if(!PlayerPrefs.HasKey(key)) {
-                if(controller.type != ControllerType.Joystick) return actionIds; // key does not exist
-                // Fall back to old version for data saved before 1.1.19.0
-                key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controller, categoryId, layoutId, false);
-                if(!PlayerPrefs.HasKey(key)) return actionIds; // key does not exist
+            // Must try many times because of new additions in various versions
+            for(int i = controllerMapPPKeyVersion; i >= 0; i--) {
+                key = GetControllerMapKnownActionIdsPlayerPrefsKey(player, controllerIdentifier, categoryId, layoutId, i);
+                if (PlayerPrefs.HasKey(key)) {
+                    found = true;
+                    break;
+                }
             }
+            if(!found) return actionIds; // key does not exist
 
             // Get the data and try to parse it
             string data = PlayerPrefs.GetString(key);
@@ -1171,14 +1194,14 @@ namespace Rewired.Data {
 
         #region Misc
 
-        private void AddDefaultMappingsForNewActions(ControllerMap controllerMap, List<int> knownActionIds) {
+        private void AddDefaultMappingsForNewActions(ControllerIdentifier controllerIdentifier, ControllerMap controllerMap, List<int> knownActionIds) {
             if (controllerMap == null || knownActionIds == null) return;
             if (knownActionIds == null || knownActionIds.Count == 0) return;
 
             // Check for new Actions added to the default mappings that didn't exist when the Controller Map was saved
 
             // Load default map for comparison
-            ControllerMap defaultMap = ReInput.mapping.GetControllerMapInstance(controllerMap.controller, controllerMap.categoryId, controllerMap.layoutId);
+            ControllerMap defaultMap = ReInput.mapping.GetControllerMapInstance(controllerIdentifier, controllerMap.categoryId, controllerMap.layoutId);
             if (defaultMap == null) return;
 
             // Find any new Action ids that didn't exist when the Controller Map was saved
@@ -1244,15 +1267,17 @@ namespace Rewired.Data {
             return matches != null;
         }
 
-        private static int GetDuplicateIndex(Player player, Controller controller) {
+        private static int GetDuplicateIndex(Player player, ControllerIdentifier controllerIdentifier) {
             // Determine how many duplicates of this controller are owned by this Player
+            Controller controller = ReInput.controllers.GetController(controllerIdentifier);
+            if (controller == null) return 0; // cannot support index count if the controller is not connected
             int duplicateCount = 0;
             foreach(var c in player.controllers.Controllers) {
                 if(c.type != controller.type) continue;
                 bool isRecognized = false;
                 if(controller.type == ControllerType.Joystick) {
-                    if((c as Joystick).hardwareTypeGuid != (controller as Joystick).hardwareTypeGuid) continue;
-                    if((controller as Joystick).hardwareTypeGuid != Guid.Empty) isRecognized = true;
+                    if((c as Joystick).hardwareTypeGuid != controller.hardwareTypeGuid) continue;
+                    if(controller.hardwareTypeGuid != Guid.Empty) isRecognized = true;
                 }
                 if(!isRecognized && c.hardwareIdentifier != controller.hardwareIdentifier) continue;
                 if(c == controller) return duplicateCount;
@@ -1265,6 +1290,18 @@ namespace Rewired.Data {
             Player player = ReInput.players.GetPlayer(playerId);
             if (player == null) return;
             player.controllers.maps.layoutManager.Apply();
+        }
+
+        private static Type GetControllerMapType(ControllerType controllerType) {
+            switch(controllerType) {
+                case ControllerType.Custom: return typeof(CustomControllerMap);
+                case ControllerType.Joystick: return typeof(JoystickMap);
+                case ControllerType.Keyboard: return typeof(KeyboardMap);
+                case ControllerType.Mouse: return typeof(MouseMap);
+                default:
+                    Debug.LogWarning(logPrefix + "Unknown ControllerType " + controllerType.ToString());
+                    return null;
+            }
         }
 
         #endregion

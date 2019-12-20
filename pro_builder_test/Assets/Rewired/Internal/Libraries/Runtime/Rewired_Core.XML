@@ -1648,7 +1648,8 @@
             <summary>
             The session id of the Controller.
             Get this value from <see cref="F:Rewired.Controller.id"/>.
-            This should be set to -1 if the Controller is not currently connected.
+            This should be set to -1 if the Controller is not currently connected or you don't know the current id.
+            Setting this value to 0 or greater will cause the controller session id to be used for selection.
             </summary>
         </member>
         <member name="P:Rewired.ControllerIdentifier.controllerType">
@@ -1661,18 +1662,27 @@
             <summary>
             The hardwre type GUID of the Controller.
             Get this value from <see cref="P:Rewired.Controller.hardwareTypeGuid"/>.
+            This value is used to identify recognized Controllers.
             </summary>
         </member>
         <member name="P:Rewired.ControllerIdentifier.hardwareIdentifier">
             <summary>
             The hardware identifier of the Controller.
             Get this value from <see cref="P:Rewired.Controller.hardwareIdentifier"/>.
+            This is used primarily by Unknown Controllers to identify the controller using various information gathered from the controller.
+            This value varies depending on the platform, input source in use, and the device.
             </summary>
         </member>
         <member name="P:Rewired.ControllerIdentifier.deviceInstanceGuid">
             <summary>
             The device instance GUID of the Controller.
             Get this value from <see cref="P:Rewired.Controller.deviceInstanceGuid"/>.
+            Use this to target a specific persistant device instance across sessions.
+            </summary>
+        </member>
+        <member name="P:Rewired.ControllerIdentifier.Blank">
+            <summary>
+            A blank ControllerIdentifier.
             </summary>
         </member>
         <member name="T:Rewired.ControllerSetSelector">
@@ -1927,21 +1937,6 @@
             Only for input sources that get their device connections from within
             </summary>
         </member>
-        <member name="F:Rewired.LowLevelEvent.id">
-            <summary>
-            NEVER SET THIS VALUE!
-            </summary>
-        </member>
-        <member name="F:Rewired.LowLevelEvent.timestamp">
-            <summary>
-            NEVER SET THIS VALUE!
-            </summary>
-        </member>
-        <member name="F:Rewired.LowLevelButtonEvent.value">
-            <summary>
-            NEVER SET THIS VALUE!
-            </summary>
-        </member>
         <member name="P:Rewired.TouchInfo.isValid">
             <summary>
             Does this contain valid touch data?
@@ -1978,6 +1973,13 @@
             Any class that accesses this MUST call Monitor(true) on initialization and Monitor(false) when finished.
             Monitor acts as a ref count to determine if Unity should be polled.
             </summary>
+        </member>
+        <member name="M:Rewired.LowLevelInputEvent.GetButtonValue(System.Int32)">
+            <summary>
+            This method is slower than SetButtonsBitMask if checking more than one button value.
+            </summary>
+            <param name="index">The button index.</param>
+            <returns>Button value.</returns>
         </member>
         <member name="T:Rewired.UI.UIAnchor">
             <exclude></exclude>
@@ -7523,7 +7525,7 @@
         </member>
         <member name="M:Rewired.PlayerMouse.Factory.Create">
             <summary>
-            Creates a new Player Mouse.
+            Creates a new Player Mouse with the default elements.
             </summary>
             <returns>A new Player Mouse.</returns>
         </member>
@@ -7537,7 +7539,7 @@
         </member>
         <member name="M:Rewired.PlayerMouse.Factory.Create(Rewired.PlayerMouse.Definition)">
             <summary>
-            Creates a new Player Mouse with the default elements.
+            Creates a new Player Mouse.
             </summary>
             <param name="definition">Definition use to set initial values in the controller.</param>
             <returns>A new Player Mouse.</returns>
@@ -7998,6 +8000,24 @@
             <exclude></exclude>
         </member>
         <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_NintendoSwitch">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia_Base">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia_Base.MatchingCriteria">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia_Base.Elements">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia_Base.Button">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia_Base.Axis">
+            <exclude></exclude>
+        </member>
+        <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_Stadia">
             <exclude></exclude>
         </member>
         <member name="T:Rewired.Data.Mapping.HardwareJoystickMap.Platform_InternalDriver_Base">
@@ -13111,6 +13131,11 @@
             WebGL input sources.
             </summary>
         </member>
+        <member name="T:Rewired.Platforms.StadiaPrimaryInputSource">
+            <summary>
+            Stadia input sources.
+            </summary>
+        </member>
         <member name="T:Rewired.Platforms.DirectInputAxis">
             <exclude></exclude>
             <summary>
@@ -13197,7 +13222,7 @@
         <member name="M:Rewired.Player.GetButton(System.String)">
             <summary>
             Gets the button held state of an Action. This will return TRUE as long as the button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The button held state</returns>
@@ -13205,7 +13230,7 @@
         <member name="M:Rewired.Player.GetButton(System.Int32)">
             <summary>
             Gets the button held state of an Action. This will return TRUE as long as the button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The button held state</returns>
@@ -13213,7 +13238,7 @@
         <member name="M:Rewired.Player.GetButtonDown(System.String)">
             <summary>
             Gets the button just pressed state of an Action. This will only return TRUE only on the first frame the button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to this Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The button just pressed state</returns>
@@ -13221,7 +13246,7 @@
         <member name="M:Rewired.Player.GetButtonDown(System.Int32)">
             <summary>
             Gets the button just pressed state of an Action. This will only return TRUE only on the first frame the button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to this Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The button just pressed state</returns>
@@ -13229,7 +13254,7 @@
         <member name="M:Rewired.Player.GetButtonUp(System.String)">
             <summary>
             Get the button just released state for an Action. This will only return TRUE for the first frame the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The button just released state</returns>
@@ -13237,7 +13262,7 @@
         <member name="M:Rewired.Player.GetButtonUp(System.Int32)">
             <summary>
             Get the button just released state for an Action. This will only return TRUE for the first frame the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The button just released state</returns>
@@ -13436,7 +13461,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <param name="time">Minimum time the button must be held before returning true.</param>
@@ -13448,7 +13473,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <param name="time">Minimum time the button must be held before returning true.</param>
@@ -13460,7 +13485,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <param name="time">Minimum time in seconds the button must be held before returning true.</param>
@@ -13473,7 +13498,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <param name="time">Minimum time the button must be held before returning true.</param>
@@ -13485,7 +13510,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <param name="time">Minimum time the button must be held before returning true.</param>
@@ -13496,7 +13521,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <param name="time">Minimum time the button must be held before returning true.</param>
@@ -13507,7 +13532,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <param name="time">Minimum time the button must be held before returning true when released.</param>
@@ -13518,7 +13543,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <param name="time">Minimum time the button must be held before returning true when released.</param>
@@ -13529,7 +13554,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <param name="time">Minimum time the button must be held before returning true when released.</param>
@@ -13541,7 +13566,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <param name="time">Minimum time the button must be held before returning true when released.</param>
@@ -13554,7 +13579,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPress instead.
             </summary>
@@ -13567,7 +13592,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPress instead.
             </summary>
@@ -13579,7 +13604,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressDown instead.
             </summary>
@@ -13591,7 +13616,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressDown instead.
             </summary>
@@ -13603,7 +13628,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressUp instead.
             </summary>
@@ -13615,7 +13640,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button short press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressUp instead.
             </summary>
@@ -13628,7 +13653,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPress instead.
             </summary>
@@ -13641,7 +13666,7 @@
             This will return TRUE only after the button has been held
             for the specified time and will continue to return TRUE
             until the button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPress instead.
             </summary>
@@ -13653,7 +13678,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressDown instead.
             </summary>
@@ -13665,7 +13690,7 @@
             Gets the button state of an Action after being held for a period of time.
             This will return TRUE only on the frame in which
             the button had been held for the specified time.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressDown instead.
             </summary>
@@ -13677,7 +13702,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressUp instead.
             </summary>
@@ -13689,7 +13714,7 @@
             Gets the button state of an Action after being held for a period of time and then released.
             This will return TRUE only on the frame in which the button had
             been held for at least the specified time and then released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             The button long press time is set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             For a custom duration, use GetButtonTimedPressUp instead.
             </summary>
@@ -13701,7 +13726,7 @@
             Gets the repeating button state of an Action.
             This will return TRUE when immediately pressed, then FALSE until the Input Behaviour button repeat delay has elapsed,
             then TRUE for a 1-frame duration repeating at the interval specified in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The button state.</returns>
@@ -13711,7 +13736,7 @@
             Gets the repeating button state of an Action.
             This will return TRUE when immediately pressed, then FALSE until the Input Behaviour button repeat delay has elapsed,
             then TRUE for a 1-frame duration repeating at the interval specified in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The button state.</returns>
@@ -13719,7 +13744,7 @@
         <member name="M:Rewired.Player.GetAnyButton">
             <summary>
             Gets the button held state of all Actions. This will return TRUE as long as any button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The button held state</returns>
         </member>
@@ -13727,7 +13752,7 @@
             <summary>
             Gets the button just pressed state of all Actions. This will only return TRUE only on the first frame any button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             This will return TRUE each time any button is pressed even if others are being held down.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The button just pressed state</returns>
         </member>
@@ -13735,14 +13760,14 @@
             <summary>
             Get the button just released state for all Actions. This will only return TRUE for the first frame the button is released.
             This will return TRUE each time any button is released even if others are being held down.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The button just released state</returns>
         </member>
         <member name="M:Rewired.Player.GetAnyButtonPrev">
             <summary>
             Gets the button held state of an any Action during the previous frame.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The previous button held state</returns>
         </member>
@@ -13777,7 +13802,7 @@
         <member name="M:Rewired.Player.GetNegativeButton(System.String)">
             <summary>
             Gets the negative button held state of an Action. This will return TRUE as long as the negative button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The negative button held state</returns>
@@ -13785,7 +13810,7 @@
         <member name="M:Rewired.Player.GetNegativeButton(System.Int32)">
             <summary>
             Gets the negative button held state of an Action. This will return TRUE as long as the negative button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The negative button held state</returns>
@@ -13793,7 +13818,7 @@
         <member name="M:Rewired.Player.GetNegativeButtonDown(System.String)">
             <summary>
             Gets the negative button just pressed state of an Action. This will only return TRUE only on the first frame the negative button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to this Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The negative button just pressed state</returns>
@@ -13801,7 +13826,7 @@
         <member name="M:Rewired.Player.GetNegativeButtonDown(System.Int32)">
             <summary>
             Gets the negative button just pressed state of an Action. This will only return TRUE only on the first frame the negative button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to this Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The negative button just pressed state</returns>
@@ -13809,7 +13834,7 @@
         <member name="M:Rewired.Player.GetNegativeButtonUp(System.String)">
             <summary>
             Get the negative button just released state for an Action. This will only return TRUE for the first frame the negative button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The negative button just released state</returns>
@@ -13817,7 +13842,7 @@
         <member name="M:Rewired.Player.GetNegativeButtonUp(System.Int32)">
             <summary>
             Get the negative button just released state for an Action. This will only return TRUE for the first frame the negative button is released.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The negative button just released state</returns>
@@ -14281,7 +14306,7 @@
             Gets the repeating negative button state of an Action.
             This will return TRUE when immediately pressed, then FALSE until the Input Behaviour button repeat delay has elapsed,
             then TRUE for a 1-frame duration repeating at the interval specified in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionName">Name of the Action</param>
             <returns>The negative button state.</returns>
@@ -14291,7 +14316,7 @@
             Gets the repeating negative button state of an Action.
             This will return TRUE when immediately pressed, then FALSE until the Input Behaviour button repeat delay has elapsed,
             then TRUE for a 1-frame duration repeating at the interval specified in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <param name="actionId">Id of the Action</param>
             <returns>The negative button state.</returns>
@@ -14299,7 +14324,7 @@
         <member name="M:Rewired.Player.GetAnyNegativeButton">
             <summary>
             Gets the negative button held state of all Actions. This will return TRUE as long as any negative button is held.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The negative button held state</returns>
         </member>
@@ -14307,7 +14332,7 @@
             <summary>
             Gets the negative button just pressed state of all Actions. This will only return TRUE only on the first frame any negative button is pressed or for the duration of the Button Down Buffer time limit if set in the <see cref="T:Rewired.InputBehavior"/> assigned to the Action.
             This will return TRUE each time any negative button is pressed even if others are being held down.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The negative button just pressed state</returns>
         </member>
@@ -14315,14 +14340,14 @@
             <summary>
             Get the negative button just released state for all Actions. This will only return TRUE for the first frame the negative button is released.
             This will return TRUE each time any negative button is released even if others are being held down.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The negative button just released state</returns>
         </member>
         <member name="M:Rewired.Player.GetAnyNegativeButtonPrev">
             <summary>
             Gets the negative button held state of an any Action during the previous frame.
-            This also applies to axes being used as buttons.
+            This also applies to axes.
             </summary>
             <returns>The previous negative button held state</returns>
         </member>
@@ -17574,6 +17599,11 @@
         <member name="T:Rewired.Platforms.PS4.Internal.PadTouchPadInformation">
             <exclude></exclude>
         </member>
+        <member name="T:Rewired.Platforms.PS4.PS4AimExtension">
+            <summary>
+            Allows access to Aim-specific functions.
+            </summary>
+        </member>
         <member name="T:Rewired.Platforms.PS4.PS4ControllerExtension">
             <summary>
             Allows access to controller-specific functions.
@@ -17755,6 +17785,68 @@
         <member name="P:Rewired.Platforms.PS4.PS4ControllerExtension.vibrationMotorCount">
             <summary>
             The number of vibration motors in this controller.
+            </summary>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.GetVibration(Rewired.Platforms.PS4.PS4AimMotorType)">
+            <summary>
+            Gets vibration level for a specific motor.
+            </summary>
+            <param name="motor">Motor type</param>
+            <returns>Motor level [float: 0.0 - 1.0]</returns>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.SetVibration(Rewired.Platforms.PS4.PS4AimMotorType,System.Single)">
+            <summary>
+            Sets vibration leves on an individual motor.
+            </summary>
+            <param name="motor">Motor type</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.SetVibration(Rewired.Platforms.PS4.PS4AimMotorType,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration level on an individual motor.
+            </summary>
+            <param name="motor">Motor type</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.SetVibration(Rewired.Platforms.PS4.PS4AimMotorType,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Sets vibration level on an individual motor.
+            </summary>
+            <param name="motor">Motor type</param>
+            <param name="motorLevel">Motor level [float: 0.0 - 1.0]</param>
+            <param name="duration">Length of time in seconds to activate the motor before it stops. [0 = Infinite]</param>
+            <param name="stopOtherMotors">Stop other motors?</param>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.SetVibration(System.Single,System.Single)">
+            <summary>
+            Sets vibration level for left and right motors.
+            </summary>
+            <param name="strongMotorLevel">float: 0.0 - 1.0</param>
+            <param name="weakMotorLevel">float: 0.0 - 1.0</param>
+        </member>
+        <member name="M:Rewired.Platforms.PS4.PS4AimExtension.SetVibration(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets vibration level for left and right motors.
+            </summary>
+            <param name="strongMotorLevel">float: 0.0 - 1.0</param>
+            <param name="weakMotorLevel">float: 0.0 - 1.0</param>
+            <param name="strongMotorDuration">Length of time in seconds to activate the left motor before it stops. [0 = Infinite]</param>
+            <param name="weakMotorDuration">Length of time in seconds to activate the right motor before it stops. [0 = Infinite]</param>
+        </member>
+        <member name="T:Rewired.Platforms.PS4.PS4AimMotorType">
+            <summary>
+            PS4 Aim motors. Used for vibration.
+            </summary>
+        </member>
+        <member name="F:Rewired.Platforms.PS4.PS4AimMotorType.StrongMotor">
+            <summary>
+            Strong motor
+            </summary>
+        </member>
+        <member name="F:Rewired.Platforms.PS4.PS4AimMotorType.WeakMotor">
+            <summary>
+            Weak motor
             </summary>
         </member>
         <member name="T:Rewired.Platforms.PS4.PS4GamepadExtension">
@@ -19299,6 +19391,42 @@
             <param name="layoutName">Layout Name</param>
             <returns>Controller Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstance(Rewired.ControllerIdentifier,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Controller Map.
+            This can be used to view the default Controller Map setup in the Rewired Input Manager.
+            This overload can be used when no Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default Joystick Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Controller Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstance(Rewired.ControllerIdentifier,System.Int32,System.Int32)">
+            <summary>
+            Gets an instanced copy of a Controller Map.
+            This can be used to view the default Controller Map setup in the Rewired Input Manager.
+            This overload can be used when no Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default Joystick Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
+            <param name="mapCategoryId">Map Category Id</param>
+            <param name="layoutId">Layout Id</param>
+            <returns>Controller Map</returns>
+        </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstance(Rewired.Joystick,System.Int32,System.Int32)">
             <summary>
             Gets an instanced copy of a Joystick Map.
@@ -19349,6 +19477,40 @@
             This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
             </summary>
             <param name="joystickTypeGuid">Joystick GUID for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Joystick Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstance(Rewired.ControllerIdentifier,System.Int32,System.Int32)">
+            <summary>
+            Gets an instanced copy of a joystick map from the default controller maps.
+            This overload can be used when no Joystick is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default Joystick Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
+            <param name="mapCategoryId">Map Category Id</param>
+            <param name="layoutId">Layout Id</param>
+            <returns>Joystick Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstance(Rewired.ControllerIdentifier,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a joystick map from the default controller maps.
+            This overload can be used when no Joystick is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default Joystick Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
             <param name="mapCategoryName">Map Category Name</param>
             <param name="layoutName">Layout Name</param>
             <returns>Joystick Map</returns>
@@ -19409,12 +19571,46 @@
             <param name="layoutName">Layout Name</param>
             <returns>CustomController Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstance(Rewired.ControllerIdentifier,System.Int32,System.Int32)">
+            <summary>
+            Gets an instanced copy of a custom controller map from the default controller maps.
+            This overload can be used when no Custom Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default CustomController Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
+            <param name="mapCategoryId">Map Category Id</param>
+            <param name="layoutId">Layout Id</param>
+            <returns>CustomController Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstance(Rewired.ControllerIdentifier,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a custom controller map from the default controller maps.
+            This overload can be used when no Custom Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the default CustomController Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            This method can only be used to load Controller Maps for recognized Controllers. Unrecognized Controllers are not supported.
+            </summary>
+            <param name="controllerIdentifier">Controller for which to retrieve the map.</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>CustomController Map</returns>
+        </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstanceSavedOrDefault(System.Int32,Rewired.Controller,System.Int32,System.Int32)">
             <summary>
             Gets an instanced copy of a Controller Map.
             This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
             The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
-            UserDataStore must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             </summary>
             <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
             <param name="controller">Controller for which to retrieve the map</param>
@@ -19422,9 +19618,25 @@
             <param name="layoutId">Layout Id</param>
             <returns>Controller Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstanceSavedOrDefault(System.Int32,Rewired.Controller,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Controller Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="controller">Controller for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Controller Map</returns>
+        </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.Int32,System.Int32)">
             <summary>
-            Gets an instanced copy of a Controller Map from the default controller maps.
+            Gets an instanced copy of a Controller Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             This overload can be used when no Controller is actually connected and available to be used to look up the correct Controller Maps to load.
             The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
             were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
@@ -19439,12 +19651,32 @@
             <param name="layoutId">Layout Id</param>
             <returns>Controller Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetControllerMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Controller Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            This overload can be used when no Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
+            were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
+            actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            NOTE: Element indices in ActionElementMaps may not match to to a Controller Map created with the actual controller connected.
+            Do not rely on ActionElementMap.elementIndex being accurate in Controller Maps returned by this method.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="controllerIdentifier">The Controller Idenfitier that defines the Controller for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Controller Map</returns>
+        </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstanceSavedOrDefault(System.Int32,Rewired.Joystick,System.Int32,System.Int32)">
             <summary>
             Gets an instanced copy of a Joystick Map.
             This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
             The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
-            UserDataStore must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             </summary>
             <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
             <param name="joystick">Joystick for which to retrieve the map</param>
@@ -19452,9 +19684,24 @@
             <param name="layoutId">Layout Id</param>
             <returns>Joystick Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstanceSavedOrDefault(System.Int32,Rewired.Joystick,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Joystick Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="joystick">Joystick for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Joystick Map</returns>
+        </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.Int32,System.Int32)">
             <summary>
-            Gets an instanced copy of a Joystick Map from the default controller maps.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             This overload can be used when no Joystick is actually connected and available to be used to look up the correct Controller Maps to load.
             The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
             were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
@@ -19469,23 +19716,12 @@
             <param name="layoutId">Layout Id</param>
             <returns>Joystick Map</returns>
         </member>
-        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.CustomController,System.Int32,System.Int32)">
+        <member name="M:Rewired.ReInput.MappingHelper.GetJoystickMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.String,System.String)">
             <summary>
-            Gets an instanced copy of a Custom Controller Map.
             This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
             The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
-            UserDataStore must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
-            </summary>
-            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
-            <param name="customController">Custom Controller for which to retrieve the map</param>
-            <param name="mapCategoryId">Map Category Id</param>
-            <param name="layoutId">Layout Id</param>
-            <returns>CustomController Map</returns>
-        </member>
-        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.Int32,System.Int32)">
-            <summary>
-            Gets an instanced copy of a Custom Controller Map from the default controller maps.
-            This overload can be used when no Custom Controller is actually connected and available to be used to look up the correct Controller Maps to load.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            This overload can be used when no Joystick is actually connected and available to be used to look up the correct Controller Maps to load.
             The Controller Map returned by this method is not guarateed to be consistent with the Controller Map that would be loaded
             were the actual device to be connected. This is due to the fact that different Controller Maps may be loaded depending on the
             actual device connected, properties returned by this device, the current input source(s) in use, and more factors.
@@ -19495,20 +19731,60 @@
             </summary>
             <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
             <param name="controllerIdentifier">The Controller Idenfitier that defines the Controller for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>Joystick Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.CustomController,System.Int32,System.Int32)">
+            <summary>
+            Gets an instanced copy of a Custom Controller Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="customController">Custom Controller for which to retrieve the map</param>
             <param name="mapCategoryId">Map Category Id</param>
             <param name="layoutId">Layout Id</param>
             <returns>CustomController Map</returns>
         </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.CustomController,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Custom Controller Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="customController">Custom Controller for which to retrieve the map</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
+            <returns>CustomController Map</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.Int32,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Rewired.ReInput.MappingHelper.GetCustomControllerMapInstanceSavedOrDefault(System.Int32,Rewired.ControllerIdentifier,System.String,System.String)" -->
         <member name="M:Rewired.ReInput.MappingHelper.GetKeyboardMapInstanceSavedOrDefault(System.Int32,System.Int32,System.Int32)">
             <summary>
             Gets an instanced copy of a Keyboard Map.
             This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
             The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
-            UserDataStore must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             </summary>
             <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
             <param name="mapCategoryId">Map Category Id</param>
             <param name="layoutId">Layout Id</param>
+            <returns>Keyboard Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetKeyboardMapInstanceSavedOrDefault(System.Int32,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Keyboard Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
             <returns>Keyboard Map</returns>
         </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetMouseMapInstanceSavedOrDefault(System.Int32,System.Int32,System.Int32)">
@@ -19516,11 +19792,23 @@
             Gets an instanced copy of a Mouse Map.
             This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
             The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
-            UserDataStore must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
             </summary>
             <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
             <param name="mapCategoryId">Map Category Id</param>
             <param name="layoutId">Layout Id</param>
+            <returns>Mouse Map</returns>
+        </member>
+        <member name="M:Rewired.ReInput.MappingHelper.GetMouseMapInstanceSavedOrDefault(System.Int32,System.String,System.String)">
+            <summary>
+            Gets an instanced copy of a Mouse Map.
+            This can be used to view the Controller Map saved in user data if available or the default Controller Map setup in the Rewired Input Manager.
+            The Controller Map will be first loaded from <see cref="T:Rewired.Data.UserDataStore"/>. If none is found, it will be loaded from the Rewired Input Manager defaults.
+            <see cref="T:Rewired.Data.UserDataStore"/> must implement <see cref="T:Rewired.Interfaces.IControllerMapStore"/> or data cannot be loaded from saved user data.
+            </summary>
+            <param name="playerId">The Player id. This is used when loading from UserDataStore.</param>
+            <param name="mapCategoryName">Map Category Name</param>
+            <param name="layoutName">Layout Name</param>
             <returns>Mouse Map</returns>
         </member>
         <member name="M:Rewired.ReInput.MappingHelper.GetFirstJoystickTemplateElementIdentifier(Rewired.Joystick,System.Int32)">
@@ -20525,6 +20813,12 @@
             </summary>
             <returns>Number of bytes written</returns>
         </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeBuffer.TryFill(System.Byte,System.Int32,System.Int32)">
+            <summary>
+            Writes a repeating value to the buffer.
+            </summary>
+            <returns>Number of bytes written</returns>
+        </member>
         <member name="M:Rewired.Utils.Classes.Data.NativeBuffer.Resize(System.Int32,System.Boolean)">
             <summary>
             Resizes the buffer.
@@ -20542,6 +20836,12 @@
             <summary>
             Frees the native memory.
             </summary>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeBuffer.CopyFrom(Rewired.Utils.Classes.Data.NativeBuffer)">
+            <summary>
+            Copies data from another NativeBuffer.
+            </summary>
+            <param name="other">The buffer to copy from.</param>
         </member>
         <member name="M:Rewired.Utils.Classes.Data.NativeBuffer.Copy(Rewired.Utils.Classes.Data.NativeBuffer,Rewired.Utils.Classes.Data.NativeBuffer)">
             <summary>
@@ -20562,6 +20862,12 @@
             Creates a native ring buffer.
             </summary>
             <param name="capacity">Size of the buffer in bytes</param>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.Allocate(System.Int32,System.Boolean,System.UInt32@)">
+            <summary>
+            Allocates space in the buffer.
+            </summary>
+            <returns>Pointer to the start of the allocated space.</returns>
         </member>
         <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.Write(System.IntPtr,System.Int32,System.Int32,System.Int32@,System.UInt32@)">
             <summary>
@@ -20611,6 +20917,28 @@
             </summary>
             <returns>Number of bytes read</returns>
         </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.GetPointerFromReadPosition(System.Int32)">
+            <summary>
+            Gets a pointer offset from the read position.
+            Result will wrap when offset would move the head beyond memory range.
+            </summary>
+            <param name="offset">Offset in bytes from the read head position.</param>
+            <returns>Pointer offset from the read position.</returns>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.GetOffsetFromReadPosition(System.Int32)">
+            <summary>
+            Gets an index offset from the read position.
+            Result will wrap when offset would move the head beyond memory range.
+            </summary>
+            <param name="offset">Offset in bytes from the read head position.</param>
+            <returns>Offset read position.</returns>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.CopyFrom(Rewired.Utils.Classes.Data.NativeRingBuffer)">
+            <summary>
+            Copies data from another NativeRingBuffer.
+            </summary>
+            <param name="other">The buffer to copy dara from.</param>
+        </member>
         <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.AdvanceWritePosition(System.Int32)">
             <summary>
             Do not call this anywhere except within Write
@@ -20619,6 +20947,24 @@
         <member name="M:Rewired.Utils.Classes.Data.NativeRingBuffer.AdvanceReadPosition(System.Int32)">
             <summary>
             Do not call this anywhere except within Read
+            </summary>
+        </member>
+        <member name="P:Rewired.Utils.Classes.Data.NativeRingBuffer.ReadPosition">
+            <summary>
+            Returns the offset from the beginning of memory of the read head.
+            </summary>
+        </member>
+        <member name="P:Rewired.Utils.Classes.Data.NativeRingBuffer.WritePosition">
+            <summary>
+            Returns the offset from the beginning of memory of the write head.
+            </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Data.NativeMemoryBlock">
+            <summary>
+            Creates a block of native memory which can be then allocated into smaller blocks.
+            When the buffer is out of space, it will wrap and allocate new blocks
+            from the beginning. There is no guarantee any block previously allocated
+            won't be overwritten by a new block.
             </summary>
         </member>
         <member name="T:Rewired.Utils.Classes.Data.ScreenRect">
@@ -21492,11 +21838,20 @@
         </member>
         <member name="T:Rewired.Utils.Classes.Utility.Locker">
             <summary>
-            Locks the target if and unlocks on dispose.
-            Safe to use with a null target.
+            Locks the target and unlocks on Dispose.
+            Safe to use with a null lock object.
             Use with using statement.
-            THIS WILL RESULT IN AN UNBOXING PENALTY BECAUSE IT IS A STRUCT THAT IMPLEMENTS AN INTERFACE!
+            THIS WILL RESULT IN AN UNBOXING PENALTY BECAUSE IT IS A STRUCT THAT IMPLEMENTS AN INTERFACE on .NET 3.5 scripting backend. .NET 4.6 fixed this.
             </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.LockedObject`1">
+            <summary>
+            A reusable locker that holds an object.
+            Best used with the using pattern.
+            This is a class and can be reused.
+            Useful for exposing an object for consumption that has to be locked within another class.
+            </summary>
+            <typeparam name="T">Contained object type.</typeparam>
         </member>
         <member name="M:Rewired.Utils.Classes.Utility.ThreadHelper.Start(System.Boolean)">
             <summary>
@@ -21734,6 +22089,82 @@
             and automatically unregisters it when the wrapper goes out of scope or is disposed.
             This is so a class doesn't have to store its own id and so it can unregister properly
             without having to implement IDisposable and be disposed manually.
+            </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue">
+            <summary>
+            An event queue that handles creation of events on a separate thread from consumption.
+            Creation thread must not call any of the non T_ methods or properties because they are not
+            thread safe. Consumption thread must not call any of the T_ methods.
+            Update must be called before consumption to copy new events into the consumption queue,
+            or use <see cref="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.ProcessNewEvents"/> to copy new events to consumption queue and enumerate all new events.
+            </summary>
+        </member>
+        <member name="F:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.currentEvent">
+            <summary>
+            The current event being processed by <see cref="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.ProcessNewEvents"/>.
+            </summary>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.T_CreateEvent">
+            <summary>
+            Creates a new event.
+            Thread-safe. Locks the queues until event is populated.
+            Must be used with the using() pattern.
+            using(var helper = obj.T_CreateEvent()) { ... populate event data }
+            Lock will be released when using calls Dispose.
+            Event is no longer valid once outside the using scope.
+            </summary>
+            <returns>Event wrapper object for population of event data. Must be used in using() pattern.</returns>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.Update">
+            <summary>
+            Copies new events from the input thread to the consumer thread.
+            </summary>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.Clear">
+            <summary>
+            Clears all events.
+            </summary>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.ProcessNewEvents">
+            <summary>
+            Updates the queue and processes the next new event in the queue.
+            Should be called in a while loop to process all the events.
+            Should only be called by the consumer thread.
+            Get the current event from <see cref="F:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.currentEvent"/>.
+            </summary>
+            <returns>True if an event was found, false if no events remain.</returns>
+        </member>
+        <member name="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.StopProcessingEvents">
+            <summary>
+            Must be called if you do not finish processing all events after calling ProcessNewEvents.
+            </summary>
+        </member>
+        <member name="P:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.lastProcessedEventId">
+            <summary>
+            The event id of the last event processed by <see cref="M:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.ProcessNewEvents"/>.
+            </summary>
+        </member>
+        <member name="P:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.count">
+            <summary>
+            The count of events in the consumer queue. This includes events that have already been processed.
+            </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.NewEventWrapper">
+            <summary>
+            Wrapper around the event that makes sure the threads are locked while the event is populated.
+            </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.DualThreadLowLevelInputEventQueue.INewEventWrapper">
+            <summary>
+            Interface for wrapping a new event during population for thread safety.
+            </summary>
+        </member>
+        <member name="T:Rewired.Utils.Classes.Utility.LowLevelInputEventQueue">
+            <summary>
+            This uses native buffers even though they're slower read/write than byte[] or int/float[]
+            because it means we can allocate a lot of memeory and release it without garbage
+            collection.
             </summary>
         </member>
         <member name="T:Rewired.Utils.Classes.Utility.SetAndRestoreVar`1">
