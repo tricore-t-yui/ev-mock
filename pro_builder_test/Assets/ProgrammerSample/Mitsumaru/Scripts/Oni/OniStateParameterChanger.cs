@@ -104,7 +104,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
             // ステートを変更
             animator.SetBool("isPlayerHide", true);
 
-            if (viewingRay.RayBlockingTimeToPlayer < 120)
+            if (viewingRay.RayBlockingTimeToPlayer < 30)
             {
                 // プレイヤーを発見して、戦闘状態へ
                 animator.SetBool("isPlayerDiscover", true);
