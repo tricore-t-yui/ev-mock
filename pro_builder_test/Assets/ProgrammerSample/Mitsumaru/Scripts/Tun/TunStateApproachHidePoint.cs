@@ -15,6 +15,9 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     [SerializeField]
     float bedCenterRadius = 0;
 
+    [SerializeField]
+    float speed = default;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
@@ -41,6 +44,9 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         // ナビメッシュ取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
         navMesh.isStopped = false;
+
+        // 移動速度を設定する
+        navMesh.speed = speed;
 
         // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
