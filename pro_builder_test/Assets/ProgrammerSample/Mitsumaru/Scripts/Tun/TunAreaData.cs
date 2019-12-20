@@ -13,6 +13,11 @@ public class TunAreaData : MonoBehaviour
     Vector3 spawnPos = Vector3.zero;
     public Vector3 SpawnPos => spawnPos;
 
+    // スポーンするまでの時間
+    [SerializeField]
+    float spawnTime = 0;
+    public float SpawnTime => spawnTime;
+
     // ハイドオブジェクト
     [SerializeField]
     List<GameObject> hideObject = default;

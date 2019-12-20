@@ -15,14 +15,14 @@ public class TunAreaDataManager : MonoBehaviour
     [SerializeField]
     PlayerHideController playerHideController = default;
 
-    [SerializeField]
-    int spawnTime = 0;
+    // スポーンするまでの時間のカウント
     int spawnTimeCounter = 0;
 
     // ツンのオブジェクト
     [SerializeField]
     GameObject tun = default;
 
+    TunAreaData areaData = default;
     bool isSpawn = false;
 
     /// <summary>
@@ -62,15 +62,16 @@ public class TunAreaDataManager : MonoBehaviour
         // TODO : プレイヤーが隠れてから、一定時間経過後にスポーンするようにする。
         // note : ステートマシンはアクティブなオブジェクトでしか動作しないため
         //        プレイヤーが隠れたかどうかの判定はここで行う。
-        if (playerHideController.enabled)
+        if (playerHideController.IsHideBed || playerHideController.IsHideLocker)
         {
-            spawnTimeCounter++;
+            // エリアデータを取得
+            areaData = GetTunAreaData(playerHideController.HideObj.GetInstanceID()) ?? areaData;
 
-            if (spawnTime < spawnTimeCounter)
+            spawnTimeCounter++;
+            if (areaData.SpawnTime < spawnTimeCounter)
             {
                 if (!isSpawn)
                 {
-                    TunAreaData areaData = GetTunAreaData(playerHideController.HideObj.GetInstanceID());
                     tun.transform.position = areaData.SpawnPos;
                     tun.SetActive(true);
                     isSpawn = true;
@@ -80,6 +81,7 @@ public class TunAreaDataManager : MonoBehaviour
         }
         else
         {
+            areaData = null;
             spawnTimeCounter = 0;
         }
 

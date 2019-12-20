@@ -76,7 +76,7 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
         // 吹き飛ばす
         else if (counter == damageTime)
         {
-            damageEvent.Invoke(animator.transform, 50);
+            damageEvent.Invoke(animator.transform, damage);
         }
         counter++;
     }
