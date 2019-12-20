@@ -40,6 +40,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     {
         // ナビメッシュ取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+        navMesh.isStopped = false;
 
         // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
@@ -89,17 +90,20 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         bool isAngle = false;
         // ハイドポイントの位置を取得
         Vector3 hideObjPos = currentCheckingHide.transform.position;
+        Vector3 hideToTun = (new Vector3(hideObjPos.x, animator.transform.position.y, hideObjPos.z) - animator.transform.position).normalized;
         // まだ目標位置に着いてなければスキップ
         if (currentCheckingHide.tag == "Locker")
         {
             if (!(navMesh.remainingDistance < navMesh.stoppingDistance)) { return; }
 
-            isAngle = (Vector3.Angle(animator.transform.forward, currentCheckingHide.transform.forward) < 0.1f);
+            navMesh.isStopped = true;
+
+            isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.1f);
         }
         else
         {
             if (!(navMesh.remainingDistance < bedCenterRadius)) { return; }
-            Vector3 hideToTun = (new Vector3(hideObjPos.x, animator.transform.position.y, hideObjPos.z) - animator.transform.position).normalized;
+            navMesh.isStopped = true;
             isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.3f);
         }
         // ハイドポイントのほうを向くようにツンを回転
@@ -110,7 +114,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
             // ハイドポイント接近フラグをオフに
             animator.SetBool("isApproachingHide", false);
 
-            // プレイヤーが隠れいているなら
+            // プレイヤーが隠れているなら
             if (hideController.enabled)
             {
                 // 隠れいているオブジェクトがツンが調べようとしているオブジェクトと同じだったら

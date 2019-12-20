@@ -38,7 +38,7 @@ public class TunStateAttackHideInBed : StateMachineBehaviour
         damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
 
         // ダメージイベントを呼ぶ
-        damageEvent.Invoke(animator.transform, 50);
+        damageEvent.Invoke(animator.transform, damage);
     }
 
     /// <summary>

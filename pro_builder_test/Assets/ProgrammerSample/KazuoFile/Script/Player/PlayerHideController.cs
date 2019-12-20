@@ -229,6 +229,52 @@ public class PlayerHideController : MonoBehaviour
         }
     }
 
+    // NOTE:k.oishi
+    //      隠れているか+息止めしているかを調べれるようにIsHideStealth()を変更しましたが、
+    //      IsHideStealth()を影人間、鬼、ツンのスクリプトでも使っているのでコンフリクト防止のために変更せずにコメント化しています。
+    ///// <summary>
+    ///// 隠れている状態かどうか
+    ///// </summary>
+    ///// <param name="isHold">息を止めいてるかどうか</param>
+    ///// <returns></returns>
+    //public bool IsHide(HideObjectType type, bool isHold)
+    //{
+    //    // 隠れているかどうかのフラグ
+    //    bool ishide = false;
+    //
+    //    // タイプによって隠れているかどうかのフラグを立てる
+    //    switch (type)
+    //    {
+    //        case HideObjectType.LOCKER: if (isHideLocker) { ishide = true; } break;
+    //        case HideObjectType.BED: if (isHideBed) { ishide = true; } break;
+    //        case HideObjectType.BOTH: if (isHideLocker || isHideBed) { ishide = true; } break;
+    //    }
+    //
+    //    // 隠れているかどうかと、息を止めているかどうかも確認
+    //    if (isHold)
+    //    {
+    //        if (isStealth && ishide)
+    //        {
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (ishide)
+    //        {
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //}
+
     /// <summary>
     /// 息切れしてしまったかどうか
     /// </summary>
