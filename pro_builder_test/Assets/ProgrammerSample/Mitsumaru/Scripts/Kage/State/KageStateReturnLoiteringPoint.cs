@@ -75,6 +75,8 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
         if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
+            // 警戒範囲を通常状態に変更
+            vigilanceRange.ChangeRadius(KageState.Kind.Normal);
         }
     }
 
