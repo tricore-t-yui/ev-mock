@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using EventStartType = PlayerStartEventCaller.EventType;
 using EventType = PlayerEventCaller.EventType;
 using EventEndType = PlayerEndEventCaller.EventType;
@@ -71,6 +72,11 @@ public class PlayerStateController : MonoBehaviour
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
 
+    //  無敵モード変更用変数
+    [SerializeField]
+    Text text = default;
+    bool isInvincible = false;
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -88,6 +94,37 @@ public class PlayerStateController : MonoBehaviour
         if (animationContoller.IsEndAnim)
         {
             EventPlay();
+        }
+
+        // 無敵モード変更
+        Invincible();
+    }
+
+    /// <summary>
+    /// 無敵モード変更
+    /// </summary>
+    /// NOTE:k.oishi 無敵モードに変更するための関数です
+    void Invincible()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (!isInvincible)
+            {
+                isInvincible = true;
+            }
+            else
+            {
+                isInvincible = false;
+            }
+        }
+
+        if (isInvincible)
+        {
+            text.text = "無敵モードON   Lキーで変更";
+        }
+        else
+        {
+            text.text = "無敵モードOFF   Lキーで変更";
         }
     }
 
@@ -287,29 +324,32 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
     public void ChangeDamageState(Transform enemyPos, float damage)
     {
-        // ダメージ処理が開始されていないならダメージを食らう
-        if (!damageController.enabled && !damageController.IsInvincible)
-        {  
-            if (State == ActionStateType.HIDE)
+        if (!isInvincible)
+        {
+            // ダメージ処理が開始されていないならダメージを食らう
+            if (!damageController.enabled && !damageController.IsInvincible)
             {
-                EventStop();
-                switch (hideController.type)
+                if (State == ActionStateType.HIDE)
                 {
-                    case PlayerHideController.HideObjectType.BED:
-                        damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.HIDEBED);
-                        break;
-                    case PlayerHideController.HideObjectType.LOCKER:
-                        damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.HIDELOCKER);
-                        break;
+                    EventStop();
+                    switch (hideController.type)
+                    {
+                        case PlayerHideController.HideObjectType.BED:
+                            damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.HIDEBED);
+                            break;
+                        case PlayerHideController.HideObjectType.LOCKER:
+                            damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.HIDELOCKER);
+                            break;
+                    }
                 }
+                else
+                {
+                    EventStop();
+                    damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
+                }
+                State = ActionStateType.DAMAGE;
+                EventStart();
             }
-            else
-            {
-                EventStop();
-                damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
-            }
-            State = ActionStateType.DAMAGE;
-            EventStart();
         }
     }
 
