@@ -109,10 +109,10 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
     /// <summary>
     ///  範囲から抜けた瞬間
     /// </summary>
-    void OnRangeExit(string enemyName)
+    void OnRangeExit(string enemyTag)
     {
         // 範囲外に出ようとしているオブジェクトが影人間だったら
-        if (enemyName == animParameterList.gameObject.name)
+        if (enemyTag == "Kage")
         {
             // 新たに目標位置を設定
             navMesh.SetDestination(GetNextTargetPos());

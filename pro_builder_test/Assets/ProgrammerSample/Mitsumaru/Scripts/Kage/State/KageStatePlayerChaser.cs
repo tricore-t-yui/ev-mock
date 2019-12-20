@@ -14,6 +14,12 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     [SerializeField]
     float speed = 0;
 
+    [SerializeField]
+    float lockerCenterRadius = 0;
+
+    [SerializeField]
+    float bedCenterRadius = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
     // 影人間のパラメータークラス
@@ -104,6 +110,35 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        GameObject targetObject = null;
+        if (playerHideController.enabled)
+        {
+            targetObject = playerHideController.HideObj;
+        }
+        else
+        {
+            targetObject = playerHideController.gameObject;
+        }
+
+        if (targetObject.tag == "Locker")
+        {
+            if (navMesh.remainingDistance < lockerCenterRadius)
+            {
+                animator.transform.LookAt(new Vector3(targetObject.transform.position.x, animator.transform.position.y, targetObject.transform.position.z));
+            }
+        }
+        else if (targetObject.tag == "Bed")
+        {
+            if (navMesh.remainingDistance < bedCenterRadius)
+            {
+                animator.transform.LookAt(new Vector3(targetObject.transform.position.x, animator.transform.position.y, targetObject.transform.position.z));
+            }
+        }
+        else
+        {
+
+        }
+
         // 影人間の移動が停止したら、見失ったとみなす
         if (!isInFieldOfView && playerHideController.IsHideStealth())
         {
@@ -115,7 +150,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         if (navMesh.velocity.magnitude < 0.1f)
         {
             stopTimeCounter++;
-
+            
             if (stopTimeCounter > stopTime)
             {
                 animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
@@ -126,12 +161,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         else
         {
             stopTimeCounter = 0;
-        }
-
-        if (animator.name == "Kage_Standing09")
-        {
-            Debug.Log("Kage_Standing09 : " + navMesh.velocity.magnitude);
-            Debug.Log("Kage_Standing09 : " + stopTimeCounter);
         }
     }
 
