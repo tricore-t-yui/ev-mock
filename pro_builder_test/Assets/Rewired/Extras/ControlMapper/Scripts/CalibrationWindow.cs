@@ -1,4 +1,39 @@
-﻿// Copyright (c) 2015 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
+// Copyright (c) 2015 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
+
+//#define REWIRED_CONTROL_MAPPER_USE_TMPRO
+
+#if UNITY_2020 || UNITY_2021 || UNITY_2022 || UNITY_2023 || UNITY_2024 || UNITY_2025
+#define UNITY_2020_PLUS
+#endif
+
+#if UNITY_2019 || UNITY_2020_PLUS
+#define UNITY_2019_PLUS
+#endif
+
+#if UNITY_2018 || UNITY_2019_PLUS
+#define UNITY_2018_PLUS
+#endif
+
+#if UNITY_2017 || UNITY_2018_PLUS
+#define UNITY_2017_PLUS
+#endif
+
+#if UNITY_5 || UNITY_2017_PLUS
+#define UNITY_5_PLUS
+#endif
+
+#if UNITY_5_1 || UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+#define UNITY_5_1_PLUS
+#endif
+
+#if UNITY_5_2 || UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+#define UNITY_5_2_PLUS
+#endif
+
+#if UNITY_5_3_OR_NEWER || UNITY_2017_PLUS
+#define UNITY_5_3_PLUS
+#endif
+
 #pragma warning disable 0219
 #pragma warning disable 0618
 #pragma warning disable 0649
@@ -14,6 +49,11 @@ namespace Rewired.UI.ControlMapper {
     using Rewired;
     using Rewired.Utils;
     using Rewired.Integration.UnityUI;
+#if REWIRED_CONTROL_MAPPER_USE_TMPRO
+    using Text = TMPro.TMP_Text;
+#else
+    using Text = UnityEngine.UI.Text;
+#endif
 
     [AddComponentMenu("")]
     public class CalibrationWindow : Window {
@@ -392,7 +432,7 @@ namespace Rewired.UI.ControlMapper {
             if (index < 0 || index >= axisButtons.Count) return;
             if (axisButtons[index] == null) return;
             axisButtons[index].interactable = false; // disable this axis
-#if UNITY_5_3_OR_NEWER
+#if UNITY_5_3_PLUS
             // Unity changed the system so when interactible is set to false,
             // the Selectable is immediately deselected.
             axisButtons[index].Select(); // force select after Unity deselects it
