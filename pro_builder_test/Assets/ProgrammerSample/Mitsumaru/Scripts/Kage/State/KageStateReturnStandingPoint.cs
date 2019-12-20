@@ -21,6 +21,9 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
     // ナビメッシュ
     NavMeshAgent navMesh = null;
 
+    // 警戒範囲
+    KageVigilanceRange vigilanceRange = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -38,6 +41,9 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
+        // 警戒範囲
+        vigilanceRange = animator.transform.Find("Collider").Find("KageVigilanceRange").GetComponent<KageVigilanceRange>() ?? vigilanceRange;
+
         // 移動目標位置をセット
         stateStanding.ReturnStandingPosition();
     }
@@ -51,6 +57,8 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
         if (navMesh.remainingDistance < navMesh.stoppingDistance)
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
+            // 警戒範囲を通常状態に変更
+            vigilanceRange.ChangeRadius(KageState.Kind.Normal);
         }
     }
 }

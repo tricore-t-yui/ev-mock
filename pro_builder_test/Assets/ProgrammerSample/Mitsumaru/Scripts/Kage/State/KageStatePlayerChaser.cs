@@ -40,6 +40,10 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     // ダメージを受けたかどうか
     bool isDamage = false;
 
+    [SerializeField]
+    int stopTime = 0;
+    int stopTimeCounter = 0;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -105,6 +109,29 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         {
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
+        }
+
+        // 壁やドアなどの障害物に一定時間つまったら、通常に戻る
+        if (navMesh.velocity.magnitude < 0.1f)
+        {
+            stopTimeCounter++;
+
+            if (stopTimeCounter > stopTime)
+            {
+                animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
+                animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
+                stopTimeCounter = 0;
+            }
+        }
+        else
+        {
+            stopTimeCounter = 0;
+        }
+
+        if (animator.name == "Kage_Standing09")
+        {
+            Debug.Log("Kage_Standing09 : " + navMesh.velocity.magnitude);
+            Debug.Log("Kage_Standing09 : " + stopTimeCounter);
         }
     }
 

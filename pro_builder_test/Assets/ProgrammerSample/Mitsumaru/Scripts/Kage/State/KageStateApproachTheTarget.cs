@@ -26,6 +26,10 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     [SerializeField]
     int targetPosStopTime = 0;
     // カウンター
+    int targetPosStopTimeCounter = 0;
+
+    [SerializeField]
+    int stopTime = 0;
     int stopTimeCounter = 0;
 
     /// <summary>
@@ -76,6 +80,23 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
         {
             // その場で待機する
             animParameterList.SetTrigger(ParameterType.targetPosStop);
+        }
+
+        // 壁やドアなどの障害物に一定時間つまったら、通常に戻る
+        if (navMesh.velocity.magnitude < 0.1f)
+        {
+            stopTimeCounter++;
+
+            if (stopTimeCounter > stopTime)
+            {
+                animParameterList.SetBool(ParameterType.isFightingMode, false);
+                animParameterList.SetBool(ParameterType.isVigilanceMode, false);
+                stopTimeCounter = 0;
+            }
+        }
+        else
+        {
+            stopTimeCounter = 0;
         }
     }
 
