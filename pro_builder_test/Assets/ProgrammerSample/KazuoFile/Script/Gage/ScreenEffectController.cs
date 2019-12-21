@@ -72,7 +72,7 @@ public class ScreenEffectController : MonoBehaviour
                 break;
             case ImageType.STAMINA:
                 color = staminaEffect.color;
-                color.a = 0.1f - (staminaController.NowAmount / 1000);
+                color.a = 0.05f - (staminaController.NowAmount / 2000);
                 break;
             case ImageType.FADEOUT:
                 color = fadeOut.color;

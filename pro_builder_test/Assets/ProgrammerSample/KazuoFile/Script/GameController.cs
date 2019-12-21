@@ -62,12 +62,11 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// 次のシーンへ移動
     /// </summary>
-    /// <param name="isEnd">次のシーンが終わりかどうか</param>
-    public void ChangeNextScene(bool isEnd)
+    public void ChangeNextScene()
     {
-        if(isEnd)
+        if(IsReturn)
         {
-            SceneManager.LoadScene("GoingScene_1.3");
+            SceneManager.LoadScene("GoingScene_1.2");
         }
         else
         {

@@ -129,9 +129,6 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.WAIT: addLevel = 1; break;
             case ActionSoundType.WALK: addLevel = 3; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
-            case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = 1; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = 1; break;
             case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 3; break;
@@ -144,6 +141,14 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
             case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 2; break;
             case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 10; break;
+
+            //NOTE:k.oishi 隠れた時の動きが見えづらいのでいったん0に
+            //case ActionSoundType.SMALLCONFUSION: addLevel = 2; break;
+            //case ActionSoundType.MEDIUMCONFUSION: addLevel = 3; break;
+            //case ActionSoundType.LARGECONFUSION: addLevel = 4; break;
+            case ActionSoundType.SMALLCONFUSION: addLevel = 0; break;
+            case ActionSoundType.MEDIUMCONFUSION: addLevel = 0; break;
+            case ActionSoundType.LARGECONFUSION: addLevel = 0; break;
         }
 
         soundLevel += addLevel;

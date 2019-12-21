@@ -24,7 +24,7 @@ public class LockerLoopState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // 息止めキーをおされたら息止め開始
-        if (hideController.IsHoldBreathKey())
+        if (hideController.IsHoldBreathKey() && !hideController.IsBreathlessness())
         {
             animator.SetBool("Stealth", true);
         }
