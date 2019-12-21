@@ -48,7 +48,10 @@ public class RandomMoveRangeCollider : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerExit(Collider other)
     {
-        // コールバック関数を呼ぶ
-        onRangeExit?.Invoke(other.transform.parent.parent.tag);
+        if (other.tag == "Kage")
+        {
+            // コールバック関数を呼ぶ
+            onRangeExit?.Invoke(other.transform.parent.parent.tag);
+        }
     }
 }
