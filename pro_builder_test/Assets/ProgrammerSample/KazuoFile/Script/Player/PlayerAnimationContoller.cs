@@ -92,6 +92,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); break;
             case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
             case AnimationType.TRAP: animator.SetTrigger("TrapOperate"); DisplayRightArm(true); break;
+            case AnimationType.GETDOLL: animator.SetTrigger("GetDoll"); break;
         }
     }
 

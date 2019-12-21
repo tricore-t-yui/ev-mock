@@ -32,20 +32,20 @@ public class PlayerBreathController : MonoBehaviour
     KeyController keyController = default;                      // キー操作クラス
 
     [SerializeField]
-    float normalRecovery = 0.3f;                               // 通常の息の回復量
+    float normalRecovery = 1;                               // 通常の息の回復量
     [SerializeField]
-    float deepBreathRecovery = 0.5f;                            // 深呼吸時の息の回復量
+    float deepBreathRecovery = 1.25f;                            // 深呼吸時の息の回復量
     [SerializeField]
-    float breathlessnessRecovery = 0.3f;                       // 息切れ時の息の回復量
+    float breathlessnessRecovery = 0.5f;                       // 息切れ時の息の回復量
 
     [SerializeField]
-    float stealthDecrement = 0.1f;                             // 息止め時の息消費量
+    float stealthDecrement = 0.25f;                             // 息止め時の息消費量
     [SerializeField]
-    float hideSmallDecrement = 0.1f;                           // 隠れる＋息止め時の息消費量(小)
+    float hideSmallDecrement = 0.45f;                           // 隠れる＋息止め時の息消費量(小)
     [SerializeField]
-    float hideMediumDecrement = 0.1f;                           // 隠れる＋息止め時の息消費量(中)
+    float hideMediumDecrement = 0.45f;                           // 隠れる＋息止め時の息消費量(中)
     [SerializeField]
-    float hideLargeDecrement = 0.1f;                            // 隠れる＋息止め時の息消費量(大)
+    float hideLargeDecrement = 0.45f;                            // 隠れる＋息止め時の息消費量(大)
     [SerializeField]
     float buttonPatienceDecrement = 0.01f;                      // 息我慢時(連打あり)の息消費量
 

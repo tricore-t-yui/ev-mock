@@ -10,7 +10,7 @@ public class DollGetController : MonoBehaviour
     [SerializeField]
     GameObject leftArm = default;                   // 左手(人形を持つ手)
     [SerializeField]
-    InteractFunction interactController = default;  // インタラクト用関数クラス
+    PlayerAnimationContoller animationContoller = default;  // インタラクト用関数クラス
     [SerializeField]
     GameController gameController = default;        // ゲームの流れクラス
     [SerializeField]
@@ -23,6 +23,7 @@ public class DollGetController : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
+        transform.LookAt(new Vector3(doll.transform.position.x, transform.position.y, doll.transform.position.z));
         transform.position = new Vector3(doll.transform.position.x, transform.position.y,doll.transform.position.z - distance);
     }
 
@@ -33,6 +34,8 @@ public class DollGetController : MonoBehaviour
     public void SetInfo(GameObject targetObj)
     {
         doll = targetObj;
+        animationContoller.AnimStart(PlayerAnimationContoller.AnimationType.GETDOLL);
+
         enabled = true;
     }
 
@@ -50,6 +53,6 @@ public class DollGetController : MonoBehaviour
     public void EndDollGet()
     {
         enabled = false;
-        gameController.ChangeNextScene(false);
+        gameController.ChangeNextScene();
     }
 }
