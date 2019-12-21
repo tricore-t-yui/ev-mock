@@ -77,7 +77,7 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 息の残量による音の発生
     /// </summary>
-    void BreathSound()
+    void BreathSound(MoveType type)
     {
         if (IsDisappear)
         {
@@ -85,7 +85,7 @@ public class PlayerBreathController : MonoBehaviour
             soundArea.AddSoundLevel(ActionSoundType.BREATHLESSNESS);
             State = BrethState.BREATHLESSNESS;
         }
-        else
+        else if(type != MoveType.HIDE)
         {
             if (NowAmount <= smallDisturbance)
             {
@@ -112,6 +112,11 @@ public class PlayerBreathController : MonoBehaviour
                 // 乱れ無し
                 State = BrethState.NOTCONFUSION;
             }
+        }
+        else
+        {
+            // 乱れ無し
+            State = BrethState.NOTCONFUSION;
         }
     }
 
@@ -146,7 +151,7 @@ public class PlayerBreathController : MonoBehaviour
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
 
         // 息の残量による音の発生
-        BreathSound();
+        BreathSound(type);
     }
 
     /// <summary>
