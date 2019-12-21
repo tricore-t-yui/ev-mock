@@ -125,30 +125,25 @@ public class SoundAreaSpawner : MonoBehaviour
         // 行動音によって音レベルを加算
         switch (type)
         {
-            case ActionSoundType.STEALTH: addLevel = -3; break;
+            case ActionSoundType.STEALTH: addLevel = -4; break;
             case ActionSoundType.WAIT: addLevel = 1; break;
-            case ActionSoundType.WALK: addLevel = 3; break;
+            case ActionSoundType.WALK: addLevel = 2; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
-            case ActionSoundType.DEEPBREATH: addLevel = 3; break;
+            case ActionSoundType.DEEPBREATH: addLevel = 2; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 7; break;
+            case ActionSoundType.DASH: addLevel = 5; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
-            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 5; break;
-            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 8; break;
+            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
+            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 2; break;
-            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 10; break;
-
-            //NOTE:k.oishi 隠れた時の動きが見えづらいのでいったん0に
-            //case ActionSoundType.SMALLCONFUSION: addLevel = 2; break;
-            //case ActionSoundType.MEDIUMCONFUSION: addLevel = 3; break;
-            //case ActionSoundType.LARGECONFUSION: addLevel = 4; break;
-            case ActionSoundType.SMALLCONFUSION: addLevel = 0; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = 0; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = 0; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 3; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 6; break;
+            case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
+            case ActionSoundType.MEDIUMCONFUSION: addLevel = 2; break;
+            case ActionSoundType.LARGECONFUSION: addLevel = 3; break;
         }
 
         soundLevel += addLevel;

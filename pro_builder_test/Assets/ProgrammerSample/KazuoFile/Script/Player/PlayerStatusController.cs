@@ -40,9 +40,6 @@ public class PlayerStatusController : MonoBehaviour
         staminaController.DeepBreathRecovery();
         objectDamageController.DeepBreathRecovery();
         healthController.HealthRecovery();
-
-        Debug.Log("息" + breathController.NowAmount);
-        Debug.Log("スタミナ" + staminaController.NowAmount);
     }
 
     /// <summary>
