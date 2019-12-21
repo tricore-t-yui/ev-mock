@@ -43,9 +43,8 @@ public class KageSpawn : MonoBehaviour
             {
                 case "Area08": kage[0].SetActive(true); kage[1].SetActive(true); break;
                 case "Area11": kage[2].SetActive(true); break;
-                case "Area13": kage[3].SetActive(true); break;
-                case "Area21": kage[4].SetActive(true); kage[5].SetActive(true); break;
-                case "Area10": kage[6].SetActive(true); break;
+                case "Area21": kage[3].SetActive(true); kage[4].SetActive(true); break;
+                case "Area10": kage[5].SetActive(true); break;
             }
         }
     }
