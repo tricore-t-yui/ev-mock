@@ -3273,7 +3273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3656781007676270685
 Transform:
   m_ObjectHideFlags: 0
@@ -7348,11 +7348,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  rayTargetLayer:
-  - Player
-  - Stage
-  - Locker
-  - Bed
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 28928
 --- !u!1 &3656781008868309528
 GameObject:
   m_ObjectHideFlags: 0
@@ -7626,6 +7624,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7681,10 +7684,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (2)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -7693,43 +7701,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781008660201860}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781008660201860}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -7751,6 +7734,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7806,10 +7794,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (6)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -7818,43 +7811,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781007807549984}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781007807549984}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -7876,6 +7844,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7931,10 +7904,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (3)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -7943,43 +7921,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781008141745710}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781008141745710}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8001,6 +7954,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8056,10 +8014,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8068,43 +8031,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781007514997016}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781007514997016}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8126,6 +8064,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8181,10 +8124,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (1)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8193,43 +8141,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781007034124232}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781007034124232}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8251,6 +8174,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8306,10 +8234,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (4)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8318,43 +8251,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781007022359571}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781007022359571}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8376,6 +8284,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (7)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8431,10 +8344,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (7)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8443,43 +8361,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781007618313233}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781007618313233}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8501,6 +8394,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3656781007742723191}
     m_Modifications:
+    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHumanParticle (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608700, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8556,10 +8454,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608703, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHumanParticle (5)
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
@@ -8568,43 +8471,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: ShapeModule.m_MeshRenderer
-      value: 
-      objectReference: {fileID: 3656781008884472624}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: ShapeModule.radiusThickness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
       propertyPath: ShapeModule.placementMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 3656781008884472624}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7707355227749608698, guid: f2c7a8f0cd2c79b43b8d74de873f31ee,
         type: 3}
