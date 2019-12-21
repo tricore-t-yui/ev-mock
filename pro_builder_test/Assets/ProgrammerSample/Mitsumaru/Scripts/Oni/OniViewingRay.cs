@@ -11,13 +11,13 @@ public class OniViewingRay : MonoBehaviour
     Transform player = default;
 
     // レイヤーマスク
-    int layerMask = 0;
+   // int layerMask = 0;
 
     // プレイヤーを見つけたかどうか
     public Transform HitObject { get; private set; } = default;
 
-    public int RayIrradiationTimeToPlayer { get; private set; } = 0;
-    public int RayBlockingTimeToPlayer { get; private set; } = 0;
+    [SerializeField]
+    LayerMask layerMask = default;
 
     /// <summary>
     /// 開始
@@ -25,7 +25,7 @@ public class OniViewingRay : MonoBehaviour
     private void Start()
     {
         // レイに衝突する対象のレイヤーを取得
-        layerMask = 1 << LayerMask.GetMask(new string[] { "Player", "Stage", "Locker","Bed" });
+        //layerMask = 1 << LayerMask.GetMask(new string[] { "Player", "Stage", "Locker","Bed" });
     }
 
     /// <summary>
@@ -41,26 +41,10 @@ public class OniViewingRay : MonoBehaviour
 
         // プレイヤーに向かってレイを飛ばして、プレイヤーにヒットしたか判定する
         RaycastHit hit;
-        if (Physics.Raycast(ray,out hit,Mathf.Infinity, layerMask))
+        if (Physics.Raycast(ray,out hit,Mathf.Infinity, layerMask.value))
         {
             // レイに当たっているオブジェクトをセット
             HitObject = hit.collider.transform;
-            
-            if (hit.collider.tag == "Player")
-            {
-                RayIrradiationTimeToPlayer++;
-                RayBlockingTimeToPlayer = 0;
-            }
-            else
-            {
-                RayIrradiationTimeToPlayer = 0;
-                RayBlockingTimeToPlayer++;
-            }
-        }
-        else
-        {
-            RayIrradiationTimeToPlayer = 0;
-            RayBlockingTimeToPlayer++;
         }
     }
 }
