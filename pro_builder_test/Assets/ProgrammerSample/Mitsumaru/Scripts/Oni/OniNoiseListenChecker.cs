@@ -24,7 +24,14 @@ public class OniNoiseListenChecker : MonoBehaviour
         if (targetTagNames.Find(x => x == other.tag) != default)
         {
             // 音を聞いたフラグをオンにする
-            animator.SetBool("isNoiseListener", true);
+            StartCoroutine(OnListener());
         }
+    }
+
+    IEnumerator OnListener()
+    {
+        animator.SetBool("isNoiseListener", true);
+        yield return null;
+        animator.SetBool("isNoiseListener", false);
     }
 }
