@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
+﻿// Copyright (c) 2015 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
 #pragma warning disable 0219
 #pragma warning disable 0618
 #pragma warning disable 0649
