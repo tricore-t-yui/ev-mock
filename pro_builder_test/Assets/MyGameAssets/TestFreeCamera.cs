@@ -36,7 +36,7 @@ public class TestFreeCamera : MonoBehaviour
 
         // rot コントローラー接続されていなかったらマウス扱いして原則。コントローラー使ってマウス動かしたらはやいけどしらん
         var controllerNames = Input.GetJoystickNames();
-        if(controllerNames[0] == "")
+        if(controllerNames.Length <= 0 || controllerNames[0] == "")
         {
             cameraRot *= 0.05f;
         }
