@@ -23,9 +23,12 @@ public class EnemySpawn : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        foreach (var item in enemy)
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
         {
-            item.SetActive(true);
+            foreach (var item in enemy)
+            {
+                item.SetActive(true);
+            }
         }
     }
 
