@@ -16,7 +16,7 @@ public class CameraAnimationController : MonoBehaviour
         BREATHRECOVERY,     // 息回復
         DAMAGE,             // ダメージ
         DASH,               // ダッシュ
-        STEALTH,            // 忍び歩き
+        BREATHHOLD,         // 息止め
         BREATHLESSNESS,     // 息切れ
         DEATH,              // 死亡
         OBJECTDAMAGE,       // オブジェクトダメージ
@@ -47,7 +47,7 @@ public class CameraAnimationController : MonoBehaviour
             case AnimationType.BREATHRECOVERY: animator.SetBool("BreathRecovery", true); break;
             case AnimationType.DAMAGE: animator.SetBool("Damage", true); break;
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
-            case AnimationType.STEALTH: animator.SetBool("Stealth", true); break;
+            case AnimationType.BREATHHOLD: animator.SetBool("Stealth", true); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Breathlessness", true); break;
             case AnimationType.DEATH: animator.SetBool("Death", true);break;
             case AnimationType.OBJECTDAMAGE: animator.SetBool("ObjectDamage", true); break;
@@ -66,7 +66,7 @@ public class CameraAnimationController : MonoBehaviour
             case AnimationType.BREATHRECOVERY: animator.SetBool("BreathRecovery", false); break;
             case AnimationType.DAMAGE: animator.SetBool("Damage", false); break;
             case AnimationType.DASH: animator.SetBool("Dash", false); break;
-            case AnimationType.STEALTH: animator.SetBool("Stealth", false); break;
+            case AnimationType.BREATHHOLD: animator.SetBool("Stealth", false); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Breathlessness", false); break;
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
             case AnimationType.OBJECTDAMAGE: animator.SetBool("ObjectDamage", false); break;

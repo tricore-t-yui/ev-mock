@@ -23,8 +23,13 @@ public class DoorController : MonoBehaviour
     DirType type = default;                         // 現在のドアの開ける方向のタイプ
     DirType firstType = default;                    // 開始時のドアの開ける方向のタイプ
 
+    // ドアを開けることができる部屋番号
+    // NOTE:k.oishi 各ドアのこの変数に、この扉を正面から開けることになる部屋番号を入力してください
+    [SerializeField]
+    string roomName = null;
+
     // ドアを逆に開けることができる部屋番号
-    // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開くことになる部屋番号を入力してください
+    // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開けることになる部屋番号を入力してください
     [SerializeField]
     string reverseRoomName = null;
 
@@ -153,6 +158,22 @@ public class DoorController : MonoBehaviour
     public DirType GetDirType()
     {
         return type;
+    }
+
+    /// <summary>
+    /// エリアの名前のゲット関数
+    /// </summary>
+    /// <param name="isReverse">逆側からあけたかどうか</param>
+    public string GetRoomName(bool isReverse)
+    {
+        if(isReverse)
+        {
+            return roomName;
+        }
+        else
+        {
+            return reverseRoomName;
+        }
     }
 
     /// <summary>

@@ -13,8 +13,6 @@ public class TunParameterChanger : StateMachineBehaviour
     KageFieldOfView fieldOfView = null;
     // エリアデータ管理クラス
     TunAreaDataManager areaDataManager = null;
-    // エリア管理クラス
-    AreaManager areaManager = null;
     // 鬼の聴こえる範囲
     ColliderEvent vigilanceRangeEvent = null;
 
@@ -35,8 +33,6 @@ public class TunParameterChanger : StateMachineBehaviour
         fieldOfView = animator.GetComponentInChildren<KageFieldOfView>() ?? fieldOfView;
         // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
-        // エリア管理クラスを取得
-        areaManager = FindObjectOfType<AreaManager>() ?? areaManager;
         // 聴こえる範囲の制御クラスを取得
         vigilanceRangeEvent = animator.transform.Find("Collider").Find("OniVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
         // 視界にとらえたときのイベントを追加

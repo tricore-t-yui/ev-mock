@@ -13,10 +13,11 @@ public class SoundAreaSpawner : MonoBehaviour
     /// </summary>
     public enum ActionSoundType
     {
-        STEALTH,                // 息止め
+        BREATHHOLD,             // 息止め
         HIDE,                   // 隠れる
         WAIT,                   // 待機
-        WALK,                   // 移動
+        WALK,                   // 歩き
+        STEALTH,                // 忍び歩き
         SQUAT,                  // しゃがみ 
         DASH,                   // ダッシュ
         DOOROPEN,               // ドア開閉
@@ -80,7 +81,6 @@ public class SoundAreaSpawner : MonoBehaviour
         // 合計値に適応、それに応じて領域拡大
         totalSoundLevel = soundLevel;
         areaRadius = 1 + (areaMagnification * totalSoundLevel);
-
         if (areaRadius < 0.25f) { return; }
 
         // スポーンしてリストに追加
@@ -121,29 +121,29 @@ public class SoundAreaSpawner : MonoBehaviour
     {
         // レベル加算用変数
         float addLevel = 0;
-
         // 行動音によって音レベルを加算
         switch (type)
         {
-            case ActionSoundType.STEALTH: addLevel = -4; break;
-            case ActionSoundType.WAIT: addLevel = 1; break;
+            case ActionSoundType.BREATHHOLD: addLevel = -4.5f; break;
+            case ActionSoundType.WAIT: addLevel = 0; break;
             case ActionSoundType.WALK: addLevel = 2; break;
+            case ActionSoundType.STEALTH: addLevel = 1; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 2; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 5; break;
+            case ActionSoundType.DASH: addLevel = 3; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 3; break;
-            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 6; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 15; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 15; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = 2; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = 3; break;
+            case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.25f; break;
+            case ActionSoundType.LARGECONFUSION: addLevel = 1.5f; break;
         }
 
         soundLevel += addLevel;

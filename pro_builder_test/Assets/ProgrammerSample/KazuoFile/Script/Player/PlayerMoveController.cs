@@ -30,7 +30,7 @@ public class PlayerMoveController : MonoBehaviour
         WALK,
         DASH,
         SQUAT,
-        STEALTH,
+        BREATHHOLD,
         BAREFOOT,
         OBJECTDAMAGE,
         STAMINA,
@@ -59,7 +59,9 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField]
     PlayerStateController stateController = default;                // ステート管理クラス
     [SerializeField]
-    KeyController keyController = default;                      // キー操作クラス
+    KeyController keyController = default;                          // キー操作クラス
+    [SerializeField]
+    SoundAreaSpawner soundAreaSpawner = default;                    // 音領域生成クラス
 
     [SerializeField]
     float forwardSpeed = 2f;                    // 前移動時のスピード
@@ -92,7 +94,6 @@ public class PlayerMoveController : MonoBehaviour
     float stepUpPower = 1.45f;                  // 段差に当たった時に加える上方向の力
 
     float moveTypeSpeedLimit = 0;               // 移動タイプによる移動速度の限界
-    float statusTypeSpeedLimit = 0;             // 状態よる移動速度の限界
     float dirTypeSpeedLimit = 0;                // 移動方向による移動速度の限界
     float stickSpeedLimit = 0;                  // スティックの入力加減による移動速度の限界
 
@@ -234,7 +235,7 @@ public class PlayerMoveController : MonoBehaviour
             case SpeedLimitType.NOTMOVE: moveTypeSpeedLimit = 0; break;
             case SpeedLimitType.WALK: moveTypeSpeedLimit = walkSpeedLimit; break;
             case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
-            case SpeedLimitType.STEALTH: moveTypeSpeedLimit = stealthSpeedLimit; break;
+            case SpeedLimitType.BREATHHOLD: moveTypeSpeedLimit = stealthSpeedLimit; break;
         }
 
         // 状態によって移動速度上限の変更
@@ -275,10 +276,12 @@ public class PlayerMoveController : MonoBehaviour
     {
         if(length > 0.75f)
         {
+            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
             return 1;
         }
         else if (length > 0.3f)
         {
+            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.5f;
         }
         else

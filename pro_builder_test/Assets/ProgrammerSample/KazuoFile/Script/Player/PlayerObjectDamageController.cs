@@ -78,7 +78,7 @@ public class PlayerObjectDamageController : MonoBehaviour
             {
                 case MoveType.WALK: NowDamage += damageAmount; break;
                 case MoveType.DASH: NowDamage += damageAmount; break;
-                case MoveType.STEALTHMOVE: NowDamage += damageAmount; break;
+                case MoveType.BREATHHOLDMOVE: NowDamage += damageAmount; break;
                 default: break;
             }
 

@@ -11,8 +11,6 @@ public class DoorOpenState : StateMachineBehaviour
     float openFrame = 15;                                   // ドアが自動で開くフレーム
     [SerializeField]
     bool isPlayer = false;                                  // このアニメーターの親がプレイヤーかどうか
-    [SerializeField]
-    bool isTun = false;                                     // このアニメーターの親がツンかどうか
 
     PlayerDoorController playerDoorController = default;    // プレイヤードア開閉クラス
     DoorController doorController = default;                // ドア管理クラス
@@ -24,27 +22,20 @@ public class DoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (isTun)
+        if (isPlayer)
         {
-            animator.SetFloat("DoorOpenSpeed", 0.5f);
+            // プレイヤードア開閉クラス取得
+            playerDoorController = animator.gameObject.GetComponent<PlayerDoorController>() ?? playerDoorController;
         }
         else
-        { 
-            if (isPlayer)
-            {
-                // プレイヤードア開閉クラス取得
-                playerDoorController = animator.gameObject.GetComponent<PlayerDoorController>() ?? playerDoorController;
-            }
-            else
-            {
-                // ドア管理クラス取得
-                doorController = animator.gameObject.GetComponent<DoorController>() ?? doorController;
-            }
-
-            // リセット
-            flame = 0;
-            animator.SetFloat("DoorOpenSpeed", 0);
+        {
+            // ドア管理クラス取得
+            doorController = animator.gameObject.GetComponent<DoorController>() ?? doorController;
         }
+
+        // リセット
+        animator.SetFloat("DoorOpenSpeed", 0);
+        animator.ResetTrigger("AutoDoorClose");
     }
 
     /// <summary>
@@ -52,18 +43,15 @@ public class DoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (!isTun)
-        { 
-            // アニメーションの進んだフレームをプラスしてドア開閉
-            flame += UpdateAnimationSpeed();
-            animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed());
+        // アニメーションの進んだフレームをプラスしてドア開閉
+        flame += UpdateAnimationSpeed();
+        animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed());
 
-            // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
-            if (flame < 0)
-            {
-                // ドアから離れる
-                animator.SetTrigger("AutoDoorClose");
-            }
+        // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
+        if (flame < 0)
+        {
+            // ドアから離れる
+            animator.SetTrigger("AutoDoorClose");
         }
     }
 
@@ -72,18 +60,21 @@ public class DoorOpenState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // トリガーのリセット
-        animator.ResetTrigger("DoorOpen");
-
         // プレイヤーだったら閉じたフラグを立てる
         if (isPlayer)
         {
             animator.SetBool("DoorEnd", true);
+
+            // フレームが0以上(開け切って終わった)時はエリアの番号を変更
+            if (flame > 0)
+            {
+                playerDoorController.ChangeAreaName();
+            }
         }
-        else if(!isTun)
-        {
-            animator.ResetTrigger("AutoDoorClose");
-        }
+
+        // トリガーとフレームのリセット
+        animator.ResetTrigger("DoorOpen");
+        flame = 0;
     }
 
     /// <summary>

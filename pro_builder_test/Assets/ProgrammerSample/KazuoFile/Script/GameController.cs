@@ -9,15 +9,18 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     [SerializeField]
-    PlayerStatusController statusController = default;  // プレイヤーのステータスクラス
+    bool isDisplayCursor = false;                       // カーソルを表示するかどうか
+
     [SerializeField]
-    KageSpawn kageSpawn = default;                      // 影人間生成クラス
+    PlayerStatusController statusController = default;  // プレイヤーのステータスクラス
     [SerializeField]
     PlayerMoveController moveController = default;      // プレイヤーの移動クラス
     [SerializeField]
     PlayerStateController stateController = default;    // プレイヤーの状態クラス
     [SerializeField]
     PlayerHealthController healthController = default;  // プレイヤーの体力クラス
+    [SerializeField]
+    EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
@@ -33,6 +36,13 @@ public class GameController : MonoBehaviour
         else
         {
             IsReturn = false;
+        }
+
+        stateController.ResetAreaName();
+
+        if (!isDisplayCursor)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -53,10 +63,16 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        // 各リセット
         statusController.ResetStatus();
-        kageSpawn.ResetKage();
         moveController.ResetPos();
         stateController.ResetState();
+        stateController.ResetAreaName();
+
+        foreach (var item in enemySpawn)
+        {
+            item.ResetEnemy();
+        }
     }
 
     /// <summary>

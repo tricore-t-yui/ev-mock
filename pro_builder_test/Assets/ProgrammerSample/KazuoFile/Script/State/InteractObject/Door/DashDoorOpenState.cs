@@ -8,12 +8,21 @@ using UnityEngine;
 public class DashDoorOpenState : StateMachineBehaviour
 {
     [SerializeField]
-    bool isPlayer = default;                        // プレイヤーかどうか
+    bool isPlayer = default;                                // プレイヤーかどうか
+
+    PlayerDoorController playerDoorController = default;    // プレイヤードア開閉クラス
 
     /// <summary>
     /// ステートに入った瞬間
     /// </summary>
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (isPlayer)
+        {
+            // プレイヤードア開閉クラス取得
+            playerDoorController = animator.gameObject.GetComponent<PlayerDoorController>() ?? playerDoorController;
+        }
+    }
 
     /// <summary>
     /// ステートに入っている間
@@ -30,6 +39,7 @@ public class DashDoorOpenState : StateMachineBehaviour
         {
             animator.SetBool("ReverseDoorOpen", false);
             animator.SetBool("DoorEnd", true);
+            playerDoorController.ChangeAreaName();
         }
     }
 }

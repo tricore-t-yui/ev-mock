@@ -9,6 +9,8 @@ public class TrapTunController : MonoBehaviour
 {
     [SerializeField]
     Animator tunAnim = default;                         // アニメーター
+    [SerializeField]
+    GameObject effect = default;                        // エフェクト
 
     public bool IsEnd { get; private set; } = false;    // 終了フラグ
     public bool IsHit { get; private set; } = false;    // ヒットフラグ
@@ -48,6 +50,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     public void TrapOperate()
     {
+        effect.SetActive(false);
         tunAnim.SetTrigger("TrapOperate");
     }
 }
