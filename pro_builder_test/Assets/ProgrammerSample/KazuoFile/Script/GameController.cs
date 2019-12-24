@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     PlayerHealthController healthController = default;  // プレイヤーの体力クラス
     [SerializeField]
+    GameObject tunObject = default;                     // ツンのオブジェクト
+    [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
@@ -73,6 +75,8 @@ public class GameController : MonoBehaviour
         {
             item.ResetEnemy();
         }
+        // ツンをリセットする
+        tunObject?.SetActive(false);
     }
 
     /// <summary>
