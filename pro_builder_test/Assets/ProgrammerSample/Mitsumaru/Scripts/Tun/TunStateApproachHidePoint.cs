@@ -121,7 +121,7 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
             animator.SetBool("isApproachingHide", false);
 
             // プレイヤーが隠れているなら
-            if (hideController.enabled)
+            if (animator.GetBool("isPlayerHide"))
             {
                 // 隠れいているオブジェクトがツンが調べようとしているオブジェクトと同じだったら
                 if (currentCheckingHide.GetInstanceID() == hideController.HideObj.GetInstanceID())
