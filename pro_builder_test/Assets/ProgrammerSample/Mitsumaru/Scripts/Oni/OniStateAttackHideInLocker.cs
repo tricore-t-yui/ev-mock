@@ -92,4 +92,10 @@ public class OniStateAttackHideInLocker : StateMachineBehaviour
         // ドアを閉める
         lockerAnimator.SetBool("DragOut", false);
     }
+
+    void OnDisable()
+    {
+        // ドアを閉める
+        if (lockerAnimator != null) lockerAnimator.SetBool("DragOut", false);
+    }
 }

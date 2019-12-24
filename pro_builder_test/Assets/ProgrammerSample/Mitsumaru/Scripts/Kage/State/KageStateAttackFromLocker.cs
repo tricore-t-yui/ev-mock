@@ -104,4 +104,10 @@ public class KageStateAttackFromLocker : StateMachineBehaviour
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromLocker, false);
         animParameterList.SetBool(KageAnimParameterList.ParameterType.isAttackFromBed, false);
     }
+
+    void OnDisable()
+    {
+        // ドアを閉める
+        if (lockerAnimator != null) lockerAnimator.SetBool("DragOut", false);
+    }
 }
