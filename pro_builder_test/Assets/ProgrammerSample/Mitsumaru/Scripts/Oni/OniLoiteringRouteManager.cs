@@ -17,10 +17,27 @@ public class OniLoiteringRouteManager : MonoBehaviour
     [SerializeField]
     List<OniLoiteringRoute> routes = default;
 
+    // 初期位置
+    Vector3 initPos = Vector3.zero;
+
     // 一番近いチェックポイントのインデックス
     public int NearCheckPointOfIndex { get; private set; } = 0;
     // 一番近いチェックポイントのルート
     public OniLoiteringRoute NearCheckPointOfRoute { get; private set; }
+
+    /// <summary>
+    /// 開始
+    /// </summary>
+    void OnEnable()
+    {
+        if (initPos == Vector3.zero)
+        {
+            // 初期位置を保存
+            initPos = transform.position;
+        }
+        // 初期位置をセット
+        transform.position = initPos;
+    }
 
     /// <summary>
     /// 鬼に一番近いルートを更新
