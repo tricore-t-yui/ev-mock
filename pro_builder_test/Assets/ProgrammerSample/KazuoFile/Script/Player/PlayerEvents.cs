@@ -71,7 +71,6 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
-        soundArea.AddSoundLevel(ActionSoundType.WALK);
         moveCamera.Rotation(CameraType.NORMAL);
         moveController.Move();
         statusController.StateUpdate(MoveType.WALK, stateController.IsSquat);
@@ -135,41 +134,40 @@ public class PlayerEvents : MonoBehaviour
     }
 
     /// <summary>
-    /// 忍び歩き開始
+    /// 息止め開始
     /// </summary>
-    public void StealthStart() {}
+    public void BreathHoldStart() {}
     /// <summary>
-    /// 忍び歩き
+    /// 息止め
     /// </summary>
-    public void Stealth()
+    public void BreathHold()
     {
-        cameraAnimationController.AnimStart(CameraAnimType.STEALTH);
-        playerAnimationContoller.AnimStart(PlayerAnimType.STEALTH);
-        statusController.StateUpdate(MoveType.STEALTH, stateController.IsSquat);
+        cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
+        playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
+        statusController.StateUpdate(MoveType.BREATHHOLD, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL);
-        soundArea.AddSoundLevel(ActionSoundType.STEALTH);
+        soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
     }
     /// <summary>
-    /// 忍び歩き移動
+    /// 息止め移動
     /// </summary>
-    public void StealthMove()
+    public void BreathHoldMove()
     {
-        cameraAnimationController.AnimStart(CameraAnimType.STEALTH);
-        playerAnimationContoller.AnimStart(PlayerAnimType.STEALTH);
-        statusController.StateUpdate(MoveType.STEALTHMOVE, stateController.IsSquat);
+        cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
+        playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
+        statusController.StateUpdate(MoveType.BREATHHOLDMOVE, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL);
-        soundArea.AddSoundLevel(ActionSoundType.STEALTH);
-        soundArea.AddSoundLevel(ActionSoundType.WALK);
-        moveController.ChangeMoveTypeSpeedLimit(SpeedType.STEALTH);
+        soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
+        moveController.ChangeMoveTypeSpeedLimit(SpeedType.BREATHHOLD);
         moveController.Move();
     }
     /// <summary>
-    /// 忍び歩き終了
+    /// 息止め終了
     /// </summary>
-    public void StealthEnd()
+    public void BreathHoldEnd()
     {
-        playerAnimationContoller.AnimStop(PlayerAnimType.STEALTH);
-        cameraAnimationController.AnimStop(CameraAnimType.STEALTH);
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+        cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
     }
 
     /// <summary>
@@ -274,7 +272,7 @@ public class PlayerEvents : MonoBehaviour
         hideController.HideCameraMove();
         if (hideController.IsHideStealth())
         {
-            soundArea.AddSoundLevel(ActionSoundType.STEALTH);
+            soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
         }
 
         hideController.ChangeRootMotion();

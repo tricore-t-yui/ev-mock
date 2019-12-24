@@ -60,11 +60,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b325430b742d646ca8565c58580abc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDisplayCursor: 0
   statusController: {fileID: 0}
-  kageSpawn: {fileID: 0}
   moveController: {fileID: 0}
   stateController: {fileID: 2129991352404032482}
   healthController: {fileID: 0}
+  enemySpawn:
+  - {fileID: 0}
 --- !u!1001 &3803910018673373040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -209,8 +211,68 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
       propertyPath: trap.m_PersistentCalls.m_Calls.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 161182595}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BreathHold
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHold.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 161182595}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BreathHoldMove
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldMove.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6300630398106554041, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}
@@ -239,8 +301,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
       propertyPath: trapStart.m_PersistentCalls.m_Calls.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 161182595}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BreathHoldStart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldStart.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6300630399452221997, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}
@@ -269,8 +361,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
       propertyPath: trapEnd.m_PersistentCalls.m_Calls.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 161182595}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BreathHoldEnd
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
+        type: 3}
+      propertyPath: breathHoldEnd.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6300630399335478061, guid: 5be0e1b1a600240bcb68ad5236cc38df,
         type: 3}

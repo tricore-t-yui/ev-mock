@@ -15,7 +15,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     {
         WALK,               // 歩き
         DASH,               // ダッシュ
-        STEALTH,            // 忍び歩き
+        BREATHHOLD,         // 息止め
         SQUAT,              // しゃがみ
         BREATHLESSNESS,     // 息切れ
         SHOES,              // 靴
@@ -79,7 +79,7 @@ public class PlayerAnimationContoller : MonoBehaviour
         {
             case AnimationType.WALK: animator.SetBool("Walk", true);break;
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
-            case AnimationType.STEALTH: animator.SetBool("Stealth",true);break;
+            case AnimationType.BREATHHOLD: animator.SetBool("Stealth",true);break;
             case AnimationType.SQUAT: animator.SetBool("Squat", true);break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); DisplayRightArm(true); break;
             case AnimationType.DAMAGE: animator.SetTrigger("Damage"); DisplayRightArm(true); break;
@@ -106,7 +106,7 @@ public class PlayerAnimationContoller : MonoBehaviour
         {
             case AnimationType.WALK: animator.SetBool("Walk", false); break;
             case AnimationType.DASH: animator.SetBool("Dash", false); break;
-            case AnimationType.STEALTH: animator.SetBool("Stealth", false); break;
+            case AnimationType.BREATHHOLD: animator.SetBool("Stealth", false); break;
             case AnimationType.SQUAT: animator.SetBool("Squat", false); break;
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", false); break;
             case AnimationType.DEATH: animator.SetBool("Death", false); break;
@@ -187,7 +187,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     /// </summary>
     public void BarefootRightArm()
     {
-        if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH || stateController.State == MoveType.STEALTH)
+        if (stateController.State == MoveType.WAIT || stateController.State == MoveType.WALK || stateController.State == MoveType.DASH || stateController.State == MoveType.BREATHHOLD)
         {
             if (IsEndAnim && !stateController.IsShoes)
             {

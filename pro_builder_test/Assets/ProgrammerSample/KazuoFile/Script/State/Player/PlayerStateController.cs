@@ -17,8 +17,8 @@ public class PlayerStateController : MonoBehaviour
         WAIT,           // 待機
         WALK,           // 歩き
         DASH,           // ダッシュ
-        STEALTH,        // 忍び歩き
-        STEALTHMOVE,    // 忍び歩き
+        BREATHHOLD,     // 息止め
+        BREATHHOLDMOVE, // 息止め歩き
         DOOROPEN,       // ドア開閉
         HIDE,           // 隠れる
         DEEPBREATH,     // 深呼吸
@@ -61,6 +61,8 @@ public class PlayerStateController : MonoBehaviour
     PlayerTrapController trapController = default;          // トラップアクションクラス
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
+    [SerializeField]
+    GameController gameController = default;                // ゲーム管理クラス
 
     // プレイヤーのダメージイベント（Added by Mitsumaru）
     // note : このクラスから受け取ったダメージのイベント関数を保存しておく
@@ -70,6 +72,7 @@ public class PlayerStateController : MonoBehaviour
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
+    public string NowAreaName { get; private set; } = "Area01"; // エリアの番号
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
 
     //  無敵モード変更用変数
@@ -212,30 +215,30 @@ public class PlayerStateController : MonoBehaviour
     }
 
     /// <summary>
-    /// 忍び歩き検知
+    /// 息止め検知
     /// </summary>
     void CheckStealthState()
     {
         if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
         {
             EventStop();
-            State = ActionStateType.STEALTH;
+            State = ActionStateType.BREATHHOLD;
             EventStart();
         }
     }
 
     /// <summary>
-    /// 忍び歩き検知
+    /// 息止め検知
     /// </summary>
     void CheckStealthMoveState()
     {
         if (keyController.GetKey(KeyType.MOVE))
         {
-            State = ActionStateType.STEALTHMOVE;
+            State = ActionStateType.BREATHHOLDMOVE;
         }
-        else if(State == ActionStateType.STEALTHMOVE)
+        else if(State == ActionStateType.BREATHHOLDMOVE)
         {
-            State = ActionStateType.STEALTH;
+            State = ActionStateType.BREATHHOLD;
             EventStart();
         }
     }
@@ -443,9 +446,9 @@ public class PlayerStateController : MonoBehaviour
                 CheckDeepBreathState();
                 CheckIDollGet();
                 break;
-            case ActionStateType.STEALTH:
+            case ActionStateType.BREATHHOLD:
                 // 各イベント処理
-                eventCaller.Invoke(EventType.STEALTH);
+                eventCaller.Invoke(EventType.BREATHHOLD);
 
                 // 各処理の検知
                 CheckSquatState();
@@ -459,9 +462,9 @@ public class PlayerStateController : MonoBehaviour
                 CheckStealthMoveState();
                 CheckIDollGet();
                 break;
-            case ActionStateType.STEALTHMOVE:
+            case ActionStateType.BREATHHOLDMOVE:
                 // 各イベント処理
-                eventCaller.Invoke(EventType.STEALTHMOVE);
+                eventCaller.Invoke(EventType.BREATHHOLDMOVE);
 
                 // 各処理の検知
                 CheckSquatState();
@@ -582,8 +585,8 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
             case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
-            case ActionStateType.STEALTH: eventEndCaller.Invoke(EventEndType.STEALTHEND); break;
-            case ActionStateType.STEALTHMOVE: eventEndCaller.Invoke(EventEndType.STEALTHEND); break;
+            case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
+            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
             case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
             case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
@@ -603,7 +606,7 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WAITSTART); break;
             case ActionStateType.DASH: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
-            case ActionStateType.STEALTH: eventStartCaller.Invoke(EventStartType.STEALTHSTART); break;
+            case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); break;
             case ActionStateType.DOOROPEN: eventStartCaller.Invoke(EventStartType.DOORSTART); break;
             case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
             case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;
@@ -670,5 +673,29 @@ public class PlayerStateController : MonoBehaviour
         {
             return -1;
         }
+    }
+
+    /// <summary>
+    /// 部屋番号リセット
+    /// </summary>
+    public void ResetAreaName()
+    {
+        if (gameController.IsReturn)
+        {
+            NowAreaName = "Area11";
+        }
+        else
+        {
+            NowAreaName = "Area01";
+        }
+    }
+
+    /// <summary>
+    /// 部屋番号変更
+    /// </summary>
+    /// <param name="AreaName">部屋番号</param>
+    public void ChangeAreaName(string AreaName)
+    {
+        NowAreaName = AreaName;
     }
 }

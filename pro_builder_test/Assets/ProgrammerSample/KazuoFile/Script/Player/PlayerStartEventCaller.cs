@@ -17,7 +17,7 @@ public class PlayerStartEventCaller : MonoBehaviour
         WALKSTART,              // 歩く
         DASHSTART,              // ダッシュ
         SQUATSTART,             // しゃがみ
-        STEALTHSTART,           // 忍び歩き
+        BREATHHOLDSTART,        // 息止め
         DOORSTART,              // ドア
         HIDESTART,              // 隠れる
         DEEPBREATHSTART,        // 深呼吸
@@ -37,7 +37,7 @@ public class PlayerStartEventCaller : MonoBehaviour
     [SerializeField]
     UnityEvent squatStart = new UnityEvent();           // しゃがみイベント
     [SerializeField]
-    UnityEvent stealthStart = new UnityEvent();         // 忍び歩きイベント
+    UnityEvent breathHoldStart = new UnityEvent();         // 息止めイベント
     [SerializeField]
     UnityEvent doorOpenStart = new UnityEvent();        // ドア開閉イベント
     [SerializeField]
@@ -67,7 +67,7 @@ public class PlayerStartEventCaller : MonoBehaviour
             case EventType.WALKSTART: walkStart.Invoke(); break;
             case EventType.DASHSTART: dashStart.Invoke(); break;
             case EventType.SQUATSTART: squatStart.Invoke(); break;
-            case EventType.STEALTHSTART: stealthStart.Invoke(); break;
+            case EventType.BREATHHOLDSTART: breathHoldStart.Invoke(); break;
             case EventType.DOORSTART: doorOpenStart.Invoke(); break;
             case EventType.HIDESTART: hideStart.Invoke(); break;
             case EventType.DEEPBREATHSTART: deepBreathStart.Invoke(); break;

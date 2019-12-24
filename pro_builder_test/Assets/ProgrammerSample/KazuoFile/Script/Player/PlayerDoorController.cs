@@ -25,13 +25,14 @@ public class PlayerDoorController : MonoBehaviour
     InteractFunction interactController = default;          // インタラクト用関数クラス
     [SerializeField]
     KeyController keyController = default;                  // キー操作クラス
+    [SerializeField]
+    PlayerStateController stateController = default;        // 状態管理クラス
 
     DoorController door = default;                          // ドアの管理クラス
     GameObject doorObj = default;                           // 回転対象のドア
     OpenType openType = OpenType.NORMAL;                    // 開けるタイプ
+    bool isReverse = false;                                 // ドアを反対側から開けるかどうか
 
-    [SerializeField]
-    AreaManager areaManager = default;                      // エリアマネージャー
 
     /// <summary>
     /// 起動処理
@@ -60,16 +61,15 @@ public class PlayerDoorController : MonoBehaviour
             case OpenType.DASH: animationContoller.AnimStart(AnimationType.DASHOPENDOOR); break;
         }
 
-        // NOTE:k.oishi 個人の作業シーンで作業をすると、
-        //      AreaManagerが無いってと怒られるのでとりあえずコメントアウトしています。
         // 触れるドアが逆なら逆向きのアニメーション開始
-        string areaName = areaManager.GetExistAreaToCharacter("Player");
-        if (door.IsReverseOpen(areaName))
+        if (door.IsReverseOpen(stateController.NowAreaName))
         {
+            isReverse = true;
             animationContoller.AnimStart(AnimationType.REVERSEOPENDOOR);
         }
         else
         {
+            isReverse = false;
             animationContoller.AnimStop(AnimationType.REVERSEOPENDOOR);
         }
 
@@ -104,7 +104,7 @@ public class PlayerDoorController : MonoBehaviour
             flag = true;
         }
 
-        if(flag)
+        if (flag)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DOOR);
             enabled = false;
@@ -127,5 +127,14 @@ public class PlayerDoorController : MonoBehaviour
     public Vector2 GetOpenStick()
     {
         return keyController.GetStick(StickType.LEFTSTICK);
+    }
+
+    /// <summary>
+    /// エリアの変更関数
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public void ChangeAreaName()
+    {
+        stateController.ChangeAreaName(door.GetRoomName(isReverse));
     }
 }
