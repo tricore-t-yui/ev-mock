@@ -3473,46 +3473,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304358787}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!28 &316748081
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 2
-  m_Width: 256
-  m_Height: 1
-  m_CompleteImageSize: 1024
-  m_TextureFormat: 5
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_LightmapFormat: 0
-  m_ColorSpace: 1
-  image data: 1024
-  _typelessdata: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  m_StreamData:
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &317180817
 GameObject:
   m_ObjectHideFlags: 0
@@ -6104,29 +6064,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!114 &517997697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &521597159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6191,41 +6128,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!84 &531269300
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Aura Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &540955423
 GameObject:
   m_ObjectHideFlags: 0
@@ -8755,6 +8657,41 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!84 &714620391
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Aura Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &724544302
 GameObject:
   m_ObjectHideFlags: 0
@@ -11375,6 +11312,46 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f3b467be2cb56941bd5c1c07bd7cfc8, type: 3}
+--- !u!28 &923834322
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 2
+  m_Width: 256
+  m_Height: 1
+  m_CompleteImageSize: 1024
+  m_TextureFormat: 5
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  image data: 1024
+  _typelessdata: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  m_StreamData:
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &941438943
 GameObject:
   m_ObjectHideFlags: 0
@@ -11593,41 +11570,6 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!84 &958413629
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Aura Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &960233221
 GameObject:
   m_ObjectHideFlags: 0
@@ -15998,6 +15940,29 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1207526831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
+  m_Name: New Aura Base Settings
+  m_EditorClassIdentifier: 
+  useDensity: 1
+  density: 0.25
+  useScattering: 1
+  scattering: 0.5
+  useAmbientLighting: 1
+  ambientLightingStrength: 1
+  useColor: 0
+  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  colorStrength: 1
+  useExtinction: 0
+  extinction: 0.75
 --- !u!1 &1231313486
 GameObject:
   m_ObjectHideFlags: 0
@@ -17008,13 +16973,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 958413629}
+  shadowMapRenderTexture: {fileID: 714620391}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.25
   outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 531269300}
+  shadowDataRenderTexture: {fileID: 1967924631}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -17078,7 +17043,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0.09765625, y: 0.03125, z: 0.01171875, w: -0.03125}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -20965,26 +20930,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5175318063243173603, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
-      propertyPath: soundArea
-      value: 
-      objectReference: {fileID: 778975254}
-    - target: {fileID: 5175318063243173603, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
-    - target: {fileID: 1360036397, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: interactController
+    - target: {fileID: 5175318063243173603, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: soundArea
       value: 
-      objectReference: {fileID: 985400480}
+      objectReference: {fileID: 778975254}
     - target: {fileID: 1360036397, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: gameController
       value: 
       objectReference: {fileID: 1182048239}
-    - target: {fileID: 1360036397, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: animationContoller
-      value: 
-      objectReference: {fileID: 1707476409}
     - target: {fileID: 1125087521836334049, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21042,21 +20999,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1125087521836334055, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
-      propertyPath: keyController
+      propertyPath: interactController
       value: 
-      objectReference: {fileID: 1294684737}
+      objectReference: {fileID: 985400480}
     - target: {fileID: 1125087521836334055, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
-      propertyPath: interactController
-      value: 
-      objectReference: {fileID: 985400480}
-    - target: {fileID: 1125087521836333848, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: areaManager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1125087521836333848, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
@@ -21067,6 +21014,16 @@ PrefabInstance:
       objectReference: {fileID: 985400480}
     - target: {fileID: 1125087521836333848, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
+      propertyPath: keyController
+      value: 
+      objectReference: {fileID: 1294684737}
+    - target: {fileID: 1125087521836333848, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 911210257}
+    - target: {fileID: 1125087521836334052, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
@@ -21075,11 +21032,6 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
-    - target: {fileID: 1125087521836334052, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: stateController
-      value: 
-      objectReference: {fileID: 911210257}
     - target: {fileID: 1125087521836334052, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: soundAreaSpawner
@@ -21101,38 +21053,14 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: normalRecovery
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: deepBreathRecovery
-      value: 1.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: breathlessnessRecovery
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: stealthDecrement
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: hideSmallDecrement
-      value: 0.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: hideMediumDecrement
-      value: 0.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: hideLargeDecrement
-      value: 0.45
-      objectReference: {fileID: 0}
     - target: {fileID: 1084558971, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: soundArea
       value: 
       objectReference: {fileID: 778975254}
+    - target: {fileID: 603303255, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: frustumSettings.baseSettings
+      value: 
+      objectReference: {fileID: 1207526831}
     - target: {fileID: 603303255, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: frustumSettings.qualitySettings
       value: 
@@ -21140,35 +21068,17 @@ PrefabInstance:
     - target: {fileID: 603303253, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: m_lensFlare.m_lensFlareGradTexture
       value: 
-      objectReference: {fileID: 316748081}
+      objectReference: {fileID: 0}
     - target: {fileID: 809868428, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
-    - target: {fileID: 1084558970, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: normalRecovery
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558970, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: walkRecovery
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558970, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: squatRecovery
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084558970, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: deepBreathRecovery
-      value: 1.25
-      objectReference: {fileID: 0}
+    - target: {fileID: 1707476416, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: interactController
+      value: 
+      objectReference: {fileID: 985400480}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
---- !u!1 &1707476399 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1125087521836334063, guid: d9c93e799392d4a27b27c3528733220d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1707476398}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1707476400 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1084558969, guid: d9c93e799392d4a27b27c3528733220d,
@@ -21259,7 +21169,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c02c39d3e2a00469ebad3978e6fc5bd6, type: 3}
@@ -21271,7 +21181,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e344118bb04e405c97504c6cfb72762, type: 3}
@@ -21283,7 +21193,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e034d5ccdcdbd4ed6840e75581d3be34, type: 3}
@@ -21295,7 +21205,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a64b688cc96c4de38f791885dcdbb98, type: 3}
@@ -21307,7 +21217,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1d2fc8a262e84de68ffe08b3e8658b8, type: 3}
@@ -21319,7 +21229,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d66c2cd67977b4e90bbd7124dca8228a, type: 3}
@@ -21331,7 +21241,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4e3017fdad064651ad1e5d1d03d0050, type: 3}
@@ -21349,20 +21259,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1707476416
+--- !u!114 &1707476416 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1707476416, guid: d9c93e799392d4a27b27c3528733220d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1707476398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707476399}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b33e0fdf57c1e4459bad82a995ef0618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactController: {fileID: 985400480}
-  animationContoller: {fileID: 1707476409}
 --- !u!1 &1709591716
 GameObject:
   m_ObjectHideFlags: 0
@@ -23576,64 +23484,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3843493000918148758, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843493000918148758, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843492999882751787, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843492999882751787, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843492999882751787, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5728322007722124568, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5728322007722124568, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8601164363739401857, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8601164363739401857, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8601164363739401857, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1043960740, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: breathController
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1043960740, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: healthController
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1224328289, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: breathController
       value: 
@@ -23643,25 +23493,43 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1707476402}
     - target: {fileID: 1224328289, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: objectDamageController
-      value: 
-      objectReference: {fileID: 1707476407}
-    - target: {fileID: 1224328289, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: staminaController
       value: 
       objectReference: {fileID: 1707476401}
-    - target: {fileID: 714637041, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Material
+    - target: {fileID: 1224328289, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: objectDamageController
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 714637041, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 714637038, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1707476407}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 911210257}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: staminaController
+      value: 
+      objectReference: {fileID: 1707476401}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: healthController
+      value: 
+      objectReference: {fileID: 1707476402}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: breathController
+      value: 
+      objectReference: {fileID: 1707476403}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: hideController
+      value: 
+      objectReference: {fileID: 1707476411}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: soundAreaSpawner
+      value: 
+      objectReference: {fileID: 778975254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
 --- !u!114 &1913595569 stripped
@@ -24046,6 +23914,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955907553}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1967924631
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Aura Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &1969909498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25521,46 +25424,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105333420}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!28 &2110709529
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 2
-  m_Width: 256
-  m_Height: 1
-  m_CompleteImageSize: 1024
-  m_TextureFormat: 5
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_LightmapFormat: 0
-  m_ColorSpace: 0
-  image data: 1024
-  _typelessdata: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  m_StreamData:
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &2114795724
 GameObject:
   m_ObjectHideFlags: 0
