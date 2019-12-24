@@ -58,6 +58,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     /// </summary>
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        navMesh.isStopped = false;
         // プレイヤーの位置を取得する
         navMesh.SetDestination(player.position);
 
