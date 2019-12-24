@@ -88,11 +88,6 @@ public class TunParameterChanger : StateMachineBehaviour
             // プレイヤーを見つけているときのフラグをオンに
             animator.SetBool("isPlayerDiscover", true);
         }
-        // プレイヤーを見つけていないとき
-        else
-        {
-            animator.SetBool("isPlayerDiscover", false);
-        }
     }
 
     /// <summary>
