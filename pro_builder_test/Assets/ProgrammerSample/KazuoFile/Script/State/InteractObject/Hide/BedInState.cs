@@ -26,7 +26,7 @@ public class BedInState : StateMachineBehaviour
     {
         // ベッドに向かって座標移動
         Vector3 exitVec = (hideController.HideObj.transform.position - animator.gameObject.transform.position).normalized;
-        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.055f;
+        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.045f;
     }
 
     /// <summary>

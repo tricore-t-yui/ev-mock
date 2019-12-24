@@ -81,7 +81,7 @@ public class CameraAnimationController : MonoBehaviour
     {
         for (int i = 0; i < playerArm.Length; i++)
         {
-            playerArm[i].SetActive(true);
+            playerArm[i].SetActive(flag);
         }
     }
 

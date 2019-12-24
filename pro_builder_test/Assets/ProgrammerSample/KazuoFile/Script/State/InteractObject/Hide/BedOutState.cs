@@ -39,7 +39,7 @@ public class BedOutState : StateMachineBehaviour
     {
         // 求めた脱出座標からベクトルを求め、ベクトル移動
         Vector3 exitVec = (exitPos - animator.gameObject.transform.position).normalized;
-        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.05f;
+        animator.gameObject.transform.position += new Vector3(exitVec.x, 0, exitVec.z) * 0.03f;
 
         // 求めた脱出方向に向かって回転
         if (animator.gameObject.transform.rotation.eulerAngles != exitRotation.eulerAngles && !hideController.IsAnimRotation)
