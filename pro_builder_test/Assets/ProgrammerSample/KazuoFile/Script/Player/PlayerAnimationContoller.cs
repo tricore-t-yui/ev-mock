@@ -56,9 +56,9 @@ public class PlayerAnimationContoller : MonoBehaviour
     [SerializeField]
     GameObject rightArm = default;                              // 右腕
     [SerializeField]
-    GameObject shoesArm = default;                              // 靴もっている腕
-    [SerializeField]
     GameObject shoes = default;                                 // 右腕に持っている靴
+    [SerializeField]
+    GameObject shoesArm = default;                              // 靴もっている腕
 
     public bool IsEndAnim { get; private set; } = true;         // アニメーションが終わったかどうか
 

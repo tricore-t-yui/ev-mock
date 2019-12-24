@@ -44,7 +44,7 @@ public class SoundAreaSpawner : MonoBehaviour
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
-    float totalSoundLevel = 0;                              // 音量レベルの合計
+    public float TotalSoundLevel { get; private set; } = 0;                              // 音量レベルの合計
     float spawnframeCount = 0;                              // スポーン用フレームカウント
     List<Transform> spawnList = new List<Transform>();      // スポーンされたオブジェクトのリスト
 
@@ -54,7 +54,7 @@ public class SoundAreaSpawner : MonoBehaviour
     void Update()
     {
         // 音量レベルが変わるか、スポーンまでのフレーム数に達したら
-        if (totalSoundLevel != soundLevel || spawnframeCount >= spawnframe)
+        if (TotalSoundLevel != soundLevel || spawnframeCount >= spawnframe)
         {
             // スポーン
             Spawn();
@@ -79,8 +79,8 @@ public class SoundAreaSpawner : MonoBehaviour
     void Spawn()
     {
         // 合計値に適応、それに応じて領域拡大
-        totalSoundLevel = soundLevel;
-        areaRadius = 1 + (areaMagnification * totalSoundLevel);
+        TotalSoundLevel = soundLevel;
+        areaRadius = 1 + (areaMagnification * TotalSoundLevel);
         if (areaRadius < 0.25f) { return; }
 
         // スポーンしてリストに追加

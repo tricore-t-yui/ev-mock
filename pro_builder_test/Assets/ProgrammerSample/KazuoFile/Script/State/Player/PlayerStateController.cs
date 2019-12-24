@@ -76,9 +76,7 @@ public class PlayerStateController : MonoBehaviour
     public ActionStateType State { get; private set; } = ActionStateType.WAIT;  // 現在の状態
 
     //  無敵モード変更用変数
-    [SerializeField]
-    Text text = default;
-    bool isInvincible = false;
+    public bool IsInvincible { get; private set; } = false;
 
     /// <summary>
     /// 開始処理
@@ -111,23 +109,14 @@ public class PlayerStateController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            if (!isInvincible)
+            if (!IsInvincible)
             {
-                isInvincible = true;
+                IsInvincible = true;
             }
             else
             {
-                isInvincible = false;
+                IsInvincible = false;
             }
-        }
-
-        if (isInvincible)
-        {
-            text.text = "無敵モードON   Lキーで変更";
-        }
-        else
-        {
-            text.text = "無敵モードOFF   Lキーで変更";
         }
     }
 
@@ -327,7 +316,7 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi この関数を敵の攻撃のUnityEventに入れてください
     public void ChangeDamageState(Transform enemyPos, float damage)
     {
-        if (!isInvincible)
+        if (!IsInvincible)
         {
             // ダメージ処理が開始されていないならダメージを食らう
             if (!damageController.enabled && !damageController.IsInvincible)
