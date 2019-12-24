@@ -118,6 +118,7 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         else
         {
             targetObject = playerHideController.gameObject;
+            animator.transform.LookAt(new Vector3(targetObject.transform.position.x, animator.transform.position.y, targetObject.transform.position.z));
         }
 
         if (targetObject.tag == "Locker")
