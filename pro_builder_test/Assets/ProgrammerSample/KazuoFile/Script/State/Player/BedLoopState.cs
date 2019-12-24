@@ -30,7 +30,7 @@ public class BedLoopState : StateMachineBehaviour
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!hideController.IsHideKey())
+        if (!hideController.IsHide())
         {
             animator.SetTrigger("BedOut");
         }

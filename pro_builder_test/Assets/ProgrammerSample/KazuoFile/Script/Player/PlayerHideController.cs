@@ -36,15 +36,16 @@ public class PlayerHideController : MonoBehaviour
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
-    bool isStealth = false;                                     // 息止めフラグ
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
+    public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
     public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
     public DirType HideObjDir { get; private set; } = default;  // 隠れるオブジェクトの向き
     List<DirType> hideObjWallContactDir = new List<DirType>();  // 隠れるオブジェクトに接触している壁の向き
 
-    public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
+    bool isStealth = false;                                     // 息止めフラグ
+    int keyInputStage = 0;                                      // キーの入力段階
 
     /// <summary>
     /// 起動処理
@@ -54,6 +55,8 @@ public class PlayerHideController : MonoBehaviour
         // オブジェクトに合わせたポジション合わせ
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
+
+        keyInputStage = 1;
     }
 
     /// <summary>
@@ -199,6 +202,7 @@ public class PlayerHideController : MonoBehaviour
         // アニメーションが再生され終わったら終了処理
         if (flag && enabled)
         {
+            keyInputStage = 0;
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             hideObjectController.SetActiveCollider(true);
             hideStateController.enabled = false;
@@ -314,12 +318,28 @@ public class PlayerHideController : MonoBehaviour
     }
 
     /// <summary>
-    /// 隠れるキーがおされているかどうか
+    /// 隠れるキーの入力段階で隠れているかどうかを取得
     /// </summary>
     /// NOTE: k.oishi ステートマシン用関数
-    public bool IsHideKey()
+    public bool IsHide()
     {
-        return keyController.GetKey(KeyType.INTERACT);
+        switch (keyInputStage)
+        {
+            case 1:
+                if (!keyController.GetKey(KeyType.INTERACT))
+                {
+                    keyInputStage = 2;
+                }
+                return true;
+            case 2:
+                if (keyController.GetKey(KeyType.INTERACT))
+                {
+                    keyInputStage = 3;
+                    return false;
+                }
+                return true;
+            default: return false;
+        }
     }
 
     /// <summary>

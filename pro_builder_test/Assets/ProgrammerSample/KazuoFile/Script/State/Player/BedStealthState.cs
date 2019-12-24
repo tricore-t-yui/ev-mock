@@ -29,7 +29,7 @@ public class BedStealthState : StateMachineBehaviour
         }
 
         // マウスの入力が途切れたら隠れるのをやめる
-        if (!hideController.IsHideKey() && stateInfo.normalizedTime > 1.0f) 
+        if (!hideController.IsHide() && stateInfo.normalizedTime > 1.0f) 
         {
             animator.SetTrigger("BedOut");
             hideController.SetIsStealth(false);

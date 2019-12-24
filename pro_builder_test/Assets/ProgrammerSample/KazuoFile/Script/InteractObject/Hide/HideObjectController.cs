@@ -150,9 +150,9 @@ public class HideObjectController : MonoBehaviour
     /// 隠れるキーがおされているかどうか
     /// </summary>
     /// NOTE: k.oishi ステートマシン用関数
-    public bool IsHideKey()
+    public bool IsHide()
     {
-        return hideController.IsHideKey();
+        return hideController.IsHide();
     }
 }
         

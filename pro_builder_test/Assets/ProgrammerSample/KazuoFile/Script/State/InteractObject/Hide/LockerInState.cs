@@ -41,14 +41,14 @@ public class LockerInState : StateMachineBehaviour
             animator.SetBool("Close", true);
             if (isPlayer)
             {
-                if (!hideController.IsHideKey())
+                if (!hideController.IsHide())
                 {
                     animator.SetTrigger("LockerOut");
                 }
             }
             else
             {
-                if (!hideObjectController.IsHideKey())
+                if (!hideObjectController.IsHide())
                 {
                     animator.SetTrigger("LockerOut");
                 }
