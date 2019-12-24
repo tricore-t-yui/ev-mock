@@ -52,6 +52,8 @@ public class PlayerAnimationContoller : MonoBehaviour
     PlayerHideController hideController = default;              // 隠れるアクションクラス
 
     [SerializeField]
+    GameObject animCamera = default;                            // カメラ
+    [SerializeField]
     GameObject rightArm = default;                              // 右腕
     [SerializeField]
     GameObject shoesArm = default;                              // 靴もっている腕
@@ -66,7 +68,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     void Start()
     {
         // 靴を履く
-        animator.SetBool("Shoes", true);
+        animator.SetBool("Shoes", true); 
     }
 
     /// <summary>
@@ -81,18 +83,18 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
             case AnimationType.BREATHHOLD: animator.SetBool("Stealth",true);break;
             case AnimationType.SQUAT: animator.SetBool("Squat", true);break;
-            case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); DisplayRightArm(true); break;
-            case AnimationType.DAMAGE: animator.SetTrigger("Damage"); DisplayRightArm(true); break;
-            case AnimationType.DRAGOUT: animator.SetBool("DragOut", true); DisplayRightArm(true); break;
-            case AnimationType.DEATH: animator.SetBool("Death", true); DisplayRightArm(true); break;
-            case AnimationType.HIDELOCKER: animator.SetTrigger("LockerIn"); DisplayRightArm(true); break;
-            case AnimationType.HIDEBED: animator.SetTrigger("BedIn"); DisplayRightArm(true); break;
-            case AnimationType.OPENDOOR: animator.SetTrigger("DoorOpen"); DisplayRightArm(true); break;
-            case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); DisplayRightArm(true); break;
-            case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); break;
-            case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; break;
-            case AnimationType.TRAP: animator.SetTrigger("TrapOperate"); DisplayRightArm(true); break;
-            case AnimationType.GETDOLL: animator.SetTrigger("GetDoll"); break;
+            case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); CameraReset(); DisplayRightArm(true); break;
+            case AnimationType.DAMAGE: animator.SetTrigger("Damage"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.DRAGOUT: animator.SetBool("DragOut", true); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.DEATH: animator.SetBool("Death", true); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.HIDELOCKER: animator.SetTrigger("LockerIn"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.HIDEBED: animator.SetTrigger("BedIn"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.OPENDOOR: animator.SetTrigger("DoorOpen"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.DASHOPENDOOR: animator.SetTrigger("DashDoorOpen"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.REVERSEOPENDOOR: animator.SetBool("ReverseDoorOpen", true); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.SHOES:animator.SetTrigger("TakeOffShoes"); IsEndAnim = false; CameraReset(); break;
+            case AnimationType.TRAP: animator.SetTrigger("TrapOperate"); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.GETDOLL: animator.SetTrigger("GetDoll"); CameraReset(); break;
         }
     }
 
@@ -260,5 +262,13 @@ public class PlayerAnimationContoller : MonoBehaviour
         {
             rightArm.gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// カメラの向きリセット
+    /// </summary>
+    public void CameraReset()
+    {
+        animCamera.transform.eulerAngles = new Vector3(0, animCamera.transform.eulerAngles.y, animCamera.transform.eulerAngles.z);
     }
 }

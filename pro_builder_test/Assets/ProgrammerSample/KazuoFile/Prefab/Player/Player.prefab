@@ -526,8 +526,8 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_glareMaxPassCount: 4
-    m_currentWidth: 158
-    m_currentHeight: 89
+    m_currentWidth: 154
+    m_currentHeight: 87
     m_currentGlareType: 8
     m_currentGlareIdx: 8
     m_perPassDisplacement: 4
@@ -686,13 +686,13 @@ MonoBehaviour:
   hideController: {fileID: 1125087521836334055}
   soundArea: {fileID: 0}
   keyController: {fileID: 0}
-  normalRecovery: 0.3
-  deepBreathRecovery: 0.5
-  breathlessnessRecovery: 0.3
-  stealthDecrement: 0.1
-  hideSmallDecrement: 0.1
-  hideMediumDecrement: 0.1
-  hideLargeDecrement: 0.1
+  normalRecovery: 1
+  deepBreathRecovery: 1.25
+  breathlessnessRecovery: 0.5
+  stealthDecrement: 0.25
+  hideSmallDecrement: 0.45
+  hideMediumDecrement: 0.45
+  hideLargeDecrement: 0.45
   buttonPatienceDecrement: 0.01
   smallDisturbance: 75
   mediumDisturbance: 50
@@ -728,10 +728,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashDecrement: 0.5
-  normalRecovery: 0.3
-  walkRecovery: 0.15
-  squatRecovery: 0.3
-  deepBreathRecovery: 0.5
+  normalRecovery: 1
+  walkRecovery: 0.5
+  squatRecovery: 0.25
+  deepBreathRecovery: 1.25
 --- !u!114 &1084558969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,6 +1173,7 @@ GameObject:
   - component: {fileID: 1873015058}
   - component: {fileID: 1360036397}
   - component: {fileID: 5175318063243173603}
+  - component: {fileID: 1707476416}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -1268,6 +1269,7 @@ MonoBehaviour:
   objectDamageController: {fileID: 5175318063243173603}
   stateController: {fileID: 0}
   keyController: {fileID: 0}
+  soundAreaSpawner: {fileID: 0}
   forwardSpeed: 2
   sideSpeed: 1.75
   backSpeed: 1.5
@@ -1296,7 +1298,7 @@ MonoBehaviour:
   animationContoller: {fileID: 1873015058}
   interactController: {fileID: 0}
   keyController: {fileID: 0}
-  areaManager: {fileID: 0}
+  stateController: {fileID: 0}
 --- !u!114 &1125087521836334055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1349,6 +1351,7 @@ MonoBehaviour:
   animator: {fileID: 1125087521836334048}
   stateController: {fileID: 0}
   hideController: {fileID: 1125087521836334055}
+  animCamera: {fileID: 809868430}
   rightArm: {fileID: 795638532825595625}
   shoesArm: {fileID: 6352119354621900277}
   shoes: {fileID: 330926767269091169}
@@ -1365,7 +1368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftArm: {fileID: 795638532360735297}
-  interactController: {fileID: 0}
+  animationContoller: {fileID: 1873015058}
   gameController: {fileID: 0}
   distance: 0.75
 --- !u!114 &5175318063243173603
@@ -1384,6 +1387,20 @@ MonoBehaviour:
   soundArea: {fileID: 0}
   damageAmount: 0.05
   deepBreathRecovery: 0.3
+--- !u!114 &1707476416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125087521836334063}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33e0fdf57c1e4459bad82a995ef0618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactController: {fileID: 0}
+  animationContoller: {fileID: 1873015058}
 --- !u!1 &6352119354259037519
 GameObject:
   m_ObjectHideFlags: 0
