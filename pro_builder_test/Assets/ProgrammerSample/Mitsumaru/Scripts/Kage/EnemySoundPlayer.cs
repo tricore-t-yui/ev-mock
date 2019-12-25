@@ -12,31 +12,13 @@ public class EnemySoundPlayer : MonoBehaviour
     AudioSource[] sounds = default;
 
     /// <summary>
-    /// 更新
-    /// </summary>
-    void Update()
-    {
-        // 再生中のサウンドを調べて、終了しているものはオブジェクトをオフにする
-        foreach(var sound in sounds)
-        {
-            if (sound.gameObject.activeSelf)
-            {
-                if (!sound.isPlaying)
-                {
-                    sound.gameObject.SetActive(false);
-                }
-            }
-        }
-    }
-
-    /// <summary>
     /// サウンドの再生
     /// </summary>
     /// <param name="soundName"></param>
     public void Play(string soundName)
     {
-        // オブジェクトをオンにする
-        transform.Find(soundName).gameObject.SetActive(true);
+        AudioSource audio = System.Array.Find(sounds, sound => sound.gameObject.name == soundName);
+        audio.Play();
     }
 
     /// <summary>
@@ -45,7 +27,7 @@ public class EnemySoundPlayer : MonoBehaviour
     public bool IsPlaying(string soundName)
     {
         // オーディオ取得
-        AudioSource audioSource = System.Array.Find(sounds, sound => sound.gameObject.name == soundName);
-        return audioSource.isPlaying;
+        AudioSource audio = System.Array.Find(sounds, sound => sound.gameObject.name == soundName);
+        return audio.isPlaying;
     }
 }

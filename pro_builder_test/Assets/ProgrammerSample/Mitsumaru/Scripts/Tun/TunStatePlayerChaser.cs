@@ -68,7 +68,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     {
         navMesh.isStopped = false;
         // プレイヤーの位置を取得する
-        navMesh.SetDestination(player.position);
+        navMesh.SetDestination(hideController.transform.position);
 
         if (navMesh.remainingDistance < attackRadius)
         {
