@@ -43,6 +43,9 @@ public class KageStateNormal : StateMachineBehaviour
     // プレイヤーのハイドコントローラー
     PlayerHideController playerHideController = null;
 
+    // サウンドエリアスポナー
+    SoundAreaSpawner soundAreaSpawner = null;
+
     GameObject player = null;
 
     /// <summary>
@@ -93,12 +96,13 @@ public class KageStateNormal : StateMachineBehaviour
 
         // 指定された状態に変更
         animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)stateType);
+
+        soundAreaSpawner = FindObjectOfType<SoundAreaSpawner>() ?? soundAreaSpawner;
     }
 
     /// <summary>
     /// 物音が聞こえた瞬間のコールバック
     /// </summary>
-    /// 
     void OnHearEnter(Transform self,Collider target)
     {
         // プレイヤー自身はスキップ
@@ -121,6 +125,9 @@ public class KageStateNormal : StateMachineBehaviour
                 }
             }
         }
+
+        // 音のコライダーのサイズを取得
+        animParameterList.SetFloat(ParameterType.heardSoundRadius, soundAreaSpawner.GetColliderRadius());
 
         // 警戒モードに変更
         animParameterList.SetBool(ParameterType.isVigilanceMode, true);

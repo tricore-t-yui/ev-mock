@@ -36,6 +36,8 @@ public class KageAnimParameterList : MonoBehaviour
         isReturnPoint,
         prevStateKindId,
         currentStateKindId,
+        loudVolumeNoise,
+        heardSoundRadius,
     }
 
     // アニメーター
