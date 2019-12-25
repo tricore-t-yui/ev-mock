@@ -70,6 +70,7 @@ public class KageStatePerception : StateMachineBehaviour
         perceptionTimeCounter = 0;
         // トリガーリセット
         animator.ResetTrigger("perceiveSound");
+        animator.ResetTrigger("loudVolumeNoise");
     }
 
 }
