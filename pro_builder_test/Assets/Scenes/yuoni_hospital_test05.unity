@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.346
   m_CustomReflection: {fileID: 8900000, guid: 32afbf5e4e2328740aaa4e264829b52f, type: 3}
   m_Sun: {fileID: 885185287}
-  m_IndirectSpecularColor: {r: 0.13762388, g: 0.11411957, b: 0.055800352, a: 0.346}
+  m_IndirectSpecularColor: {r: 0.20199151, g: 0.17757669, b: 0.11636971, a: 0.346}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -56,15 +56,15 @@ LightmapSettings:
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
-    m_BakeResolution: 20
-    m_AtlasSize: 512
-    m_AO: 0
-    m_AOMaxDistance: 1
+    m_BakeResolution: 16
+    m_AtlasSize: 1024
+    m_AO: 1
+    m_AOMaxDistance: 2
     m_CompAOExponent: 1
-    m_CompAOExponentDirect: 0
+    m_CompAOExponentDirect: 1
     m_ExtractAmbientOcclusion: 0
     m_Padding: 2
-    m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000,
+    m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000,
       type: 0}
     m_LightmapsBakeMode: 0
     m_TextureCompression: 0
@@ -75,10 +75,10 @@ LightmapSettings:
     m_MixedBakeMode: 2
     m_BakeBackend: 2
     m_PVRSampling: 1
-    m_PVRDirectSampleCount: 4
-    m_PVRSampleCount: 32
-    m_PVRBounces: 1
-    m_PVREnvironmentSampleCount: 32
+    m_PVRDirectSampleCount: 16
+    m_PVRSampleCount: 128
+    m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 8
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 1
     m_PVRDenoiserTypeDirect: 1
@@ -14681,13 +14681,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1377444344}
+  shadowMapRenderTexture: {fileID: 1019671853}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.25
   outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 1840873189}
+  shadowDataRenderTexture: {fileID: 1200753689}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -16565,7 +16565,7 @@ ReflectionProbe:
   m_BoxSize: {x: 74.86456, y: 29.271767, z: 72.94121}
   m_BoxOffset: {x: 2.6459808, y: 1.9240379, z: -1.630127}
   m_NearClip: 0.3
-  m_FarClip: 100
+  m_FarClip: 500
   m_ShadowDistance: 100
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -17292,6 +17292,41 @@ Transform:
   m_Father: {fileID: 1962032739}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1019671853
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1020522106
 GameObject:
   m_ObjectHideFlags: 0
@@ -20727,6 +20762,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190471855}
   m_Mesh: {fileID: -6142620064137672953, guid: e18b78523d2840b46a45b02cd5b8507b, type: 3}
+--- !u!84 &1200753689
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &1209265279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21679,6 +21749,7 @@ GameObject:
   - component: {fileID: 1232651833}
   - component: {fileID: 1232651834}
   - component: {fileID: 1232651838}
+  - component: {fileID: 1232651835}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -21826,6 +21897,20 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &1232651835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232651829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bf616c0a7476c4d825cfe4ffff1dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  auraCamera: {fileID: 1232651833}
+  postProcessVolume: {fileID: 254548657}
 --- !u!114 &1232651838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23482,7 +23567,7 @@ ReflectionProbe:
   m_BoxSize: {x: 30.385696, y: 32.34895, z: 72.188934}
   m_BoxOffset: {x: -2.619049, y: 2.19026, z: -1.2539902}
   m_NearClip: 0.3
-  m_FarClip: 100
+  m_FarClip: 500
   m_ShadowDistance: 100
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -24108,41 +24193,6 @@ Transform:
   m_Father: {fileID: 2071344441}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1377444344
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1383235116
 GameObject:
   m_ObjectHideFlags: 0
@@ -30871,41 +30921,6 @@ Transform:
   m_Father: {fileID: 728949447}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1840873189
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &1841620977
 PrefabInstance:
   m_ObjectHideFlags: 0
