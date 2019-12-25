@@ -62,6 +62,19 @@ public class KageStateStanding : StateMachineBehaviour
         int motionId = Random.Range(1, System.Enum.GetNames(typeof(MotionKind)).Length + 1);
         // 決定した値をもとにモーションを変更する
         animParameterList.SetInteger(ParameterType.standingMotionKindId, motionId);
+
+        // 影人間のメッシュレンダラーを取得
+        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+
+        // 影人間の全マテリアルを黒にする
+        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.color = Color.black;
+                material.renderQueue = 2000;
+            }
+        }
     }
 
     /// <summary>

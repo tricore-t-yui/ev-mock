@@ -103,6 +103,19 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         fieldOfView.SetOnOutViewRangeEvent(OnOutFieldOfView);
         // 警戒範囲内にいるときのコールバックをセット
         vigilanceRangeEvent.AddUpdateListener(OnInVigilanceRange);
+
+        // 影人間のメッシュレンダラーを取得
+        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+
+        // 影人間の全マテリアルを赤にする
+        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.color = Color.red;
+                material.renderQueue = 4000;
+            }
+        }
     }
 
     /// <summary>
