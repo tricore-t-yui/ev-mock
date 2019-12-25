@@ -25,6 +25,19 @@ public class KageStatePerception : StateMachineBehaviour
         perceptionTimeCounter = 0;
         // 聞こえたコライダーの範囲をリセット
         animator.SetFloat("heardSoundRadius", 0);
+
+        // 影人間のメッシュレンダラーを取得
+        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+
+        // 影人間の全マテリアルを黄色にする
+        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.color = new Color(190,255,0,255);
+                material.renderQueue = 4000;
+            }
+        }
     }
 
     /// <summary>

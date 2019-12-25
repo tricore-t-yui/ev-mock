@@ -52,5 +52,19 @@ public class KageStateLoitering : StateMachineBehaviour
         {
             animParameterList.SetInteger(KageAnimParameterList.ParameterType.loiteringKindId, 2);
         }
+
+
+        // 影人間のメッシュレンダラーを取得
+        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+
+        // 影人間の全マテリアルを黒にする
+        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.color = Color.black;
+                material.renderQueue = 2000;
+            }
+        }
     }
 }
