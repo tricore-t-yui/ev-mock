@@ -44,8 +44,6 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        Debug.Log(currentCheckPointIndex);
-
         // ステートパラメータを取得
         stateParameter = animator.gameObject.GetComponent<KageStateParameter>();
         // パラメータクラスを取得
@@ -63,7 +61,6 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         
         // 最初のチェックポイントを設定
         navMesh.SetDestination(checkPointList[currentCheckPointIndex]);
-        
 
         // 移動を開始する
         animParameterList.SetBool(ParameterType.isLoiteringMove, true);
