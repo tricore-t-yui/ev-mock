@@ -55,17 +55,7 @@ public class PlayerObjectDamageController : MonoBehaviour
                 IsDamage = true;
                 NowDamage += 50;
             }
-        }
-    }
 
-    /// <summary>
-    /// 障害物に当たっている間
-    /// </summary>
-    void OnTriggerStay(Collider other)
-    {
-        // ダメージオブジェクト触れているかどうか
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Damage")
-        {
             if (stateController.IsShoes)
             {
                 soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.SHOESDAMAGEOBJECT);
