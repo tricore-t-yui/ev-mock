@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     PlayerHealthController healthController = default;  // プレイヤーの体力クラス
     [SerializeField]
+    PlayerDamageController damageController = default;      // 隠れるクラス
+    [SerializeField]
     GameObject tunObject = default;                     // ツンのオブジェクト
     [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
@@ -54,7 +56,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // 死んだらゲームオーバー
-        if(healthController.IsDeath)
+        if(healthController.IsDeath && !damageController.enabled)
         {
             GameOver();
         }

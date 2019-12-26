@@ -19,7 +19,7 @@ public class SoundAreaController : MonoBehaviour
     [SerializeField]
     float smallAreaDecrease = 0.5f;         // 小さな領域の1フレームの領域の減少量
     [SerializeField]
-    float largeAreaDecrease = 0.25f;        // 大きな領域の1フレームの領域の減少量
+    float largeAreaDecrease = 0.1f;         // 大きな領域の1フレームの領域の減少量
 
     float areaDecrease = 0;                 // 1フレームの領域の減少量
 

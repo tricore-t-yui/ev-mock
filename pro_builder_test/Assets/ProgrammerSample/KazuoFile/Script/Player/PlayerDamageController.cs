@@ -46,8 +46,8 @@ public class PlayerDamageController : MonoBehaviour
     /// </summary>
     void OnEnable()
     {
-        // 初期化
-        IsDeath();
+        // NOTE: k.oishi リセットが入るため今のところ死んだらはなし
+        //IsDeath();
     }
 
     /// <summary>
@@ -68,7 +68,6 @@ public class PlayerDamageController : MonoBehaviour
                 playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * -5, ForceMode.Impulse);
                 animationContoller.AnimStart(AnimationType.DAMAGE); break;
             case DamageType.HIDEBED:
-
                 animationContoller.AnimStart(AnimationType.DRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
@@ -114,7 +113,8 @@ public class PlayerDamageController : MonoBehaviour
     public void EndDamageAction()
     {
         // アニメーションが再生され終わったら終了処理
-        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DAMAGE) && !healthController.IsDeath)
+        // NOTE: k.oishi リセットが入るため今のところ死んだらはなし
+        if (animationContoller.EndAnimation(PlayerAnimationContoller.EndAnimationType.DAMAGE) )//&& !healthController.IsDeath)
         {
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.DAMAGE);
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);

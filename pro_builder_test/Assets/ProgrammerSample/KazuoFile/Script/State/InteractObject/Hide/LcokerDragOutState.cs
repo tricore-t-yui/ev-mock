@@ -22,7 +22,6 @@ public class LcokerDragOutState : StateMachineBehaviour
         // 隠れる終了
         animator.ResetTrigger("LockerIn");
         animator.ResetTrigger("LockerOut");
-        animator.ResetTrigger("DragOutStandUp");
         animator.SetBool("Stealth", false);
         animator.SetBool("DragOut", false);
         animator.SetBool("HideEnd", true);
