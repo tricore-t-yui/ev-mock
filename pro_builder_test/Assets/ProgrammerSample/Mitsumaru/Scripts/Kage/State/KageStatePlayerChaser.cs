@@ -153,6 +153,13 @@ public class KageStatePlayerChaser : StateMachineBehaviour
 
         }
 
+        // 移動目標位置についたら、警戒状態へ
+        if (navMesh.remainingDistance < navMesh.stoppingDistance)
+        {
+            animParameterList.SetBool(KageAnimParameterList.ParameterType.isFightingMode, false);
+            animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, true);
+        }
+
         // 影人間の移動が停止したら、見失ったとみなす
         if (!isInFieldOfView && playerHideController.IsHideStealth())
         {

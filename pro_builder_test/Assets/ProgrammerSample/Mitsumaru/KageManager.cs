@@ -49,4 +49,21 @@ public class KageManager : MonoBehaviour
             });
         }
     }
+
+    /// <summary>
+    /// 全ての影人間の状態をリセットする
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator ResetAllKage()
+    {
+        foreach (GameObject kage in kageList)
+        {
+            kage.SetActive(false);
+        }
+        yield return null;
+        foreach (GameObject kage in kageList)
+        {
+            kage.SetActive(true);
+        }
+    }
 }

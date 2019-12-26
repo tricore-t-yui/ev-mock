@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour
     GameObject tunObject = default;                     // ツンのオブジェクト
     [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
+    [SerializeField]
+    KageManager kageManager = default;
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
@@ -77,6 +79,8 @@ public class GameController : MonoBehaviour
         {
             item.ResetEnemy();
         }
+        // 全ての影人間をリセットする
+        StartCoroutine(kageManager.ResetAllKage());
         // ツンをリセットする
         if (tunObject != null) tunObject.SetActive(false);
     }
