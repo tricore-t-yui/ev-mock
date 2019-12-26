@@ -58,7 +58,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
 
         player = GameObject.Find("Player") ?? player;
 
-
+        animator.SetFloat("moveSpeed", navMesh.speed);
     }
 
     /// <summary>
