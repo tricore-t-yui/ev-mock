@@ -52,6 +52,5 @@ public class EnemyTransformSetter : StateMachineBehaviour
             soundPlayer.Play("Step");
             stepSoundInterval = 20;
         }
-        Debug.Log(navMesh.velocity.magnitude);
     }
 }
