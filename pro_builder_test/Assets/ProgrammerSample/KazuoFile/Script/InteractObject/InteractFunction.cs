@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class InteractFunction : MonoBehaviour
 {
+    [SerializeField]
+    CameraController moveCamera = default;  // カメラクラス
     /// <summary>
     /// 各オブジェクトの向きタイプ
     /// </summary>
@@ -68,6 +70,9 @@ public class InteractFunction : MonoBehaviour
                 rotation = Quaternion.Euler(0, 270, 0);
                 break;
         }
+
+        // カメラのリセット
+        moveCamera.CameraReset();
 
         return rotation;
     }
