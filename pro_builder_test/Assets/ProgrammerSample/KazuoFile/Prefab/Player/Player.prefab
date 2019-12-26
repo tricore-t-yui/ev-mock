@@ -526,8 +526,8 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_glareMaxPassCount: 4
-    m_currentWidth: 154
-    m_currentHeight: 87
+    m_currentWidth: 170
+    m_currentHeight: 95
     m_currentGlareType: 8
     m_currentGlareIdx: 8
     m_perPassDisplacement: 4
@@ -632,11 +632,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1125087521836334049}
+  animCamera: {fileID: 1125087521023189967}
   damageController: {fileID: 733771168}
   hideController: {fileID: 1125087521836334055}
   keyController: {fileID: 0}
   sensitivity: 2
   lookbackSensitivity: 20
+  lookIntoPositionShift: 0.75
+  lookIntoRotationShift: 30
 --- !u!1 &1084558967
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,10 +692,10 @@ MonoBehaviour:
   normalRecovery: 1
   deepBreathRecovery: 1.25
   breathlessnessRecovery: 0.5
-  stealthDecrement: 0.25
-  hideSmallDecrement: 0.45
-  hideMediumDecrement: 0.45
-  hideLargeDecrement: 0.45
+  stealthDecrement: 0.175
+  hideSmallDecrement: 0.3
+  hideMediumDecrement: 0.3
+  hideLargeDecrement: 0.3
   buttonPatienceDecrement: 0.01
   smallDisturbance: 75
   mediumDisturbance: 50
@@ -1353,8 +1356,8 @@ MonoBehaviour:
   hideController: {fileID: 1125087521836334055}
   animCamera: {fileID: 809868430}
   rightArm: {fileID: 795638532825595625}
-  shoesArm: {fileID: 6352119354621900277}
   shoes: {fileID: 330926767269091169}
+  shoesArm: {fileID: 6352119354621900277}
 --- !u!114 &1360036397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,7 +1415,6 @@ GameObject:
   - component: {fileID: 6352119354259037518}
   - component: {fileID: 6352119354259037507}
   - component: {fileID: 6352119354259037516}
-  - component: {fileID: 330926768372059444}
   m_Layer: 8
   m_Name: LeftArm
   m_TagString: Untagged
@@ -1480,20 +1482,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &330926768372059444
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6352119354259037519}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6352119354991667687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,7 +1493,6 @@ GameObject:
   - component: {fileID: 6352119354991667686}
   - component: {fileID: 6352119354991667675}
   - component: {fileID: 6352119354991667684}
-  - component: {fileID: 330926768370802098}
   m_Layer: 8
   m_Name: RightArm
   m_TagString: Untagged
@@ -1573,20 +1560,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &330926768370802098
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6352119354991667687}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2550730880501809176
 PrefabInstance:
   m_ObjectHideFlags: 0
