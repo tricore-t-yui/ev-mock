@@ -64,10 +64,10 @@ public class KageStateStanding : StateMachineBehaviour
         animParameterList.SetInteger(ParameterType.standingMotionKindId, motionId);
 
         // 影人間のメッシュレンダラーを取得
-        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+        SkinnedMeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         // 影人間の全マテリアルを黒にする
-        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        foreach (SkinnedMeshRenderer meshRenderer in kageMeshRenderers)
         {
             foreach (Material material in meshRenderer.materials)
             {

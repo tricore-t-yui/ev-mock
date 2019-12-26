@@ -30,17 +30,17 @@ public class KageStatePerception : StateMachineBehaviour
         animator.SetFloat("heardSoundRadius", 0);
 
         // 影人間のメッシュレンダラーを取得
-        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+        SkinnedMeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
         soundPlayer.Play("Kizuita");
 
         // 影人間の全マテリアルを黄色にする
-        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        foreach (SkinnedMeshRenderer meshRenderer in kageMeshRenderers)
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = Color.yellow;
+                material.color = Color.white;
             }
         }
     }
