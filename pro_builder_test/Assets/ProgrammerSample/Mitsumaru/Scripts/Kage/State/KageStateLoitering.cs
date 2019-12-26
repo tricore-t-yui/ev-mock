@@ -63,7 +63,6 @@ public class KageStateLoitering : StateMachineBehaviour
             foreach (Material material in meshRenderer.materials)
             {
                 material.color = Color.black;
-                material.renderQueue = 2000;
             }
         }
     }

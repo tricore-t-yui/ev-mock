@@ -92,13 +92,6 @@ public class OniStateParameterChanger : StateMachineBehaviour
         // 現在のステートのIDをセット
         animator.SetInteger("currentStateKindId",currentStateId);
 
-        if (animator.GetInteger("prevStateKindId") == (int)StateKind.Vigilance &&
-            animator.GetInteger("currentStateKindId") == (int)StateKind.Fighting)
-        {
-            // 状態変化サウンドを再生
-            soundPlayer.Play("StateChange");
-        }
-
         // プレイヤーがハイドポイントに入ったら
         if (playerHideController.IsHideLocker || playerHideController.IsHideBed)
         {
