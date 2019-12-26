@@ -48,6 +48,8 @@ public class SoundAreaSpawner : MonoBehaviour
     float spawnframeCount = 0;                              // スポーン用フレームカウント
     List<Transform> spawnList = new List<Transform>();      // スポーンされたオブジェクトのリスト
 
+    public bool IsDamageObjectSound { get; private set; } = false;
+
     /// <summary>
     /// 更新処理
     /// </summary>
@@ -71,6 +73,7 @@ public class SoundAreaSpawner : MonoBehaviour
         spawnframeCount++;
         soundLevel = 0;
 
+        IsDamageObjectSound = false;
     }
 
     /// <summary>
@@ -155,5 +158,14 @@ public class SoundAreaSpawner : MonoBehaviour
     public float GetColliderRadius()
     {
         return areaRadius;
+    }
+
+    /// <summary>
+    /// ダメージオブジェクトの音領域拡大フラグのセット関数
+    /// </summary>
+    /// <param name="flag"></param>
+    public void SetIsDamageObjectSound(bool flag)
+    {
+        IsDamageObjectSound = flag;
     }
 }

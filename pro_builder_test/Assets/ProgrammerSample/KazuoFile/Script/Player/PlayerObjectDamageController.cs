@@ -55,7 +55,17 @@ public class PlayerObjectDamageController : MonoBehaviour
                 IsDamage = true;
                 NowDamage += 50;
             }
+        }
+    }
 
+    /// <summary>
+    /// 障害物に当たっている間
+    /// </summary>
+    void OnTriggerStay(Collider other)
+    {
+        // ダメージオブジェクト触れているかどうか
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Damage" && !soundArea.IsDamageObjectSound)
+        {
             if (stateController.IsShoes)
             {
                 soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.SHOESDAMAGEOBJECT);
@@ -64,6 +74,8 @@ public class PlayerObjectDamageController : MonoBehaviour
             {
                 soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.BAREFOOTDAMAGEOBJECT);
             }
+
+            soundArea.SetIsDamageObjectSound(true); 
         }
     }
 
