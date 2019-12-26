@@ -64,8 +64,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
 
         // サウンドプレイヤー
         soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
-        // 状態変化サウンドを再生
-        soundPlayer.Play("StateChange");
 
         // ナビメッシュを取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
@@ -113,7 +111,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
             foreach (Material material in meshRenderer.materials)
             {
                 material.color = Color.red;
-                material.renderQueue = 4000;
             }
         }
     }

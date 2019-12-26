@@ -40,8 +40,7 @@ public class KageStatePerception : StateMachineBehaviour
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = new Color(190,255,0,255);
-                material.renderQueue = 4000;
+                material.color = Color.yellow;
             }
         }
     }

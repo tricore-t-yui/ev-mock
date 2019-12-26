@@ -47,11 +47,6 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
 
         // サウンドプレイヤー
         soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
-        if (animator.GetInteger("prevStateKindId") == 0)
-        {
-            // 状態変化サウンドを再生
-            soundPlayer.Play("StateChange");
-        }
        
 
         // 移動速度をセット
