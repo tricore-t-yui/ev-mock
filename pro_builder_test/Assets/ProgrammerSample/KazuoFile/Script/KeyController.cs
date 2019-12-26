@@ -97,7 +97,7 @@ public class KeyController : MonoBehaviour
             case KeyType.DEEPBREATH: if (Input.GetKey("joystick button 3")) { return true; } break;
             case KeyType.DASH: if (Input.GetKey("joystick button 5")) { return true; } break;
             case KeyType.SAVE: if (Input.GetKey("joystick button 6")) { return true; } break;
-            case KeyType.LOOKINTO: break;
+            case KeyType.LOOKINTO: if (Input.GetKey("joystick button 9")) { return true; } break;
         }
 
         return false;
