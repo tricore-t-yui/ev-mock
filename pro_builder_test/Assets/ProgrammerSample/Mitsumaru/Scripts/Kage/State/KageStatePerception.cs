@@ -16,6 +16,9 @@ public class KageStatePerception : StateMachineBehaviour
     int perceptionTime = 0;
     int perceptionTimeCounter = 0;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -28,6 +31,9 @@ public class KageStatePerception : StateMachineBehaviour
 
         // 影人間のメッシュレンダラーを取得
         MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
+        soundPlayer.Play("Kizuita");
 
         // 影人間の全マテリアルを黄色にする
         foreach (MeshRenderer meshRenderer in kageMeshRenderers)

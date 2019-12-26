@@ -33,6 +33,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     Transform player = default;                         // プレイヤー
     [SerializeField]
+    Transform animCamera = default;                     // アニメーション用カメラ
+    [SerializeField]
     PlayerDamageController damageController = default;  // ダメージクラス
     [SerializeField]
     PlayerHideController hideController = default;      // 隠れるアクション管理クラス
@@ -43,6 +45,11 @@ public class CameraController : MonoBehaviour
     float sensitivity = 2;                              // カメラの感度
     [SerializeField]
     float lookbackSensitivity = 20;                     // 振り返りの感度
+
+    [SerializeField]
+    float lookIntoPositionShift = 0.75f;                // 覗き込み時の位置ずらし
+    [SerializeField]
+    float lookIntoRotationShift = 30;                   // 覗き込み時の回転
 
     float lookBackAngle = 0;                            // 振り返りのアングル
 
@@ -58,21 +65,27 @@ public class CameraController : MonoBehaviour
         switch (type)
         {
             case RotationType.NORMAL:
-                player.Rotate(0, X_Rotation, 0);
-                transform.Rotate(-Y_Rotation, 0, 0);
+
+                transform.position = animCamera.position;
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
 
                 // 振り返り
-                if (keyController.GetKey(KeyType.LOOKBACK))
+                LookBack(keyController.GetKey(KeyType.LOOKBACK));
+
+                // 覗き込み
+                if (!keyController.GetKey(KeyType.LOOKBACK) && keyController.GetKey(KeyType.LOOKINTO))
                 {
-                    LookBack();
+                    transform.position = animCamera.position + (Vector3.Cross(Vector3.up, transform.forward) * keyController.GetStick(StickType.LEFTSTICK).x) * lookIntoPositionShift;
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, lookIntoRotationShift * -keyController.GetStick(StickType.LEFTSTICK).x);
                 }
                 else
                 {
-                    LookFront();
-                }
+                    player.Rotate(0, X_Rotation, 0);
+                    transform.Rotate(-Y_Rotation, 0, 0);
 
-                // 回転制限
-                transform.localEulerAngles = NormalAngleLimit();
+                    // 回転制限
+                    transform.localEulerAngles = NormalAngleLimit();
+                }
                 break;
             case RotationType.HIDEBED:
                 player.Rotate(0, 0, -X_Rotation);
@@ -173,32 +186,42 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 振り返り
     /// </summary>
-    void LookBack()
+    void LookBack(bool flag)
     {
-        if (lookBackAngle < 180)
+        // 振り返り
+        if (flag)
         {
-            lookBackAngle += lookbackSensitivity;
-            transform.Rotate(0, lookbackSensitivity, 0);
-            if (lookBackAngle > 180)
+            if (lookBackAngle < 180)
             {
-                lookBackAngle = 180;
+                lookBackAngle += lookbackSensitivity;
+                transform.Rotate(0, lookbackSensitivity, 0);
+                if (lookBackAngle > 180)
+                {
+                    lookBackAngle = 180;
+                }
+            }
+        }
+        // 正面
+        else
+        {
+            if (lookBackAngle > 0)
+            {
+                lookBackAngle -= lookbackSensitivity;
+                transform.Rotate(0, -lookbackSensitivity, 0);
+                if (lookBackAngle < 0)
+                {
+                    lookBackAngle = 0;
+                }
             }
         }
     }
 
     /// <summary>
-    /// 正面を向く
+    /// カメラの位置リセット
     /// </summary>
-    void LookFront()
+    public void CameraReset()
     {
-        if (lookBackAngle > 0)
-        {
-            lookBackAngle -= lookbackSensitivity;
-            transform.Rotate(0, -lookbackSensitivity, 0);
-            if (lookBackAngle < 0)
-            {
-                lookBackAngle = 0;
-            }
-        }
+        transform.position = animCamera.position;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
     }
 }

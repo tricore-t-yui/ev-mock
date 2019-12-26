@@ -26,6 +26,9 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
 
     NavMeshAgent navMesh = null;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
@@ -41,6 +44,9 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
         // ステートパラメータを取得
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
 
         // 範囲用コライダーのオブジェクトを取得
         GameObject colliderObject = GameObject.Find(stateParameter.RandomMoveRangeOfObjectName);
@@ -86,6 +92,12 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
             // カウンターをリセット
             moveCount = 0;
         }
+
+        // 徘徊中のささやき
+        if (!soundPlayer.IsPlaying("Sasayaki"))
+        {
+            soundPlayer.Play("Sasayaki");
+        }
     }
 
     /// <summary>
@@ -124,6 +136,6 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
     /// </summary>
     public void ReturnLoiteringPoint(Animator animator)
     {
-
+        navMesh.SetDestination(rangeCollider.gameObject.transform.position);
     }
 }

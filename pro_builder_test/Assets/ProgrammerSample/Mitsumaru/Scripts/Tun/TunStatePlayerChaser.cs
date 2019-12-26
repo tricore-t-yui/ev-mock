@@ -17,7 +17,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     NavMeshAgent navMesh = null;
 
     // プレイヤー
-    Transform player = default;
+    GameObject player = null;
 
     // エリアデータ管理クラス
     TunAreaDataManager areaDataManager = null;
@@ -56,7 +56,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
 
         navMesh.isStopped = false;
 
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player") ?? player;
 
 
     }
@@ -68,14 +68,14 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     {
         navMesh.isStopped = false;
         // プレイヤーの位置を取得する
-        navMesh.SetDestination(hideController.transform.position);
+        navMesh.SetDestination(player.transform.position);
 
         if (navMesh.remainingDistance < attackRadius)
         {
             animator.SetTrigger("attackStart");
         }
 
-        if (!currentArea.IsBoudsContains(player.position))
+        if (!currentArea.IsBoudsContains(player.transform.position))
         {
             animator.gameObject.SetActive(false);
         }

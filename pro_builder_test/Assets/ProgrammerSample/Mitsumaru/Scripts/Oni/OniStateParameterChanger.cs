@@ -171,8 +171,6 @@ public class OniStateParameterChanger : StateMachineBehaviour
             rayIrradiationCounter = 0;
             rayBlockingTimeToVigilance++;
         }
-        //Debug.Log("hit : " + rayIrradiationCounter + " , " + "not : " + rayBlockingTimeToVigilance + " , " + "obj : " + viewingRay.HitObject.tag);
-
         // 鬼のレイの遮断時間が一定時間経過したら
         if (rayBlockingTimeToVigilance > parameters[currentStateId].rayBlockingTimeToVigilance)
         {

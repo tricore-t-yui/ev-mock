@@ -40,11 +40,11 @@ public class SoundAreaSpawner : MonoBehaviour
     [SerializeField]
     float areaMagnification = 0.3f;                         // 拡大倍率
     [SerializeField]
-    float spawnframe = 75;                                  // スポーンするまでのフレーム数
+    float spawnframe = 50;                                  // スポーンするまでのフレーム数
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
-    public float TotalSoundLevel { get; private set; } = 0;                              // 音量レベルの合計
+    public float TotalSoundLevel { get; private set; } = 0; // 音量レベルの合計
     float spawnframeCount = 0;                              // スポーン用フレームカウント
     List<Transform> spawnList = new List<Transform>();      // スポーンされたオブジェクトのリスト
 
@@ -133,13 +133,13 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 2; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 3; break;
+            case ActionSoundType.DASH: addLevel = 5; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 15; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 14f; break;
             case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 15; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.25f; break;

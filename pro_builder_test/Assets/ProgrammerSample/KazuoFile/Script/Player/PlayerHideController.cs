@@ -55,7 +55,6 @@ public class PlayerHideController : MonoBehaviour
         // オブジェクトに合わせたポジション合わせ
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
-
         keyInputStage = 1;
     }
 
@@ -205,6 +204,8 @@ public class PlayerHideController : MonoBehaviour
             keyInputStage = 0;
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             hideObjectController.SetActiveCollider(true);
+            IsHideLocker = false;
+            IsHideBed = false;
             hideStateController.enabled = false;
             enabled = false;
         }
