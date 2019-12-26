@@ -169,7 +169,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWaitState()
     {
-        if (!keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.HOLDBREATH))
+        if (!keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.HOLDBREATH) || (keyController.GetKey(KeyType.LOOKINTO) && State == ActionStateType.WALK))
         {
             EventStop();
             State = ActionStateType.WAIT;
@@ -181,7 +181,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckWalkState()
     {
-        if (keyController.GetKey(KeyType.MOVE) && (staminaController.IsDisappear || !keyController.GetKey(KeyType.DASH)) && !keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
+        if (!keyController.GetKey(KeyType.LOOKINTO) && keyController.GetKey(KeyType.MOVE) && (staminaController.IsDisappear || !keyController.GetKey(KeyType.DASH)) && !keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
         {
             EventStop();
             State = ActionStateType.WALK;

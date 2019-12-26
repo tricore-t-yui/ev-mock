@@ -23,6 +23,7 @@ public class KeyController : MonoBehaviour
         DEEPBREATH,     // 深呼吸
         DASH,           // ダッシュ
         SAVE,           // セーブ
+        LOOKINTO,       // 覗き込み
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ public class KeyController : MonoBehaviour
             case KeyType.SQUAT: if (Input.GetKey(KeyCode.C)) { return true; } break;
             case KeyType.DEEPBREATH: if (Input.GetKey(KeyCode.LeftControl)) { return true; } break;
             case KeyType.DASH: if (Input.GetKey(KeyCode.LeftShift)) { return true; } break;
+            case KeyType.LOOKINTO: if (Input.GetKey(KeyCode.T)) { return true; } break;
         }
 
         return false;
@@ -95,6 +97,7 @@ public class KeyController : MonoBehaviour
             case KeyType.DEEPBREATH: if (Input.GetKey("joystick button 3")) { return true; } break;
             case KeyType.DASH: if (Input.GetKey("joystick button 5")) { return true; } break;
             case KeyType.SAVE: if (Input.GetKey("joystick button 6")) { return true; } break;
+            case KeyType.LOOKINTO: break;
         }
 
         return false;
