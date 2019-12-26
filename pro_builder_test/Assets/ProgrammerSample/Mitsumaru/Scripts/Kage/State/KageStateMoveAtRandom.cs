@@ -136,6 +136,6 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
     /// </summary>
     public void ReturnLoiteringPoint(Animator animator)
     {
-
+        navMesh.SetDestination(rangeCollider.gameObject.transform.position);
     }
 }
