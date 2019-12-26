@@ -221,11 +221,11 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckStealthMoveState()
     {
-        if (keyController.GetKey(KeyType.MOVE))
+        if (keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.LOOKINTO))
         {
             State = ActionStateType.BREATHHOLDMOVE;
         }
-        else if(State == ActionStateType.BREATHHOLDMOVE)
+        else if (State == ActionStateType.BREATHHOLDMOVE)
         {
             State = ActionStateType.BREATHHOLD;
             EventStart();
