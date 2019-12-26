@@ -46,6 +46,8 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
 
         // 移動目標位置をセット
         stateStanding.ReturnStandingPosition();
+
+        animator.SetBool("isReturnPoint", true);
     }
 
     /// <summary>
@@ -59,6 +61,8 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
             // 警戒範囲を通常状態に変更
             vigilanceRange.ChangeRadius(KageState.Kind.Normal);
+
+            animator.SetBool("isReturnPoint", false);
         }
     }
 }

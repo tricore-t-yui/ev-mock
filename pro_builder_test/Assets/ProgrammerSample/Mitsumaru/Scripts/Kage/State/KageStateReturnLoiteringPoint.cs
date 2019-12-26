@@ -64,6 +64,8 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
         vigilanceRange = animator.transform.Find("Collider").Find("KageVigilanceRange").GetComponent<KageVigilanceRange>() ?? vigilanceRange;
         //警戒範囲の設定を行う
         vigilanceRange.ChangeRadius(KageState.Kind.Vigilance);
+
+        animator.SetBool("isReturnPoint", true);
     }
 
     /// <summary>
@@ -77,6 +79,8 @@ public class KageStateReturnLoiteringPoint : StateMachineBehaviour
             animParameterList.SetBool(KageAnimParameterList.ParameterType.isVigilanceMode, false);
             // 警戒範囲を通常状態に変更
             vigilanceRange.ChangeRadius(KageState.Kind.Normal);
+
+            animator.SetBool("isReturnPoint", false);
         }
     }
 
