@@ -133,7 +133,7 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 2; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 3; break;
+            case ActionSoundType.DASH: addLevel = 5; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
