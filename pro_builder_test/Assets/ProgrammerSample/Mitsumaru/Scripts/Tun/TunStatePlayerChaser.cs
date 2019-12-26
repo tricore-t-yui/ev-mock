@@ -25,6 +25,9 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     // ハイドコントローラー
     PlayerHideController hideController = null;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     TunAreaData currentArea = null;
 
     /// <summary>
@@ -39,6 +42,11 @@ public class TunStatePlayerChaser : StateMachineBehaviour
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
         // ハイドコントローラーを取得
         hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
+
+        soundPlayer.Play("Mitsuketa");
 
         // 現在のエリアを取得
         currentArea = areaDataManager.GetTunAreaData(hideController.HideObj.GetInstanceID());
@@ -60,7 +68,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
     {
         navMesh.isStopped = false;
         // プレイヤーの位置を取得する
-        navMesh.SetDestination(player.position);
+        navMesh.SetDestination(hideController.transform.position);
 
         if (navMesh.remainingDistance < attackRadius)
         {

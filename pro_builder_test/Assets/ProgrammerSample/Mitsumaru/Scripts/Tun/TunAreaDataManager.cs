@@ -15,6 +15,9 @@ public class TunAreaDataManager : MonoBehaviour
     [SerializeField]
     PlayerHideController playerHideController = default;
 
+    [SerializeField]
+    EnemySoundPlayer soundPlayer = default;
+
     // スポーンするまでの時間のカウント
     int spawnTimeCounter = 0;
 
@@ -74,6 +77,7 @@ public class TunAreaDataManager : MonoBehaviour
                 {
                     tun.transform.position = areaData.SpawnPos;
                     tun.SetActive(true);
+                    soundPlayer.Play("Warai");
                     isSpawn = true;
                     spawnTimeCounter = 0;
                 }

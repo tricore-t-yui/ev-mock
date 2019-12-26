@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
             item.ResetEnemy();
         }
         // ツンをリセットする
-        tunObject?.SetActive(false);
+        if (tunObject != null) tunObject.SetActive(false);
     }
 
     /// <summary>
