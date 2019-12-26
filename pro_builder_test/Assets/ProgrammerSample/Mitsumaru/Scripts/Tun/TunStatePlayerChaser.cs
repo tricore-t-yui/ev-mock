@@ -75,7 +75,7 @@ public class TunStatePlayerChaser : StateMachineBehaviour
             animator.SetTrigger("attackStart");
         }
 
-        if (!currentArea.IsBoudsContains(player.position))
+        if (!currentArea.IsBoudsContains(hideController.transform.position))
         {
             animator.gameObject.SetActive(false);
         }

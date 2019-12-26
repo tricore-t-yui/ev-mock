@@ -36,6 +36,9 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
+    // 敵のサウンドプレイヤー取得
+    EnemySoundPlayer soundPlayer = null;
+
     // 影人間のステートのパラーメータを取得
     KageStateParameter stateParameter = null;
 
@@ -50,6 +53,9 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
         animParameterList = animator.gameObject.GetComponent<KageAnimParameterList>();
         // チェックポイントを取得
         checkPointList = stateParameter.RouteCheckPointList;
+
+        // サウンドプレイヤー
+        soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
 
         // ナビメッシュの取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
@@ -88,6 +94,12 @@ public class KageStateMoveAtRoute : StateMachineBehaviour
             animParameterList.SetBool(ParameterType.isLoiteringMove, false);
             // カウンターをリセット
             moveCount = 0;
+        }
+
+        // 徘徊中のささやき
+        if (!soundPlayer.IsPlaying("Sasayaki"))
+        {
+            soundPlayer.Play("Sasayaki");
         }
     }
 
