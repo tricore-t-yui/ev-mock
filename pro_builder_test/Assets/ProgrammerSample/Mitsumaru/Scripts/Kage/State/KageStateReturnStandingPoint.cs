@@ -24,6 +24,10 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
     // 警戒範囲
     KageVigilanceRange vigilanceRange = null;
 
+    // ワープする目標位置までの距離
+    [SerializeField]
+    float warpDistance = 0;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -47,7 +51,15 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
         // 移動目標位置をセット
         stateStanding.ReturnStandingPosition();
 
+        // 帰るフラグをオンにする
         animator.SetBool("isReturnPoint", true);
+
+        // 目標位置が一定以上離れていたら
+        if ((animator.transform.position - navMesh.destination).magnitude > warpDistance)
+        {
+            // 目標位置にワープする
+            navMesh.Warp(navMesh.destination);
+        }
     }
 
     /// <summary>
