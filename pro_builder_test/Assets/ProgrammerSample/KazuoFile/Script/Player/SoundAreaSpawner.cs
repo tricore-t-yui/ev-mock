@@ -139,8 +139,8 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 18; break;
-            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 20; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 14f; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 15; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.25f; break;
             case ActionSoundType.LARGECONFUSION: addLevel = 1.5f; break;
