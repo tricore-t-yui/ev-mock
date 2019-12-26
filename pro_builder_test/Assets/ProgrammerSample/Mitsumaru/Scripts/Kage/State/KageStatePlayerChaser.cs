@@ -103,10 +103,10 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         vigilanceRangeEvent.AddUpdateListener(OnInVigilanceRange);
 
         // 影人間のメッシュレンダラーを取得
-        MeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<MeshRenderer>();
+        SkinnedMeshRenderer[] kageMeshRenderers = animator.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         // 影人間の全マテリアルを赤にする
-        foreach (MeshRenderer meshRenderer in kageMeshRenderers)
+        foreach (SkinnedMeshRenderer meshRenderer in kageMeshRenderers)
         {
             foreach (Material material in meshRenderer.materials)
             {
