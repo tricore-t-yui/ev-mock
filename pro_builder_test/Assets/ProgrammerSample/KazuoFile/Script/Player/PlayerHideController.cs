@@ -38,6 +38,7 @@ public class PlayerHideController : MonoBehaviour
 
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
+    public bool IsInteractArea{ get; private set; } = false;    // インタラクト可能エリアに触れているかどうかのフラグ
     public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
     public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
@@ -56,6 +57,27 @@ public class PlayerHideController : MonoBehaviour
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
         keyInputStage = 1;
+    }
+
+    /// <summary>
+    /// トリガーに触れたら
+    /// </summary>
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Interact"))
+        {
+            IsInteractArea = true;
+        }
+    }
+    /// <summary>
+    /// トリガーから離れたら
+    /// </summary>
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Interact"))
+        {
+            IsInteractArea = false;
+        }
     }
 
     /// <summary>

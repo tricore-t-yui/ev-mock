@@ -33,6 +33,7 @@ public class SoundAreaSpawner : MonoBehaviour
         BAREFOOT,               // 裸足
         BAREFOOTDAMAGEOBJECT,   // 裸足でダメージオブジェクトを踏んだとき
         SHOESDAMAGEOBJECT,      // 靴でダメージオブジェクトを踏んだとき
+        FALL,                   // 落下
     }
 
     [SerializeField]
@@ -130,7 +131,7 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.BREATHHOLD: addLevel = -4.5f; break;
             case ActionSoundType.WAIT: addLevel = 0; break;
             case ActionSoundType.WALK: addLevel = 2; break;
-            case ActionSoundType.STEALTH: addLevel = 1; break;
+            case ActionSoundType.STEALTH: addLevel = 0.5f; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
@@ -142,11 +143,12 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
             case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
             case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 14f; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 14; break;
             case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 15; break;
             case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
             case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.25f; break;
             case ActionSoundType.LARGECONFUSION: addLevel = 1.5f; break;
+            case ActionSoundType.FALL: addLevel = 10; break;
         }
 
         soundLevel += addLevel;

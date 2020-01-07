@@ -31,20 +31,46 @@ public class InteractFunction : MonoBehaviour
         switch (type)
         {
             case DirType.FORWARD:
-                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z - target.localScale.z);
+                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z - PositionShift(type, target));
                 break;
             case DirType.BACK:
-                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z + target.localScale.z);
+                position = new Vector3(target.transform.position.x, player.position.y, target.transform.position.z + PositionShift(type, target));
                 break;
             case DirType.RIGHT:
-                position = new Vector3(target.transform.position.x - target.localScale.x, player.position.y, target.transform.position.z);
+                position = new Vector3(target.transform.position.x - PositionShift(type, target), player.position.y, target.transform.position.z);
                 break;
             case DirType.LEFT:
-                position = new Vector3(target.transform.position.x + target.localScale.x, player.position.y, target.transform.position.z);
+                position = new Vector3(target.transform.position.x + PositionShift(type, target), player.position.y, target.transform.position.z);
                 break;
         }
 
         return position;
+    }
+
+    /// <summary>
+    /// ポジションずらし
+    /// </summary>
+    /// <param name="type">オブジェクトのタイプ</param>
+    float PositionShift(DirType type, Transform target)
+    {
+        if(type == DirType.FORWARD || type == DirType.BACK)
+        {
+            if ((target.localEulerAngles.y > 225 && target.localEulerAngles.y < 315) || (target.localEulerAngles.y > 45 && target.localEulerAngles.y < 135))
+            {
+                return target.localScale.x;
+            }
+
+            return target.localScale.z;
+        }
+        else
+        {
+            if ((target.localEulerAngles.y > 225 && target.localEulerAngles.y < 315) || (target.localEulerAngles.y > 45 && target.localEulerAngles.y < 135))
+            {
+                return target.localScale.z;
+            }
+
+            return target.localScale.x;
+        }
     }
 
     /// <summary>
