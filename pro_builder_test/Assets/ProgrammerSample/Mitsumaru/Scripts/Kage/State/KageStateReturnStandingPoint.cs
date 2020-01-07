@@ -75,6 +75,9 @@ public class KageStateReturnStandingPoint : StateMachineBehaviour
             vigilanceRange.ChangeRadius(KageState.Kind.Normal);
 
             animator.SetBool("isReturnPoint", false);
+
+            // 状態レベルを変更
+            animator.SetInteger("currentStateLevel", 0);
         }
     }
 }

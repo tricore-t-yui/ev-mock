@@ -36,6 +36,9 @@ public class KageStateLoitering : StateMachineBehaviour
         // 現在のステートのIDをセット
         animator.SetInteger("currentStateKindId", 0);
 
+        // 状態レベルを変更
+        animator.SetInteger("currentStateLevel", 0);
+
         // ステートパラメータを取得
         stateParameter = animator.GetComponent<KageStateParameter>() ?? stateParameter;
         // パラメータクラスを取得

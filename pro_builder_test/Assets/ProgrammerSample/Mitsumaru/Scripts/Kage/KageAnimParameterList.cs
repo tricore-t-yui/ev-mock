@@ -38,6 +38,8 @@ public class KageAnimParameterList : MonoBehaviour
         currentStateKindId,
         loudVolumeNoise,
         heardSoundRadius,
+        isNearHigherPriorityStateKage,
+        currentStateLevel,
     }
 
     // アニメーター
