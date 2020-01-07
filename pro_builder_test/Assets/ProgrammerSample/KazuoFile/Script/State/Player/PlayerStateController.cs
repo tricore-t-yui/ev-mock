@@ -675,7 +675,7 @@ public class PlayerStateController : MonoBehaviour
     public bool IsCanHide()
     {
         // 隠れることができる状態ならテキスト表示
-        if (hideController.IsInteractArea && (rayObjectLayer == LayerMask.NameToLayer("Locker") || rayObjectLayer == LayerMask.NameToLayer("Bed")))
+        if (!hideController.enabled && hideController.IsInteractArea && (rayObjectLayer == LayerMask.NameToLayer("Locker") || rayObjectLayer == LayerMask.NameToLayer("Bed")))
         {
             return true;
         }
