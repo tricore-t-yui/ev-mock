@@ -283,7 +283,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckHideState()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && IsCanHide())
+        if (keyController.GetKeyDown(KeyType.INTERACT) && IsCanHide())
         {
             EventStop();
             State = ActionStateType.HIDE;
@@ -297,7 +297,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDoorOpenState()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Door"))
+        if (keyController.GetKeyDown(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Door"))
         {
             EventStop();
             if (State == ActionStateType.DASH)
@@ -379,7 +379,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckIDollGet()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Doll"))
+        if (keyController.GetKeyDown(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Doll"))
         {
             EventStop();
             dollGetController.SetInfo(rayObject);
