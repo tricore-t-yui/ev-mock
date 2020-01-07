@@ -76,40 +76,45 @@ public class BedOutState : StateMachineBehaviour
 
         // 今プレイヤーが向いている向き
         Vector3 angle = animator.gameObject.transform.eulerAngles;
-
+        Debug.Log(angle.y);
         // 今プレイヤーが向いている方向から脱出方向をとり、その方向が壁とかぶっていないかを見る
         if ((angle.y >= 315 && angle.y <= 360) || (angle.y >= 0 && angle.y <= 45))
         {
-            exitDir = ChangeAvoidWallDir(angle, DirType.BACK);
+            Debug.Log("FORWARD");
+            exitDir = ChangeAvoidWallDir(angle, DirType.FORWARD);
         }
         else if (angle.y >= 135 && angle.y <= 225)
         {
-            exitDir = ChangeAvoidWallDir(angle, DirType.FORWARD);
+            Debug.Log("BACK");
+            exitDir = ChangeAvoidWallDir(angle, DirType.BACK);
         }
         else if(angle.y >= 180)
         {
-            exitDir = ChangeAvoidWallDir(angle, DirType.RIGHT);
+            Debug.Log("LEFT");
+            exitDir = ChangeAvoidWallDir(angle, DirType.LEFT);
         }
         else
         {
-            exitDir = ChangeAvoidWallDir(angle, DirType.LEFT);
+            Debug.Log("RIGHT");
+            exitDir = ChangeAvoidWallDir(angle, DirType.RIGHT);
         }
+        Debug.Log(exitDir);
 
         // 求めた脱出方向から、座標、回転方向を求める
         switch (exitDir)
         {
             case DirType.FORWARD:
-                exitPos = new Vector3(hideObj.position.x, hideObj.position.y, hideObj.position.z - (hideObj.localScale.z / 2 + 1));
-                exitRotation = Quaternion.Euler(90, 0, -180); break;
-            case DirType.BACK:
                 exitPos = new Vector3(hideObj.position.x, hideObj.position.y, hideObj.position.z + (hideObj.localScale.z / 2 + 1));
                 exitRotation = Quaternion.Euler(90, 0, 0); break;
+            case DirType.BACK:
+                exitPos = new Vector3(hideObj.position.x, hideObj.position.y, hideObj.position.z - (hideObj.localScale.z / 2 + 1));
+                exitRotation = Quaternion.Euler(90, 0, -180); break;
             case DirType.RIGHT:
-                exitPos = new Vector3(hideObj.position.x - (hideObj.localScale.x / 2 + 1), hideObj.position.y, hideObj.position.z);
-                exitRotation = Quaternion.Euler(90, 0, -270); break;
-            case DirType.LEFT:
                 exitPos = new Vector3(hideObj.position.x + (hideObj.localScale.x / 2 + 1), hideObj.position.y, hideObj.position.z);
                 exitRotation = Quaternion.Euler(90, 0, -90); break;
+            case DirType.LEFT:
+                exitPos = new Vector3(hideObj.position.x - (hideObj.localScale.x / 2 + 1), hideObj.position.y, hideObj.position.z);
+                exitRotation = Quaternion.Euler(90, 0, -270); break;
         }
     }
 
@@ -130,7 +135,6 @@ public class BedOutState : StateMachineBehaviour
                 return CheckAvoidWallRight(angle, dir);
             case DirType.LEFT:
                 return CheckAvoidWallLeft(angle, dir);
-
         }
         return dir;
     }
@@ -146,24 +150,6 @@ public class BedOutState : StateMachineBehaviour
         {
             if (angle.y >= 180)
             {
-                if (IsWallDir(DirType.RIGHT))
-                {
-                    if (IsWallDir(DirType.LEFT))
-                    {
-                        return DirType.BACK;
-                    }
-                    else
-                    {
-                        return DirType.LEFT;
-                    }
-                }
-                else
-                {
-                    return DirType.RIGHT;
-                }
-            }
-            else
-            {
                 if (IsWallDir(DirType.LEFT))
                 {
                     if (IsWallDir(DirType.RIGHT))
@@ -178,6 +164,24 @@ public class BedOutState : StateMachineBehaviour
                 else
                 {
                     return DirType.LEFT;
+                }
+            }
+            else
+            {
+                if (IsWallDir(DirType.RIGHT))
+                {
+                    if (IsWallDir(DirType.LEFT))
+                    {
+                        return DirType.BACK;
+                    }
+                    else
+                    {
+                        return DirType.LEFT;
+                    }
+                }
+                else
+                {
+                    return DirType.RIGHT;
                 }
             }
         }
@@ -197,24 +201,6 @@ public class BedOutState : StateMachineBehaviour
         {
             if (angle.y >= 180)
             {
-                if (IsWallDir(DirType.RIGHT))
-                {
-                    if (IsWallDir(DirType.LEFT))
-                    {
-                        return DirType.FORWARD;
-                    }
-                    else
-                    {
-                        return DirType.LEFT;
-                    }
-                }
-                else
-                {
-                    return DirType.RIGHT;
-                }
-            }
-            else
-            {
                 if (IsWallDir(DirType.LEFT))
                 {
                     if (IsWallDir(DirType.RIGHT))
@@ -229,6 +215,24 @@ public class BedOutState : StateMachineBehaviour
                 else
                 {
                     return DirType.LEFT;
+                }
+            }
+            else
+            {
+                if (IsWallDir(DirType.RIGHT))
+                {
+                    if (IsWallDir(DirType.LEFT))
+                    {
+                        return DirType.FORWARD;
+                    }
+                    else
+                    {
+                        return DirType.LEFT;
+                    }
+                }
+                else
+                {
+                    return DirType.RIGHT;
                 }
             }
         }
@@ -246,7 +250,7 @@ public class BedOutState : StateMachineBehaviour
     {
         if (IsWallDir(dir))
         {
-            if ((angle.y >= 315 && angle.y <= 360) || (angle.y >= 0 && angle.y <= 45))
+            if ((angle.y >= 0 && angle.y <= 90) || (angle.y < 360 && angle.y >= 270))
             {
                 if (IsWallDir(DirType.FORWARD))
                 {
@@ -264,7 +268,7 @@ public class BedOutState : StateMachineBehaviour
                     return DirType.FORWARD;
                 }
             }
-            else if (angle.y >= 135 && angle.y <= 225)
+            else
             {
                 if (IsWallDir(DirType.BACK))
                 {
@@ -282,10 +286,6 @@ public class BedOutState : StateMachineBehaviour
                     return DirType.BACK;
                 }
             }
-            else
-            {
-                return DirType.LEFT;
-            }
         }
         else
         {
@@ -301,13 +301,13 @@ public class BedOutState : StateMachineBehaviour
     {
         if (IsWallDir(dir))
         {
-            if ((angle.y >= 315 && angle.y <= 360) || (angle.y >= 0 && angle.y <= 45))
+            if ((angle.y >= 0 && angle.y <= 90) || (angle.y < 360 && angle.y >= 270))
             {
                 if (IsWallDir(DirType.FORWARD))
                 {
                     if (IsWallDir(DirType.BACK))
                     {
-                        return DirType.RIGHT;
+                        return DirType.LEFT;
                     }
                     else
                     {
@@ -319,13 +319,13 @@ public class BedOutState : StateMachineBehaviour
                     return DirType.FORWARD;
                 }
             }
-            else if (angle.y >= 135 && angle.y <= 225)
+            else
             {
                 if (IsWallDir(DirType.BACK))
                 {
                     if (IsWallDir(DirType.FORWARD))
                     {
-                        return DirType.RIGHT;
+                        return DirType.LEFT;
                     }
                     else
                     {
@@ -336,10 +336,6 @@ public class BedOutState : StateMachineBehaviour
                 {
                     return DirType.BACK;
                 }
-            }
-            else
-            {
-                return DirType.RIGHT;
             }
         }
         else

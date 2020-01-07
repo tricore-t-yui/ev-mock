@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DirType = InteractFunction.DirType;
-using KeyType = KeyController.KeyType;
 
 /// <summary>
 /// ロッカークラス
@@ -19,24 +18,21 @@ public class HideObjectController : MonoBehaviour
     }
 
     [SerializeField]
-    Animator lockerAnim = default;                  // ロッカーのアニメーション ベッドの場合は不要
+    Animator lockerAnim = default;                  // ロッカーのアニメーション
     [SerializeField]
     Transform player = default;                     // プレイヤー
     [SerializeField]
     BoxCollider interactCollider = default;         // インタラクト可能エリア 
-
     [SerializeField]
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
-
-    [SerializeField]
-    ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
-    [SerializeField]
-    DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
     [SerializeField]
     BoxCollider[] objectCollider = default;         // コライダー
     [SerializeField]
-    List<DirType> wallContactDir = new List<DirType>();             // 壁に接触している向きのタイプ
+    [Tooltip("壁に接触している面の配列です。 Z軸の正を向いている面がFORWARDとして、反対がBACK、右がRIGHT、左がLEFTとしています。 壁に接触している面を追加してあげるとそっち側に行かないようになります。")]
+    List<DirType> wallContactDir = new List<DirType>();// 壁に接触している向きのタイプ
 
+    ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
+    DirType dirType = default;                      // 隠れるオブジェクトの向きのタイプ
     Vector3 rightForward = default;                 // 位置による向きタイプ変更の基準となる右前の角の座標
     Vector3 leftForward = default;                  // 位置による向きタイプ変更の基準となる左前の角の座標
 
@@ -47,6 +43,9 @@ public class HideObjectController : MonoBehaviour
     {
         rightForward = new Vector3(transform.position.x - transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
         leftForward = new Vector3(transform.position.x + transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
+
+        ChangeObjType();
+        ChangeDirType(objType);
     }
 
     /// <summary>
@@ -57,7 +56,7 @@ public class HideObjectController : MonoBehaviour
         // ベッドは入る場所によって向きのタイプを変える
         if (objType == ObjectType.BED)
         {
-            ChandeDirType();
+            ChangeDirType(objType);
         }
         if (objType == ObjectType.LOCKER)
         {
@@ -81,32 +80,69 @@ public class HideObjectController : MonoBehaviour
     }
 
     /// <summary>
-    /// 位置によって向きタイプの変更
+    /// オブジェクトタイプの変更
     /// </summary>
-    void ChandeDirType()
+    void ChangeObjType()
     {
-        if (rightForward.x <= player.position.x && leftForward.x >= player.position.x)
+        if(gameObject.layer == LayerMask.NameToLayer("Bed"))
         {
-            if (transform.position.z >= player.position.z)
-            {
-                dirType = DirType.FORWARD;
-            }
-            else
-            {
-                dirType = DirType.BACK;
-            }
-        }
-        else if (transform.position.x >= player.position.x)
-        {
-            dirType = DirType.RIGHT;
+            objType = ObjectType.BED;
         }
         else
         {
-            dirType = DirType.LEFT;
+            objType = ObjectType.LOCKER;
         }
+    }
 
-        // インタラクト可能エリアの移動
-        ChangeColliderPosition();
+    /// <summary>
+    /// 向きタイプの変更
+    /// </summary>
+    void ChangeDirType(ObjectType type)
+    {
+        if (type == ObjectType.LOCKER)
+        {
+            if (transform.localEulerAngles.y < 45 || transform.localEulerAngles.y > 315)
+            {
+                dirType = DirType.FORWARD;
+            }
+            else if (transform.localEulerAngles.y > 135 && transform.localEulerAngles.y < 225)
+            {
+                dirType = DirType.BACK;
+            }
+            else if (transform.localEulerAngles.y < 180)
+            {
+                dirType = DirType.RIGHT;
+            }
+            else
+            {
+                dirType = DirType.LEFT;
+            }
+        }
+        else
+        {
+            if (rightForward.x <= player.position.x && leftForward.x >= player.position.x)
+            {
+                if (transform.position.z >= player.position.z)
+                {
+                    dirType = DirType.FORWARD;
+                }
+                else
+                {
+                    dirType = DirType.BACK;
+                }
+            }
+            else if (transform.position.x >= player.position.x)
+            {
+                dirType = DirType.RIGHT;
+            }
+            else
+            {
+                dirType = DirType.LEFT;
+            }
+
+            // インタラクト可能エリアの移動
+            ChangeColliderPosition();
+        }
     }
 
     /// <summary>
