@@ -12,19 +12,19 @@ public class KeyController : MonoBehaviour
     /// </summary>
     public enum KeyType
     {
-        LOOKBACK,       // 振り返り
-        MOVE,           // 移動
-        LEFTENDUREBREATH,   // 息我慢
-        RIGHTENDUREBREATH,   // 息我慢
-        INTERACT,       // インタラクト
-        HOLDBREATH,     // 息止め
-        OPTION,         // スタート画面
-        SHOES,          // 靴
-        SQUAT,          // しゃがみ
-        DEEPBREATH,     // 深呼吸
-        DASH,           // ダッシュ
-        SAVE,           // セーブ
-        LOOKINTO,       // 覗き込み
+        LOOKBACK,           // 振り返り
+        MOVE,               // 移動
+        LEFTENDUREBREATH,   // 左息我慢
+        RIGHTENDUREBREATH,  // 右息我慢
+        INTERACT,           // インタラクト
+        HOLDBREATH,         // 息止め
+        OPTION,             // スタート画面
+        SHOES,              // 靴
+        SQUAT,              // しゃがみ
+        DEEPBREATH,         // 深呼吸
+        DASH,               // ダッシュ
+        SAVE,               // セーブ
+        LOOKINTO,           // 覗き込み
     }
 
     /// <summary>
@@ -51,6 +51,10 @@ public class KeyController : MonoBehaviour
         }
         else
         {
+            if (type == KeyType.INTERACT)
+            {
+                return Input.GetMouseButtonUp(0);
+            }
             return Input.GetKeyUp(GetKeyboardKey(type));
         }
     }
@@ -97,6 +101,10 @@ public class KeyController : MonoBehaviour
         }
         else
         {
+            if(type == KeyType.INTERACT)
+            {
+                return Input.GetMouseButtonDown(0);
+            }
             return Input.GetKeyDown(GetKeyboardKey(type));
         }
     }

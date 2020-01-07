@@ -355,7 +355,7 @@ public class PlayerHideController : MonoBehaviour
                 }
                 return true;
             case 2:
-                if (keyController.GetKey(KeyType.INTERACT))
+                if (keyController.GetKeyDown(KeyType.INTERACT))
                 {
                     keyInputStage = 3;
                     return false;
