@@ -121,6 +121,15 @@ public class PlayerDoorController : MonoBehaviour
     }
 
     /// <summary>
+    /// ダッシュキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool GetDashKey()
+    {
+        return keyController.GetKey(KeyType.DASH);
+    }
+
+    /// <summary>
     /// ドア開閉時のスティックの入力加減取得
     /// </summary>
     /// NOTE: k.oishi ステートマシン用関数

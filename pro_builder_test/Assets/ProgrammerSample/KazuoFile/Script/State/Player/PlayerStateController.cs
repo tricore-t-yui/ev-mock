@@ -29,7 +29,6 @@ public class PlayerStateController : MonoBehaviour
         TRAP,           // 罠
     }
 
-    GameObject rayObject = default;                         // レイに当たったオブジェクト
 
     [SerializeField]
     Transform player = default;                             // プレイヤー
@@ -78,6 +77,9 @@ public class PlayerStateController : MonoBehaviour
     //  無敵モード変更用変数
     public bool IsInvincible { get; private set; } = false;
 
+    GameObject rayObject = default;                         // レイに当たったオブジェクト
+    int rayObjectLayer = default;                           // レイに当たったオブジェクトのレイヤー
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -91,6 +93,9 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // レイの情報を更新
+        rayObjectLayer = ObjectLayer();
+
         // 各ニメーションがちゃんと終わっているなら各イベント処理再生
         if (animationContoller.IsEndAnim)
         {
@@ -278,7 +283,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckHideState()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && (ObjectLayer() == LayerMask.NameToLayer("Locker") || ObjectLayer() == LayerMask.NameToLayer("Bed")))
+        if (keyController.GetKey(KeyType.INTERACT) && IsCanHide())
         {
             EventStop();
             State = ActionStateType.HIDE;
@@ -292,7 +297,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckDoorOpenState()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && ObjectLayer() == LayerMask.NameToLayer("Door"))
+        if (keyController.GetKey(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Door"))
         {
             EventStop();
             if (State == ActionStateType.DASH)
@@ -374,7 +379,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckIDollGet()
     {
-        if (keyController.GetKey(KeyType.INTERACT) && ObjectLayer() == LayerMask.NameToLayer("Doll"))
+        if (keyController.GetKey(KeyType.INTERACT) && rayObjectLayer == LayerMask.NameToLayer("Doll"))
         {
             EventStop();
             dollGetController.SetInfo(rayObject);
@@ -661,6 +666,22 @@ public class PlayerStateController : MonoBehaviour
         else
         {
             return -1;
+        }
+    }
+
+    /// <summary>
+    /// 隠れることが可能な状態かどうか
+    /// </summary>
+    public bool IsCanHide()
+    {
+        // 隠れることができる状態ならテキスト表示
+        if (hideController.IsInteractArea && (rayObjectLayer == LayerMask.NameToLayer("Locker") || rayObjectLayer == LayerMask.NameToLayer("Bed")))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

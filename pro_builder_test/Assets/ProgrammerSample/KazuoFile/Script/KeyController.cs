@@ -14,7 +14,8 @@ public class KeyController : MonoBehaviour
     {
         LOOKBACK,       // 振り返り
         MOVE,           // 移動
-        ENDUREBREATH,   // 息我慢
+        LEFTENDUREBREATH,   // 息我慢
+        RIGHTENDUREBREATH,   // 息我慢
         INTERACT,       // インタラクト
         HOLDBREATH,     // 息止め
         OPTION,         // スタート画面
@@ -42,15 +43,61 @@ public class KeyController : MonoBehaviour
     /// キー取得
     /// </summary>
     /// <param name="type">キーの種類</param>
+    public bool GetKeyUp(KeyType type)
+    {
+        if (isUseController)
+        {
+            return Input.GetKeyUp(GetControllerButton(type));
+        }
+        else
+        {
+            return Input.GetKeyUp(GetKeyboardKey(type));
+        }
+    }
+
+    /// <summary>
+    /// キー取得
+    /// </summary>
+    /// <param name="type">キーの種類</param>
     public bool GetKey(KeyType type)
     {
         if (isUseController)
         {
-            return GetControllerButton(type);
+            switch (type)
+            {
+                case KeyType.HOLDBREATH: if (Input.GetAxis("L_R_Trigger") > 0) { return true; } break;
+                case KeyType.MOVE: return GetDirectionKey();
+                case KeyType.DASH: if (Input.GetAxis("L_R_Trigger") < 0) { return true; } break;
+                default: if (Input.GetKey(GetControllerButton(type))) { return true; } break;
+            }
+            return false;
         }
         else
         {
-            return GetKeyboardKey(type);
+            switch (type)
+            {
+                case KeyType.MOVE: return GetDirectionKey();
+                case KeyType.INTERACT: if (Input.GetMouseButton(0)) { return true; } break;
+                case KeyType.HOLDBREATH: if (Input.GetMouseButton(1)) { return true; } break;
+                default: if (Input.GetKey(GetKeyboardKey(type))) { return true; } break;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// キー取得
+    /// </summary>
+    /// <param name="type">キーの種類</param>
+    public bool GetKeyDown(KeyType type)
+    {
+        if (isUseController)
+        {
+            return Input.GetKeyDown(GetControllerButton(type));
+        }
+        else
+        {
+            return Input.GetKeyDown(GetKeyboardKey(type));
         }
     }
 
@@ -58,49 +105,47 @@ public class KeyController : MonoBehaviour
     /// キーボード用キー取得
     /// </summary>
     /// <param name="type">キーの種類</param>
-    bool GetKeyboardKey(KeyType type)
+    KeyCode GetKeyboardKey(KeyType type)
     {
         switch (type)
         {
-            case KeyType.LOOKBACK: if (Input.GetKey(KeyCode.Q)) { return true; } break;
-            case KeyType.MOVE: return GetDirectionKey();
-            case KeyType.ENDUREBREATH: if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.R)) { return true; } break;
-            case KeyType.INTERACT: if (Input.GetMouseButton(0)) { return true; } break;
-            case KeyType.HOLDBREATH: if (Input.GetMouseButton(1)) { return true; } break;
-            case KeyType.OPTION: if (Input.GetKey(KeyCode.P)) { return true; } break;
-            case KeyType.SHOES: if (Input.GetKey(KeyCode.Space)) { return true; } break;
-            case KeyType.SQUAT: if (Input.GetKey(KeyCode.C)) { return true; } break;
-            case KeyType.DEEPBREATH: if (Input.GetKey(KeyCode.LeftControl)) { return true; } break;
-            case KeyType.DASH: if (Input.GetKey(KeyCode.LeftShift)) { return true; } break;
-            case KeyType.LOOKINTO: if (Input.GetKey(KeyCode.T)) { return true; } break;
+            case KeyType.LOOKBACK: return KeyCode.Q;
+            case KeyType.OPTION: return KeyCode.P;
+            case KeyType.SHOES: return KeyCode.Space;
+            case KeyType.SQUAT: return KeyCode.C;
+            case KeyType.DEEPBREATH: return KeyCode.LeftControl;
+            case KeyType.DASH: return KeyCode.LeftShift;
+            case KeyType.LOOKINTO: return KeyCode.T;
+            case KeyType.LEFTENDUREBREATH: return KeyCode.E;
+            case KeyType.RIGHTENDUREBREATH: return KeyCode.R;
         }
 
-        return false;
+        Debug.Log("対象外のキー");
+        return default;
     }
 
     /// <summary>
     /// コントローラー用ボタン取得
     /// </summary>
     /// <param name="type">キーの種類</param>
-    bool GetControllerButton(KeyType type)
+    string GetControllerButton(KeyType type)
     {
         switch (type)
         {
-            case KeyType.LOOKBACK: if (Input.GetKey("joystick button 8")) { return true; } break;
-            case KeyType.MOVE: return GetDirectionKey();
-            case KeyType.ENDUREBREATH: if (Input.GetKey("joystick button 4") && Input.GetKey("joystick button 5")) { return true; } break;
-            case KeyType.INTERACT: if (Input.GetKey("joystick button 0")) { return true; } break;
-            case KeyType.HOLDBREATH: if (Input.GetKey("joystick button 4")) { return true; } break;
-            case KeyType.OPTION: if (Input.GetKey("joystick button 7")) { return true; } break;
-            case KeyType.SHOES: if (Input.GetKey("joystick button 2")) { return true; } break;
-            case KeyType.SQUAT: if (Input.GetKey("joystick button 1")) { return true; } break;
-            case KeyType.DEEPBREATH: if (Input.GetKey("joystick button 3")) { return true; } break;
-            case KeyType.DASH: if (Input.GetKey("joystick button 5")) { return true; } break;
-            case KeyType.SAVE: if (Input.GetKey("joystick button 6")) { return true; } break;
-            case KeyType.LOOKINTO: if (Input.GetKey("joystick button 9")) { return true; } break;
+            case KeyType.LOOKBACK: return "joystick button 8";
+            case KeyType.INTERACT: return "joystick button 0";
+            case KeyType.OPTION: return "joystick button 7";
+            case KeyType.SHOES: return "joystick button 2";
+            case KeyType.SQUAT: return "joystick button 1";
+            case KeyType.DEEPBREATH: return "joystick button 3";
+            case KeyType.SAVE: return "joystick button 6";
+            case KeyType.LOOKINTO: return "joystick button 9";
+            case KeyType.LEFTENDUREBREATH: return "joystick button 4";
+            case KeyType.RIGHTENDUREBREATH: return "joystick button 5";
         }
 
-        return false;
+        Debug.Log("対象外のボタン");
+        return default;
     }
 
     /// <summary>

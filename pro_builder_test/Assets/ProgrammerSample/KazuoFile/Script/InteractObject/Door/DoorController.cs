@@ -186,6 +186,15 @@ public class DoorController : MonoBehaviour
     }
 
     /// <summary>
+    /// ダッシュキーがおされているかどうか
+    /// </summary>
+    /// NOTE: k.oishi ステートマシン用関数
+    public bool GetDashKey()
+    {
+        return doorController.GetDashKey();
+    }
+
+    /// <summary>
     /// ドア開閉時のスティックの入力加減取得
     /// </summary>
     /// NOTE: k.oishi ステートマシン用関数

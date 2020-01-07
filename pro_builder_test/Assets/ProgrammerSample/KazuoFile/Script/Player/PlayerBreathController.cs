@@ -194,7 +194,7 @@ public class PlayerBreathController : MonoBehaviour
     void StrikeButtonRepeatedly()
     {
         // 消費軽減キーを押したら
-        if (keyController.GetKey(KeyType.ENDUREBREATH))
+        if (keyController.GetKeyDown(KeyType.RIGHTENDUREBREATH) || keyController.GetKeyDown(KeyType.LEFTENDUREBREATH))
         {
             // 連打処理の継続時間にプラス
             duration += durationPlus;

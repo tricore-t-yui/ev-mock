@@ -274,20 +274,23 @@ public class PlayerMoveController : MonoBehaviour
     /// <param name="length">ベクトルの長さ</param>
     float ChangeStickSpeedLimit(float length)
     {
-        if(length > 0.75f)
+        if (length >= 1)
         {
             soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
             return 1;
         }
-        else if (length > 0.3f)
+        else if (length > 0.5f)
         {
             soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.5f;
         }
-        else
+        else if (length > 0.1f)
         {
-            return 0;
+            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
+            return 0.2f;
         }
+
+        return 0;
     }
 
     /// <summary>

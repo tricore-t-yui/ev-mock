@@ -44,8 +44,8 @@ public class DoorOpenState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // アニメーションの進んだフレームをプラスしてドア開閉
-        flame += UpdateAnimationSpeed();
-        animator.SetFloat("DoorOpenSpeed", UpdateAnimationSpeed());
+        flame += UpdateAnimation();
+        animator.SetFloat("DoorOpenSpeed", UpdateAnimation());
 
         // フレームが0以下の時(閉じきっている状態でなお、後ろを入力した時)
         if (flame < 0)
@@ -64,12 +64,6 @@ public class DoorOpenState : StateMachineBehaviour
         if (isPlayer)
         {
             animator.SetBool("DoorEnd", true);
-
-            // フレームが0以上(開け切って終わった)時はエリアの番号を変更
-            if (flame > 0)
-            {
-                playerDoorController.ChangeAreaName();
-            }
         }
 
         // トリガーとフレームのリセット
@@ -80,12 +74,18 @@ public class DoorOpenState : StateMachineBehaviour
     /// <summary>
     /// アニメーションを進める
     /// </summary>
-    float UpdateAnimationSpeed()
+    float UpdateAnimation()
     {
         // 自動で開けるフレームを超えたら自動で開ける
         if (flame >= openFrame)
         {
-            return 0.5f;
+            // プレイヤーだったらエリアの番号を変更
+            if (isPlayer)
+            {
+                playerDoorController.ChangeAreaName();
+            }
+
+            return 0.5f　* GetAnimationSpeed();
         }
         else
         {
@@ -94,7 +94,7 @@ public class DoorOpenState : StateMachineBehaviour
                 // マウスを押している間はキー操作でマウスが離れたら自動で閉める
                 if (playerDoorController.IsDoorKey())
                 {
-                    return DoorOpen();
+                    return DoorOpen() * GetAnimationSpeed();
                 }
             }
             else
@@ -102,12 +102,12 @@ public class DoorOpenState : StateMachineBehaviour
                 // マウスを押している間はキー操作でマウスが離れたら自動で閉める
                 if (doorController.IsDoorKey())
                 {
-                    return DoorOpen();
+                    return DoorOpen() * GetAnimationSpeed();
                 }
             }
         }
 
-        return -0.5f;
+        return -0.5f * GetAnimationSpeed();
     }
 
     /// <summary>
@@ -141,7 +141,30 @@ public class DoorOpenState : StateMachineBehaviour
                 return -0.5f;
             }
         }
-       
+
         return 0;
+    }
+
+    /// <summary>
+    /// アニメーションの速度の倍率
+    /// </summary>
+    float GetAnimationSpeed()
+    {
+        if (isPlayer)
+        {
+            if (playerDoorController.GetDashKey())
+            {
+                return 2;
+            }
+        }
+        else
+        {
+            if (doorController.GetDashKey())
+            {
+                return 2;
+            }
+        }
+
+        return 1;
     }
 }

@@ -22,6 +22,8 @@ public class HideObjectController : MonoBehaviour
     Animator lockerAnim = default;                  // ロッカーのアニメーション ベッドの場合は不要
     [SerializeField]
     Transform player = default;                     // プレイヤー
+    [SerializeField]
+    BoxCollider interactCollider = default;         // インタラクト可能エリア 
 
     [SerializeField]
     PlayerHideController hideController = default;  // 隠れるアクション管理クラス
@@ -102,7 +104,60 @@ public class HideObjectController : MonoBehaviour
         {
             dirType = DirType.LEFT;
         }
+
+        // インタラクト可能エリアの移動
+        ChangeColliderPosition();
     }
+
+    /// <summary>
+    /// インタラクト可能エリアの移動
+    /// </summary>
+    void ChangeColliderPosition()
+    {
+        switch (dirType)
+        {
+            case DirType.FORWARD:
+                interactCollider.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - PositionShift());
+                break;
+            case DirType.BACK:
+                interactCollider.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + PositionShift());
+                break;
+            case DirType.RIGHT:
+                interactCollider.gameObject.transform.position = new Vector3(transform.position.x - PositionShift(), transform.position.y, transform.position.z);
+                break;
+            case DirType.LEFT:
+                interactCollider.gameObject.transform.position = new Vector3(transform.position.x + PositionShift(), transform.position.y, transform.position.z);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// ポジションずらし
+    /// </summary>
+    float PositionShift()
+    {
+        if (dirType == DirType.FORWARD || dirType == DirType.BACK)
+        {
+            interactCollider.gameObject.transform.rotation  = Quaternion.Euler(0, 90, 0);
+            if ((transform.localEulerAngles.y > 225 && transform.localEulerAngles.y < 315) || (transform.localEulerAngles.y > 45 && transform.localEulerAngles.y < 135))
+            {
+                return transform.localScale.x / 1.25f;
+            }
+
+            return transform.localScale.z / 1.25f;
+        }
+        else
+        {
+            interactCollider.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+            if ((transform.localEulerAngles.y > 225 && transform.localEulerAngles.y < 315) || (transform.localEulerAngles.y > 45 && transform.localEulerAngles.y < 135))
+            {
+                return transform.localScale.z / 1.25f;
+            }
+
+            return transform.localScale.x / 1.25f;
+        }
+    }
+
 
     /// <summary>
     /// アニメーション開始
