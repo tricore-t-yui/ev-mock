@@ -13,9 +13,8 @@ public class DollGetController : MonoBehaviour
     PlayerAnimationContoller animationContoller = default;  // インタラクト用関数クラス
     [SerializeField]
     GameController gameController = default;        // ゲームの流れクラス
-    [SerializeField]
-    float distance = 0.75f;                         // 人形との距離
 
+    float distance = 0.75f;                         // 人形との距離
     GameObject doll = default;                      // 人形
 
     /// <summary>

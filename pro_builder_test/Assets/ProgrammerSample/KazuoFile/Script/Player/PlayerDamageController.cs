@@ -26,14 +26,12 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     PlayerHealthController healthController = default;          // 体力管理クラス
     [SerializeField]
-    InteractFunction interactController = default;              // インタラクト用関数クラス
-    [SerializeField]
-    PlayerHideController playerHideController = default;
+    PlayerHideController playerHideController = default;        // 隠れるアクションクラス
 
     [SerializeField]
     float invincibleSecond = 2;                                 // ダメージ処理後の無敵時間
 
-    HideObjectController hideObjectController = null;
+    HideObjectController hideObjectController = null;           // 隠れているオブジェクト
 
     public DamageType Type { get; private set; } = default;     // ダメージタイプ
     public Transform EnemyPos { get; private set; } = default;  // 敵のTransform
