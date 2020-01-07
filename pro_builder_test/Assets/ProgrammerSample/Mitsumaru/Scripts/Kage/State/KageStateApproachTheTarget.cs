@@ -63,6 +63,9 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
 
         // 目標位置をセット
         navMesh.SetDestination(targetPos);
+
+        // 状態レベルを変更
+        animator.SetInteger("currentStateLevel", 1);
     }
 
     /// <summary>

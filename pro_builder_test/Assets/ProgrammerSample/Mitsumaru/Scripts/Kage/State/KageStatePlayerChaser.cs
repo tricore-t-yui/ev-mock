@@ -113,6 +113,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
                 material.color = Color.red;
             }
         }
+
+        // 状態レベルを変更
+        animator.SetInteger("currentStateLevel", 2);
     }
 
     /// <summary>

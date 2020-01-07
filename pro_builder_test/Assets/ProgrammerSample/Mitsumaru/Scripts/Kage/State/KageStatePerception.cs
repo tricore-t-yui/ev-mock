@@ -43,6 +43,9 @@ public class KageStatePerception : StateMachineBehaviour
                 material.color = Color.white;
             }
         }
+
+        // 状態レベルを変更
+        animator.SetInteger("currentStateLevel", 1);
     }
 
     /// <summary>

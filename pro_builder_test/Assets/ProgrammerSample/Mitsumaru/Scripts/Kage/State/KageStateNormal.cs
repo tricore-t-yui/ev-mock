@@ -98,6 +98,9 @@ public class KageStateNormal : StateMachineBehaviour
         animParameterList.SetInteger(ParameterType.normalBehaviourKindId, (int)stateType);
 
         soundAreaSpawner = FindObjectOfType<SoundAreaSpawner>() ?? soundAreaSpawner;
+
+        // 状態レベルを変更
+        animator.SetInteger("currentStateLevel", 0);
     }
 
     /// <summary>
