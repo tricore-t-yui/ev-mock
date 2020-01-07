@@ -16,22 +16,23 @@ public class DoorController : MonoBehaviour
     PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
 
     [SerializeField]
-    float closeDistance = 0.3f;                        // ドアが自動で閉まる距離
-
-    bool isAutoClose = true;                        // 自動でドアを閉めるフラグ
-
-    DirType type = default;                         // 現在のドアの開ける方向のタイプ
-    DirType firstType = default;                    // 開始時のドアの開ける方向のタイプ
+    [Tooltip("ドアが自動で閉まる距離です。 ドアからプレイヤーがこの値離れると自動で閉まります。")]
+    float closeDistance = 0.3f;                     // ドアが自動で閉まる距離
 
     // ドアを開けることができる部屋番号
-    // NOTE:k.oishi 各ドアのこの変数に、この扉を正面から開けることになる部屋番号を入力してください
     [SerializeField]
+    [Tooltip("ドアを正面から開けることができる部屋番号です。 (ドアノブが右側にある方が正面です。) この扉を正面から開けることになる部屋番号を入力してください。")]
     string roomName = null;
 
     // ドアを逆に開けることができる部屋番号
-    // NOTE:k.oishi 各ドアのこの変数に、この扉を逆側から開けることになる部屋番号を入力してください
     [SerializeField]
+    [Tooltip("ドアを逆側から開けることができる部屋番号です。 (ドアノブが左側にある方が逆側です。) この扉を逆側から開けることになる部屋番号を入力してください。")]
     string reverseRoomName = null;
+
+    bool isAutoClose = true;                        // 自動でドアを閉めるフラグ
+    DirType type = default;                         // 現在のドアの開ける方向のタイプ
+    DirType firstType = default;                    // 開始時のドアの開ける方向のタイプ
+
 
     /// <summary>
     /// 開始処理
