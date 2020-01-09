@@ -28,7 +28,7 @@ public class HideObjectController : MonoBehaviour
     [SerializeField]
     BoxCollider[] objectCollider = default;         // コライダー
     [SerializeField]
-    [Tooltip("壁に接触している面の配列です。 Z軸の正を向いている面がFORWARDとして、反対がBACK、右がRIGHT、左がLEFTとしています。 壁に接触している面を追加してあげるとそっち側に行かないようになります。")]
+    [Tooltip("壁に接触している面の配列です。 壁に接触している面を追加してあげるとそっち側に行かないようになります。 Z軸の正を向いている面がFORWARDとして、反対がBACK、右がRIGHT、左がLEFTとしています。 ※ベッドのみ追加してください。")]
     List<DirType> wallContactDir = new List<DirType>();// 壁に接触している向きのタイプ
 
     ObjectType objType = default;                   // 隠れるオブジェクトのタイプ
