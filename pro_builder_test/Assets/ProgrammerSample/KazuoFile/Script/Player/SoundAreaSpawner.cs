@@ -74,7 +74,10 @@ public class SoundAreaSpawner : MonoBehaviour
         spawnframeCount++;
         soundLevel = 0;
 
-        IsDamageObjectSound = false;
+        if (spawnframeCount >= spawnframe)
+        {
+            IsDamageObjectSound = false;
+        }
     }
 
     /// <summary>
