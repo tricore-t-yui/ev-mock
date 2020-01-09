@@ -10,9 +10,7 @@ public class BedOutState : StateMachineBehaviour
 {
     PlayerHideController hideController = default;      // 隠れるアクションクラス
 
-    [SerializeField]
-    float exitRotationSpeed = 2;                        // 脱出方向へ向くスピード
-
+    float exitRotationSpeed = 3;                        // 脱出方向へ向くスピード
     Vector3 exitPos = default;                          // 脱出座標
     Quaternion exitRotation = default;                  // 脱出回転方向
     DirType exitDir = default;                          // 脱出方向のタイプ

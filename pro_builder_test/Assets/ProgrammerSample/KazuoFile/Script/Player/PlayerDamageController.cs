@@ -29,7 +29,7 @@ public class PlayerDamageController : MonoBehaviour
     PlayerHideController playerHideController = default;        // 隠れるアクションクラス
 
     [SerializeField]
-    float invincibleSecond = 2;                                 // ダメージ処理後の無敵時間
+    PlayerStatusData playerData = default;                      // プレイヤーのデータのスクリプタブルオブジェクト
 
     HideObjectController hideObjectController = null;           // 隠れているオブジェクト
 
@@ -134,7 +134,7 @@ public class PlayerDamageController : MonoBehaviour
     /// </summary>
     IEnumerator InvincibleCount()
     {
-        yield return new WaitForSeconds(invincibleSecond);
+        yield return new WaitForSeconds(playerData.InvincibleSecond);
         IsInvincible = false;
     }
 }
