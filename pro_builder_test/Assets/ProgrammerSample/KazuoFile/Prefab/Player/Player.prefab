@@ -199,7 +199,7 @@ Camera:
   m_GameObject: {fileID: 603303248}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -349,8 +349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frustumSettings:
-    baseSettings: {fileID: 11400000, guid: 80d25926ec4187249acbfebc86ca115e, type: 2}
-    qualitySettings: {fileID: 11400000, guid: cd48c4b6f687ec24699fbeb4a38f6ee7, type: 2}
+    baseSettings: {fileID: 0}
+    qualitySettings: {fileID: 0}
 --- !u!1 &809868430
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,11 +413,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1084558972}
+  - component: {fileID: 648182768}
+  - component: {fileID: 1084558969}
   - component: {fileID: 1084558973}
   - component: {fileID: 1084558971}
   - component: {fileID: 1084558970}
-  - component: {fileID: 1084558969}
-  - component: {fileID: 648182768}
   - component: {fileID: 648182769}
   m_Layer: 8
   m_Name: StatusController
@@ -440,67 +440,20 @@ Transform:
   m_Father: {fileID: 1125087521836334049}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1084558973
-MonoBehaviour:
+--- !u!136 &648182768
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084558967}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cceab300322a24715bab8d355088e39c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hideController: {fileID: 1125087521836334055}
-  soundArea: {fileID: 0}
-  keyController: {fileID: 0}
-  normalRecovery: 1
-  deepBreathRecovery: 1.25
-  breathlessnessRecovery: 0.5
-  stealthDecrement: 0.175
-  hideSmallDecrement: 0.3
-  hideMediumDecrement: 0.3
-  hideLargeDecrement: 0.3
-  buttonPatienceDecrement: 0.01
-  smallDisturbance: 75
-  mediumDisturbance: 50
-  largeDisturbance: 20
-  durationPlus: 5
---- !u!114 &1084558971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1084558967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ff0586b1ac1c49be98105f8da395e20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundArea: {fileID: 0}
-  recoveryFrame: 240
-  recoveryAmount: 0.1
-  smallDisturbance: 75
-  largeDisturbance: 50
---- !u!114 &1084558970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1084558967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32f91e192e3314c7ca022d7e5f457acc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashDecrement: 0.5
-  normalRecovery: 1
-  walkRecovery: 0.5
-  squatRecovery: 0.25
-  deepBreathRecovery: 1.25
+  m_Radius: 0.25
+  m_Height: 1.4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1084558969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,20 +470,50 @@ MonoBehaviour:
   healthController: {fileID: 1084558971}
   staminaController: {fileID: 1084558970}
   objectDamageController: {fileID: 648182769}
---- !u!136 &648182768
-CapsuleCollider:
+--- !u!114 &1084558973
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084558967}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 1.4
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cceab300322a24715bab8d355088e39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideController: {fileID: 1125087521836334055}
+  soundArea: {fileID: 0}
+  keyController: {fileID: 0}
+  playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
+  durationPlus: 5
+--- !u!114 &1084558971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff0586b1ac1c49be98105f8da395e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundArea: {fileID: 0}
+  playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
+--- !u!114 &1084558970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084558967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f91e192e3314c7ca022d7e5f457acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
 --- !u!114 &648182769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,8 +528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   soundArea: {fileID: 0}
-  damageAmount: 0.05
-  deepBreathRecovery: 0.3
+  playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
 --- !u!1 &330926767269091169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,24 +1044,12 @@ MonoBehaviour:
   playerRigidbody: {fileID: 1125087521836334054}
   playerCollider: {fileID: 1125087521836334053}
   playerAnim: {fileID: 1125087521836334048}
+  moveData: {fileID: 11400000, guid: b138ea689e3f54597affb975cad57001, type: 2}
   staminaController: {fileID: 1084558970}
   objectDamageController: {fileID: 648182769}
   stateController: {fileID: 0}
   keyController: {fileID: 0}
   soundAreaSpawner: {fileID: 0}
-  forwardSpeed: 2
-  sideSpeed: 1.75
-  backSpeed: 1.5
-  speedMagnification: 25
-  barefootSpeedReduction: 0.85
-  objectDamageSpeedReduction: 0.85
-  staminaSpeedReduction: 0.85
-  walkSpeedLimit: 0.75
-  dashSpeedLimit: 1.5
-  squatSpeedLimit: 0.25
-  stealthSpeedLimit: 0.25
-  stepAngle: 71.5
-  stepUpPower: 1.45
 --- !u!114 &1125087521836333848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1130,7 +1100,6 @@ MonoBehaviour:
   playerRigidbody: {fileID: 1125087521836334054}
   animationContoller: {fileID: 1873015058}
   healthController: {fileID: 1084558971}
-  interactController: {fileID: 0}
   playerHideController: {fileID: 1125087521836334055}
   invincibleSecond: 2
 --- !u!114 &1873015058
@@ -1167,7 +1136,6 @@ MonoBehaviour:
   leftArm: {fileID: 795638532360735297}
   animationContoller: {fileID: 1873015058}
   gameController: {fileID: 0}
-  distance: 0.75
 --- !u!1 &6352119354259037519
 GameObject:
   m_ObjectHideFlags: 0

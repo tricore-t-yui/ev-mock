@@ -21,12 +21,8 @@ public class PlayerObjectDamageController : MonoBehaviour
     PlayerStateController stateController = default;            // ステート管理クラス
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
-
     [SerializeField]
-    float damageAmount = 0.05f;                                 // ダメージ量
-
-    [SerializeField]
-    float deepBreathRecovery = 0.3f;                            // 深呼吸時の回復量
+    PlayerStatusData playerData = default;                            // プレイヤーのデータのスクリプタブルオブジェクト
 
     public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
     public bool IsDamage { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
@@ -89,9 +85,9 @@ public class PlayerObjectDamageController : MonoBehaviour
             // 各ステートに合わせた処理を実行
             switch (type)
             {
-                case MoveType.WALK: NowDamage += damageAmount; break;
-                case MoveType.DASH: NowDamage += damageAmount; break;
-                case MoveType.BREATHHOLDMOVE: NowDamage += damageAmount; break;
+                case MoveType.WALK: NowDamage += playerData.ObjectDamageAmount; break;
+                case MoveType.DASH: NowDamage += playerData.ObjectDamageAmount; break;
+                case MoveType.BREATHHOLDMOVE: NowDamage += playerData.ObjectDamageAmount; break;
                 default: break;
             }
 
@@ -112,7 +108,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     public void DeepBreathRecovery()
     {
         // 深呼吸回数をカウントし、回数が上限を超えたら回復
-        NowDamage -= deepBreathRecovery;
+        NowDamage -= playerData.ObjectDamagedeepBreathRecovery;
         if (NowDamage <= 0)
         {
             NowDamage = 0;

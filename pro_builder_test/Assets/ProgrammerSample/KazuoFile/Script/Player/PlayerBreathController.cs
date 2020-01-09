@@ -30,31 +30,8 @@ public class PlayerBreathController : MonoBehaviour
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
     KeyController keyController = default;                      // キー操作クラス
-
     [SerializeField]
-    float normalRecovery = 0.3f;                               // 通常の息の回復量
-    [SerializeField]
-    float deepBreathRecovery = 0.5f;                            // 深呼吸時の息の回復量
-    [SerializeField]
-    float breathlessnessRecovery = 0.3f;                       // 息切れ時の息の回復量
-
-    [SerializeField]
-    float stealthDecrement = 0.175f;                             // 息止め時の息消費量
-    [SerializeField]
-    float hideSmallDecrement = 0.3f;                           // 隠れる＋息止め時の息消費量(小)
-    [SerializeField]
-    float hideMediumDecrement = 0.3f;                           // 隠れる＋息止め時の息消費量(中)
-    [SerializeField]
-    float hideLargeDecrement = 0.3f;                            // 隠れる＋息止め時の息消費量(大)
-    [SerializeField]
-    float buttonPatienceDecrement = 0.01f;                      // 息我慢時(連打あり)の息消費量
-
-    [SerializeField]
-    float smallDisturbance = 75;                                // 息の乱れ(小)の基準値
-    [SerializeField]
-    float mediumDisturbance = 50;                               // 息の乱れ(中)の基準値
-    [SerializeField]
-    float largeDisturbance = 20;                                // 息の乱れ(大)の基準値
+    PlayerStatusData playerData = default;                            // プレイヤーデータのスクリプタブルオブジェクト
 
     [SerializeField]
     int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
@@ -88,19 +65,19 @@ public class PlayerBreathController : MonoBehaviour
         else if((type != MoveType.HIDE && type != MoveType.BREATHHOLD && type != MoveType.BREATHHOLDMOVE)
              || (type == MoveType.HIDE && !hideController.IsHideStealth()))
         {
-            if (NowAmount <= smallDisturbance)
+            if (NowAmount <= playerData.SmallDisturbance)
             {
                 // 小さな乱れ
                 soundArea.AddSoundLevel(ActionSoundType.SMALLCONFUSION);
                 State = BrethState.SMALLCONFUSION;
 
-                if (NowAmount <= mediumDisturbance)
+                if (NowAmount <= playerData.MediumDisturbance)
                 {
                     // 乱れ
                     soundArea.AddSoundLevel(ActionSoundType.MEDIUMCONFUSION);
                     State = BrethState.MEDIUMCONFUSION;
 
-                    if (NowAmount <= largeDisturbance)
+                    if (NowAmount <= playerData.LargeDisturbance)
                     {
                         // 大きな乱れ
                         soundArea.AddSoundLevel(ActionSoundType.LARGECONFUSION);
@@ -129,12 +106,12 @@ public class PlayerBreathController : MonoBehaviour
         // 各ステートに合わせた処理を実行
         switch (type)
         {
-            case MoveType.WAIT: NowAmount += normalRecovery; break;
-            case MoveType.WALK: NowAmount += normalRecovery; break;
-            case MoveType.BREATHHOLD: NowAmount -= stealthDecrement; break;
-            case MoveType.BREATHHOLDMOVE: NowAmount -= stealthDecrement; break;
+            case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
+            case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
+            case MoveType.BREATHHOLD: NowAmount -= playerData.StealthDecrement; break;
+            case MoveType.BREATHHOLDMOVE: NowAmount -= playerData.StealthDecrement; break;
             case MoveType.HIDE: ConsumeHideBreath(); break;
-            case MoveType.BREATHLESSNESS: NowAmount += breathlessnessRecovery; break;
+            case MoveType.BREATHLESSNESS: NowAmount += playerData.BreathlessnessRecovery; break;
             default: break;
         }
 
@@ -169,7 +146,7 @@ public class PlayerBreathController : MonoBehaviour
             // 連打処理の継続時間続いている間
             if (duration > 0)
             {
-                NowAmount -= buttonPatienceDecrement;
+                NowAmount -= playerData.ButtonPatienceDecrement;
             }
             // 連打していない場合
             else
@@ -180,7 +157,7 @@ public class PlayerBreathController : MonoBehaviour
         }
         else
         {
-            NowAmount += normalRecovery;
+            NowAmount += playerData.NormalRecovery;
         }
     }
 
@@ -214,9 +191,9 @@ public class PlayerBreathController : MonoBehaviour
     {
         switch (type)
         {
-            case HeartSoundType.NORMAL: hideDecrement = hideSmallDecrement; break;
-            case HeartSoundType.MEDIUM: hideDecrement = hideMediumDecrement; break;
-            case HeartSoundType.LARGE: hideDecrement = hideLargeDecrement; break;
+            case HeartSoundType.NORMAL: hideDecrement = playerData.HideSmallDecrement; break;
+            case HeartSoundType.MEDIUM: hideDecrement = playerData.HideMediumDecrement; break;
+            case HeartSoundType.LARGE: hideDecrement = playerData.HideLargeDecrement; break;
         }
     }
 
@@ -225,7 +202,7 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     public void DeepBreathRecovery()
     {
-        NowAmount += deepBreathRecovery;
+        NowAmount += playerData.DeepBreathRecovery;
     }
 
     /// <summary>

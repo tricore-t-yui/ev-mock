@@ -10,15 +10,8 @@ public class PlayerHealthController : MonoBehaviour
 {
     [SerializeField]
     SoundAreaSpawner soundArea = default;               // 音管理クラス
-
     [SerializeField]
-    float recoveryFrame = 240;                          // 回復が始まるまでのフレーム数
-    [SerializeField]
-    float recoveryAmount = 0.1f;                        // 回復量
-    [SerializeField]
-    float smallDisturbance = 75;                        // 息の乱れ(小)の基準値
-    [SerializeField]
-    float largeDisturbance = 50;                        // 息の乱れ(大)の基準値
+    PlayerStatusData playerData = default;                    // プレイヤーデータのスクリプタブルオブジェクト
 
     float damageFrame = 0;                              // ダメージを食らってからのフレーム
 
@@ -55,7 +48,7 @@ public class PlayerHealthController : MonoBehaviour
                 HealthSound();
 
                 // ダメージフレームが回復フレームより大きくなったら回復開始
-                if (recoveryFrame <= damageFrame)
+                if (playerData.HealthRecoveryFrame <= damageFrame)
                 {
                     damageFrame = 0;
                     IsDamage = false;
@@ -63,7 +56,7 @@ public class PlayerHealthController : MonoBehaviour
             }
             else
             {
-                NowAmount += recoveryAmount;
+                NowAmount += playerData.HealthRecoveryAmount;
             }
         }
 
@@ -76,10 +69,10 @@ public class PlayerHealthController : MonoBehaviour
     /// </summary>
     void HealthSound()
     {
-        if (NowAmount <= smallDisturbance)
+        if (NowAmount <= playerData.SmallDisturbance)
         {
             soundArea.AddSoundLevel(ActionSoundType.DAMAGEHALFHEALTH);
-            if (NowAmount <= largeDisturbance)
+            if (NowAmount <= playerData.LargeDisturbance)
             {
                 soundArea.AddSoundLevel(ActionSoundType.DAMAGEPINCHHEALTH);
             }

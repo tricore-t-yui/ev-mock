@@ -52,7 +52,7 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField]
     Animator playerAnim = default;              // アニメーター
     [SerializeField]
-    PlayerMoveData moveData = default;          // プレイヤーの移動系データのスクリプタブルオブジェクト
+    PlayerMoveData moveData = default;              // プレイヤーデータのスクリプタブルオブジェクト
 
     [SerializeField]
     playerStaminaController staminaController = default;            // スタミナクラス
