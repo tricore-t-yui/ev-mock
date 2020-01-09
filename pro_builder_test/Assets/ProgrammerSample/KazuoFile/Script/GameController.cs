@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     PlayerHealthController healthController = default;  // プレイヤーの体力クラス
     [SerializeField]
-    PlayerDamageController damageController = default;      // 隠れるクラス
+    PlayerDamageController damageController = default;  // 隠れるクラス
     [SerializeField]
     GameObject tunObject = default;                     // ツンのオブジェクト
     [SerializeField]
