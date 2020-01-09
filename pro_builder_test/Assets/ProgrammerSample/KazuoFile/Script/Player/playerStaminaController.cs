@@ -9,16 +9,7 @@ using MoveType = PlayerStateController.ActionStateType;
 public class playerStaminaController : MonoBehaviour
 {
     [SerializeField]
-    float dashDecrement = 0.5f;                             // 息止め時の息消費量
-
-    [SerializeField]
-    float normalRecovery = 0.3f;                            // 通常の息の回復量
-    [SerializeField]
-    float walkRecovery = 0.15f;                             // 通常の息の回復量
-    [SerializeField]
-    float squatRecovery = 0.3f;                             // 通常の息の回復量
-    [SerializeField]
-    float deepBreathRecovery = 0.5f;                        // 深呼吸時の息の回復量
+    PlayerStatusData playerData = default;                        // プレイヤーのデータのスクリプタブルオブジェクト
 
     public float NowAmount { get; private set; } = 100;     // 現在量
     public bool IsDisappear { get; private set; } = false;  // スタミナ切れフラグ
@@ -40,9 +31,9 @@ public class playerStaminaController : MonoBehaviour
         // 各ステートに合わせた処理を実行
         switch (type)
         {
-            case MoveType.WALK: NowAmount += walkRecovery; SquatRecovery(isSquat); break;
-            case MoveType.DASH: NowAmount -= dashDecrement; break;
-            default: NowAmount += normalRecovery; SquatRecovery(isSquat); break;
+            case MoveType.WALK: NowAmount += playerData.StaminaWalkRecovery; SquatRecovery(isSquat); break;
+            case MoveType.DASH: NowAmount -= playerData.StaminaDecrement; break;
+            default: NowAmount += playerData.StaminaNormalRecovery; SquatRecovery(isSquat); break;
         }
 
         // スタミナの状態変更
@@ -59,7 +50,7 @@ public class playerStaminaController : MonoBehaviour
     {
         if (flag)
         {
-            NowAmount += squatRecovery;
+            NowAmount += playerData.StaminaSquatRecovery;
         }
     }
 
@@ -68,7 +59,7 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     public void DeepBreathRecovery()
     {
-        NowAmount += deepBreathRecovery;
+        NowAmount += playerData.StaminaDeepBreathRecovery;
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);

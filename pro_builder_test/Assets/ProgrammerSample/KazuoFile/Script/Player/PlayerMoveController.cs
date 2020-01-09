@@ -51,6 +51,8 @@ public class PlayerMoveController : MonoBehaviour
     CapsuleCollider playerCollider = default;   // コライダー
     [SerializeField]
     Animator playerAnim = default;              // アニメーター
+    [SerializeField]
+    PlayerMoveData moveData = default;              // プレイヤーデータのスクリプタブルオブジェクト
 
     [SerializeField]
     playerStaminaController staminaController = default;            // スタミナクラス
@@ -63,40 +65,9 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundAreaSpawner = default;                    // 音領域生成クラス
 
-    [SerializeField]
-    float forwardSpeed = 2f;                    // 前移動時のスピード
-    [SerializeField]
-    float sideSpeed = 1.75f;                    // 横移動時のスピード
-    [SerializeField]
-    float backSpeed = 1.5f;                     // 後ろ移動時のスピード
-    [SerializeField]
-    float speedMagnification = 10;              // 移動速度の倍率
-
-    [SerializeField, Range(0, 1)]
-    float barefootSpeedReduction = 0.85f;       // 裸足時の移動速度の減少割合
-    [SerializeField, Range(0, 1)]
-    float objectDamageSpeedReduction = 0.85f;   // オブジェクトダメージ時の移動速度の減少割合
-    [SerializeField, Range(0, 1)]
-    float staminaSpeedReduction = 0.85f;        // スタミナ切れ時の移動速度の減少割合
-
-    [SerializeField]
-    float walkSpeedLimit = 0.75f;               // 歩き時の移動速度の限界
-    [SerializeField]
-    float dashSpeedLimit = 1.5f;                // ダッシュ時の移動速度の限界
-    [SerializeField]
-    float squatSpeedLimit = 0.25f;              // しゃがみ時の移動速度の限界
-    [SerializeField]
-    float stealthSpeedLimit = 0.25f;            // 忍び歩き時の移動速度の限界
-
-    [SerializeField, Range(0,180)]
-    float stepAngle = 60;                       // 段差の許容角度
-    [SerializeField]
-    float stepUpPower = 1.45f;                  // 段差に当たった時に加える上方向の力
-
     float moveTypeSpeedLimit = 0;               // 移動タイプによる移動速度の限界
     float dirTypeSpeedLimit = 0;                // 移動方向による移動速度の限界
     float stickSpeedLimit = 0;                  // スティックの入力加減による移動速度の限界
-
     Vector3 moveSpeed = Vector3.zero;           // 移動速度
     bool isAnimPosition = false;                // アニメーションに座標移動をまかせるかどうか
     bool isAnimRotation = false;                // アニメーションに回転をまかせるかどうか
@@ -164,14 +135,13 @@ public class PlayerMoveController : MonoBehaviour
         // 段差に当たったら上方向に力を加え登らせる
         if (DirectionRay(RayType.MOVEDIRECTION) && !DirectionRay(RayType.DIAGONALDIRECTION))
         {
-            moveSpeed += Vector3.up * stepUpPower;
+            moveSpeed += Vector3.up * moveData.StepUpPower;
         }
-
         // 移動速度の限界を超えるまで力をくわえ続ける
         float walkSpeed = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z).magnitude;
         if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit * stickSpeedLimit)
         {
-            playerRigidbody.AddForce(moveSpeed * speedMagnification);
+            playerRigidbody.AddForce(moveSpeed * moveData.SpeedMagnification);
         }
     }
 
@@ -203,7 +173,7 @@ public class PlayerMoveController : MonoBehaviour
                 dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
             case RayType.DIAGONALDIRECTION:
                 start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.2f)), transform.position.z);
-                dir = new Vector3(moveSpeed.normalized.x, stepAngle / 100, moveSpeed.normalized.z); break;
+                dir = new Vector3(moveSpeed.normalized.x, moveData.StepAngle / 100, moveSpeed.normalized.z); break;
         }
 
         // レイ作成
@@ -233,9 +203,9 @@ public class PlayerMoveController : MonoBehaviour
         switch (type)
         {
             case SpeedLimitType.NOTMOVE: moveTypeSpeedLimit = 0; break;
-            case SpeedLimitType.WALK: moveTypeSpeedLimit = walkSpeedLimit; break;
-            case SpeedLimitType.DASH: moveTypeSpeedLimit = dashSpeedLimit; break;
-            case SpeedLimitType.BREATHHOLD: moveTypeSpeedLimit = stealthSpeedLimit; break;
+            case SpeedLimitType.WALK: moveTypeSpeedLimit = moveData.WalkSpeedLimit; break;
+            case SpeedLimitType.DASH: moveTypeSpeedLimit = moveData.DashSpeedLimit; break;
+            case SpeedLimitType.BREATHHOLD: moveTypeSpeedLimit = moveData.StealthSpeedLimit; break;
         }
 
         // 状態によって移動速度上限の変更
@@ -249,22 +219,22 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (stateController.IsSquat)
         {
-            moveTypeSpeedLimit = moveTypeSpeedLimit * squatSpeedLimit;
+            moveTypeSpeedLimit = moveTypeSpeedLimit * moveData.SquatSpeedLimit;
         }
         // 裸足
         if (!stateController.IsShoes)
         {
-            moveTypeSpeedLimit = moveTypeSpeedLimit * barefootSpeedReduction;
+            moveTypeSpeedLimit = moveTypeSpeedLimit * moveData.BarefootSpeedReduction;
         }
         // ダメージ所持状態
         if (objectDamageController.IsDamage)
         {
-            moveTypeSpeedLimit = moveTypeSpeedLimit * objectDamageSpeedReduction;
+            moveTypeSpeedLimit = moveTypeSpeedLimit * moveData.ObjectDamageSpeedReduction;
         }
         // スタミナ切れ時
         if (staminaController.IsDisappear)
         {
-            moveTypeSpeedLimit = moveTypeSpeedLimit * staminaSpeedReduction;
+            moveTypeSpeedLimit = moveTypeSpeedLimit * moveData.StaminaSpeedReduction;
         }
     }
 
@@ -303,16 +273,16 @@ public class PlayerMoveController : MonoBehaviour
 
         if(vec.x != 0)
         {
-            speed = sideSpeed;
+            speed = moveData.SideSpeed;
         }
 
         if (vec.y > 0)
         {
-            speed = forwardSpeed;
+            speed = moveData.ForwardSpeed;
         }
         else if (vec.y < 0)
         {
-            speed = backSpeed;
+            speed = moveData.BackSpeed;
         }
 
         return speed;
