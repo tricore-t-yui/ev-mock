@@ -52,6 +52,9 @@ public class PlayerStatusData : ScriptableObject
     [SerializeField]
     [Tooltip("体力の回復量")]
     float healthRecoveryAmount = 0.1f;          // 体力の回復量
+    [SerializeField]
+    [Tooltip("無敵時間")]
+    float invincibleSecond = 2;           // 無敵時間
 
     // スタミナ
     [Header("スタミナ系")]
@@ -104,4 +107,6 @@ public class PlayerStatusData : ScriptableObject
 
     public float ObjectDamageAmount => objectDamageAmount;
     public float ObjectDamagedeepBreathRecovery => objectDamagedeepBreathRecovery;
+
+    public float InvincibleSecond => invincibleSecond;
 }

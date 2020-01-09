@@ -13,9 +13,7 @@ public class LockerOutState : StateMachineBehaviour
     [SerializeField]
     bool isPlayer = default;                                // プレイヤーかどうか
 
-    [SerializeField]
     float exitRotationSpeed = 2;                            // 脱出方向へ向くスピード
-
     Quaternion exitRotation = default;                      // 脱出方向
 
     /// <summary>
