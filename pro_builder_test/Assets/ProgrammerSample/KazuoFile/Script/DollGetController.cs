@@ -52,6 +52,8 @@ public class DollGetController : MonoBehaviour
     public void EndDollGet()
     {
         enabled = false;
-        gameController.ChangeNextScene();
+
+        // NOTE:k.oishi とりあえずコメントアウト
+        //gameController.ChangeNextScene();
     }
 }
