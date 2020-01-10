@@ -13,6 +13,7 @@ public class CameraAnimationController : MonoBehaviour
     public enum AnimationType
     {
         NORMAL,             // 通常
+        WALK,               // 歩き
         BREATHRECOVERY,     // 息回復
         DAMAGE,             // ダメージ
         DASH,               // ダッシュ
@@ -44,6 +45,7 @@ public class CameraAnimationController : MonoBehaviour
     {
         switch (type)
         {
+            case AnimationType.WALK: animator.SetBool("Walk", true); break;
             case AnimationType.BREATHRECOVERY: animator.SetBool("BreathRecovery", true); break;
             case AnimationType.DAMAGE: animator.SetBool("Damage", true); break;
             case AnimationType.DASH: animator.SetBool("Dash", true); break;
@@ -63,6 +65,7 @@ public class CameraAnimationController : MonoBehaviour
     {
         switch (type)
         {
+            case AnimationType.WALK: animator.SetBool("Walk", false); break;
             case AnimationType.BREATHRECOVERY: animator.SetBool("BreathRecovery", false); break;
             case AnimationType.DAMAGE: animator.SetBool("Damage", false); break;
             case AnimationType.DASH: animator.SetBool("Dash", false); break;
