@@ -50,7 +50,7 @@ public class PlayerEvents : MonoBehaviour
     public void Wait()
     {
         moveController.IsRootMotion(false, false);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, false);
         soundArea.AddSoundLevel(ActionSoundType.WAIT);
         statusController.StateUpdate(MoveType.WAIT, stateController.IsSquat);
     }
@@ -72,7 +72,7 @@ public class PlayerEvents : MonoBehaviour
         cameraAnimationController.AnimStart(CameraAnimType.WALK);
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, false);
         moveController.Move();
         statusController.StateUpdate(MoveType.WALK, stateController.IsSquat);
     }
@@ -99,7 +99,7 @@ public class PlayerEvents : MonoBehaviour
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.DASH);
         playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
         soundArea.AddSoundLevel(ActionSoundType.DASH);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, false);
         moveController.Move();
         statusController.StateUpdate(MoveType.DASH, stateController.IsSquat);
     }
@@ -124,7 +124,7 @@ public class PlayerEvents : MonoBehaviour
         playerCollider.height = 0.4f;
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
         soundArea.AddSoundLevel(ActionSoundType.SQUAT);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, false);
     }
     /// <summary>
     /// しゃがみ終了
@@ -138,7 +138,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め開始
     /// </summary>
-    public void BreathHoldStart() {}
+    public void BreathHoldStart() { }
     /// <summary>
     /// 息止め
     /// </summary>
@@ -147,7 +147,7 @@ public class PlayerEvents : MonoBehaviour
         cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLD, stateController.IsSquat);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, true);
         soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
     }
     /// <summary>
@@ -158,7 +158,7 @@ public class PlayerEvents : MonoBehaviour
         cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLDMOVE, stateController.IsSquat);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, true);
         soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.BREATHHOLD);
         moveController.Move();
@@ -184,7 +184,7 @@ public class PlayerEvents : MonoBehaviour
         SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
         soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
-        moveCamera.Rotation(CameraType.NORMAL);
+        moveCamera.Rotation(CameraType.NORMAL, false);
         statusController.DeepBreathRecovery();
     }
     /// <summary>
@@ -305,11 +305,11 @@ public class PlayerEvents : MonoBehaviour
                 moveController.IsRootMotion(true, true);
                 break;
             case PlayerDamageController.DamageType.DEATH:
-                if(damageController.IsFinishBlow)
+                if (damageController.IsFinishBlow)
                 {
                     moveController.IsRootMotion(false, false);
                     cameraAnimationController.AnimStart(CameraAnimType.DEATH);
-                    moveCamera.Rotation(CameraType.DEATH);
+                    moveCamera.Rotation(CameraType.DEATH, false);
                 }
                 else
                 {

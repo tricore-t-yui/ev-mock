@@ -52,11 +52,13 @@ public class CameraController : MonoBehaviour
     float lookIntoRotationShift = 30;                   // 覗き込み時の回転
 
     float lookBackAngle = 0;                            // 振り返りのアングル
+    [SerializeField]
+    Transform playerArms = default;                     // プレイヤーの腕
 
     /// <summary>
     /// カメラの回転
     /// </summary>
-    public void Rotation(RotationType type)
+    public void Rotation(RotationType type, bool isBreathHold)
     {
         // 回転量を求める
         float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity;
@@ -68,6 +70,7 @@ public class CameraController : MonoBehaviour
 
                 transform.position = animCamera.position;
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+
 
                 // 振り返り
                 LookBack(keyController.GetKey(KeyType.LOOKBACK));
@@ -85,6 +88,17 @@ public class CameraController : MonoBehaviour
 
                     // 回転制限
                     transform.localEulerAngles = NormalAngleLimit();
+
+                    if(isBreathHold)
+                    {
+                        playerArms.eulerAngles = new Vector3(playerArms.eulerAngles.x, playerArms.eulerAngles.y, 0);
+                        playerArms.Rotate(-Y_Rotation, 0, 0);
+                        playerArms.localEulerAngles = NormalAngleLimit();
+                    }
+                    else
+                    {
+                        playerArms.eulerAngles = new Vector3(0, playerArms.eulerAngles.y, 0);
+                    }
                 }
                 break;
             case RotationType.HIDEBED:
@@ -98,6 +112,7 @@ public class CameraController : MonoBehaviour
                 break;
             case RotationType.DEATH:
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((damageController.EnemyPos.position - transform.position).normalized), Time.deltaTime);
+                playerArms.rotation = Quaternion.Slerp(playerArms.rotation, Quaternion.LookRotation((damageController.EnemyPos.position - playerArms.position).normalized), Time.deltaTime);
                 break;
         }
     }
@@ -223,5 +238,6 @@ public class CameraController : MonoBehaviour
     {
         transform.position = animCamera.position;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+        playerArms.eulerAngles = new Vector3(0, playerArms.eulerAngles.y, 0);
     }
 }
