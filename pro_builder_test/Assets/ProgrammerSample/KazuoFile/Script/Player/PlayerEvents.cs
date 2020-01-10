@@ -69,6 +69,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Walk()
     {
+        cameraAnimationController.AnimStart(CameraAnimType.WALK);
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
         moveCamera.Rotation(CameraType.NORMAL);
@@ -81,6 +82,7 @@ public class PlayerEvents : MonoBehaviour
     public void WalkEnd()
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.WALK);
+        cameraAnimationController.AnimStop(CameraAnimType.WALKa);
     }
 
     /// <summary>
