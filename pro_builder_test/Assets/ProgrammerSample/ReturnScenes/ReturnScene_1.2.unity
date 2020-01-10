@@ -844,7 +844,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 896593357}
+  shadowMapRenderTexture: {fileID: 589922837}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -1986,6 +1986,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: trapTunGroup.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: statusController
       value: 
       objectReference: {fileID: 1707476400}
@@ -2025,6 +2029,22 @@ PrefabInstance:
       propertyPath: kageManager
       value: 
       objectReference: {fileID: 1969909499}
+    - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: trapTunGroup.Array.data[0]
+      value: 
+      objectReference: {fileID: 1969909501}
+    - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: trapTunGroup.Array.data[1]
+      value: 
+      objectReference: {fileID: 1969909502}
+    - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: trapTunGroup.Array.data[2]
+      value: 
+      objectReference: {fileID: 1969909503}
+    - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: trapTunGroup.Array.data[3]
+      value: 
+      objectReference: {fileID: 1969909504}
     - target: {fileID: 2129991352605002302, guid: 9934758d5f9e944dcb23b97b7b23231b,
         type: 3}
       propertyPath: moveCamera
@@ -5748,44 +5768,6 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &504037293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  displayVolumetricLightingBuffer: 0
-  frustumGridResolution: {x: 160, y: 90, z: 128}
-  enableAutomaticStereoResizing: 1
-  farClipPlaneDistance: 128
-  depthBiasCoefficient: 0.35
-  enableVolumes: 1
-  enableVolumesTexture2DMask: 1
-  enableVolumesTexture3DMask: 1
-  enableVolumesNoiseMask: 1
-  enableAmbientLighting: 1
-  enableDirectionalLights: 1
-  enableDirectionalLightsShadows: 1
-  enableSpotLights: 1
-  enableSpotLightsShadows: 1
-  enablePointLights: 1
-  enablePointLightsShadows: 1
-  enableLightsCookies: 1
-  enableDithering: 1
-  texture3DFiltering: 1
-  enableDenoisingFilter: 0
-  denoisingFilterRange: 0
-  enableTemporalReprojection: 1
-  temporalReprojectionFactor: 0.95
-  enableOcclusionCulling: 1
-  occlusionCullingAccuracy: 2
-  enableLightProbes: 0
 --- !u!1 &506695238
 GameObject:
   m_ObjectHideFlags: 0
@@ -6779,6 +6761,41 @@ Transform:
   m_Father: {fileID: 1777037512}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &589922837
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &596167692
 GameObject:
   m_ObjectHideFlags: 0
@@ -11073,41 +11090,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!84 &896593357
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &902378413
 GameObject:
   m_ObjectHideFlags: 0
@@ -14285,6 +14267,44 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!114 &1151327418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
+  m_Name: Default Aura Quality Settings
+  m_EditorClassIdentifier: 
+  displayVolumetricLightingBuffer: 0
+  frustumGridResolution: {x: 160, y: 88, z: 128}
+  enableAutomaticStereoResizing: 1
+  farClipPlaneDistance: 128
+  depthBiasCoefficient: 0.35
+  enableVolumes: 1
+  enableVolumesTexture2DMask: 1
+  enableVolumesTexture3DMask: 1
+  enableVolumesNoiseMask: 1
+  enableAmbientLighting: 1
+  enableDirectionalLights: 1
+  enableDirectionalLightsShadows: 1
+  enableSpotLights: 1
+  enableSpotLightsShadows: 1
+  enablePointLights: 1
+  enablePointLightsShadows: 1
+  enableLightsCookies: 1
+  enableDithering: 1
+  texture3DFiltering: 1
+  enableDenoisingFilter: 0
+  denoisingFilterRange: 0
+  enableTemporalReprojection: 1
+  temporalReprojectionFactor: 0.95
+  enableOcclusionCulling: 1
+  occlusionCullingAccuracy: 2
+  enableLightProbes: 0
 --- !u!1 &1153461767
 GameObject:
   m_ObjectHideFlags: 0
@@ -18548,29 +18568,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468160882}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1481606513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &1483948058
 GameObject:
   m_ObjectHideFlags: 0
@@ -20508,10 +20505,6 @@ PrefabInstance:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
-    - target: {fileID: 733771168, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: interactController
-      value: 
-      objectReference: {fileID: 985400480}
     - target: {fileID: 1084558973, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: soundArea
       value: 
@@ -20528,6 +20521,10 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
+    - target: {fileID: 733771168, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: interactController
+      value: 
+      objectReference: {fileID: 985400480}
     - target: {fileID: 603303258, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: m_ClearFlags
       value: 1
@@ -21447,6 +21444,29 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1773457868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
+  m_Name: New Aura Base Settings
+  m_EditorClassIdentifier: 
+  useDensity: 1
+  density: 0.25
+  useScattering: 1
+  scattering: 0.5
+  useAmbientLighting: 1
+  ambientLightingStrength: 1
+  useColor: 0
+  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  colorStrength: 1
+  useExtinction: 0
+  extinction: 0.75
 --- !u!1 &1777037511
 GameObject:
   m_ObjectHideFlags: 0
@@ -23687,6 +23707,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f90063b9cc81e149bbfff6390d4a4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1969909501 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8025558841433740359, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1969909498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbce143ce96a416fb961fdf9cf00711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1969909502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3996931314798740616, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1969909498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbce143ce96a416fb961fdf9cf00711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1969909503 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8660281751885564482, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1969909498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbce143ce96a416fb961fdf9cf00711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1969909504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8247532826648595366, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1969909498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbce143ce96a416fb961fdf9cf00711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1970849135
 GameObject:
   m_ObjectHideFlags: 0
@@ -25778,6 +25846,11 @@ PrefabInstance:
       propertyPath: doorController
       value: 
       objectReference: {fileID: 1707476412}
+    - target: {fileID: 4254110117816769106, guid: 54c7e276010cd48aca35e74e64efe613,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54c7e276010cd48aca35e74e64efe613, type: 3}
 --- !u!1001 &8805618845239135185

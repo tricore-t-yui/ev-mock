@@ -78,4 +78,18 @@ public class TrapTunGroupController : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetTrapTun()
+    {
+        isOperate = false;
+        isPlayerHit = false;
+        isDemonHit = false;
+        foreach (var item in tuns)
+        {
+            item.ResetTrapTun();
+        }
+    }
 }
