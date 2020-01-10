@@ -120,11 +120,11 @@ public class PlayerHideController : MonoBehaviour
     {
         if (IsHideBed)
         {
-            moveCamera.Rotation(CameraController.RotationType.HIDEBED);
+            moveCamera.Rotation(CameraController.RotationType.HIDEBED, false);
         }
         if (IsHideLocker)
         {
-            moveCamera.Rotation(CameraController.RotationType.HIDELOCKER);
+            moveCamera.Rotation(CameraController.RotationType.HIDELOCKER, false);
         }
     }
 
@@ -140,7 +140,7 @@ public class PlayerHideController : MonoBehaviour
         {
             // ロッカー
             case HideObjectType.LOCKER:
-                moveCamera.Rotation(CameraController.RotationType.HIDELOCKER);
+                moveCamera.Rotation(CameraController.RotationType.HIDELOCKER, false);
                 IsHideLocker = true; break;
             // ベッド
             case HideObjectType.BED:
