@@ -82,7 +82,7 @@ public class PlayerEvents : MonoBehaviour
     public void WalkEnd()
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.WALK);
-        cameraAnimationController.AnimStop(CameraAnimType.WALKa);
+        cameraAnimationController.AnimStop(CameraAnimType.WALK);
     }
 
     /// <summary>
@@ -201,6 +201,7 @@ public class PlayerEvents : MonoBehaviour
     public void BrethlessnessStart()
     {
         moveController.IsRootMotion(true, true);
+        playerAnimationContoller.AnimStart(PlayerAnimType.BREATHLESSNESS);
     }
     /// <summary>
     /// 息切れ
@@ -208,7 +209,6 @@ public class PlayerEvents : MonoBehaviour
     public void Brethlessness()
     {
         cameraAnimationController.AnimStart(CameraAnimType.BREATHLESSNESS);
-        playerAnimationContoller.AnimStart(PlayerAnimType.BREATHLESSNESS);
         statusController.StateUpdate(MoveType.BREATHLESSNESS, stateController.IsSquat);
     }
     /// <summary>
