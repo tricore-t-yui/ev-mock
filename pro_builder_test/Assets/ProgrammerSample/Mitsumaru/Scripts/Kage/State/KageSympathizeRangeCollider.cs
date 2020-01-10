@@ -25,7 +25,6 @@ public class KageSympathizeRangeCollider : MonoBehaviour
     /// </summary>
     void Update()
     {
-        Debug.Log(higherPriorityStateKageAnimators.Count);
         if (higherPriorityStateKageAnimators.Count(elem => elem.GetInteger("currentStateLevel") > animator.GetInteger("currentStateLevel")) > 0)
         {
             animator.SetBool("isNearHigherPriorityStateKage", true);
