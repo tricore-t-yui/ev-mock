@@ -53,4 +53,13 @@ public class TrapTunController : MonoBehaviour
         effect.SetActive(false);
         tunAnim.SetTrigger("TrapOperate");
     }
+
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void ResetTrapTun()
+    {
+        effect.SetActive(true);
+        IsHit = false;
+    }
 }

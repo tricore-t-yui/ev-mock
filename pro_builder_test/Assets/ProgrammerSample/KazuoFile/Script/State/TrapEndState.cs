@@ -15,7 +15,6 @@ public class TrapEndState : StateMachineBehaviour
     /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.ResetTrigger("TrapStop");
         animator.ResetTrigger("TrapOperate");
     }
 
@@ -32,7 +31,6 @@ public class TrapEndState : StateMachineBehaviour
         if (isPlayer)
         {
             animator.SetBool("TrapEnd", true);
-        }
-        animator.SetTrigger("TrapStop");
+        };
     }
 }

@@ -24,9 +24,11 @@ public class GameController : MonoBehaviour
     [SerializeField]
     GameObject tunObject = default;                     // ツンのオブジェクト
     [SerializeField]
+    KageManager kageManager = default;                  // 影人間の管理クラス
+    [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
     [SerializeField]
-    KageManager kageManager = default;
+    TrapTunGroupController[] trapTunGroup = default;    // 罠ツンのグループクラス
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
@@ -62,6 +64,12 @@ public class GameController : MonoBehaviour
         {
             GameOver();
         }
+
+        // リセット(デバック用)
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GameOver();
+        }
     }
 
     /// <summary>
@@ -74,15 +82,18 @@ public class GameController : MonoBehaviour
         moveController.ResetPos();
         stateController.ResetState();
         stateController.ResetAreaName();
+        StartCoroutine(kageManager.ResetAllKage());
+        if (tunObject != null) tunObject.SetActive(false);
 
         foreach (var item in enemySpawn)
         {
             item.ResetEnemy();
         }
-        // 全ての影人間をリセットする
-        StartCoroutine(kageManager.ResetAllKage());
-        // ツンをリセットする
-        if (tunObject != null) tunObject.SetActive(false);
+
+        foreach (var item in trapTunGroup)
+        {
+            item.ResetTrapTun();
+        }
     }
 
     /// <summary>

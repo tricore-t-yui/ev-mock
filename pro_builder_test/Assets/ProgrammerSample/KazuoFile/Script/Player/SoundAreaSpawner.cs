@@ -74,6 +74,7 @@ public class SoundAreaSpawner : MonoBehaviour
         spawnframeCount++;
         soundLevel = 0;
 
+        // スポーンまでのフレーム数に達したらダメージオブジェクトを反応させる
         if (spawnframeCount >= spawnframe)
         {
             IsDamageObjectSound = false;
