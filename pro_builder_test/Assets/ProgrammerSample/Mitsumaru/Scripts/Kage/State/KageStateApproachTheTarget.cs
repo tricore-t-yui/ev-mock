@@ -22,12 +22,6 @@ public class KageStateApproachTheTarget : StateMachineBehaviour
     // 敵のサウンドプレイヤー取得
     EnemySoundPlayer soundPlayer = null;
 
-    // 目標地点での停止時間
-    [SerializeField]
-    int targetPosStopTime = 0;
-    // カウンター
-    int targetPosStopTimeCounter = 0;
-
     [SerializeField]
     int stopTime = 0;
     int stopTimeCounter = 0;
