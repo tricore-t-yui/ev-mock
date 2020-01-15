@@ -49,7 +49,7 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
         soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
 
         // 範囲用コライダーのオブジェクトを取得
-        GameObject colliderObject = GameObject.Find(stateParameter.RandomMoveRangeOfObjectName);
+        GameObject colliderObject = animator.GetComponentInChildren<AsyncParentPosition>().gameObject;
         // オブジェクトからコライダーのスクリプトを取得
         rangeCollider = colliderObject.GetComponent<RandomMoveRangeCollider>() ?? rangeCollider;
 

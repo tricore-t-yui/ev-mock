@@ -17,10 +17,13 @@ public class KageStateParameter : MonoBehaviour
     KageStateLoitering.LoiteringKind stateLoiteringOfType = default;
     public KageStateLoitering.LoiteringKind StateLoiteringOfType => stateLoiteringOfType;
 
-    // ランダム徘徊の範囲用コライダーのオブジェクト名
+    // ランダム徘徊の範囲のサイズ
     [SerializeField]
-    string randomMoveRangeOfObjectName = default;
-    public string RandomMoveRangeOfObjectName => randomMoveRangeOfObjectName;
+    float randomRangeRadius = 1;
+    public float RandomRangeRadius => randomRangeRadius;
+
+    [SerializeField]
+    SphereCollider randomRangeCollider = default;
 
     // ルート徘徊するときのチェックポイントのリスト
     [SerializeField]
@@ -40,6 +43,9 @@ public class KageStateParameter : MonoBehaviour
     {
         // 初期位置をセット
         InitializePos = transform.position;
+
+        // ランダム移動の範囲を設定
+        randomRangeCollider.radius = randomRangeRadius;
     }
 
 #if UNITY_EDITOR
