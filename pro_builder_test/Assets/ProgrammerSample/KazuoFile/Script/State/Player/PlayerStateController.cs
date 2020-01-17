@@ -6,6 +6,7 @@ using EventStartType = PlayerStartEventCaller.EventType;
 using EventType = PlayerEventCaller.EventType;
 using EventEndType = PlayerEndEventCaller.EventType;
 using KeyType = KeyController.KeyType;
+using UnityEngine.SceneManagement;
 
 public class PlayerStateController : MonoBehaviour
 {
@@ -85,6 +86,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        IsInvincible = (PlayerPrefs.GetInt("isInvincibleKey") == 1) ? true : false;
         playerDamageEvent.Add(ChangeDamageState);
     }
 
@@ -104,6 +106,13 @@ public class PlayerStateController : MonoBehaviour
 
         // 無敵モード変更
         Invincible();
+
+        // シーン選択画面に戻る
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Select");
+        }
     }
 
     /// <summary>
@@ -117,10 +126,12 @@ public class PlayerStateController : MonoBehaviour
             if (!IsInvincible)
             {
                 IsInvincible = true;
+                PlayerPrefs.SetInt("isInvincibleKey", IsInvincible ? 1 : 0);
             }
             else
             {
                 IsInvincible = false;
+                PlayerPrefs.SetInt("isInvincibleKey", IsInvincible ? 1 : 0);
             }
         }
     }
