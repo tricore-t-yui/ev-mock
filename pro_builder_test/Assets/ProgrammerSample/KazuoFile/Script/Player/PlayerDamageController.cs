@@ -16,6 +16,7 @@ public class PlayerDamageController : MonoBehaviour
         NORMAL,     // 通常のダメージ
         HIDEBED,    // ベッドから引き摺り出される時のダメージ
         HIDELOCKER, // ロッカーから引き摺り出される時のダメージ
+        DUCT,       // ダクト
         DEATH,      // トドメ
     }
 
@@ -66,12 +67,16 @@ public class PlayerDamageController : MonoBehaviour
                 playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * -5, ForceMode.Impulse);
                 animationContoller.AnimStart(AnimationType.DAMAGE); break;
             case DamageType.HIDEBED:
-                animationContoller.AnimStart(AnimationType.DRAGOUT);
+                animationContoller.AnimStart(AnimationType.HIDEDRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
                 playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
             case DamageType.HIDELOCKER:
-                animationContoller.AnimStart(AnimationType.DRAGOUT); break;
+                animationContoller.AnimStart(AnimationType.HIDEDRAGOUT); break;
+            case DamageType.DUCT:
+                animationContoller.AnimStart(AnimationType.DUCTDRAGOUT);
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
+
         }
 
         // 処理開始
