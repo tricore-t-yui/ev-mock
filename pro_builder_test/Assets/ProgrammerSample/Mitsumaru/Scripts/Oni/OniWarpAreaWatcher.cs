@@ -40,6 +40,7 @@ public class OniWarpAreaWatcher : MonoBehaviour
     List<WarpAreaParameter> warpAreaParameter = new List<WarpAreaParameter>();
 
     //鬼のリスト
+    [SerializeField]
     List<NavMeshAgent> onis = new List<NavMeshAgent>();
 
     // 対象の鬼
