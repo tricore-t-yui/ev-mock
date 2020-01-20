@@ -69,7 +69,7 @@ public class PlayerHideController : MonoBehaviour
         {
             IsInteractArea = true;
         }
-        if (other.gameObject.layer == LayerMask.NameToLayer("duct"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Duct"))
         {
             HideObj = other.gameObject;
             IsDuctArea = true;
@@ -84,7 +84,7 @@ public class PlayerHideController : MonoBehaviour
         {
             IsInteractArea = false;
         }
-        if (other.gameObject.layer == LayerMask.NameToLayer("duct"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Duct"))
         {
             IsDuctArea = false;
         }
