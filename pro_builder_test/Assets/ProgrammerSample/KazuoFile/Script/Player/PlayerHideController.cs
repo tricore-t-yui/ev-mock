@@ -39,6 +39,7 @@ public class PlayerHideController : MonoBehaviour
     public bool IsHideLocker { get; private set; } = false;     // ロッカーに隠れているかどうかのフラグ
     public bool IsHideBed { get; private set; } = false;        // ベッドに隠れているかどうかのフラグ
     public bool IsInteractArea{ get; private set; } = false;    // インタラクト可能エリアに触れているかどうかのフラグ
+    public bool IsDuctArea { get; private set; } = false;       // ダクトエリアに触れているかどうかのフラグ
     public bool IsAnimRotation { get; private set; } = true;    // 回転をアニメーションに任せるフラグ
     public HideObjectType type { get; private set; } = default; // 隠れているオブジェクトのタイプ
     public GameObject HideObj { get; private set; } = default;  // 対象のオブジェクト
@@ -68,6 +69,11 @@ public class PlayerHideController : MonoBehaviour
         {
             IsInteractArea = true;
         }
+        if (other.gameObject.layer == LayerMask.NameToLayer("duct"))
+        {
+            HideObj = other.gameObject;
+            IsDuctArea = true;
+        }
     }
     /// <summary>
     /// トリガーから離れたら
@@ -77,6 +83,10 @@ public class PlayerHideController : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Interact"))
         {
             IsInteractArea = false;
+        }
+        if (other.gameObject.layer == LayerMask.NameToLayer("duct"))
+        {
+            IsDuctArea = false;
         }
     }
 

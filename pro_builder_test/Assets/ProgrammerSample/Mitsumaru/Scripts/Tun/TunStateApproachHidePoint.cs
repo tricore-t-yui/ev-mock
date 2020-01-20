@@ -14,6 +14,8 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
     float lockerToTaegetDistance = 0;
     [SerializeField]
     float bedCenterRadius = 0;
+    [SerializeField]
+    float ductCenterRadius = 0;
 
     [SerializeField]
     float speed = default;
@@ -86,6 +88,10 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
         {
             navMesh.SetDestination(currentCheckingHide.transform.position);
         }
+        else if (currentCheckingHide.tag == "Duct")
+        {
+            navMesh.SetDestination(currentCheckingHide.transform.position);
+        }
     }
 
     /// <summary>
@@ -106,9 +112,15 @@ public class TunStateApproachHidePoint : StateMachineBehaviour
 
             isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.1f);
         }
-        else
+        else if (currentCheckingHide.tag == "Bed")
         {
             if (!(navMesh.remainingDistance < bedCenterRadius)) { return; }
+            navMesh.isStopped = true;
+            isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.3f);
+        }
+        else if (currentCheckingHide.tag == "Duct")
+        {
+            if (!(navMesh.remainingDistance < ductCenterRadius)) { return; }
             navMesh.isStopped = true;
             isAngle = (Vector3.Angle(animator.transform.forward, hideToTun) < 0.3f);
         }
