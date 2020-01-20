@@ -64,9 +64,13 @@ public class TunParameterChanger : StateMachineBehaviour
                 animator.SetInteger("CheckHideType", 0);
             }
             // ベッド
-            else
+            else if(hideController.HideObj.tag == "Bed")
             {
                 animator.SetInteger("CheckHideType", 1);
+            }
+            else if (hideController.HideObj.tag == "Duct")
+            {
+                animator.SetInteger("CheckHideType", 2);
             }
         }
         // 隠れていない

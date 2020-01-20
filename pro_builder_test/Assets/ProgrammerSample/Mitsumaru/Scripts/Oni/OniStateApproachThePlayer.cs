@@ -13,6 +13,7 @@ public class OniStateApproachThePlayer : StateMachineBehaviour
         Normal,
         HideInLocker,
         HideInBed,
+        HideInDuct,
         Num,
     }
 
@@ -69,6 +70,11 @@ public class OniStateApproachThePlayer : StateMachineBehaviour
             else if (playerHideController.IsHideBed)
             {
                 currentPlayerCondition = PlayerConditionKind.HideInBed;
+            }
+            // ダクト
+            else if (playerHideController.IsDuctArea)
+            {
+                currentPlayerCondition = PlayerConditionKind.HideInDuct;
             }
         }
         else
