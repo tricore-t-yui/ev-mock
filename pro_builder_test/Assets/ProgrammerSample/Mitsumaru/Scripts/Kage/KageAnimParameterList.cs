@@ -40,6 +40,7 @@ public class KageAnimParameterList : MonoBehaviour
         heardSoundRadius,
         isNearHigherPriorityStateKage,
         currentStateLevel,
+        isAttackFromDuct,
     }
 
     // アニメーター

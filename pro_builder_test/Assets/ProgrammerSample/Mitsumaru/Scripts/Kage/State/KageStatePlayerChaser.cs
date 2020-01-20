@@ -20,6 +20,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     [SerializeField]
     float bedCenterRadius = 0;
 
+    [SerializeField]
+    float ductCenterRadius = 0;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
     // 影人間のパラメータークラス
@@ -259,6 +262,10 @@ public class KageStatePlayerChaser : StateMachineBehaviour
             else if (target.tag == "Bed")
             {
                 animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromBed);
+            }
+            else if (target.tag == "Duct")
+            {
+                animParameterList.SetTrigger(KageAnimParameterList.ParameterType.isAttackFromDuct);
             }
             // ダメージフラグを立てる
             isDamage = true;
