@@ -88,13 +88,15 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// ダッシュ開始
     /// </summary>
-    public void DashStart() { }
+    public void DashStart()
+    {
+        SquatEnd();
+    }
     /// <summary>
     /// ダッシュ
     /// </summary>
     public void Dash()
     {
-        SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DASH);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.DASH);
         playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
@@ -131,6 +133,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void SquatEnd()
     {
+        stateController.SquatEnd();
         playerCollider.height = 1.4f;
         playerAnimationContoller.AnimStop(PlayerAnimType.SQUAT);
     }

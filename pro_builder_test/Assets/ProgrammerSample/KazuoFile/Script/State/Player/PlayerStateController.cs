@@ -142,15 +142,25 @@ public class PlayerStateController : MonoBehaviour
     /// NOTE:k.oishi しゃがみはステートを持っていないので検知と同時に処理
     void CheckSquatState()
     {
-        if (keyController.GetKey(KeyType.SQUAT))
+        if (keyController.GetKeyDown(KeyType.SQUAT))
         {
-            eventCaller.Invoke(EventType.SQUAT);
-            IsSquat = true;
+            if (IsSquat)
+            {
+                IsSquat = false;
+            }
+            else
+            {
+                IsSquat = true;
+            }
+        }
+
+        if (!IsSquat)
+        {
+            eventEndCaller.Invoke(EventEndType.SQUATEND);
         }
         else
         {
-            eventEndCaller.Invoke(EventEndType.SQUATEND);
-            IsSquat = false;
+            eventCaller.Invoke(EventType.SQUAT);
         }
     }
 
@@ -718,5 +728,13 @@ public class PlayerStateController : MonoBehaviour
     public void ChangeAreaName(string AreaName)
     {
         NowAreaName = AreaName;
+    }
+
+    /// <summary>
+    /// しゃがみ解除
+    /// </summary>
+    public void SquatEnd()
+    {
+        IsSquat = false;
     }
 }
