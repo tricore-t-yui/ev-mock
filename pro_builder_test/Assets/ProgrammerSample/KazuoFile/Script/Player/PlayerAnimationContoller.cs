@@ -87,7 +87,7 @@ public class PlayerAnimationContoller : MonoBehaviour
             case AnimationType.BREATHLESSNESS: animator.SetBool("Brethlessness", true); CameraReset(); DisplayRightArm(true); break;
             case AnimationType.DAMAGE: animator.SetTrigger("Damage"); DisplayRightArm(true); CameraReset(); break;
             case AnimationType.HIDEDRAGOUT: animator.SetBool("DragOut", true); DisplayRightArm(true); CameraReset(); break;
-            case AnimationType.DUCTDRAGOUT: animator.SetBool("DragOut", true); DisplayRightArm(true); CameraReset(); break;
+            case AnimationType.DUCTDRAGOUT: animator.SetBool("DuctDragOut", true); DisplayRightArm(true); CameraReset(); break;
             case AnimationType.DEATH: animator.SetBool("Death", true); DisplayRightArm(true); CameraReset(); break;
             case AnimationType.HIDELOCKER: animator.SetTrigger("LockerIn"); DisplayRightArm(true); CameraReset(); break;
             case AnimationType.HIDEBED: animator.SetTrigger("BedIn"); DisplayRightArm(true); CameraReset(); break;
