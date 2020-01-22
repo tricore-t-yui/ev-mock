@@ -7174,7 +7174,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 896123877}
+  shadowMapRenderTexture: {fileID: 995746622}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -12412,41 +12412,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!84 &896123877
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &902378413
 GameObject:
   m_ObjectHideFlags: 0
@@ -13257,6 +13222,41 @@ MonoBehaviour:
   startText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF+RT\u30DC\u30BF\u30F3\u3067\u30C0\u30C3\u30B7\u30E5"
   endText: "\u30C9\u30A2\u306E\u524D\u3067A\u30DC\u30BF\u30F3+RT\u30DC\u30BF\u30F3\u3067\u7D20\u65E9\u304F\u30C9\u30A2\u3092\u958B\u3051\u308B"
   startCondition: 0
+--- !u!84 &995746622
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1006149297
 GameObject:
   m_ObjectHideFlags: 0
@@ -21092,7 +21092,7 @@ MonoBehaviour:
   volumeShape:
     shape: 1
     fading:
-      falloffExponent: 4.5
+      falloffExponent: 3
       xPositiveCubeFade: 0.25
       xNegativeCubeFade: 0.25
       yPositiveCubeFade: 0.25
@@ -21135,7 +21135,7 @@ MonoBehaviour:
       scale: {x: 5, y: 5, z: 5}
   densityInjection:
     enable: 1
-    strength: 5
+    strength: 0.1
     useNoiseMask: 1
     useNoiseMaskLevels: 1
     noiseMaskLevelParameters:
@@ -21161,7 +21161,7 @@ MonoBehaviour:
       outputHiValue: 1
       contrast: 1
   scatteringInjection:
-    enable: 0
+    enable: 1
     strength: 0.25
     useNoiseMask: 1
     useNoiseMaskLevels: 1
@@ -21170,7 +21170,7 @@ MonoBehaviour:
       levelHiThreshold: 1
       outputLowValue: -1
       outputHiValue: 1
-      contrast: 3
+      contrast: 1
     useTexture2DMask: 1
     useTexture2DMaskLevels: 0
     texture2DMaskLevelParameters:
@@ -21217,7 +21217,7 @@ MonoBehaviour:
         contrast: 1
     color: {r: 1, g: 1, b: 1, a: 1}
   ambientInjection:
-    enable: 1
+    enable: 0
     strength: 4.77
     useNoiseMask: 0
     useNoiseMaskLevels: 0
