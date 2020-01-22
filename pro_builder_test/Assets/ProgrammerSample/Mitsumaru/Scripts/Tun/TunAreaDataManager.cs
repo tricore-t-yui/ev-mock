@@ -18,6 +18,10 @@ public class TunAreaDataManager : MonoBehaviour
     [SerializeField]
     EnemySoundPlayer soundPlayer = default;
 
+    // NOTE:k.oishi ツンを出現させないようにするフラグです。デバック用に作りました。
+    [SerializeField]
+    bool isNotSpawn = false;
+
     // スポーンするまでの時間のカウント
     int spawnTimeCounter = 0;
 
@@ -65,7 +69,7 @@ public class TunAreaDataManager : MonoBehaviour
         // TODO : プレイヤーが隠れてから、一定時間経過後にスポーンするようにする。
         // note : ステートマシンはアクティブなオブジェクトでしか動作しないため
         //        プレイヤーが隠れたかどうかの判定はここで行う。
-        if (playerHideController.IsHideBed || playerHideController.IsHideLocker)
+        if (!isNotSpawn && (playerHideController.IsHideBed || playerHideController.IsHideLocker))
         {
             // エリアデータを取得
             areaData = GetTunAreaData(playerHideController.HideObj.GetInstanceID()) ?? areaData;
