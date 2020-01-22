@@ -8,14 +8,25 @@ using UnityEngine;
 public class DollGetController : MonoBehaviour
 {
     [SerializeField]
-    GameObject leftArm = default;                   // 左手(人形を持つ手)
+    GameObject leftArm = default;                           // 左手(人形を持つ手)
     [SerializeField]
     PlayerAnimationContoller animationContoller = default;  // インタラクト用関数クラス
     [SerializeField]
-    GameController gameController = default;        // ゲームの流れクラス
+    GameController gameController = default;                // ゲームの流れクラス
 
-    float distance = 0.75f;                         // 人形との距離
-    GameObject doll = default;                      // 人形
+    public bool IsDollGet { get; private set; } = false;    // 人形をゲットしたかどうか
+
+    float distance = 0.75f;                                 // 人形との距離
+    GameObject doll = null;                                 // 人形
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    void Start()
+    {
+        IsDollGet = false;
+        doll = null;
+    }
 
     /// <summary>
     /// 起動処理
@@ -44,6 +55,7 @@ public class DollGetController : MonoBehaviour
     public void DollGet()
     {
         doll.transform.parent = leftArm.transform;
+        IsDollGet = true;
     }
 
     /// <summary>
@@ -53,7 +65,7 @@ public class DollGetController : MonoBehaviour
     {
         enabled = false;
 
-        // NOTE:k.oishi とりあえずコメントアウト
-        //gameController.ChangeNextScene();
+        // 帰り開始
+        gameController.StartReturn();
     }
 }

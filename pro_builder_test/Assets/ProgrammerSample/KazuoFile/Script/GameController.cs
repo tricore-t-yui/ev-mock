@@ -8,8 +8,14 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameController : MonoBehaviour
 {
-    [SerializeField]
-    bool isDisplayCursor = false;                       // カーソルを表示するかどうか
+    /// <summary>
+    /// 帰りシーン遷移方法
+    /// </summary>
+    enum ReturnTransitionMethod
+    {
+        ANOTHERSCENE,   // 別シーン
+        SAMESCENE,      // 同じシーン
+    }
 
     [SerializeField]
     PlayerStatusController statusController = default;  // プレイヤーのステータスクラス
@@ -26,9 +32,18 @@ public class GameController : MonoBehaviour
     [SerializeField]
     KageManager kageManager = default;                  // 影人間の管理クラス
     [SerializeField]
+    DollGetController dollGetController = default;      // 人形ゲットクラス
+
+    [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
     [SerializeField]
     TrapTunGroupController[] trapTunGroup = default;    // 罠ツンのグループクラス
+
+    [SerializeField]
+    ReturnTransitionMethod returnTransitionMethod = ReturnTransitionMethod.ANOTHERSCENE;    // 帰りのシーンの遷移方法
+
+    [SerializeField]
+    bool isDebug = false;   // デバックかどうか
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
@@ -37,21 +52,33 @@ public class GameController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "ReturnScene_1.2")
+        Cursor.lockState = CursorLockMode.Locked;
+
+        switch (returnTransitionMethod)
         {
-            IsReturn = true;
-        }
-        else
-        {
-            IsReturn = false;
+            case ReturnTransitionMethod.ANOTHERSCENE:
+                if (SceneManager.GetActiveScene().name == "ReturnScene_1.2")
+                {
+                    IsReturn = true;
+                }
+                else
+                {
+                    IsReturn = false;
+                }
+                break;
+            case ReturnTransitionMethod.SAMESCENE:
+                if(dollGetController.IsDollGet)
+                {
+                    IsReturn = true;
+                }
+                else
+                {
+                    IsReturn = false;
+                }
+                break;
         }
 
         stateController.ResetAreaName();
-
-        if (!isDisplayCursor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     /// <summary>
@@ -60,13 +87,13 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // 死んだらゲームオーバー
-        if(healthController.IsDeath && !damageController.enabled)
+        if (healthController.IsDeath && !damageController.enabled)
         {
             GameOver();
         }
 
         // リセット(デバック用)
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(isDebug && Input.GetKeyDown(KeyCode.Alpha1))
         {
             GameOver();
         }
@@ -97,17 +124,33 @@ public class GameController : MonoBehaviour
     }
 
     /// <summary>
-    /// 次のシーンへ移動
+    /// 帰り開始
     /// </summary>
-    public void ChangeNextScene()
+    public void StartReturn()
     {
-        if(IsReturn)
+        switch (returnTransitionMethod)
         {
-            SceneManager.LoadScene("GoingScene_1.2");
-        }
-        else
-        {
-            SceneManager.LoadScene("ReturnScene_1.2");
+            case ReturnTransitionMethod.ANOTHERSCENE:
+                // NOTE:k.oishi シーン遷移はいったんコメントアウト
+                //if (IsReturn)
+                //{
+                //    SceneManager.LoadScene("GoingScene_1.2");
+                //}
+                //else
+                //{
+                //    SceneManager.LoadScene("ReturnScene_1.2");
+                //}
+                break;
+            case ReturnTransitionMethod.SAMESCENE:
+                if (dollGetController.IsDollGet)
+                {
+                    IsReturn = true;
+                }
+                else
+                {
+                    IsReturn = false;
+                }
+                break;
         }
     }
 }
