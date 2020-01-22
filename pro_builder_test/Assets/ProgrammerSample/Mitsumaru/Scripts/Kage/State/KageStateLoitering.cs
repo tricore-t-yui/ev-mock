@@ -65,7 +65,8 @@ public class KageStateLoitering : StateMachineBehaviour
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = Color.black;
+                material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+                material.SetColor("_EmissionColor", Color.black);
             }
         }
     }

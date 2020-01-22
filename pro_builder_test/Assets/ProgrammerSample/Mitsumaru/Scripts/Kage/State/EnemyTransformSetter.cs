@@ -50,7 +50,7 @@ public class EnemyTransformSetter : StateMachineBehaviour
         if (stepSoundInterval < 0)
         {
             soundPlayer.Play("Step");
-            stepSoundInterval = 20;
+            stepSoundInterval = 40;
         }
     }
 }

@@ -31,9 +31,12 @@ public class KageStateStanding : StateMachineBehaviour
 
     // 待機位置
     Vector3 standingPosition = Vector3.zero;
-    
+
     // 初期位置を保存したかどうか
     bool isSaveToStandingPos = false;
+
+    [SerializeField]
+    Color bodyColor = default;
 
     /// <summary>
     /// ステートの開始
@@ -71,7 +74,8 @@ public class KageStateStanding : StateMachineBehaviour
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = Color.black;
+                material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+                material.SetColor("_EmissionColor", bodyColor);
             }
         }
     }
