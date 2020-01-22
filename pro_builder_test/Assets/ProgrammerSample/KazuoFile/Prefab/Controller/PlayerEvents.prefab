@@ -99,11 +99,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  stealth:
+  breathHold:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
-        m_MethodName: Stealth
+        m_MethodName: BreathHold
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -113,11 +113,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  stealthMove:
+  breathHoldMove:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
-        m_MethodName: StealthMove
+        m_MethodName: BreathHoldMove
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -225,6 +225,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  trap:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: Trap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6300630399015724226
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +297,7 @@ MonoBehaviour:
   sound: {fileID: 0}
   cameraAnimationController: {fileID: 0}
   statusController: {fileID: 0}
+  trapController: {fileID: 0}
 --- !u!1 &6300630399335478063
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,11 +397,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  stealthEnd:
+  breathHoldEnd:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
-        m_MethodName: StealthEnd
+        m_MethodName: BreathHoldEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  breathHoldMoveEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: BreathHoldMoveEnd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -485,6 +514,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
         m_MethodName: DollGetEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  trapEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: TrapEnd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -593,11 +636,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  stealthStart:
+  breathHoldStart:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
-        m_MethodName: StealthStart
+        m_MethodName: BreathHoldStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  breathHoldMoveStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: BreathHoldMoveStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -696,6 +753,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6300630399015724224}
         m_MethodName: DollGetStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  trapStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6300630399015724224}
+        m_MethodName: TrapStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

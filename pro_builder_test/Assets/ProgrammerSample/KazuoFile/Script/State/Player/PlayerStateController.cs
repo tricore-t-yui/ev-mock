@@ -232,9 +232,10 @@ public class PlayerStateController : MonoBehaviour
     /// <summary>
     /// 息止め検知
     /// </summary>
-    void CheckStealthState()
+    void CheckBreathHoldState()
     {
-        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS)
+        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS &&
+            (State != ActionStateType.BREATHHOLDMOVE || State == ActionStateType.BREATHHOLDMOVE && !keyController.GetKey(KeyType.MOVE)))
         {
             EventStop();
             State = ActionStateType.BREATHHOLD;
@@ -245,15 +246,11 @@ public class PlayerStateController : MonoBehaviour
     /// <summary>
     /// 息止め検知
     /// </summary>
-    void CheckStealthMoveState()
+    void CheckBreathHoldMoveState()
     {
-        if (keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.LOOKINTO))
+        if (keyController.GetKey(KeyType.MOVE) && !keyController.GetKey(KeyType.LOOKINTO) && State != ActionStateType.BREATHHOLDMOVE)
         {
             State = ActionStateType.BREATHHOLDMOVE;
-        }
-        else if (State == ActionStateType.BREATHHOLDMOVE)
-        {
-            State = ActionStateType.BREATHHOLD;
             EventStart();
         }
     }
@@ -424,7 +421,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckSquatState();
                 CheckWalkState();
                 CheckDashState();
-                CheckStealthState();
+                CheckBreathHoldState();
                 CheckDeepBreathState();
                 CheckDoorOpenState();
                 CheckHideState();
@@ -440,7 +437,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckSquatState();
                 CheckWaitState();
                 CheckDashState();
-                CheckStealthState();
+                CheckBreathHoldState();
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckShooesState();
@@ -454,7 +451,7 @@ public class PlayerStateController : MonoBehaviour
                 // 各処理の検知
                 CheckWaitState();
                 CheckWalkState();
-                CheckStealthState();
+                CheckBreathHoldState();
                 CheckDoorOpenState();
                 CheckHideState();
                 CheckBrethlessnessState();
@@ -474,7 +471,7 @@ public class PlayerStateController : MonoBehaviour
                 CheckHideState();
                 CheckBrethlessnessState();
                 CheckDeepBreathState();
-                CheckStealthMoveState();
+                CheckBreathHoldMoveState();
                 CheckIDollGet();
                 break;
             case ActionStateType.BREATHHOLDMOVE:
@@ -483,7 +480,7 @@ public class PlayerStateController : MonoBehaviour
 
                 // 各処理の検知
                 CheckSquatState();
-                CheckStealthMoveState();
+                CheckBreathHoldState();
                 CheckWaitState();
                 CheckWalkState();
                 CheckDashState();
@@ -503,7 +500,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                     CheckWalkState();
                     CheckDashState();
-                    CheckStealthState();
+                    CheckBreathHoldState();
                     CheckDeepBreathState();
                 }
                 break;
@@ -523,7 +520,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                     CheckWalkState();
                     CheckDashState();
-                    CheckStealthState();
+                    CheckBreathHoldState();
                     CheckDeepBreathState();
                 }
                 break;
@@ -537,7 +534,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                     CheckWalkState();
                     CheckDashState();
-                    CheckStealthState();
+                    CheckBreathHoldState();
                     CheckDoorOpenState();
                     CheckHideState();
                     CheckIDollGet();
@@ -560,7 +557,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                     CheckWalkState();
                     CheckDashState();
-                    CheckStealthState();
+                    CheckBreathHoldState();
                     CheckDeepBreathState();
                 }
                 break;
@@ -584,7 +581,7 @@ public class PlayerStateController : MonoBehaviour
                     CheckWaitState();
                     CheckWalkState();
                     CheckDashState();
-                    CheckStealthState();
+                    CheckBreathHoldState();
                     CheckDeepBreathState();
                 }
                 break;
@@ -601,7 +598,7 @@ public class PlayerStateController : MonoBehaviour
             case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
             case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
             case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
-            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
+            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDMOVEEND); break;
             case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
             case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
@@ -619,9 +616,10 @@ public class PlayerStateController : MonoBehaviour
     {
         switch (State)
         {
-            case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WAITSTART); break;
+            case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WALKSTART); break;
             case ActionStateType.DASH: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
             case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); break;
+            case ActionStateType.BREATHHOLDMOVE: eventStartCaller.Invoke(EventStartType.BREATHHOLDSMOVETART); break;
             case ActionStateType.DOOROPEN: eventStartCaller.Invoke(EventStartType.DOORSTART); break;
             case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
             case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;

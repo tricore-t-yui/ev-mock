@@ -18,6 +18,7 @@ public class PlayerEndEventCaller : MonoBehaviour
         DASHEND,            // ダッシュ終了
         SQUATEND,           // しゃがみ終了
         BREATHHOLDEND,      // 息止め終了
+        BREATHHOLDMOVEEND,      // 息止め終了
         DOOREND,            // ドア終了
         HIDEEND,            // 隠れる終了
         DEEPBREATHEND,      // 深呼吸終了
@@ -38,6 +39,8 @@ public class PlayerEndEventCaller : MonoBehaviour
     UnityEvent squatEnd = new UnityEvent();         // しゃがみ終了イベント
     [SerializeField]
     UnityEvent breathHoldEnd = new UnityEvent();    // 息止め終了イベント
+    [SerializeField]
+    UnityEvent breathHoldMoveEnd = new UnityEvent();// 息止め移動終了イベント
     [SerializeField]
     UnityEvent doorOpenEnd = new UnityEvent();      // ドア開閉終了イベント
     [SerializeField]
@@ -68,6 +71,7 @@ public class PlayerEndEventCaller : MonoBehaviour
             case EventType.DASHEND: dashEnd.Invoke(); break;
             case EventType.SQUATEND: squatEnd.Invoke(); break;
             case EventType.BREATHHOLDEND: breathHoldEnd.Invoke(); break;
+            case EventType.BREATHHOLDMOVEEND: breathHoldMoveEnd.Invoke(); break;
             case EventType.DOOREND: doorOpenEnd.Invoke(); break;
             case EventType.HIDEEND: hideEnd.Invoke(); break;
             case EventType.DEEPBREATHEND: deepBreathEnd.Invoke(); break;

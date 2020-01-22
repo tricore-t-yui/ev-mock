@@ -1933,6 +1933,10 @@ PrefabInstance:
       propertyPath: moveCamera
       value: 
       objectReference: {fileID: 5055980059918624240}
+    - target: {fileID: 132313234, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
+      propertyPath: isUseController
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
 --- !u!1 &147712469
@@ -4438,41 +4442,6 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!84 &363242734
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &367936569
 GameObject:
   m_ObjectHideFlags: 0
@@ -7201,7 +7170,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 363242734}
+  shadowMapRenderTexture: {fileID: 1756504069}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -22984,6 +22953,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &1756504069
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1757148089
 GameObject:
   m_ObjectHideFlags: 0
@@ -24632,6 +24636,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3843493001073311935, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -24783,6 +24791,11 @@ PrefabInstance:
       propertyPath: soundAreaSpawner
       value: 
       objectReference: {fileID: 778975254}
+    - target: {fileID: 2971156355183845757, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: isDisplay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1643037399, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: stateController
       value: 
@@ -24791,9 +24804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialText
       objectReference: {fileID: 0}
-    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Text
-      value: 
+    - target: {fileID: 197961341441321707, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e13c6f735bdda473d9317b5068cae389, type: 3}

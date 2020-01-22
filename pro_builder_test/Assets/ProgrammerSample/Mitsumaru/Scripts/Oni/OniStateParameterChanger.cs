@@ -92,7 +92,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
         // 現在のステートのIDをセット
         animator.SetInteger("currentStateKindId",currentStateId);
 
-        Debug.Log(playerHideController.IsDuctArea);
+        //Debug.Log(playerHideController.IsDuctArea);
 
         // プレイヤーがハイドポイントに入ったら
         if (playerHideController.IsHideLocker || playerHideController.IsHideBed || playerHideController.IsDuctArea)
