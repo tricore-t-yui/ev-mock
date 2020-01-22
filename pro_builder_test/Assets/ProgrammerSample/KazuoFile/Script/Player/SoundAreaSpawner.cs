@@ -132,16 +132,16 @@ public class SoundAreaSpawner : MonoBehaviour
         // 行動音によって音レベルを加算
         switch (type)
         {
-            case ActionSoundType.BREATHHOLD: addLevel = -4.5f; break;
+            case ActionSoundType.BREATHHOLD: addLevel = -5.5f; break;
             case ActionSoundType.WAIT: addLevel = 0; break;
-            case ActionSoundType.WALK: addLevel = 2; break;
+            case ActionSoundType.WALK: addLevel = 3.5f; break;
             case ActionSoundType.STEALTH: addLevel = 0.5f; break;
             case ActionSoundType.SQUAT: addLevel = -2; break;
             case ActionSoundType.HIDE: addLevel = 0; break;
             case ActionSoundType.DOOROPEN: addLevel = 1; break;
             case ActionSoundType.DEEPBREATH: addLevel = 2; break;
             case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 5; break;
+            case ActionSoundType.DASH: addLevel = 3.5f; break;
             case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
             case ActionSoundType.DAMAGE: addLevel = 3; break;
             case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
