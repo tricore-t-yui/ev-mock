@@ -63,7 +63,10 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 歩く開始
     /// </summary>
-    public void WalkStart() { }
+    public void WalkStart()
+    {
+        sound.Play(SoundSpawner.SoundType.Walk);
+    }
     /// <summary>
     /// 歩く
     /// </summary>
@@ -83,6 +86,7 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.WALK);
         cameraAnimationController.AnimStop(CameraAnimType.WALK);
+        sound.Stop(SoundSpawner.SoundType.Walk);
     }
 
     /// <summary>
@@ -91,6 +95,7 @@ public class PlayerEvents : MonoBehaviour
     public void DashStart()
     {
         SquatEnd();
+        sound.Play(SoundSpawner.SoundType.Dash);
     }
     /// <summary>
     /// ダッシュ
@@ -112,6 +117,7 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.DASH);
         cameraAnimationController.AnimStop(CameraAnimType.DASH);
+        sound.Stop(SoundSpawner.SoundType.Dash);
     }
 
     /// <summary>
@@ -154,6 +160,21 @@ public class PlayerEvents : MonoBehaviour
         soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
     }
     /// <summary>
+    /// 息止め終了
+    /// </summary>
+    public void BreathHoldEnd()
+    {
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+        cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
+    }
+    /// <summary>
+    /// 息止め開始
+    /// </summary>
+    public void BreathHoldMoveStart()
+    {
+        sound.Play(SoundSpawner.SoundType.Walk);
+    }
+    /// <summary>
     /// 息止め移動
     /// </summary>
     public void BreathHoldMove()
@@ -169,10 +190,11 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め終了
     /// </summary>
-    public void BreathHoldEnd()
+    public void BreathHoldMoveEnd()
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
+        sound.Stop(SoundSpawner.SoundType.Walk);
     }
 
     /// <summary>
