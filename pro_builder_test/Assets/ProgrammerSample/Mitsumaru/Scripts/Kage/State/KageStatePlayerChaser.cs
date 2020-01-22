@@ -23,6 +23,9 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     [SerializeField]
     float ductCenterRadius = 0;
 
+    [SerializeField]
+    Color bodyColor = default;
+
     // ナビメッシュ
     NavMeshAgent navMesh = null;
     // 影人間のパラメータークラス
@@ -113,7 +116,8 @@ public class KageStatePlayerChaser : StateMachineBehaviour
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = Color.red;
+                material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+                material.SetColor("_EmissionColor", bodyColor);
             }
         }
 

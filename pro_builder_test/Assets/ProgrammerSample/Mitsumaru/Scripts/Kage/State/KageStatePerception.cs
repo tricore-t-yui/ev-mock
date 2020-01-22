@@ -19,6 +19,9 @@ public class KageStatePerception : StateMachineBehaviour
     // 敵のサウンドプレイヤー取得
     EnemySoundPlayer soundPlayer = null;
 
+    [SerializeField]
+    Color bodyColor = default;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
@@ -40,7 +43,8 @@ public class KageStatePerception : StateMachineBehaviour
         {
             foreach (Material material in meshRenderer.materials)
             {
-                material.color = Color.white;
+                material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+                material.SetColor("_EmissionColor", bodyColor);
             }
         }
 

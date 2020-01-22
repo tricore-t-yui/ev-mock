@@ -30,11 +30,11 @@ public class TunParameterChanger : StateMachineBehaviour
         // ハイドコントローラを取得
         hideController = FindObjectOfType<PlayerHideController>() ?? hideController;
         // 視界の制御クラスを取得
-        fieldOfView = animator.GetComponentInChildren<KageFieldOfView>() ?? fieldOfView;
+        fieldOfView = animator.transform.Find("Collider").Find("TsunFeildOfView").GetComponent<KageFieldOfView>() ?? fieldOfView;
         // エリアデータ管理クラスを取得
         areaDataManager = FindObjectOfType<TunAreaDataManager>() ?? areaDataManager;
         // 聴こえる範囲の制御クラスを取得
-        vigilanceRangeEvent = animator.transform.Find("Collider").Find("OniVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
+        vigilanceRangeEvent = animator.transform.Find("Collider").Find("TsunVigilanceRange").GetComponent<ColliderEvent>() ?? vigilanceRangeEvent;
         // 視界にとらえたときのイベントを追加
         fieldOfView.SetOnInViewRangeEvent(OnInFieldOfView);
         // 何かしらの物音を聴いたとき
