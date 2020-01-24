@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ParameterType = KageAnimParameterList.ParameterType;
+using UnityEngine.AI;
 
 /// <summary>
 /// 影人間の徘徊中にそのまま徘徊を続けるかその他の行動に移行するかの抽選を行う
@@ -17,11 +18,20 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
     // 影人間のパラメータークラス
     KageAnimParameterList animParameterList = null;
 
+    // ナビメッシュ
+    NavMeshAgent navMesh = null;
+
     /// <summary>
     /// ステートの開始
     /// </summary>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
+        // ナビメッシュのコンポーネントを取得
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // ナビメッシュによる移動を停止
+        navMesh.isStopped = true;
+
         // パラメータクラスを取得
         animParameterList = animator.GetComponent<KageAnimParameterList>() ?? animParameterList;
 
@@ -41,5 +51,14 @@ public class KageLotteryNextBehavior : StateMachineBehaviour
         {
             animParameterList.SetBool(ParameterType.isLoiteringMove, true);
         }
+    }
+
+    /// <summary>
+    /// ステートの終了
+    /// </summary>
+    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    {
+        // ナビメッシュによる移動を再開
+        navMesh.isStopped = false;
     }
 }
