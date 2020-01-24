@@ -74,6 +74,8 @@ public class PlayerMoveController : MonoBehaviour
     Vector3 initPos = default;                  // 初期位置
     Quaternion initRota = default;              // 初期の向き
 
+    public bool IsDuct { get; private set; } = false;   // ダクトないかどうか
+
     /// <summary>
     /// アニメーション中の移動方法
     /// </summary>
@@ -89,6 +91,28 @@ public class PlayerMoveController : MonoBehaviour
         {
             // 回転をanimatorに任せる
             transform.rotation = playerAnim.rootRotation;
+        }
+    }
+
+    /// <summary>
+    /// トリガーに触れたとき
+    /// </summary>
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("SquatObject"))
+        {
+            IsDuct = true;
+        }
+    }
+
+    /// <summary>
+    /// トリガーから離れたとき
+    /// </summary>
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("SquatObject"))
+        {
+            IsDuct = false;
         }
     }
 
@@ -158,7 +182,7 @@ public class PlayerMoveController : MonoBehaviour
         Vector3 dir = Vector3.zero;
 
         // レイの距離
-        float distance = playerCollider.radius * 1.1f;
+        float distance = playerCollider.radius * 2f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
         int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");

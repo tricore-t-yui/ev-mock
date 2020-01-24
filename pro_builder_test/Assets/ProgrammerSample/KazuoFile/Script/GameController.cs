@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
     DollGetController dollGetController = default;      // 人形ゲットクラス
 
     [SerializeField]
+    TutorialTriggerManager tutorialTriggerManager = default;    // チュートリアルトリガー管理クラス
+    [SerializeField]
     EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
     [SerializeField]
     TrapTunGroupController[] trapTunGroup = default;    // 罠ツンのグループクラス
@@ -109,6 +111,10 @@ public class GameController : MonoBehaviour
         moveController.ResetPos();
         stateController.ResetState();
         stateController.ResetAreaName();
+        if (!IsReturn)
+        {
+            tutorialTriggerManager.TriggerReset();
+        }
         StartCoroutine(kageManager.ResetAllKage());
         if (tunObject != null) tunObject.SetActive(false);
 

@@ -33,7 +33,9 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Kage" ||
+            LayerMask.LayerToName(other.gameObject.layer) == "Oni"||
+            LayerMask.LayerToName(other.gameObject.layer) == "Tsun")
         {
             nearEnemy.Add(other.gameObject);
         }
@@ -44,7 +46,9 @@ public class HideStateController : MonoBehaviour
     /// </summary>
     void OnTriggerExit(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Enemy")
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Kage" ||
+            LayerMask.LayerToName(other.gameObject.layer) == "Oni" ||
+            LayerMask.LayerToName(other.gameObject.layer) == "Tsun")
         {
             nearEnemy.Remove(other.gameObject);
         }
@@ -116,9 +120,9 @@ public class HideStateController : MonoBehaviour
     bool VisibleEnemyRay(Transform enemy, float height)
     {
         // 敵のそれぞれの座標
-        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + (height / 2), enemy.position.z);
-        Vector3 enemyMiddle = enemy.position;
-        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y - (height / 2) + 0.01f, enemy.position.z);
+        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + height, enemy.position.z);
+        Vector3 enemyMiddle = new Vector3(enemy.position.x, enemy.position.y + (height / 2), enemy.position.z);
+        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y + 0.1f, enemy.position.z);
 
         // レイのスタート位置
         Vector3 start = new Vector3(transform.position.x, transform.position.y + (playerCollider.height / 2), transform.position.z);
@@ -130,7 +134,8 @@ public class HideStateController : MonoBehaviour
         float distance = 0.0f;
 
         // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Locker") | 1 << LayerMask.NameToLayer("Bed") | 1 << LayerMask.NameToLayer("SafetyArea");
+        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Locker") | 1 << LayerMask.NameToLayer("Bed") |
+            1 << LayerMask.NameToLayer("SafetyArea") | 1 << LayerMask.NameToLayer("Interact") | 1 << LayerMask.NameToLayer("LockerSide") | 1 << LayerMask.NameToLayer("Default");
         layerMask = ~layerMask;
 
         for (int i = 0; i < 3; i++)
@@ -153,7 +158,9 @@ public class HideStateController : MonoBehaviour
             // レイに当たったらtrue、外れていたらfalse
             if (Physics.Raycast(ray, out hit, distance, layerMask))
             {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Kage") ||
+                    hit.collider.gameObject.layer == LayerMask.NameToLayer("Oni") ||
+                    hit.collider.gameObject.layer == LayerMask.NameToLayer("Tun"))
                 {
                     return true;
                 }

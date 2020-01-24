@@ -17,6 +17,7 @@ public class SoundSpawner : MonoBehaviour
         Breth,
         Walk,
         Dash,
+        DamageObject,
     }
 
     [SerializeField]
@@ -130,6 +131,7 @@ public class SoundSpawner : MonoBehaviour
             case SoundType.HeartSound: isLoop = true; break;
             case SoundType.Walk: isLoop = true; break;
             case SoundType.Dash: isLoop = true; break;
+            case SoundType.DamageObject: isLoop = true;break;
             default: isLoop = false; break;
         }
     }

@@ -20,7 +20,7 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;                  // 隠れるアクションクラス
     [SerializeField]
-    PlayerDoorController doorController = default;                  // 隠れるアクションクラス
+    PlayerDoorController doorController = default;                  // ドアアクションクラス
     [SerializeField]
     CameraController moveCamera = default;                          // カメラクラス
     [SerializeField]
@@ -39,6 +39,8 @@ public class PlayerEvents : MonoBehaviour
     PlayerStatusController statusController = default;              // ステータス管理クラス
     [SerializeField]
     PlayerTrapController trapController = default;                  // 罠アクションクラス
+    [SerializeField]
+    PlayerBreathController breathController = default;              // 息管理クラス
 
     /// <summary>
     /// 待機
@@ -170,10 +172,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め開始
     /// </summary>
-    public void BreathHoldMoveStart()
-    {
-        sound.Play(SoundSpawner.SoundType.Walk);
-    }
+    public void BreathHoldMoveStart() { }
     /// <summary>
     /// 息止め移動
     /// </summary>
@@ -194,7 +193,6 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
-        sound.Stop(SoundSpawner.SoundType.Walk);
     }
 
     /// <summary>
@@ -241,6 +239,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BrethlessnessEnd()
     {
+        breathController.BreathlessnessDamage();
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHLESSNESS);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHLESSNESS);
     }
@@ -285,7 +284,6 @@ public class PlayerEvents : MonoBehaviour
     public void HideStart()
     {
         SquatEnd();
-        sound.Play(SoundSpawner.SoundType.HeartSound);
         moveController.IsRootMotion(true, true);
     }
     /// <summary>
@@ -309,7 +307,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void HideEnd()
     {
-        sound.Stop(SoundSpawner.SoundType.HeartSound);
         hideController.EndHideAction(true);
         moveController.IsRootMotion(false, false);
     }
