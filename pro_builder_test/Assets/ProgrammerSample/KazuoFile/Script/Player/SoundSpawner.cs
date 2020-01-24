@@ -17,6 +17,7 @@ public class SoundSpawner : MonoBehaviour
         Breth,
         Walk,
         Dash,
+        DamageObject,
     }
 
     [SerializeField]

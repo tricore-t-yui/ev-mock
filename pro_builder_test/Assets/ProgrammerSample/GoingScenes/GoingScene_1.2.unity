@@ -2072,41 +2072,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219054107}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &220720922
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &223507462
 GameObject:
   m_ObjectHideFlags: 0
@@ -4767,6 +4732,41 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!84 &400957472
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &403443236
 GameObject:
   m_ObjectHideFlags: 0
@@ -7174,13 +7174,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1636468661}
+  shadowMapRenderTexture: {fileID: 1875853215}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.25
   outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 220720922}
+  shadowDataRenderTexture: {fileID: 400957472}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -22083,41 +22083,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636025658}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1636468661
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 256
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1660883541 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1496695912407549401, guid: 5bae20764d5fc48aea7468385fd8d67b,
@@ -22221,6 +22186,11 @@ PrefabInstance:
       propertyPath: hideStateController
       value: 
       objectReference: {fileID: 5055980059589506883}
+    - target: {fileID: 2621288946128301264, guid: f70ee79cec0f4445a918b9e213fbdd3a,
+        type: 3}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 911210257}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f70ee79cec0f4445a918b9e213fbdd3a, type: 3}
 --- !u!1 &1682943888
@@ -24369,6 +24339,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1874083486}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1875853215
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1879479869
 GameObject:
   m_ObjectHideFlags: 0
@@ -24640,10 +24645,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Text
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3843493001073311935, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -24804,14 +24805,18 @@ PrefabInstance:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
-    - target: {fileID: 1410817391, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Name
-      value: TutorialText
-      objectReference: {fileID: 0}
     - target: {fileID: 197961341441321707, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410817391, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: m_Name
+      value: TutorialText
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
@@ -27411,6 +27416,10 @@ PrefabInstance:
       propertyPath: soundArea
       value: 
       objectReference: {fileID: 778975254}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 1594144943}
     - target: {fileID: 1360036397, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: gameController
       value: 

@@ -18,6 +18,8 @@ public class SoundController : MonoBehaviour
     HideStateController hideStateController = default;  // 隠れる状態管理クラス
     [SerializeField]
     PlayerBreathController breathController = default;  // 息管理クラス
+    [SerializeField]
+    PlayerStateController stateController = default;    // ステート管理クラスz
 
     SoundType soundType = default;                      // 音のタイプ
 
@@ -41,6 +43,7 @@ public class SoundController : MonoBehaviour
         {
             case SoundType.Breth: BreathVolume(); break;
             case SoundType.HeartSound: HeartSoundVolume(); break;
+            case SoundType.Walk: WalkVolume();break;
             default:break;
         }
 
@@ -57,14 +60,14 @@ public class SoundController : MonoBehaviour
     {
         switch(hideStateController.HeartSound)
         {
-            case HeartSoundType.NORMAL: audioSource.volume = 0.5f; audioSource.pitch = 0.75f; break;
-            case HeartSoundType.MEDIUM: audioSource.volume = 1f; audioSource.pitch = 0.75f; break;
-            case HeartSoundType.LARGE: audioSource.volume = 1f; audioSource.pitch = 1.5f; break;
+            case HeartSoundType.NORMAL: audioSource.volume = 0.25f; audioSource.pitch = 0.75f; break;
+            case HeartSoundType.MEDIUM: audioSource.volume = 0.5f; audioSource.pitch = 0.75f; break;
+            case HeartSoundType.LARGE: audioSource.volume = 0.75f; audioSource.pitch = 1.5f; break;
         }
     }
 
     /// <summary>
-    /// 息の大きさ
+    /// 息の音の大きさ
     /// </summary>
     void BreathVolume()
     {
@@ -75,6 +78,21 @@ public class SoundController : MonoBehaviour
             case BrethState.MEDIUMCONFUSION: audioSource.volume = 0.2f; audioSource.pitch = 1.5f; break;
             case BrethState.LARGECONFUSION: audioSource.volume = 0.4f; audioSource.pitch = 1.75f; break;
             case BrethState.BREATHLESSNESS: audioSource.volume = 0.5f; audioSource.pitch = 2f; break;
+        }
+    }
+
+    /// <summary>
+    /// 歩き音の大きさ
+    /// </summary>
+    void WalkVolume()
+    {
+        if(stateController.IsSquat)
+        {
+            audioSource.volume = 0.25f;
+        }
+        else
+        {
+            audioSource.volume = 1f;
         }
     }
 }

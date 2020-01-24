@@ -113,6 +113,11 @@ public class PlayerStateController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("Select");
         }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            ChangeDamageState(transform, 10);
+        }
     }
 
     /// <summary>

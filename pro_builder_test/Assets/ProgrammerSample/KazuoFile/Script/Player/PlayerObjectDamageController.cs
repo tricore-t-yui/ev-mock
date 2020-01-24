@@ -22,13 +22,13 @@ public class PlayerObjectDamageController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
+    SoundSpawner sound = default;                               // 音管理クラス
+    [SerializeField]
     PlayerStatusData playerData = default;                      // プレイヤーのデータのスクリプタブルオブジェクト
 
     public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
     public bool IsDamage { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
     public float NowDamage { get; private set; } = 0;           // 今食らっているオブジェクトダメージ
-
-    float soundCount = 0;                                       // 音が出るまでのカウント
 
     /// <summary>
     /// 開始処理
@@ -38,7 +38,6 @@ public class PlayerObjectDamageController : MonoBehaviour
         IsDeepBreath = false;
         IsDamage = false;
         NowDamage = 0;
-        soundCount = 0;
     }
 
     /// <summary>
@@ -54,6 +53,8 @@ public class PlayerObjectDamageController : MonoBehaviour
                 IsDamage = true;
                 NowDamage += 50;
             }
+
+            sound.Play(SoundSpawner.SoundType.DamageObject);
         }
     }
 
@@ -75,6 +76,19 @@ public class PlayerObjectDamageController : MonoBehaviour
             }
 
             soundArea.SetIsDamageObjectSound(true); 
+        }
+    }
+
+    /// <summary>
+    /// 障害物から離れたとき
+    /// </summary>
+    /// <param name="other"></param>
+    void OnTriggerExit(Collider other)
+    {
+        // ダメージオブジェクトから離れたかどうか
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Damage")
+        {
+            sound.Stop(SoundSpawner.SoundType.DamageObject);
         }
     }
 

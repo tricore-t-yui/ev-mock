@@ -170,10 +170,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め開始
     /// </summary>
-    public void BreathHoldMoveStart()
-    {
-        sound.Play(SoundSpawner.SoundType.Walk);
-    }
+    public void BreathHoldMoveStart() { }
     /// <summary>
     /// 息止め移動
     /// </summary>
@@ -194,7 +191,6 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
-        sound.Stop(SoundSpawner.SoundType.Walk);
     }
 
     /// <summary>
