@@ -41,6 +41,7 @@ public class KageAnimParameterList : MonoBehaviour
         isNearHigherPriorityStateKage,
         currentStateLevel,
         isAttackFromDuct,
+        currentSpeed,
     }
 
     // アニメーター

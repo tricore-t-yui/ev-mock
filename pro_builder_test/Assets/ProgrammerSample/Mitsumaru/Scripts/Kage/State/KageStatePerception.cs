@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 /// <summary>
 /// 影人間のステート：音が聞こえて何かを察知
@@ -21,6 +22,9 @@ public class KageStatePerception : StateMachineBehaviour
 
     [SerializeField]
     Color bodyColor = default;
+
+    // ナビメッシュ
+    NavMeshAgent navMesh = null;
 
     /// <summary>
     /// ステートの開始
@@ -47,6 +51,12 @@ public class KageStatePerception : StateMachineBehaviour
                 material.SetColor("_EmissionColor", bodyColor);
             }
         }
+
+        // ナビメッシュのコンポーネントを取得
+        navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
+
+        // ナビメッシュによる移動を停止
+        navMesh.isStopped = true;
 
         // 状態レベルを変更
         animator.SetInteger("currentStateLevel", 1);
@@ -83,6 +93,9 @@ public class KageStatePerception : StateMachineBehaviour
         // トリガーリセット
         animator.ResetTrigger("perceiveSound");
         animator.ResetTrigger("loudVolumeNoise");
+
+        // ナビメッシュによる移動を停止
+        navMesh.isStopped = false;
     }
 
 }
