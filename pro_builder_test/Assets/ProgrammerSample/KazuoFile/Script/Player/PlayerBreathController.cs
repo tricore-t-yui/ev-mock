@@ -206,6 +206,14 @@ public class PlayerBreathController : MonoBehaviour
     }
 
     /// <summary>
+    /// 息切れ中にダメージを食らったら
+    /// </summary>
+    public void BreathlessnessDamage()
+    {
+        IsDisappear = false;
+    }
+
+    /// <summary>
     /// リセット
     /// </summary>
     public void ResetAmount()

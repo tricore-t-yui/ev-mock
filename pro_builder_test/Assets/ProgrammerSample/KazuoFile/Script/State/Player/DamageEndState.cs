@@ -22,6 +22,7 @@ public class DamageEndState : StateMachineBehaviour
     /// </summary>
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.SetBool("Brethlessness", false);
         animator.SetBool("DamageEnd", true);
     }
 }

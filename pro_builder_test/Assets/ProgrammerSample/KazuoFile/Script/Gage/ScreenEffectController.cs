@@ -59,12 +59,19 @@ public class ScreenEffectController : MonoBehaviour
     {
         // イメージのカラー
         Color color = new Color(0,0,0);
-
+        // 75 /? = 0.5
         switch(type)
         {
             case ImageType.BREATH:
                 color = breathEffect.color;
-                color.a = 1.0f - (breathController.NowAmount / 100);
+                if (breathController.NowAmount <= 75)
+                {
+                    color.a = 0.75f - (breathController.NowAmount / 75);
+                }
+                else
+                {
+                    color.a = 0;
+                }
                 break;
             case ImageType.HEALTH:
                 color = healthEffect.color;

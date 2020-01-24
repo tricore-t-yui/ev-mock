@@ -63,6 +63,8 @@ public class PlayerStateController : MonoBehaviour
     PlayerObjectDamageController objectDamageController = default;      // ダメージリアクションクラス
     [SerializeField]
     GameController gameController = default;                // ゲーム管理クラス
+    [SerializeField]
+    PlayerMoveController moveController = default;                // 移動クラス
 
     // プレイヤーのダメージイベント（Added by Mitsumaru）
     // note : このクラスから受け取ったダメージのイベント関数を保存しておく
@@ -113,11 +115,6 @@ public class PlayerStateController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("Select");
         }
-
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            ChangeDamageState(transform, 10);
-        }
     }
 
     /// <summary>
@@ -149,13 +146,13 @@ public class PlayerStateController : MonoBehaviour
     {
         if (keyController.GetKeyDown(KeyType.SQUAT))
         {
-            if (IsSquat)
-            {
-                IsSquat = false;
-            }
-            else
+            if (!IsSquat)
             {
                 IsSquat = true;
+            }
+            else if (!moveController.IsDuct)
+            {
+                IsSquat = false;
             }
         }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// チュートリアルテキストクラス
 /// </summary>
-public class TutorialTextCntroller : MonoBehaviour
+public class TutorialTextController : MonoBehaviour
 {
     /// <summary>
     /// 開始条件
@@ -112,5 +112,17 @@ public class TutorialTextCntroller : MonoBehaviour
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// テキストのリセット
+    /// </summary>
+    public void TextReset()
+    {
+        tutorialText.text = "";
+        startTriger.TriggerReset();
+        endTriger.TriggerReset();
+        isStart = false;
+        isEnd = false;
     }
 }

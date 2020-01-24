@@ -44,6 +44,7 @@ public class SoundController : MonoBehaviour
             case SoundType.Breth: BreathVolume(); break;
             case SoundType.HeartSound: HeartSoundVolume(); break;
             case SoundType.Walk: WalkVolume();break;
+            case SoundType.DamageObject: DamageObjectVolume();break;
             default:break;
         }
 
@@ -94,5 +95,13 @@ public class SoundController : MonoBehaviour
         {
             audioSource.volume = 1f;
         }
+    }
+
+    /// <summary>
+    /// ダメージオブジェクトを踏んだときの大きさ
+    /// </summary>
+    void DamageObjectVolume()
+    {
+        audioSource.volume = 0.25f;
     }
 }

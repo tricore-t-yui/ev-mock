@@ -64,7 +64,11 @@ public class DoorOpenState : StateMachineBehaviour
         if (isPlayer)
         {
             animator.SetBool("DoorEnd", true);
-            playerDoorController.ChangeAreaName();
+
+            if (flame > 0)
+            {
+                playerDoorController.ChangeAreaName();
+            }
         }
 
         // トリガーとフレームのリセット

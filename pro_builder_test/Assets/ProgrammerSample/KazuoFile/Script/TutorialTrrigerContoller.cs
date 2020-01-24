@@ -30,4 +30,12 @@ public class TutorialTrrigerContoller : MonoBehaviour
             IsHit = false;
         }
     }
+
+    /// <summary>
+    /// トリガーのリセット
+    /// </summary>
+    public void TriggerReset()
+    {
+        IsHit = false;
+    }
 }
