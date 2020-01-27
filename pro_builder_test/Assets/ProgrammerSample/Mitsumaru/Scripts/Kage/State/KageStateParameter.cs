@@ -7,26 +7,39 @@ public class KageStateParameter : MonoBehaviour
     // 初期位置
     public Vector3 InitializePos { get; private set; } = Vector3.zero;
 
+    // アニメーター
+    [SerializeField]
+    Animator animator = default;
+
+    [SerializeField]
+    SphereCollider randomRangeCollider = default;
+
     // 通常状態の種類
     [SerializeField]
+    [Tooltip("通常状態の種類を設定します。\n待機型か徘徊型か。")]
     KageStateNormal.StateKind stateNormalOfType = default;
     public KageStateNormal.StateKind StateNormalOfType => stateNormalOfType;
 
     // 徘徊の種類
     [SerializeField]
+    [Tooltip("徘徊型の種類を設定します。\nルートかランダムか。")]
     KageStateLoitering.LoiteringKind stateLoiteringOfType = default;
     public KageStateLoitering.LoiteringKind StateLoiteringOfType => stateLoiteringOfType;
 
+    // 状態変化を行わないフラグ
+    [SerializeField]
+    [Tooltip("状態変化を行うかどうか。\nこのフラグがオンの場合は一切状態が変化しない。")]
+    bool isStaticState = false;
+
     // ランダム徘徊の範囲のサイズ
     [SerializeField]
+    [Tooltip("ランダム徘徊の徘徊範囲の半径を設定します。")]
     float randomRangeRadius = 1;
     public float RandomRangeRadius => randomRangeRadius;
 
-    [SerializeField]
-    SphereCollider randomRangeCollider = default;
-
     // ルート徘徊するときのチェックポイントのリスト
     [SerializeField]
+    [Tooltip("ルート徘徊の各チェックポイントを設定します。\n上から順番に移動していきます。\n最後まで移動すると最初のチェックポイントに戻ります。")]
     List<Vector3> routeCheckPointList = default;
     public IReadOnlyList<Vector3> RouteCheckPointList
     {
@@ -46,6 +59,9 @@ public class KageStateParameter : MonoBehaviour
 
         // ランダム移動の範囲を設定
         randomRangeCollider.radius = randomRangeRadius;
+
+        // 状態変化をフラグをセット
+        animator.SetBool("isStaticState", isStaticState);
     }
 
 #if UNITY_EDITOR
