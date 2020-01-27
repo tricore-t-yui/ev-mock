@@ -844,7 +844,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 493746231}
+  shadowMapRenderTexture: {fileID: 1424986206}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -2046,7 +2046,7 @@ PrefabInstance:
       objectReference: {fileID: 1707476406}
     - target: {fileID: 132313234, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: isUseController
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
@@ -5444,41 +5444,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484402716}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &493746231
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &495249631
 GameObject:
   m_ObjectHideFlags: 0
@@ -6760,41 +6725,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581211129}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &588250273
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 588250274}
-  m_Layer: 0
-  m_Name: RikaRoom
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!4 &588250274
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 588250273}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1365030737}
-  - {fileID: 2005194472}
-  - {fileID: 2105333421}
-  - {fileID: 249114907}
-  m_Father: {fileID: 1777037512}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &591270899
+--- !u!114 &581709621
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6832,6 +6763,40 @@ MonoBehaviour:
   enableOcclusionCulling: 1
   occlusionCullingAccuracy: 2
   enableLightProbes: 0
+--- !u!1 &588250273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 588250274}
+  m_Layer: 0
+  m_Name: RikaRoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &588250274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588250273}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1365030737}
+  - {fileID: 2005194472}
+  - {fileID: 2105333421}
+  - {fileID: 249114907}
+  m_Father: {fileID: 1777037512}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &596167692
 GameObject:
   m_ObjectHideFlags: 0
@@ -15792,29 +15757,6 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &1221024888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &1231313486
 GameObject:
   m_ObjectHideFlags: 0
@@ -18315,6 +18257,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1423189895}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &1424986206
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1448254378
 GameObject:
   m_ObjectHideFlags: 0
@@ -22303,6 +22280,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828423490}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1840968426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
+  m_Name: New Aura Base Settings
+  m_EditorClassIdentifier: 
+  useDensity: 1
+  density: 0.25
+  useScattering: 1
+  scattering: 0.5
+  useAmbientLighting: 1
+  ambientLightingStrength: 1
+  useColor: 0
+  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  colorStrength: 1
+  useExtinction: 0
+  extinction: 0.75
 --- !u!1 &1843844039
 GameObject:
   m_ObjectHideFlags: 0
@@ -23396,6 +23396,44 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReturnSceneEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 707863783893452668, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23646,6 +23684,16 @@ PrefabInstance:
       propertyPath: playerCollider
       value: 
       objectReference: {fileID: 1707476414}
+    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
 --- !u!114 &1969909499 stripped
