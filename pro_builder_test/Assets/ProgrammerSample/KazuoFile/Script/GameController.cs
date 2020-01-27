@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
     }
 
     [SerializeField]
+    bool isDebug = false;   // デバックかどうか
+    [SerializeField]
     PlayerStatusController statusController = default;  // プレイヤーのステータスクラス
     [SerializeField]
     PlayerMoveController moveController = default;      // プレイヤーの移動クラス
@@ -33,19 +35,20 @@ public class GameController : MonoBehaviour
     KageManager kageManager = default;                  // 影人間の管理クラス
     [SerializeField]
     DollGetController dollGetController = default;      // 人形ゲットクラス
-
     [SerializeField]
     TutorialTriggerManager tutorialTriggerManager = default;    // チュートリアルトリガー管理クラス
-    [SerializeField]
-    EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
-    [SerializeField]
-    TrapTunGroupController[] trapTunGroup = default;    // 罠ツンのグループクラス
-
     [SerializeField]
     ReturnTransitionMethod returnTransitionMethod = ReturnTransitionMethod.ANOTHERSCENE;    // 帰りのシーンの遷移方法
 
     [SerializeField]
-    bool isDebug = false;   // デバックかどうか
+    GameObject goingEnemy = default;                    // 行きの敵
+    [SerializeField]
+    GameObject returnEnemy = default;                   // 帰りの敵
+
+    [SerializeField]
+    EnemySpawn[] enemySpawn = default;                  // 影人間生成クラス
+    [SerializeField]
+    TrapTunGroupController[] trapTunGroup = default;    // 罠ツンのグループクラス
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
@@ -80,6 +83,7 @@ public class GameController : MonoBehaviour
                 break;
         }
 
+        EnemyReset();
         stateController.ResetAreaName();
     }
 
@@ -111,21 +115,11 @@ public class GameController : MonoBehaviour
         moveController.ResetPos();
         stateController.ResetState();
         stateController.ResetAreaName();
+        EnemyReset();
+
         if (!IsReturn)
         {
             tutorialTriggerManager.TriggerReset();
-        }
-        StartCoroutine(kageManager.ResetAllKage());
-        if (tunObject != null) tunObject.SetActive(false);
-
-        foreach (var item in enemySpawn)
-        {
-            item.ResetEnemy();
-        }
-
-        foreach (var item in trapTunGroup)
-        {
-            item.ResetTrapTun();
         }
     }
 
@@ -148,15 +142,47 @@ public class GameController : MonoBehaviour
                 //}
                 break;
             case ReturnTransitionMethod.SAMESCENE:
-                if (dollGetController.IsDollGet)
-                {
-                    IsReturn = true;
-                }
-                else
-                {
-                    IsReturn = false;
-                }
+                IsReturn = true;
                 break;
+        }
+
+        EnemyReset();
+    }
+
+    /// <summary>
+    /// 敵のリセット
+    /// </summary>
+    void EnemyReset()
+    {
+        if (!IsReturn)
+        {
+            goingEnemy.SetActive(true);
+            returnEnemy.SetActive(false);
+            foreach (var item in trapTunGroup)
+            {
+                item.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            goingEnemy.SetActive(false);
+            returnEnemy.SetActive(true);
+            foreach (var item in trapTunGroup)
+            {
+                item.gameObject.SetActive(true);
+            }
+        }
+
+        StartCoroutine(kageManager.ResetAllKage());
+        if (tunObject != null) tunObject.SetActive(false);
+
+        foreach (var item in enemySpawn)
+        {
+            item.ResetEnemy();
+        }
+        foreach (var item in trapTunGroup)
+        {
+            item.ResetTrapTun();
         }
     }
 }

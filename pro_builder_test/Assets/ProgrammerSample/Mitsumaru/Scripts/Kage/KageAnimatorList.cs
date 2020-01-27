@@ -8,6 +8,10 @@ using System.Linq;
 /// </summary>
 public class KageAnimatorList : MonoBehaviour
 {
+    // 影人間管理クラス
+    [SerializeField]
+    KageManager kageManager = default;
+
     public Dictionary<int, Animator> Animators { get; private set; } = new Dictionary<int, Animator>();
 
     /// <summary>
@@ -15,7 +19,6 @@ public class KageAnimatorList : MonoBehaviour
     /// </summary>
     void Start()
     {
-        GameObject[] kages = GameObject.FindGameObjectsWithTag("Kage");
-        Animators = kages.ToDictionary(kageKey => kageKey.gameObject.GetInstanceID(), kageValue => kageValue.GetComponent<Animator>());
+        Animators = kageManager.KageList.ToDictionary(kageKey => kageKey.gameObject.GetInstanceID(), kageValue => kageValue.GetComponent<Animator>());
     }
 }

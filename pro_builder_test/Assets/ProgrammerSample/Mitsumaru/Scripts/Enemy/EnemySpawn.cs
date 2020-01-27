@@ -8,22 +8,19 @@ using UnityEngine;
 public class EnemySpawn : MonoBehaviour
 {
     [SerializeField]
-    GameObject[] enemy = default;   // 敵
-
-    /// <summary>
-    /// 開始処理
-    /// </summary>
-    void Start()
-    {
-        ResetEnemy();
-    }
+    GameController gameController = default;    // ゲームの流れクラス
+    [SerializeField]
+    bool isReturn = false;                      // 帰りで出すかどうか
+    [SerializeField]
+    GameObject[] enemy = default;               // 敵
 
     /// <summary>
     /// 当たったら敵を生成
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Player" &&
+            ((isReturn && gameController.IsReturn) || (!isReturn && !gameController.IsReturn)) )
         {
             foreach (var item in enemy)
             {

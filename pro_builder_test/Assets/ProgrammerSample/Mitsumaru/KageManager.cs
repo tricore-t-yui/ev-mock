@@ -12,6 +12,7 @@ public class KageManager : MonoBehaviour
 
     [SerializeField]
     GameObject[] kageList = default;
+    public GameObject[] KageList => kageList;
 
     // 体のコライダー
     List<GameObject> bodyColliderObjects = new List<GameObject>();

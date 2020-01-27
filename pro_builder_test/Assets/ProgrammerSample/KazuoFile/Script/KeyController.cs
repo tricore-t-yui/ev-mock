@@ -39,6 +39,25 @@ public class KeyController : MonoBehaviour
     [SerializeField]
     bool isUseController = false;   // コントローラーを使うかどうか
 
+   ///// <summary>
+   ///// 開始処理
+   ///// </summary>
+   //void Start()
+   //{
+   //    // 接続されているコントローラの名前を調べる
+   //    var controllerNames = Input.GetJoystickNames();
+   //
+   //    // 一台もコントローラが接続されていなければエラー
+   //    if (controllerNames[0] == "")
+   //    {
+   //        isUseController = false;
+   //    }
+   //    else
+   //    {
+   //        isUseController = true;
+   //    }
+   //}
+
     /// <summary>
     /// キー取得
     /// </summary>
