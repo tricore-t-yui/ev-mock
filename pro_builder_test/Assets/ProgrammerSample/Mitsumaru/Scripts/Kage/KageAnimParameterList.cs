@@ -42,6 +42,7 @@ public class KageAnimParameterList : MonoBehaviour
         currentStateLevel,
         isAttackFromDuct,
         currentSpeed,
+        isPlayingNextBehavior,
     }
 
     // アニメーター
