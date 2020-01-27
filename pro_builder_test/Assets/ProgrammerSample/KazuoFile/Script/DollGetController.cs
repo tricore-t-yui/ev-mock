@@ -25,7 +25,6 @@ public class DollGetController : MonoBehaviour
     void Start()
     {
         IsDollGet = false;
-        doll = null;
     }
 
     /// <summary>
@@ -34,7 +33,7 @@ public class DollGetController : MonoBehaviour
     void OnEnable()
     {
         transform.LookAt(new Vector3(doll.transform.position.x, transform.position.y, doll.transform.position.z));
-        transform.position = new Vector3(doll.transform.position.x, transform.position.y,doll.transform.position.z - distance);
+        transform.position = new Vector3(doll.transform.position.x + distance, transform.position.y,doll.transform.position.z);
     }
 
     /// <summary>
