@@ -26,6 +26,12 @@ public class KageStateParameter : MonoBehaviour
     KageStateLoitering.LoiteringKind stateLoiteringOfType = default;
     public KageStateLoitering.LoiteringKind StateLoiteringOfType => stateLoiteringOfType;
 
+    // 自動でスポーンを行うか
+    [SerializeField]
+    [Tooltip("自動でスポーンを行うかどうかを設定する。\nこのフラグがオンの場合は、リセット後に自動でスポーンする。")]
+    bool isAutoSpawn = true;
+    public bool IsAutoSpawn => isAutoSpawn;
+
     // 状態変化を行わないフラグ
     [SerializeField]
     [Tooltip("状態変化を行うかどうか。\nこのフラグがオンの場合は一切状態が変化しない。")]
