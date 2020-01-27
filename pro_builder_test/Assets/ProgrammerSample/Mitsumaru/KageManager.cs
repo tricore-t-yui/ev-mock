@@ -55,13 +55,12 @@ public class KageManager : MonoBehaviour
     /// 全ての影人間の状態をリセットする
     /// </summary>
     /// <returns></returns>
-    public IEnumerator ResetAllKage(bool isAutoSpawn)
+    public void ResetAllKage()
     {
         foreach (KageStateParameter kage in kageList)
         {
             kage.gameObject.SetActive(false);
         }
-        yield return null;
         foreach (KageStateParameter kage in kageList)
         {
             if (kage.IsAutoSpawn)
@@ -69,5 +68,6 @@ public class KageManager : MonoBehaviour
                 kage.gameObject.SetActive(true);
             }
         }
+
     }
 }

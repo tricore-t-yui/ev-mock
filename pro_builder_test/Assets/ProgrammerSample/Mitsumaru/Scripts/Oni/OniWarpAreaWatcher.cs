@@ -21,6 +21,9 @@ public class WarpAreaParameter
 
     // リスポーン位置
     public Vector3 respawnPosition = Vector3.zero;
+
+    // スポーン時間
+    public float spawnTimeSecond = 0;
 }
 
 [RequireComponent(typeof(BoxCollider))]
@@ -39,12 +42,18 @@ public class OniWarpAreaWatcher : MonoBehaviour
     [SerializeField]
     List<WarpAreaParameter> warpAreaParameter = new List<WarpAreaParameter>();
 
-    //鬼のリスト
-    [SerializeField]
-    List<NavMeshAgent> onis = new List<NavMeshAgent>();
-
     // 対象の鬼
-    NavMeshAgent targetOniAgent = null;
+    [SerializeField]
+    NavMeshAgent oni = null;
+
+    // 現在の出口のパラメータ
+    WarpAreaParameter currentExitParameter = null;
+
+    // スポーンフラグ
+    bool isSpawn = false;
+
+    // スポーン時間
+    float spawnTime = 0;
 
     // 面の向き
     List<System.Tuple<Vector3, WarpAreaParameter.ExitSurface>> surfaceDirs = new List<System.Tuple<Vector3, WarpAreaParameter.ExitSurface>>();
@@ -58,11 +67,29 @@ public class OniWarpAreaWatcher : MonoBehaviour
         surfaceDirs.Add(new System.Tuple<Vector3, WarpAreaParameter.ExitSurface>(new Vector3(-1, 0, 0), WarpAreaParameter.ExitSurface.XMinus));
         surfaceDirs.Add(new System.Tuple<Vector3, WarpAreaParameter.ExitSurface>(new Vector3(0, 0, +1), WarpAreaParameter.ExitSurface.ZMinus));
         surfaceDirs.Add(new System.Tuple<Vector3, WarpAreaParameter.ExitSurface>(new Vector3(0, 0, -1), WarpAreaParameter.ExitSurface.ZPlus));
+    }
 
-        // 鬼のナビメッシュ取得
-        foreach (OniLoiteringRouteManager routeManager in FindObjectsOfType<OniLoiteringRouteManager>())
+    /// <summary>
+    /// 更新
+    /// </summary>
+    void Update()
+    {
+        if (isSpawn)
         {
-            onis.Add(routeManager.GetComponent<NavMeshAgent>());
+            spawnTime += Time.deltaTime;
+            Debug.Log(spawnTime);
+            if (spawnTime >= currentExitParameter.spawnTimeSecond)
+            {
+                // 消した鬼を表示
+                oni?.gameObject.SetActive(true);
+                // 表示した鬼をリスポーン位置までワープさせる
+                oni?.Warp(transform.position + currentExitParameter.respawnPosition);
+
+                // フラグを倒す
+                isSpawn = false;
+                // 時間をリセット
+                spawnTime = 0;
+            }
         }
     }
 
@@ -91,15 +118,10 @@ public class OniWarpAreaWatcher : MonoBehaviour
         // プレイヤーが接触したら
         if (other.tag == "Player")
         {
-            // アクティブ中の鬼を取得
-            NavMeshAgent oni = new NavMeshAgent();
-            oni = onis.Find(elem => elem.gameObject.activeSelf);
-
             // 鬼を消す
             if (oni != default)
             {
                 oni.gameObject.SetActive(false);
-                targetOniAgent = oni;
             }
         }
     }
@@ -115,13 +137,11 @@ public class OniWarpAreaWatcher : MonoBehaviour
         {
             var surfaceDir = surfaceDirs.OrderBy(elem => Vector3.Angle(elem.Item1,(transform.position - other.transform.position).normalized));
 
-            var param = warpAreaParameter.Find(elem => elem.exitSurface == surfaceDir.First().Item2);
-            if (param != default)
+            currentExitParameter = warpAreaParameter.Find(elem => elem.exitSurface == surfaceDir.First().Item2);
+            if (currentExitParameter != default)
             {
-                // 消した鬼を表示
-                targetOniAgent?.gameObject.SetActive(true);
-                // 表示した鬼をリスポーン位置までワープさせる
-                targetOniAgent?.Warp(transform.position + param.respawnPosition);
+                // フラグを立てる
+                isSpawn = true;
             }
 
 
