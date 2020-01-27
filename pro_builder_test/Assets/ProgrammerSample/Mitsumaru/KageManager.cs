@@ -11,8 +11,8 @@ public class KageManager : MonoBehaviour
     PlayerDamageController damageController = default;
 
     [SerializeField]
-    GameObject[] kageList = default;
-    public GameObject[] KageList => kageList;
+    KageStateParameter[] kageList = default;
+    public KageStateParameter[] KageList => kageList;
 
     // 体のコライダー
     List<GameObject> bodyColliderObjects = new List<GameObject>();
@@ -22,7 +22,7 @@ public class KageManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        foreach(GameObject kage in kageList)
+        foreach(KageStateParameter kage in kageList)
         {
             // コライダーのオブジェクトを取得
             bodyColliderObjects.Add(kage.transform.Find("Collider").Find("KageBody").gameObject);
@@ -55,16 +55,19 @@ public class KageManager : MonoBehaviour
     /// 全ての影人間の状態をリセットする
     /// </summary>
     /// <returns></returns>
-    public IEnumerator ResetAllKage()
+    public IEnumerator ResetAllKage(bool isAutoSpawn)
     {
-        foreach (GameObject kage in kageList)
+        foreach (KageStateParameter kage in kageList)
         {
-            kage.SetActive(false);
+            kage.gameObject.SetActive(false);
         }
         yield return null;
-        foreach (GameObject kage in kageList)
+        foreach (KageStateParameter kage in kageList)
         {
-            kage.SetActive(true);
+            if (kage.IsAutoSpawn)
+            {
+                kage.gameObject.SetActive(true);
+            }
         }
     }
 }

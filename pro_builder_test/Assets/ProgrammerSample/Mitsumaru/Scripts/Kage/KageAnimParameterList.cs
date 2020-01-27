@@ -43,6 +43,7 @@ public class KageAnimParameterList : MonoBehaviour
         isAttackFromDuct,
         currentSpeed,
         isPlayingNextBehavior,
+        isStaticState,
     }
 
     // アニメーター
