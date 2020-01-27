@@ -7,9 +7,6 @@ using UnityEngine;
 /// </summary>
 public class AsyncParentPosition : MonoBehaviour
 {
-    [SerializeField]
-    Transform parent = default;
-
     Vector3 initPos = Vector3.zero;
 
     /// <summary>

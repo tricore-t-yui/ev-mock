@@ -15,7 +15,7 @@ public class KageSympathizeRangeCollider : MonoBehaviour
     /// <summary>
     /// 開始
     /// </summary>
-    void Start()
+    void Awake()
     {
         kageAnimatorList = FindObjectOfType<KageAnimatorList>();
     }
