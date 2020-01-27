@@ -21,9 +21,6 @@ public class KageStatePlayerChaser : StateMachineBehaviour
     float bedCenterRadius = 0;
 
     [SerializeField]
-    float ductCenterRadius = 0;
-
-    [SerializeField]
     Color bodyColor = default;
 
     // ナビメッシュ
