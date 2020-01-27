@@ -156,8 +156,11 @@ public class GameController : MonoBehaviour
     {
         if (!IsReturn)
         {
-            goingEnemy.SetActive(true);
-            returnEnemy.SetActive(false);
+            if (returnTransitionMethod == ReturnTransitionMethod.SAMESCENE)
+            {
+                goingEnemy.SetActive(true);
+                returnEnemy.SetActive(false);
+            }
             foreach (var item in trapTunGroup)
             {
                 item.gameObject.SetActive(false);
@@ -165,8 +168,11 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            goingEnemy.SetActive(false);
-            returnEnemy.SetActive(true);
+            if (returnTransitionMethod == ReturnTransitionMethod.SAMESCENE)
+            {
+                goingEnemy.SetActive(false);
+                returnEnemy.SetActive(true);
+            }
             foreach (var item in trapTunGroup)
             {
                 item.gameObject.SetActive(true);

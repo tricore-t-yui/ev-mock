@@ -152,9 +152,6 @@ public class HideStateController : MonoBehaviour
             Ray ray = new Ray(start, dir);
             RaycastHit hit = default;
 
-            // デバック用ライン
-            Debug.DrawLine(start, start + (dir * distance), Color.red);
-
             // レイに当たったらtrue、外れていたらfalse
             if (Physics.Raycast(ray, out hit, distance, layerMask))
             {
