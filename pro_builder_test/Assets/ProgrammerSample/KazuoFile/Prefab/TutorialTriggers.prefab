@@ -1,5 +1,172 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &708684497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 708684498}
+  - component: {fileID: 708684500}
+  - component: {fileID: 708684499}
+  m_Layer: 0
+  m_Name: TutorialEndTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &708684498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708684497}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -62.097, y: 0.271, z: -2.622}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1154736807}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &708684500
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708684497}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &708684499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708684497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1154736806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1154736807}
+  - component: {fileID: 1154736808}
+  m_Layer: 0
+  m_Name: TutorialTrigger12
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1154736807
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154736806}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20.63, y: 3.36, z: 6.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1276011207}
+  - {fileID: 708684498}
+  m_Father: {fileID: 8664578900012127273}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1154736808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154736806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917684eafa3bc4145af88b0e7e4352b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorController: {fileID: 0}
+  hideController: {fileID: 0}
+  tutorialText: {fileID: 0}
+  startTriger: {fileID: 1276011208}
+  endTriger: {fileID: 708684499}
+  startText: "\u3057\u304B\u3057\u3001\u9774\u3092\u8131\u3044\u3060\u72B6\u614B\u3067\u30AC\u30E9\u30B9\u7247\u3092\u8E0F\u3093\u3067\u3057\u307E\u3046\u3068\n\u602A\u6211\u3092\u8CA0\u3063\u3066\u3057\u307E\u3044\u3001\u79FB\u52D5\u901F\u5EA6\u304C\u843D\u3061\u3066\u3057\u307E\u3046\u3002\n\u6DF1\u547C\u5438\u3092\u3057\u3066\u56DE\u5FA9\u3092\u56F3\u308D\u3046\u3002"
+  endText: 
+  startCondition: 0
+--- !u!1 &1276011206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1276011207}
+  - component: {fileID: 1276011209}
+  - component: {fileID: 1276011208}
+  m_Layer: 0
+  m_Name: TutorialStartTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1276011207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276011206}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -55.108, y: 0.271, z: -4.499}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1154736807}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &1276011209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276011206}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5, y: 2, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1276011208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276011206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2274447419174231162
 GameObject:
   m_ObjectHideFlags: 0
@@ -26,7 +193,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2274447419174231162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.45, y: 0.27800012, z: 12.03}
+  m_LocalPosition: {x: -5.08, y: 0.27800012, z: 12.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8664578899898483154}
@@ -254,7 +421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2274447419783686234}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -57.32, y: 0.287, z: -5.752}
+  m_LocalPosition: {x: -48.824, y: 0.287, z: -1.484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8664578899382186720}
@@ -271,7 +438,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 0.5}
+  m_Size: {x: 2.5, y: 2, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2274447419783686236
 MonoBehaviour:
@@ -368,7 +535,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2274447419977967991}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.45, y: 0.27800012, z: 12.1}
+  m_LocalPosition: {x: 3.436, y: 0.27800012, z: 6.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8664578899480278387}
@@ -385,7 +552,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 2, z: 2}
+  m_Size: {x: 3, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2274447419977967993
 MonoBehaviour:
@@ -539,7 +706,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2274447420155198779}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.44, y: 0.27800012, z: 1.67}
+  m_LocalPosition: {x: 4.03, y: 0.27800012, z: 1.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8664578899480278387}
@@ -556,7 +723,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.25, y: 2, z: 1}
+  m_Size: {x: 4, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2274447420155198781
 MonoBehaviour:
@@ -912,6 +1079,340 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2460592122651993811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883168928307263758}
+  - component: {fileID: 2548067309848693361}
+  - component: {fileID: 6600807169908937618}
+  m_Layer: 0
+  m_Name: TutorialStartTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1883168928307263758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460592122651993811}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.08, y: 0.27800012, z: 12.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5250263068592711230}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2548067309848693361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460592122651993811}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2, z: 2.25}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6600807169908937618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460592122651993811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &3964455364053306226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5464580458423360298}
+  - component: {fileID: 9030746894165617975}
+  m_Layer: 0
+  m_Name: TutorialTrigger5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5464580458423360298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964455364053306226}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.73, y: 3.36, z: 9.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1321899655867375186}
+  - {fileID: 8043226335539281750}
+  m_Father: {fileID: 8664578900012127273}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9030746894165617975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964455364053306226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917684eafa3bc4145af88b0e7e4352b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorController: {fileID: 0}
+  hideController: {fileID: 0}
+  tutorialText: {fileID: 0}
+  startTriger: {fileID: 6683208136501153455}
+  endTriger: {fileID: 3533692827051897759}
+  startText: "\u30C0\u30C3\u30B7\u30E5\u72B6\u614B\u3067\u30C9\u30A2\u524D\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\n\u7D20\u65E9\u304F\u958B\u3051\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u3002"
+  endText: "RT\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u3044\u308B\u9593\u306F\u606F\u3092\u6B62\u3081\u308B\u3002\n\u606F\u3092\u6B62\u3081\u3066\u3044\u308B\u9593\u306F\u9759\u304B\u306B\u79FB\u52D5\u3067\u304D\u308B\u3002"
+  startCondition: 0
+--- !u!1 &5093596710490967837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1173126618322600808}
+  - component: {fileID: 7485908035389596468}
+  - component: {fileID: 1732163821033457275}
+  m_Layer: 0
+  m_Name: TutorialEndTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1173126618322600808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5093596710490967837}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.06, y: 0.27800012, z: 12.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5250263068592711230}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7485908035389596468
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5093596710490967837}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2, z: 2.25}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1732163821033457275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5093596710490967837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &6092424951236883608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8043226335539281750}
+  - component: {fileID: 8105949676663808875}
+  - component: {fileID: 3533692827051897759}
+  m_Layer: 0
+  m_Name: TutorialEndTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8043226335539281750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092424951236883608}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.65, y: 0.27800012, z: 12.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5464580458423360298}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8105949676663808875
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092424951236883608}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2, z: 2.25}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3533692827051897759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092424951236883608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &7298906941498145928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5250263068592711230}
+  - component: {fileID: 3369664423242719196}
+  m_Layer: 0
+  m_Name: TutorialTrigger7
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5250263068592711230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7298906941498145928}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.73, y: 3.36, z: 9.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1883168928307263758}
+  - {fileID: 1173126618322600808}
+  m_Father: {fileID: 8664578900012127273}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3369664423242719196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7298906941498145928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917684eafa3bc4145af88b0e7e4352b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorController: {fileID: 0}
+  hideController: {fileID: 0}
+  tutorialText: {fileID: 0}
+  startTriger: {fileID: 6600807169908937618}
+  endTriger: {fileID: 1732163821033457275}
+  startText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF\u62BC\u3057\u8FBC\u307F\u3067\u632F\u308A\u5411\u304F"
+  endText: "\u9577\u6642\u9593\u606F\u3092\u6B62\u3081\u305F\u308A\u3001\u30C0\u30C3\u30B7\u30E5\u3092\u3059\u308B\u3053\u3068\u3067\u547C\u5438\u304C\u4E71\u308C\u305F\u5834\u5408\u306F\nY\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u7D9A\u3051\u3066\u6DF1\u547C\u5438\u3092\u884C\u3046\u3053\u3068\u3067\u65E9\u304F\u56DE\u5FA9\u304C\u3067\u304D\u308B\u3002"
+  startCondition: 0
+--- !u!1 &8083560520263160466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1321899655867375186}
+  - component: {fileID: 4331934053957826241}
+  - component: {fileID: 6683208136501153455}
+  m_Layer: 0
+  m_Name: TutorialStartTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1321899655867375186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8083560520263160466}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.395, y: 0.27800012, z: 12.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5464580458423360298}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4331934053957826241
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8083560520263160466}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 2, z: 2.25}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6683208136501153455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8083560520263160466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bfcdc065a9466a8e2f1042d8642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8664578898841760677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,8 +1520,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 8664578898841760679}
   endTriger: {fileID: 8664578898878961827}
-  startText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF\u3067\u79FB\u52D5"
-  endText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8"
+  startText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF\u3067\u79FB\u52D5\u3002"
+  endText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8\u3002"
   startCondition: 0
 --- !u!1 &8664578898878961825
 GameObject:
@@ -1090,7 +1591,7 @@ GameObject:
   - component: {fileID: 8664578899319833959}
   - component: {fileID: 8664578899319833958}
   m_Layer: 0
-  m_Name: TutorialTrigger6
+  m_Name: TutorialTrigger8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1110,7 +1611,7 @@ Transform:
   - {fileID: 2274447420104600242}
   - {fileID: 2274447420147875722}
   m_Father: {fileID: 8664578900012127273}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8664578899319833958
 MonoBehaviour:
@@ -1129,8 +1630,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420104600243}
   endTriger: {fileID: 2274447420147875723}
-  startText: "B\u30DC\u30BF\u30F3\u3067\u3057\u3083\u304C\u307F"
-  endText: "\u30D9\u30C3\u30C9\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3067\u30D9\u30C3\u30C9\u306B\u96A0\u308C\u308B"
+  startText: "B\u30DC\u30BF\u30F3\u3067\u3057\u3083\u304C\u307F\u3002"
+  endText: "\u30D9\u30C3\u30C8\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\n\u30D9\u30C3\u30C8\u306E\u4E0B\u306B\u96A0\u308C\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u3002"
   startCondition: 0
 --- !u!1 &8664578899382186721
 GameObject:
@@ -1143,7 +1644,7 @@ GameObject:
   - component: {fileID: 8664578899382186720}
   - component: {fileID: 8664578899382186723}
   m_Layer: 0
-  m_Name: TutorialTrigger9
+  m_Name: TutorialTrigger11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,7 +1664,7 @@ Transform:
   - {fileID: 2274447419565879071}
   - {fileID: 2274447419783686235}
   m_Father: {fileID: 8664578900012127273}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8664578899382186723
 MonoBehaviour:
@@ -1182,8 +1683,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447419565879264}
   endTriger: {fileID: 2274447419783686236}
-  startText: "\u30AC\u30E9\u30B9\u7247\u306F\u8E0F\u3080\u3068\u5927\u304D\u306A\u97F3\u304C\u51FA\u308B\u306E\u3067\u907F\u3051\u3088\u3046"
-  endText: 
+  startText: "\u30AC\u30E9\u30B9\u3092\u8E0F\u3080\u3068\u5927\u304D\u306A\u97F3\u304C\u9CF4\u3063\u3066\u3057\u307E\u3046\u3002\n\u6575\u304C\u8FD1\u304F\u306B\u3044\u308B\u3068\u304D\u306F\u306A\u308B\u3079\u304F\u907F\u3051\u3088\u3046\u3002"
+  endText: "X\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\u9774\u3092\u8131\u3044\u3067\u9759\u304B\u306B\u79FB\u52D5\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u3002"
   startCondition: 0
 --- !u!1 &8664578899394579787
 GameObject:
@@ -1235,7 +1736,7 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420840583101}
   endTriger: {fileID: 2274447419625131223}
-  startText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8"
+  startText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8\u3002"
   endText: 
   startCondition: 0
 --- !u!1 &8664578899480278384
@@ -1288,8 +1789,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420155198781}
   endTriger: {fileID: 2274447419977967993}
-  startText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF+LT\u30DC\u30BF\u30F3\u3067\u30C0\u30C3\u30B7\u30E5"
-  endText: "\u30C9\u30A2\u306E\u524D\u3067A\u30DC\u30BF\u30F3+LT\u30DC\u30BF\u30F3\u3067\u7D20\u65E9\u304F\u30C9\u30A2\u3092\u958B\u3051\u308B"
+  startText: "LT\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u306A\u304C\u3089\u79FB\u52D5\u3059\u308B\u3068\u30C0\u30C3\u30B7\u30E5\u3002"
+  endText: "\u9577\u6642\u9593\u30C0\u30C3\u30B7\u30E5\u3092\u3059\u308B\u3068\u547C\u5438\u304C\u4E71\u308C\u3066\u901F\u5EA6\u304C\u9045\u304F\u306A\u308B\n\u606F\u5207\u308C\u72B6\u614B\u306B\u306A\u308B\u3068\u7ACB\u3061\u6B62\u307E\u3063\u3066\u3057\u307E\u3046\u3002"
   startCondition: 0
 --- !u!1 &8664578899740023441
 GameObject:
@@ -1302,7 +1803,7 @@ GameObject:
   - component: {fileID: 8664578899740023440}
   - component: {fileID: 8664578899740023443}
   m_Layer: 0
-  m_Name: TutorialTrigger8
+  m_Name: TutorialTrigger10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1322,7 +1823,7 @@ Transform:
   - {fileID: 2274447420897394069}
   - {fileID: 2274447420355775464}
   m_Father: {fileID: 8664578900012127273}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8664578899740023443
 MonoBehaviour:
@@ -1341,8 +1842,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420897394070}
   endTriger: {fileID: 2274447420355775465}
-  startText: "\u30ED\u30C3\u30AB\u30FC\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3067\u30ED\u30C3\u30AB\u30FC\u306B\u96A0\u308C\u308B"
-  endText: "\u3082\u3046\u4E00\u5EA6A\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u30ED\u30C3\u30AB\u30FC\u304B\u3089\u51FA\u308B"
+  startText: "\u30ED\u30C3\u30AB\u30FC\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\n\u30ED\u30C3\u30AB\u30FC\u306B\u96A0\u308C\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u3002"
+  endText: "\u96A0\u308C\u305F\u72B6\u614B\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\u5916\u306B\u3067\u308B\u3002"
   startCondition: 2
 --- !u!1 &8664578899740628759
 GameObject:
@@ -1394,8 +1895,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420585937706}
   endTriger: {fileID: 2274447420834977426}
-  startText: "\u524D\u79FB\u52D5\u3067\u958B\u3051\u308B\u3001\u5F8C\u308D\u79FB\u52D5\u3067\u9589\u3081\u308B"
-  endText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8"
+  startText: "A\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u306A\u304C\u3089\u524D\u306B\u9032\u3080\u3068\u30C9\u30A2\u3092\u958B\u304F\u3002"
+  endText: "A\u30DC\u30BF\u30F3\u3067\u30C9\u30A2\u306B\u30A4\u30F3\u30BF\u30E9\u30AF\u30C8\u3002"
   startCondition: 1
 --- !u!1 &8664578899898483155
 GameObject:
@@ -1408,7 +1909,7 @@ GameObject:
   - component: {fileID: 8664578899898483154}
   - component: {fileID: 8664578899898483157}
   m_Layer: 0
-  m_Name: TutorialTrigger5
+  m_Name: TutorialTrigger6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1428,7 +1929,7 @@ Transform:
   - {fileID: 2274447420821867166}
   - {fileID: 2274447419174231163}
   m_Father: {fileID: 8664578900012127273}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8664578899898483157
 MonoBehaviour:
@@ -1447,8 +1948,8 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447420821867167}
   endTriger: {fileID: 2274447419174231164}
-  startText: "RT\u30DC\u30BF\u30F3\u3067\u606F\u6B62\u3081"
-  endText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF\u62BC\u3057\u8FBC\u307F\u3067\u632F\u308A\u5411\u304F"
+  startText: "RT\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u3044\u308B\u9593\u306F\u606F\u3092\u6B62\u3081\u308B\u3002\n\u606F\u3092\u6B62\u3081\u3066\u3044\u308B\u9593\u306F\u9759\u304B\u306B\u79FB\u52D5\u3067\u304D\u308B\u3002"
+  endText: "\u5DE6\u30B9\u30C6\u30A3\u30C3\u30AF\u62BC\u3057\u8FBC\u307F\u3067\u632F\u308A\u5411\u304F\u3002"
   startCondition: 0
 --- !u!1 &8664578900012127270
 GameObject:
@@ -1482,11 +1983,14 @@ Transform:
   - {fileID: 8664578899394579786}
   - {fileID: 8664578899740628758}
   - {fileID: 8664578899480278387}
+  - {fileID: 5464580458423360298}
   - {fileID: 8664578899898483154}
+  - {fileID: 5250263068592711230}
   - {fileID: 8664578899319833959}
   - {fileID: 8664578900850424656}
   - {fileID: 8664578899740023440}
   - {fileID: 8664578899382186720}
+  - {fileID: 1154736807}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1503,11 +2007,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialTextController:
+  - {fileID: 1154736808}
   - {fileID: 8664578899382186723}
   - {fileID: 8664578899740023443}
   - {fileID: 8664578900850424659}
   - {fileID: 8664578899319833958}
+  - {fileID: 3369664423242719196}
   - {fileID: 8664578899898483157}
+  - {fileID: 9030746894165617975}
   - {fileID: 8664578899480278386}
   - {fileID: 8664578899740628761}
   - {fileID: 8664578899394579789}
@@ -1523,7 +2030,7 @@ GameObject:
   - component: {fileID: 8664578900850424656}
   - component: {fileID: 8664578900850424659}
   m_Layer: 0
-  m_Name: TutorialTrigger7
+  m_Name: TutorialTrigger9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1543,7 +2050,7 @@ Transform:
   - {fileID: 2274447419203615117}
   - {fileID: 2274447419970961206}
   m_Father: {fileID: 8664578900012127273}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8664578900850424659
 MonoBehaviour:
@@ -1562,6 +2069,6 @@ MonoBehaviour:
   tutorialText: {fileID: 0}
   startTriger: {fileID: 2274447419203615118}
   endTriger: {fileID: 2274447419970961207}
-  startText: "\u30D9\u30C3\u30C9\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3067\u30D9\u30C3\u30C9\u306B\u96A0\u308C\u308B"
-  endText: "\u3082\u3046\u4E00\u5EA6A\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u30D9\u30C3\u30C9\u304B\u3089\u51FA\u308B"
+  startText: "\u30D9\u30C3\u30C8\u306E\u524D\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\n\u30D9\u30C3\u30C8\u306E\u4E0B\u306B\u96A0\u308C\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u3002"
+  endText: "\u96A0\u308C\u305F\u72B6\u614B\u3067A\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3068\u5916\u306B\u3067\u308B\u3002"
   startCondition: 2

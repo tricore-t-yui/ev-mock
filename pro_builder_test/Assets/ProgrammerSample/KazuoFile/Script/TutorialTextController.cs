@@ -30,9 +30,11 @@ public class TutorialTextController : MonoBehaviour
     [SerializeField]
     TutorialTrrigerContoller endTriger = default;   // チュートリアル終了トリガー
     [SerializeField]
+    [TextArea(1, 3)]
     [Tooltip("チュートリアルが開始したときに表示したいテキストを入力してください。")]
     string startText = default;                     // チュートリアルが開始したときのテキスト
     [SerializeField]
+    [TextArea(1, 3)]
     [Tooltip("チュートリアルが終了したときに表示したいテキストを入力してください。")]
     string endText = default;                       // チュートリアルが終了したときのテキスト
 
