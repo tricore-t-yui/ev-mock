@@ -844,7 +844,7 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 1424986206}
+  shadowMapRenderTexture: {fileID: 909384987}
   useCookie: 0
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
@@ -2046,7 +2046,7 @@ PrefabInstance:
       objectReference: {fileID: 1707476406}
     - target: {fileID: 132313234, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: isUseController
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
@@ -6725,44 +6725,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581211129}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &581709621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
-  m_Name: Default Aura Quality Settings
-  m_EditorClassIdentifier: 
-  displayVolumetricLightingBuffer: 0
-  frustumGridResolution: {x: 160, y: 88, z: 128}
-  enableAutomaticStereoResizing: 1
-  farClipPlaneDistance: 128
-  depthBiasCoefficient: 0.35
-  enableVolumes: 1
-  enableVolumesTexture2DMask: 1
-  enableVolumesTexture3DMask: 1
-  enableVolumesNoiseMask: 1
-  enableAmbientLighting: 1
-  enableDirectionalLights: 1
-  enableDirectionalLightsShadows: 1
-  enableSpotLights: 1
-  enableSpotLightsShadows: 1
-  enablePointLights: 1
-  enablePointLightsShadows: 1
-  enableLightsCookies: 1
-  enableDithering: 1
-  texture3DFiltering: 1
-  enableDenoisingFilter: 0
-  denoisingFilterRange: 0
-  enableTemporalReprojection: 1
-  temporalReprojectionFactor: 0.95
-  enableOcclusionCulling: 1
-  occlusionCullingAccuracy: 2
-  enableLightProbes: 0
 --- !u!1 &588250273
 GameObject:
   m_ObjectHideFlags: 0
@@ -11149,6 +11111,41 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!84 &909384987
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!114 &911210257 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2129991352404032482, guid: 9934758d5f9e944dcb23b97b7b23231b,
@@ -11254,7 +11251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &946238607
 Transform:
   m_ObjectHideFlags: 0
@@ -18257,41 +18254,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1423189895}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &1424986206
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1448254378
 GameObject:
   m_ObjectHideFlags: 0
@@ -18595,6 +18557,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468160882}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1479166390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
+  m_Name: New Aura Base Settings
+  m_EditorClassIdentifier: 
+  useDensity: 1
+  density: 0.25
+  useScattering: 1
+  scattering: 0.5
+  useAmbientLighting: 1
+  ambientLightingStrength: 1
+  useColor: 0
+  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  colorStrength: 1
+  useExtinction: 0
+  extinction: 0.75
 --- !u!1 &1483948058
 GameObject:
   m_ObjectHideFlags: 0
@@ -20521,6 +20506,10 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
+    - target: {fileID: 809868428, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: sensitivity
+      value: 2.75
+      objectReference: {fileID: 0}
     - target: {fileID: 733771168, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: interactController
       value: 
@@ -22280,29 +22269,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828423490}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1840968426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
-  m_Name: New Aura Base Settings
-  m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &1843844039
 GameObject:
   m_ObjectHideFlags: 0
@@ -23396,44 +23362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReturnSceneEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1182048239}
-    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: isReturn
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1182048239}
-    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: isReturn
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1182048239}
-    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: isReturn
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1182048239}
-    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
-      propertyPath: isReturn
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 707863783893452668, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23544,11 +23472,49 @@ PrefabInstance:
       propertyPath: kageList.Array.data[1]
       value: 
       objectReference: {fileID: 1969909512}
+    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 1845321856, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 3825467506698394641, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3996931314798740616, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
         type: 3}
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
+    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 4497220053119002974, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 8187743180238088074, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8025558841433740359, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
         type: 3}
       propertyPath: stateController
@@ -23564,6 +23530,31 @@ PrefabInstance:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
+    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1182048239}
+    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: isReturn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417440406171482086, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417440406171482086, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417440406171482086, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
+        type: 3}
+      propertyPath: m_BaseOffset
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4278971866290089224, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
         type: 3}
       propertyPath: isAutoSpawn
@@ -23684,16 +23675,6 @@ PrefabInstance:
       propertyPath: playerCollider
       value: 
       objectReference: {fileID: 1707476414}
-    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1182048239}
-    - target: {fileID: 634507005545387558, guid: 5adc50e9faae2465ca8ef2fb157caaf2,
-        type: 3}
-      propertyPath: isReturn
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5adc50e9faae2465ca8ef2fb157caaf2, type: 3}
 --- !u!114 &1969909499 stripped
@@ -24232,6 +24213,44 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005194471}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2023191771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
+  m_Name: Default Aura Quality Settings
+  m_EditorClassIdentifier: 
+  displayVolumetricLightingBuffer: 0
+  frustumGridResolution: {x: 160, y: 88, z: 128}
+  enableAutomaticStereoResizing: 1
+  farClipPlaneDistance: 128
+  depthBiasCoefficient: 0.35
+  enableVolumes: 1
+  enableVolumesTexture2DMask: 1
+  enableVolumesTexture3DMask: 1
+  enableVolumesNoiseMask: 1
+  enableAmbientLighting: 1
+  enableDirectionalLights: 1
+  enableDirectionalLightsShadows: 1
+  enableSpotLights: 1
+  enableSpotLightsShadows: 1
+  enablePointLights: 1
+  enablePointLightsShadows: 1
+  enableLightsCookies: 1
+  enableDithering: 1
+  texture3DFiltering: 1
+  enableDenoisingFilter: 0
+  denoisingFilterRange: 0
+  enableTemporalReprojection: 1
+  temporalReprojectionFactor: 0.95
+  enableOcclusionCulling: 1
+  occlusionCullingAccuracy: 2
+  enableLightProbes: 0
 --- !u!1 &2029968632
 GameObject:
   m_ObjectHideFlags: 0
@@ -25980,6 +25999,11 @@ PrefabInstance:
     - target: {fileID: 4254110117007051236, guid: 54c7e276010cd48aca35e74e64efe613,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4254110116097569630, guid: 54c7e276010cd48aca35e74e64efe613,
+        type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
