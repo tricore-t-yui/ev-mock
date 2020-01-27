@@ -179,7 +179,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        StartCoroutine(kageManager.ResetAllKage(true));
+        kageManager.ResetAllKage();
         if (tunObject != null) tunObject.SetActive(false);
 
         foreach (var item in enemySpawn)

@@ -109,7 +109,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
             }
 
             // 鬼のレイが当たり続けている間
-            if (viewingRay.HitObject.tag == "Player")
+            if (viewingRay?.HitObject?.tag == "Player")
             {
                 rayBlockingTimeToVigilance = 0;
                 rayIrradiationCounter++;
@@ -122,7 +122,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
             animator.SetBool("isPlayerHide", false);
 
             // レイがプレイヤーに当たったら
-            if (viewingRay.HitObject.tag == "Player")
+            if (viewingRay?.HitObject?.tag == "Player")
             {
                 // プレイヤーを発見して、戦闘状態へ
                 animator.SetInteger("oniStateKindId", (int)StateKind.Fighting);
@@ -155,7 +155,7 @@ public class OniStateParameterChanger : StateMachineBehaviour
         }
 
         // 鬼のレイが当たり続けている間
-        if (viewingRay.HitObject.tag == "Player")
+        if (viewingRay?.HitObject?.tag == "Player")
         {
             rayBlockingTimeToVigilance = 0;
             rayIrradiationCounter++;
