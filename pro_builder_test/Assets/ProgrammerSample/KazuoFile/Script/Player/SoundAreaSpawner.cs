@@ -42,6 +42,8 @@ public class SoundAreaSpawner : MonoBehaviour
     float areaMagnification = 0.3f;                         // 拡大倍率
     [SerializeField]
     float spawnframe = 50;                                  // スポーンするまでのフレーム数
+    [SerializeField]
+    PlayerSoundData soundData = default;                    // 音発生の追加量
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
@@ -132,27 +134,27 @@ public class SoundAreaSpawner : MonoBehaviour
         // 行動音によって音レベルを加算
         switch (type)
         {
-            case ActionSoundType.BREATHHOLD: addLevel = -5.5f; break;
-            case ActionSoundType.WAIT: addLevel = 0; break;
-            case ActionSoundType.WALK: addLevel = 3.5f; break;
-            case ActionSoundType.STEALTH: addLevel = 0.5f; break;
-            case ActionSoundType.SQUAT: addLevel = -2; break;
-            case ActionSoundType.HIDE: addLevel = 0; break;
-            case ActionSoundType.DOOROPEN: addLevel = 1; break;
-            case ActionSoundType.DEEPBREATH: addLevel = 2; break;
-            case ActionSoundType.DASHDOOROPEN: addLevel = 4; break;
-            case ActionSoundType.DASH: addLevel = 3.5f; break;
-            case ActionSoundType.BREATHLESSNESS: addLevel = 4; break;
-            case ActionSoundType.DAMAGE: addLevel = 3; break;
-            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = 1; break;
-            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = 2; break;
-            case ActionSoundType.BAREFOOT: addLevel = -3; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = 14; break;
-            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = 15; break;
-            case ActionSoundType.SMALLCONFUSION: addLevel = 1; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = 1.25f; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = 1.5f; break;
-            case ActionSoundType.FALL: addLevel = 10; break;
+            case ActionSoundType.BREATHHOLD: addLevel = soundData.BreathHold; break;
+            case ActionSoundType.WAIT: addLevel = soundData.Wait; break;
+            case ActionSoundType.WALK: addLevel = soundData.Walk; break;
+            case ActionSoundType.STEALTH: addLevel = soundData.Stealth; break;
+            case ActionSoundType.SQUAT: addLevel = soundData.Squat; break;
+            case ActionSoundType.HIDE: addLevel = soundData.Hide; break;
+            case ActionSoundType.DOOROPEN: addLevel = soundData.DoorOpen; break;
+            case ActionSoundType.DEEPBREATH: addLevel = soundData.DeepBreath; break;
+            case ActionSoundType.DASHDOOROPEN: addLevel = soundData.DashDoorOpen; break;
+            case ActionSoundType.DASH: addLevel = soundData.Dash; break;
+            case ActionSoundType.BREATHLESSNESS: addLevel = soundData.Breathlessness; break;
+            case ActionSoundType.DAMAGE: addLevel = soundData.Damage; break;
+            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = soundData.HalfBreath; break;
+            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = soundData.PinchBreath; break;
+            case ActionSoundType.BAREFOOT: addLevel = soundData.Barefoot; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = soundData.ShoesObjectDamage; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = soundData.BarefootObjectDamage; break;
+            case ActionSoundType.SMALLCONFUSION: addLevel = soundData.BreathSmallConfusion; break;
+            case ActionSoundType.MEDIUMCONFUSION: addLevel = soundData.BreathMediumConfusion; break;
+            case ActionSoundType.LARGECONFUSION: addLevel = soundData.BreathLargeConfusion; break;
+            case ActionSoundType.FALL: addLevel = soundData.Fall; break;
         }
 
         soundLevel += addLevel;
