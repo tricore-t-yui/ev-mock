@@ -9,6 +9,9 @@ public class OniDespawnTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        oni.SetActive(false);
+        if (other.tag == "Player")
+        {
+            oni.SetActive(false);
+        }
     }
 }

@@ -62,7 +62,10 @@ public class OniSpawnTrigger : MonoBehaviour
         // プレイヤーだったら
         if (other.tag == "Player")
         {
-            isSpawn = true;
+            if (!oni.gameObject.activeSelf)
+            {
+                isSpawn = true;
+            }
         }
     }
 }
