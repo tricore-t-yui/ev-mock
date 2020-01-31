@@ -47,11 +47,12 @@ public class KageStateParameter : MonoBehaviour
     [SerializeField]
     [Tooltip("ルート徘徊の各チェックポイントを設定します。\n上から順番に移動していきます。\n最後まで移動すると最初のチェックポイントに戻ります。")]
     List<Vector3> routeCheckPointList = default;
+    List<Vector3> routeWorldCheckPointList = new List<Vector3>();
     public IReadOnlyList<Vector3> RouteCheckPointList
     {
         get
         {
-            return routeCheckPointList;
+            return routeWorldCheckPointList;
         }
     }
 
@@ -68,6 +69,13 @@ public class KageStateParameter : MonoBehaviour
 
         // 状態変化をフラグをセット
         animator.SetBool("isStaticState", isStaticState);
+
+        routeWorldCheckPointList = routeCheckPointList.ConvertAll(elem => elem + transform.position);
+    }
+
+    void Update()
+    {
+        
     }
 
 #if UNITY_EDITOR
@@ -77,7 +85,14 @@ public class KageStateParameter : MonoBehaviour
     private void OnDrawGizmos()
     {
         // 現在と次の目標位置を線でつなぐ
-        DrawLineToTargetPos(routeCheckPointList);
+        if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            DrawLineToTargetPos(routeWorldCheckPointList);
+        }
+        else
+        {
+            DrawLineToTargetPos(routeCheckPointList.ConvertAll(elem => elem + transform.position));
+        }
     }
 
     /// <summary>
