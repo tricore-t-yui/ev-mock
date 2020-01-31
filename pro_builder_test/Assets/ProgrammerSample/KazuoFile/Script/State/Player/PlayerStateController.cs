@@ -89,7 +89,7 @@ public class PlayerStateController : MonoBehaviour
     void Start()
     {
         IsInvincible = (PlayerPrefs.GetInt("isInvincibleKey") == 1) ? true : false;
-        playerDamageEvent.Add(ChangeDamageState);
+        playerDamageEvent?.Add(ChangeDamageState);
     }
 
     /// <summary>
