@@ -158,12 +158,12 @@ public class GameController : MonoBehaviour
         {
             if (returnTransitionMethod == ReturnTransitionMethod.SAMESCENE)
             {
-                goingEnemy?.SetActive(true);
-                returnEnemy?.SetActive(false);
+                //goingEnemy?.SetActive(true);
+                //returnEnemy?.SetActive(false);
             }
             foreach (var item in trapTunGroup)
             {
-                item.gameObject.SetActive(false);
+                item?.gameObject.SetActive(false);
             }
         }
         else
@@ -179,16 +179,16 @@ public class GameController : MonoBehaviour
             }
         }
 
-        kageManager.ResetAllKage();
+        kageManager?.ResetAllKage();
         if (tunObject != null) tunObject.SetActive(false);
 
         foreach (var item in enemySpawn)
         {
-            item.ResetEnemy();
+            item?.ResetEnemy();
         }
         foreach (var item in trapTunGroup)
         {
-            item.ResetTrapTun();
+            item?.ResetTrapTun();
         }
     }
 }
