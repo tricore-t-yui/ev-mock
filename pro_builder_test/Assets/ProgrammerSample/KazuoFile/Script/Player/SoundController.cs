@@ -44,6 +44,7 @@ public class SoundController : MonoBehaviour
             case SoundType.Breth: BreathVolume(); break;
             case SoundType.HeartSound: HeartSoundVolume(); break;
             case SoundType.Walk: WalkVolume();break;
+            case SoundType.Dash:DashVolume();break;
             case SoundType.DamageObject: DamageObjectVolume();break;
             default:break;
         }
@@ -93,8 +94,17 @@ public class SoundController : MonoBehaviour
         }
         else
         {
-            audioSource.volume = 1f;
+            audioSource.volume = 0.5f;
         }
+    }
+
+    /// <summary>
+    /// 走る音の大きさ
+    /// </summary>
+    void DashVolume()
+    {
+        audioSource.volume = 0.5f + 0.1f * Random.Range(-1, 1);
+        audioSource.pitch = 1 + 0.05f * Random.Range(-1, 1);
     }
 
     /// <summary>

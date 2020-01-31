@@ -11,6 +11,9 @@ public class playerStaminaController : MonoBehaviour
     [SerializeField]
     PlayerStatusData playerData = default;                        // プレイヤーのデータのスクリプタブルオブジェクト
 
+    [SerializeField]
+    bool isDebug = false;
+
     public float NowAmount { get; private set; } = 100;     // 現在量
     public bool IsDisappear { get; private set; } = false;  // スタミナ切れフラグ
 
@@ -28,12 +31,15 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     public void StateUpdate(MoveType type, bool isSquat)
     {
-        // 各ステートに合わせた処理を実行
-        switch (type)
+        if (!isDebug)
         {
-            case MoveType.WALK: NowAmount += playerData.StaminaWalkRecovery; SquatRecovery(isSquat); break;
-            case MoveType.DASH: NowAmount -= playerData.StaminaDecrement; break;
-            default: NowAmount += playerData.StaminaNormalRecovery; SquatRecovery(isSquat); break;
+            // 各ステートに合わせた処理を実行
+            switch (type)
+            {
+                case MoveType.WALK: NowAmount += playerData.StaminaWalkRecovery; SquatRecovery(isSquat); break;
+                case MoveType.DASH: NowAmount -= playerData.StaminaDecrement; break;
+                default: NowAmount += playerData.StaminaNormalRecovery; SquatRecovery(isSquat); break;
+            }
         }
 
         // スタミナの状態変更
