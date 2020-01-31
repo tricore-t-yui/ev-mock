@@ -223,7 +223,7 @@ public class PlayerStateController : MonoBehaviour
     void CheckDashState()
     {
         // 方向キーが押されている時
-        if (keyController.GetKey(KeyType.MOVE) && keyController.GetKey(KeyType.DASH) && State != ActionStateType.BREATHLESSNESS && !staminaController.IsDisappear)
+        if (!moveController.IsDuct && keyController.GetKey(KeyType.MOVE) && keyController.GetKey(KeyType.DASH) && State != ActionStateType.BREATHLESSNESS && !staminaController.IsDisappear)
         {
             EventStop();
             State = ActionStateType.DASH;
