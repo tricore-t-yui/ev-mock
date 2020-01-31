@@ -12,7 +12,13 @@ public class KageStateParameter : MonoBehaviour
     Animator animator = default;
 
     [SerializeField]
-    SphereCollider randomRangeCollider = default;
+    SphereCollider randomRangeColliderMin = default;
+
+    [SerializeField]
+    SphereCollider randomRangeColliderMax = default;
+
+    [SerializeField]
+    Transform asyncTransform = default;
 
     // 通常状態の種類
     [SerializeField]
@@ -39,9 +45,15 @@ public class KageStateParameter : MonoBehaviour
 
     // ランダム徘徊の範囲のサイズ
     [SerializeField]
-    [Tooltip("ランダム徘徊の徘徊範囲の半径を設定します。")]
-    float randomRangeRadius = 1;
-    public float RandomRangeRadius => randomRangeRadius;
+    [Tooltip("ランダム徘徊の徘徊範囲の最小半径を設定します。")]
+    float randomRangeRadiusMin = 1;
+    public float RandomRangeRadiusMin => randomRangeRadiusMin;
+
+    // ランダム徘徊の範囲のサイズ
+    [SerializeField]
+    [Tooltip("ランダム徘徊の徘徊範囲の最大半径を設定します。")]
+    float randomRangeRadiusMax = 2;
+    public float RandomRangeRadiusMax => randomRangeRadiusMax;
 
     // ルート徘徊するときのチェックポイントのリスト
     [SerializeField]
@@ -65,7 +77,8 @@ public class KageStateParameter : MonoBehaviour
         InitializePos = transform.position;
 
         // ランダム移動の範囲を設定
-        randomRangeCollider.radius = randomRangeRadius;
+        randomRangeColliderMin.radius = randomRangeRadiusMin;
+        randomRangeColliderMax.radius = randomRangeRadiusMax;
 
         // 状態変化をフラグをセット
         animator.SetBool("isStaticState", isStaticState);
@@ -84,6 +97,21 @@ public class KageStateParameter : MonoBehaviour
     /// </summary>
     private void OnDrawGizmos()
     {
+        randomRangeColliderMin.radius = randomRangeRadiusMin;
+        randomRangeColliderMax.radius = randomRangeRadiusMax;
+
+        Gizmos.color = new Color(1f, 0, 0);
+        Gizmos.DrawWireSphere(asyncTransform.position + randomRangeColliderMin.center, randomRangeColliderMin.radius);
+        Gizmos.DrawWireSphere(asyncTransform.position + randomRangeColliderMax.center, randomRangeColliderMax.radius);
+
+        Gizmos.color = new Color(255, 255, 255);
+
+        if ((randomRangeRadiusMax - randomRangeRadiusMin) <= 0.5f)
+        {
+            randomRangeRadiusMax = randomRangeRadiusMin + 0.5f;
+            randomRangeRadiusMin = randomRangeRadiusMax - 0.5f;
+        }
+
         // 現在と次の目標位置を線でつなぐ
         if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
         {

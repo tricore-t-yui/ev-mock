@@ -10,7 +10,8 @@ using ParameterType = KageAnimParameterList.ParameterType;
 public class KageStateMoveAtRandom : StateMachineBehaviour
 {
     // 範囲用コライダー
-    RandomMoveRangeCollider rangeCollider = null;
+    RandomMoveRangeCollider rangeColliderMin = null;
+    RandomMoveRangeCollider rangeColliderMax = null;
 
     // 移動中のカウント
     int moveCount = 0;
@@ -49,12 +50,15 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
         soundPlayer = animator.GetComponentInChildren<EnemySoundPlayer>() ?? soundPlayer;
 
         // 範囲用コライダーのオブジェクトを取得
-        GameObject colliderObject = animator.GetComponentInChildren<AsyncParentPosition>().gameObject;
+        GameObject colliderMinObject = animator.transform.Find("Collider").Find("RandomRangeCollider").Find("ColliderMin").gameObject;
+        GameObject colliderMaxObject = animator.transform.Find("Collider").Find("RandomRangeCollider").Find("ColliderMax").gameObject;
         // オブジェクトからコライダーのスクリプトを取得
-        rangeCollider = colliderObject.GetComponent<RandomMoveRangeCollider>() ?? rangeCollider;
+        rangeColliderMin = colliderMinObject.GetComponent<RandomMoveRangeCollider>() ?? rangeColliderMin;
+        rangeColliderMax = colliderMaxObject.GetComponent<RandomMoveRangeCollider>() ?? rangeColliderMax;
 
         // 範囲から抜けた瞬間に呼ばれる関数をセット
-        rangeCollider.SetCallback(OnRangeExit);
+        rangeColliderMin.SetCallback(OnRangeExit);
+        rangeColliderMax.SetCallback(OnRangeExit);
 
         // ナビメッシュの取得
         navMesh = animator.GetComponent<NavMeshAgent>() ?? navMesh;
@@ -107,13 +111,16 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
     Vector3 GetNextTargetPos()
     {
         // コライダーのトランスフォームを取得
-        Transform colliderTrans =  rangeCollider.transform;
+        Vector3 pos =  rangeColliderMin.transform.position;
         // コライダーの半径を取得
-        float colliderRadius = rangeCollider.GetRadius();
+        float radiusMin = rangeColliderMin.GetRadius();
+        // コライダーの半径を取得s
+        float radiusMax = rangeColliderMax.GetRadius();
+
         // コライダーの範囲内で目標位置を取得
-        Vector3 nextPos = new Vector3(Random.Range(colliderTrans.position.x - colliderRadius, colliderTrans.position.x + colliderRadius),
-                                      colliderTrans.position.y,
-                                      Random.Range(colliderTrans.position.z - colliderRadius, colliderTrans.position.z + colliderRadius));
+        float radius = Random.Range(radiusMin, radiusMax);
+        float angle = Random.Range(0.0f,Mathf.PI*2);
+        Vector3 nextPos = rangeColliderMin.transform.position +  new Vector3(Mathf.Cos(angle), pos.y, Mathf.Sin(angle)) * radius;
 
         return nextPos;
     }
@@ -136,6 +143,6 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
     /// </summary>
     public void ReturnLoiteringPoint(Animator animator)
     {
-        navMesh.SetDestination(rangeCollider.gameObject.transform.position);
+        navMesh.SetDestination(rangeColliderMin.gameObject.transform.position);
     }
 }
