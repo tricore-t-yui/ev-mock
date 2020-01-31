@@ -158,8 +158,8 @@ public class GameController : MonoBehaviour
         {
             if (returnTransitionMethod == ReturnTransitionMethod.SAMESCENE)
             {
-                goingEnemy.SetActive(true);
-                returnEnemy.SetActive(false);
+                goingEnemy?.SetActive(true);
+                returnEnemy?.SetActive(false);
             }
             foreach (var item in trapTunGroup)
             {
