@@ -22,12 +22,14 @@ public class PlayerObjectDamageController : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
-    SoundSpawner sound = default;                               // 音管理クラス
-    [SerializeField]
     PlayerStatusData playerData = default;                      // プレイヤーのデータのスクリプタブルオブジェクト
 
+    [SerializeField]
+    bool isDebug = false;
+
     public bool IsDeepBreath { get; private set; } = false;     // 深呼吸強制フラグ
-    public bool IsDamage { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
+    public bool IsTouch { get; private set; } = false;         // ダメージオブジェクトにふれているかどうか
+    public bool IsDamage { get; private set; } = false;         // ダメージを負ってしまっているかどうか
     public float NowDamage { get; private set; } = 0;           // 今食らっているオブジェクトダメージ
 
     /// <summary>
@@ -35,6 +37,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        IsTouch = false;
         IsDeepBreath = false;
         IsDamage = false;
         NowDamage = 0;
@@ -54,7 +57,7 @@ public class PlayerObjectDamageController : MonoBehaviour
                 NowDamage += 50;
             }
 
-            sound.Play(SoundSpawner.SoundType.DamageObject);
+            IsTouch = true;
         }
     }
 
@@ -80,15 +83,14 @@ public class PlayerObjectDamageController : MonoBehaviour
     }
 
     /// <summary>
-    /// 障害物から離れたとき
+    /// トリガーから離れたとき
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerExit(Collider other)
     {
-        // ダメージオブジェクトから離れたかどうか
         if (LayerMask.LayerToName(other.gameObject.layer) == "Damage")
         {
-            sound.Stop(SoundSpawner.SoundType.DamageObject);
+            IsTouch = false;
         }
     }
 
@@ -97,7 +99,7 @@ public class PlayerObjectDamageController : MonoBehaviour
     /// </summary>
     public void StateUpdate(MoveType type)
     {
-        if (IsDamage)
+        if (IsDamage && !isDebug)
         {
             // 各ステートに合わせた処理を実行
             switch (type)

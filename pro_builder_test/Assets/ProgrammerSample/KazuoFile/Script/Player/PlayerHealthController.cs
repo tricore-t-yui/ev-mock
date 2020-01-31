@@ -13,6 +13,9 @@ public class PlayerHealthController : MonoBehaviour
     [SerializeField]
     PlayerStatusData playerData = default;                    // プレイヤーデータのスクリプタブルオブジェクト
 
+    [SerializeField]
+    bool isDebug = false;
+
     float damageFrame = 0;                              // ダメージを食らってからのフレーム
 
     public float NowAmount { get; private set; } = 100; // 体力
@@ -36,7 +39,7 @@ public class PlayerHealthController : MonoBehaviour
     /// </summary>
     public void HealthRecovery()
     {
-        if (!IsDeath)
+        if (!IsDeath && !isDebug)
         {
             // ダメージ所持状態フラグがたっている間は回復できない
             if (IsDamage)

@@ -37,6 +37,9 @@ public class PlayerBreathController : MonoBehaviour
     int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
     int duration = 0;                                           // 連打処理の継続フレーム (詳細は165行のNOTE)
 
+    [SerializeField]
+    bool isDebug = false;
+
     float hideDecrement = 0;                                    // 隠れているときの息の消費量
     public bool IsDisappear { get; private set; } = false;      // 息切れフラグ
     public float NowAmount { get; private set; } = 100;         // 息の残量
@@ -103,16 +106,19 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     public void StateUpdate(MoveType type)
     {
-        // 各ステートに合わせた処理を実行
-        switch (type)
+        if (!isDebug)
         {
-            case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
-            case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
-            case MoveType.BREATHHOLD: NowAmount -= playerData.StealthDecrement; break;
-            case MoveType.BREATHHOLDMOVE: NowAmount -= playerData.StealthDecrement; break;
-            case MoveType.HIDE: ConsumeHideBreath(); break;
-            case MoveType.BREATHLESSNESS: NowAmount += playerData.BreathlessnessRecovery; break;
-            default: break;
+            // 各ステートに合わせた処理を実行
+            switch (type)
+            {
+                case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
+                case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
+                case MoveType.BREATHHOLD: NowAmount -= playerData.StealthDecrement; break;
+                case MoveType.BREATHHOLDMOVE: NowAmount -= playerData.StealthDecrement; break;
+                case MoveType.HIDE: ConsumeHideBreath(); break;
+                case MoveType.BREATHLESSNESS: NowAmount += playerData.BreathlessnessRecovery; break;
+                default: break;
+            }
         }
 
         // 息切れ検知

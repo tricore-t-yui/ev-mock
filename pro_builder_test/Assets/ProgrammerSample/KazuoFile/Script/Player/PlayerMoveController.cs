@@ -46,24 +46,26 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     [SerializeField]
-    Rigidbody playerRigidbody = default;        // リジットボディ
+    Rigidbody playerRigidbody = default;                          // リジットボディ
     [SerializeField]
-    CapsuleCollider playerCollider = default;   // コライダー
+    CapsuleCollider playerCollider = default;                      // コライダー
     [SerializeField]
-    Animator playerAnim = default;              // アニメーター
+    Animator playerAnim = default;                                // アニメーター
     [SerializeField]
-    PlayerMoveData moveData = default;              // プレイヤーデータのスクリプタブルオブジェクト
+    PlayerMoveData moveData = default;                            // プレイヤーデータのスクリプタブルオブジェクト
 
     [SerializeField]
     playerStaminaController staminaController = default;            // スタミナクラス
     [SerializeField]
-    PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
+    PlayerObjectDamageController objectDamageController = default;   // オブジェクトダメージクラス
     [SerializeField]
     PlayerStateController stateController = default;                // ステート管理クラス
     [SerializeField]
-    KeyController keyController = default;                          // キー操作クラス
+    KeyController keyController = default;                         // キー操作クラス
     [SerializeField]
     SoundAreaSpawner soundAreaSpawner = default;                    // 音領域生成クラス
+    [SerializeField]
+    SoundSpawner soundSpawner = default;                           // 音生成クラス
 
     float moveTypeSpeedLimit = 0;               // 移動タイプによる移動速度の限界
     float dirTypeSpeedLimit = 0;                // 移動方向による移動速度の限界
@@ -346,5 +348,27 @@ public class PlayerMoveController : MonoBehaviour
     {
         transform.position = initPos;
         transform.rotation = initRota;
+    }
+
+    /// <summary>
+    /// 歩いているときの足音
+    /// </summary>
+    /// NOTE:アニメーション用関数
+    public void PlayWalkSound()
+    {
+        soundSpawner.Play(SoundSpawner.SoundType.Walk);
+        if(objectDamageController.IsTouch)
+        {
+            soundSpawner.Play(SoundSpawner.SoundType.DamageObject);
+        }
+    }
+
+    /// <summary>
+    /// 走っているときの足音
+    /// </summary>
+    /// NOTE:アニメーション用関数
+    public void PlayDashSound()
+    {
+        soundSpawner.Play(SoundSpawner.SoundType.Dash);
     }
 }

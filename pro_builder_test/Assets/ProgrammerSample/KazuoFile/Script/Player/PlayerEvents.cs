@@ -65,10 +65,7 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 歩く開始
     /// </summary>
-    public void WalkStart()
-    {
-        sound.Play(SoundSpawner.SoundType.Walk);
-    }
+    public void WalkStart() { }
     /// <summary>
     /// 歩く
     /// </summary>
@@ -88,7 +85,6 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.WALK);
         cameraAnimationController.AnimStop(CameraAnimType.WALK);
-        sound.Stop(SoundSpawner.SoundType.Walk);
     }
 
     /// <summary>
@@ -97,7 +93,6 @@ public class PlayerEvents : MonoBehaviour
     public void DashStart()
     {
         SquatEnd();
-        sound.Play(SoundSpawner.SoundType.Dash);
     }
     /// <summary>
     /// ダッシュ
@@ -119,7 +114,6 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStop(PlayerAnimType.DASH);
         cameraAnimationController.AnimStop(CameraAnimType.DASH);
-        sound.Stop(SoundSpawner.SoundType.Dash);
     }
 
     /// <summary>
