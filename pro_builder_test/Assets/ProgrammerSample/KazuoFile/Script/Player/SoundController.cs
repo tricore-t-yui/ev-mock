@@ -90,11 +90,11 @@ public class SoundController : MonoBehaviour
     {
         if(stateController.IsSquat)
         {
-            audioSource.volume = 0.25f;
+            audioSource.volume = 0.15f;
         }
         else
         {
-            audioSource.volume = 0.5f;
+            audioSource.volume = 0.35f;
         }
     }
 
