@@ -55,6 +55,10 @@ public class KageStateParameter : MonoBehaviour
     float randomRangeRadiusMax = 2;
     public float RandomRangeRadiusMax => randomRangeRadiusMax;
 
+    [SerializeField]
+    [Tooltip("相対座標で位置を指定するかどうか")]
+    bool isRelative = true;
+
     // ルート徘徊するときのチェックポイントのリスト
     [SerializeField]
     [Tooltip("ルート徘徊の各チェックポイントを設定します。\n上から順番に移動していきます。\n最後まで移動すると最初のチェックポイントに戻ります。")]
@@ -83,7 +87,14 @@ public class KageStateParameter : MonoBehaviour
         // 状態変化をフラグをセット
         animator.SetBool("isStaticState", isStaticState);
 
-        routeWorldCheckPointList = routeCheckPointList.ConvertAll(elem => elem + transform.position);
+        if (isRelative)
+        {
+            routeWorldCheckPointList = routeCheckPointList.ConvertAll(elem => elem + transform.position);
+        }
+        else
+        {
+            routeWorldCheckPointList = routeCheckPointList;
+        }
     }
 
     void Update()
@@ -113,13 +124,20 @@ public class KageStateParameter : MonoBehaviour
         }
 
         // 現在と次の目標位置を線でつなぐ
-        if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+        if (isRelative)
         {
-            DrawLineToTargetPos(routeWorldCheckPointList);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                DrawLineToTargetPos(routeWorldCheckPointList);
+            }
+            else
+            {
+                DrawLineToTargetPos(routeCheckPointList.ConvertAll(elem => elem + transform.position));
+            }
         }
         else
         {
-            DrawLineToTargetPos(routeCheckPointList.ConvertAll(elem => elem + transform.position));
+            DrawLineToTargetPos(routeWorldCheckPointList);
         }
     }
 
