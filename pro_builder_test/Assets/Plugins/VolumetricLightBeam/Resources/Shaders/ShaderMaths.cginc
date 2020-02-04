@@ -5,19 +5,29 @@
 #define _VLB_SHADER_MATHS_INCLUDED_
 
 #if UNITY_VERSION < 540
-#define matWorldToObject _World2Object
-#define matObjectToWorld _Object2World
-inline float4 UnityObjectToClipPos(in float3 pos) { return mul(UNITY_MATRIX_MVP, float4(pos, 1.0)); }
+    #define VLBMatrixWorldToObject  _World2Object
+    #define VLBMatrixObjectToWorld  _Object2World
+    #define VLBMatrixMV             UNITY_MATRIX_MV
+    inline float4 VLBObjectToClipPos(in float3 pos) { return mul(UNITY_MATRIX_MVP, float4(pos, 1.0)); }
 #else
-#define matWorldToObject unity_WorldToObject
-#define matObjectToWorld unity_ObjectToWorld
+    #if VLB_CUSTOM_INSTANCED_OBJECT_MATRICES
+        #define VLBMatrixWorldToObject  UNITY_ACCESS_INSTANCED_PROP(Props, _WorldToLocalMatrix)
+        #define VLBMatrixObjectToWorld  UNITY_ACCESS_INSTANCED_PROP(Props, _LocalToWorldMatrix)
+        #define VLBMatrixMV             mul(unity_MatrixV, VLBMatrixObjectToWorld)
+        inline float4 VLBObjectToClipPos(in float3 pos) { return mul(mul(unity_MatrixVP, VLBMatrixObjectToWorld), float4(pos, 1.0)); }
+    #else
+        #define VLBMatrixWorldToObject  unity_WorldToObject
+        #define VLBMatrixObjectToWorld  unity_ObjectToWorld
+        #define VLBMatrixMV             UNITY_MATRIX_MV
+        #define VLBObjectToClipPos      UnityObjectToClipPos
+    #endif
 #endif
 
-inline float3 VLBObjectToViewPos(in float3 pos)     { return mul(UNITY_MATRIX_MV, float4(pos, 1.0)).xyz; }
+inline float3 VLBObjectToViewPos(in float3 pos)     { return mul(VLBMatrixMV, float4(pos, 1.0)).xyz; }
 inline float3 VLBObjectToViewPos(   float4 pos)     { return VLBObjectToViewPos(pos.xyz); }
 
-inline float3 UnityWorldToObjectPos(in float3 pos) { return mul(matWorldToObject, float4(pos, 1.0)).xyz; }
-inline float3 UnityObjectToWorldPos(in float3 pos) { return mul(matObjectToWorld, float4(pos, 1.0)).xyz; }
+inline float3 VLBWorldToObjectPos(in float3 pos)    { return mul(VLBMatrixWorldToObject, float4(pos, 1.0)).xyz; }
+//inline float3 VLBObjectToWorldPos(in float3 pos)    { return mul(VLBMatrixObjectToWorld, float4(pos, 1.0)).xyz; } // unused
 
 inline float dot2(float2 v) { return dot(v,v); }
 inline float lerpClamped(float a, float b, float t) { return lerp(a, b, saturate(t)); }

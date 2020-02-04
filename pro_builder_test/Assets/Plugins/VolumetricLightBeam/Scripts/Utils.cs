@@ -5,6 +5,18 @@ namespace VLB
 {
     public static class Utils
     {
+        public static float ComputeConeRadiusEnd(float fallOffEnd, float spotAngle)
+        {
+            return fallOffEnd * Mathf.Tan(spotAngle * Mathf.Deg2Rad * 0.5f);
+        }
+
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            var temp = a;
+            a = b;
+            b = temp;
+        }
+
         public static string GetPath(Transform current)
         {
             if (current.parent == null)

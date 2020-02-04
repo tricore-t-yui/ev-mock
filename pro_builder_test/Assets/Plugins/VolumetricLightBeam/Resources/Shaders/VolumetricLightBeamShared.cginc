@@ -19,17 +19,24 @@
 #define VLB_STEREO_INSTANCING 1
 #endif
 
+#if VLB_SRP_API && VLB_INSTANCING_API_AVAILABLE && VLB_GPU_INSTANCING
+// When using SRP API and GPU Instancing, the unity_WorldToObject and unity_ObjectToWorld matrices are not sent, so we have to manually send them
+#define VLB_CUSTOM_INSTANCED_OBJECT_MATRICES 1
+#endif
+
 #include "ShaderIncludes.cginc"
 /// ****************************************
 
 /// ****************************************
 /// DEBUG
 /// ****************************************
-//#define DEBUG_SHOW_DEPTH 1
+#define DEBUG_VALUE_DEPTHBUFFER 1
+#define DEBUG_VALUE_DEPTHBLEND 2
+//#define DEBUG_DEPTH_MODE DEBUG_VALUE_DEPTHBLEND
 //#define DEBUG_SHOW_NOISE3D 1
 //#define DEBUG_BLEND_INSIDE_OUTSIDE 1
 
-#if DEBUG_SHOW_DEPTH && !VLB_DEPTH_BLEND
+#if DEBUG_DEPTH_MODE && !VLB_DEPTH_BLEND
 #define VLB_DEPTH_BLEND 1
 #endif
 
@@ -139,6 +146,12 @@ struct v2f
 /// PROPERTIES DECLARATION
 /// ****************************************
 VLB_DEFINE_PROP_START
+
+#if VLB_CUSTOM_INSTANCED_OBJECT_MATRICES
+    VLB_DEFINE_PROP(float4x4, _LocalToWorldMatrix)
+    VLB_DEFINE_PROP(float4x4, _WorldToLocalMatrix)
+#endif
+
 #if VLB_COLOR_GRADIENT_MATRIX_HIGH || VLB_COLOR_GRADIENT_MATRIX_LOW
     VLB_DEFINE_PROP(float4x4, _ColorGradientMatrix)
 #else
@@ -162,6 +175,7 @@ VLB_DEFINE_PROP_START
 
 #if VLB_CLIPPING_PLANE
     VLB_DEFINE_PROP(float4, _ClippingPlaneWS)
+    VLB_DEFINE_PROP(float,  _ClippingPlaneProps)
 #endif
 
 #if VLB_DEPTH_BLEND
@@ -170,7 +184,11 @@ VLB_DEFINE_PROP_START
 
 #if VLB_NOISE_3D
     VLB_DEFINE_PROP(float4, _NoiseLocal)
-    VLB_DEFINE_PROP(float3, _NoiseParam)
+    VLB_DEFINE_PROP(float4, _NoiseParam)
+#endif
+
+#ifdef VLB_SRP_API
+    VLB_DEFINE_PROP(float2, _CameraBufferSizeSRP)
 #endif
 
 VLB_DEFINE_PROP_END
@@ -329,8 +347,8 @@ v2f vertShared(vlb_appdata v, float outsideBeam)
     float normalizedRadiusEnd = coneRadius.y / maxRadius;
     vertexOS.xy *= lerp(normalizedRadiusStart, normalizedRadiusEnd, vertexOS.z);
 
-    o.posClipSpace = UnityObjectToClipPos(vertexOS);
-    o.posWorldSpace = mul(matObjectToWorld, vertexOS);
+    o.posClipSpace = VLBObjectToClipPos(vertexOS);
+    o.posWorldSpace = mul(VLBMatrixObjectToWorld, vertexOS);
 
     // apply the same scaling than we do through the localScale in BeamGeometry.ComputeLocalMatrix
     // to get the proper transformed vertex position in object space
@@ -344,10 +362,10 @@ v2f vertShared(vlb_appdata v, float outsideBeam)
     float isCap = v.texcoord.x;
 
 #if VLB_NOISE_3D
-	o.uvwNoise_intensity.rgb = Noise3D_GetUVW(o.posWorldSpace.xyz);
+	o.uvwNoise_intensity.rgb = Noise3D_GetUVW(o.posWorldSpace.xyz, o.posObjectSpace);
 #endif
 
-    o.cameraPosObjectSpace = UnityWorldToObjectPos(float4(_WorldSpaceCameraPos, 1.0)).xyz * scaleObjectSpace;
+    o.cameraPosObjectSpace = VLBWorldToObjectPos(float4(_WorldSpaceCameraPos, 1.0)).xyz * scaleObjectSpace; // TODO: should we compute this pos on the CPU?
 
 #if OPTIM_VS
     // Treat Cap a special way: cap is only visible from inside
@@ -425,7 +443,8 @@ half4 fragShared(v2f i, float outsideBeam)
         float4 clippingPlaneWS = VLB_GET_PROP(_ClippingPlaneWS);
         float distToClipPlane = DistanceToPlane(i.posWorldSpace.xyz, clippingPlaneWS.xyz, clippingPlaneWS.w);
         clip(distToClipPlane);
-        intensity *= smoothstep(0, 0.25, distToClipPlane);
+        float fadeDistance = VLB_GET_PROP(_ClippingPlaneProps);
+        intensity *= smoothstep(0, fadeDistance, distToClipPlane);
     }
 #endif
 
@@ -487,9 +506,11 @@ half4 fragShared(v2f i, float outsideBeam)
         depthBlendFactor = lerp(depthBlendFactor, 1, cameraIsOrtho); // disable depth BlendState factor with ortho camera (temporary fix)
         intensity *= depthBlendFactor;
 
-    #if DEBUG_SHOW_DEPTH
+    #if DEBUG_DEPTH_MODE == DEBUG_VALUE_DEPTHBUFFER
         return SampleSceneZ_Eye(i.projPos) * _ProjectionParams.w;
-    #endif // DEBUG_SHOW_DEPTH
+    #elif DEBUG_DEPTH_MODE == DEBUG_VALUE_DEPTHBLEND
+        return depthBlendFactor;
+    #endif
     }
 #endif // VLB_DEPTH_BLEND
 
@@ -515,7 +536,7 @@ half4 fragShared(v2f i, float outsideBeam)
         intensity *= VLB_GET_PROP(_FadeOutFactor);
 
         // attenuation
-        intensity *= ComputeAttenuation(pixDistFromSource, _DistanceFadeStart, _DistanceFadeEnd, _AttenuationLerpLinearQuad);
+        intensity *= ComputeAttenuation(pixDistFromSource, VLB_GET_PROP(_DistanceFadeStart), VLB_GET_PROP(_DistanceFadeEnd), VLB_GET_PROP(_AttenuationLerpLinearQuad));
 
         // fade when too close to camera factor
         float fadeWithCameraEnabled = 1 - max(boostFactor,      // do not fade according to camera when we are in boost zone, to keep boost effect

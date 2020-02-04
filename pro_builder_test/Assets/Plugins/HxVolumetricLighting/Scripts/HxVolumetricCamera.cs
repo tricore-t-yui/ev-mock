@@ -24,7 +24,10 @@ using UnityEngine.VR;
 [ExecuteInEditMode]
 public class HxVolumetricCamera : MonoBehaviour
 {
-   
+
+    Transform _transform;
+    public Transform myTransform { get { if (_transform == null) { _transform = transform; } return _transform;  } set { _transform = value; } }
+
     public enum hxRenderOrder { ImageEffect = 0, ImageEffectOpaque = 1 };
     public hxRenderOrder RenderOrder = hxRenderOrder.ImageEffect;
     public HxVolumetricRenderCallback callBackImageEffect;
@@ -1017,7 +1020,7 @@ public class HxVolumetricCamera : MonoBehaviour
             BufferRender.SetGlobalVector("DensitySliceDistance2", CalculateDensityDistance(2));
             BufferRender.SetGlobalVector("DensitySliceDistance3", CalculateDensityDistance(3));
 
-            ConstructPlanes(Mycamera, 0, Mathf.Max(MaxDirectionalRayDistance, MaxLightDistanceUsed));
+            ConstructPlanes(Mycamera,myTransform, 0, Mathf.Max(MaxDirectionalRayDistance, MaxLightDistanceUsed));
 
             FindActiveParticleSystems();
             ParticleDensityRenderCount += RenderSlices();
@@ -1162,7 +1165,7 @@ public class HxVolumetricCamera : MonoBehaviour
 #if HXVR
         if (Mycamera.stereoTargetEye != StereoTargetEyeMask.None && Application.isPlaying && UnityEngine.XR.XRSettings.enabled && UnityEngine.XR.XRDevice.isPresent)
         {
-            return UnityEngine.XR.XRSettings.eyeTextureWidth + (Mycamera.stereoTargetEye == StereoTargetEyeMask.Both ? UnityEngine.XR.XRSettings.eyeTextureWidth +  Mathf.CeilToInt(48 * UnityEngine.XR.XRSettings.eyeTextureResolutionScale) : 0);
+            return UnityEngine.XR.XRSettings.eyeTextureWidth + (Mycamera.stereoTargetEye == StereoTargetEyeMask.Both ? UnityEngine.XR.XRSettings.eyeTextureWidth : 0); //+  Mathf.CeilToInt(48 * UnityEngine.XR.XRSettings.eyeTextureResolutionScale)
         }
 #endif
 
@@ -1372,13 +1375,13 @@ public class HxVolumetricCamera : MonoBehaviour
 #if HxApplyDirect
     CameraEvent ApplyEvent = CameraEvent.BeforeForwardAlpha; //apply in render que (dont rebuild)
 #endif
-    public static void ConstructPlanes(Camera cam, float near, float far)
+    public static void ConstructPlanes(Camera cam, Transform camTransform, float near, float far)
     {
         
-        Vector3 pos = cam.transform.position;
-        Vector3 forward = cam.transform.forward;
-        Vector3 right = cam.transform.right;
-        Vector3 up = cam.transform.up;
+        Vector3 pos = camTransform.position;
+        Vector3 forward = camTransform.forward;
+        Vector3 right = camTransform.right;
+        Vector3 up = camTransform.up;
         // Vector3 nearCenter = pos + forward * cam.nearClipPlane;
         Vector3 farCenter = pos + forward * far;
         Vector3 nearCenter = pos + forward * near;
@@ -1479,7 +1482,7 @@ public class HxVolumetricCamera : MonoBehaviour
                 ShadowMaterial.hideFlags = HideFlags.DontSave;
             }
 
-           if(ShadowFix) Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, Matrix4x4.TRS(transform.position, Quaternion.identity, new Vector3(Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance), Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance), Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance)) * 2), HxVolumetricCamera.ShadowMaterial, 0);
+           if(ShadowFix) Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, Matrix4x4.TRS(myTransform.position, Quaternion.identity, new Vector3(Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance), Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance), Mathf.Max(MaxDirectionalRayDistance, MaxLightDistance)) * 2), HxVolumetricCamera.ShadowMaterial, 0);
         }
         else
         {
@@ -1598,9 +1601,27 @@ public class HxVolumetricCamera : MonoBehaviour
 
             //  BufferSetup.Blit(Tile5x5, ScaledDepthTextureRTID[(int)resolution], DownSampleMaterial, (int)resolution);
             BufferSetup.SetGlobalTexture(ScaledDepthTexturePID, ScaledDepthTextureRTID[(int)resolution]);
+
+
+            float rndOffsetX = Random.value;
+            float rndOffsetY = Random.value;
+
+
+            BufferSetup.SetGlobalVector("_Dithering_Coords", new Vector4(
+                (float)ScaledDepthTexture[(int)resolution].width / Tile5x5.width,
+                (float)ScaledDepthTexture[(int)resolution].height / Tile5x5.height,
+                rndOffsetX,
+                rndOffsetY
+            ));
+
+
             lastSetup = SetupEvent;
             Mycamera.AddCommandBuffer(SetupEvent, BufferSetup);
             SetupBufferAdded = true;
+
+
+
+
         }
     }
 
@@ -2184,11 +2205,14 @@ public class HxVolumetricCamera : MonoBehaviour
 
                 if (IsRenderBoth())
                 {
-                    Matrix4x4 camToWorld = Mycamera.worldToCameraMatrix;
-                    Matrix4x4 camToWorld2 = Mycamera.worldToCameraMatrix;
+                    //Matrix4x4 camToWorld = Mycamera.worldToCameraMatrix;
+                    //Matrix4x4 camToWorld2 = Mycamera.worldToCameraMatrix;
+                    
+                    //camToWorld[12] += Mycamera.stereoSeparation / 2.0f;
+                    //camToWorld2[12] -= Mycamera.stereoSeparation / 2.0f;
 
-                    camToWorld[12] += Mycamera.stereoSeparation / 2.0f;
-                    camToWorld2[12] -= Mycamera.stereoSeparation / 2.0f;
+                    Matrix4x4 camToWorld = Mycamera.GetStereoViewMatrix(Camera.StereoscopicEye.Left);
+                    Matrix4x4 camToWorld2 = Mycamera.GetStereoViewMatrix(Camera.StereoscopicEye.Right);
 
                     BufferRender.SetGlobalMatrix("hxCameraToWorld", camToWorld.inverse);
                     BufferRender.SetGlobalMatrix("hxCameraToWorld2", camToWorld2.inverse);
@@ -2241,8 +2265,8 @@ public class HxVolumetricCamera : MonoBehaviour
 
             BlitScale.z = HxVolumetricCamera.ActiveCamera.nearClipPlane + 1f;
             BlitScale.y = (HxVolumetricCamera.ActiveCamera.nearClipPlane + 1f) * Mathf.Tan(Mathf.Deg2Rad * HxVolumetricCamera.ActiveCamera.fieldOfView * 0.51f);
-            BlitScale.x = BlitScale.y * HxVolumetricCamera.ActiveCamera.aspect;
-            BlitMatrix = Matrix4x4.TRS(HxVolumetricCamera.Active.transform.position, HxVolumetricCamera.Active.transform.rotation, BlitScale);
+            BlitScale.x = BlitScale.y * HxVolumetricCamera.ActiveCamera.aspect * 10;
+            BlitMatrix = Matrix4x4.TRS(HxVolumetricCamera.Active.myTransform.position, HxVolumetricCamera.Active.myTransform.rotation, BlitScale);
 
 
             BlitMatrixMVP = HxVolumetricCamera.Active.MatrixVP * BlitMatrix;
@@ -2277,7 +2301,7 @@ public class HxVolumetricCamera : MonoBehaviour
             BufferRender.ClearRenderTarget(false, true, new Color(0, 0, 0, 0));
 
             BufferRender.SetGlobalFloat(DepthThresholdPID, DepthThreshold);
-            BufferRender.SetGlobalVector("CameraFoward", transform.forward);
+            BufferRender.SetGlobalVector("CameraFoward", myTransform.forward);
             BufferRender.SetGlobalFloat(BlurDepthFalloffPID, BlurDepthFalloff);
             BufferRender.SetGlobalFloat(VolumeScalePID, ResolutionScale[(int)resolution]);
             BufferRender.SetGlobalMatrix(InverseViewMatrixPID, Mycamera.cameraToWorldMatrix);
@@ -2550,7 +2574,7 @@ public class HxVolumetricCamera : MonoBehaviour
 
         ReleaseLightBuffers();
         MaxLightDistanceUsed = MaxLightDistance;
-        ConstructPlanes(Mycamera, 0, MaxLightDistanceUsed); //set near to 0 just incase.
+        ConstructPlanes(Mycamera,myTransform, 0, MaxLightDistanceUsed); //set near to 0 just incase.
        
       
         UpdateLightPoistions();
@@ -2675,30 +2699,35 @@ public class HxVolumetricCamera : MonoBehaviour
 
     static void CreateTileTexture()
     {
-        Tile5x5 = Resources.Load("HxOffsetTile") as Texture2D;
-        if (Tile5x5 == null)
-        {
-            Tile5x5 = new Texture2D(5, 5, TextureFormat.RGBA32, false, true);
-            Tile5x5.hideFlags = HideFlags.DontSave;
-            Tile5x5.filterMode = FilterMode.Point;
-            Tile5x5.wrapMode = TextureWrapMode.Repeat;
-            Color[] tempc = new Color[25];
-            for (int i = 0; i < tempc.Length; i++)
-            {
-                tempc[i] = new Color(Tile5x5int[i] * 0.04f, 0, 0, 0);
-            }
+        Tile5x5 = Resources.Load("tex_BlueNoise_1024x1024_UNI") as Texture2D;
 
-            Tile5x5.SetPixels(tempc);
-            Tile5x5.Apply();
-            Shader.SetGlobalTexture("Tile5x5", Tile5x5);
-            Shader.SetGlobalFloat("HxTileSize", 5);
-        }
-        else
-        {
-            Shader.SetGlobalTexture("Tile5x5", Tile5x5);
-            Shader.SetGlobalFloat("HxTileSize", Tile5x5.width);
+        Shader.SetGlobalTexture("Tile5x5", Tile5x5);
 
-        }
+
+        //Tile5x5 = Resources.Load("HxOffsetTile") as Texture2D;
+        //if (Tile5x5 == null)
+        //{
+        //    Tile5x5 = new Texture2D(5, 5, TextureFormat.RGBA32, false, true);
+        //    Tile5x5.hideFlags = HideFlags.DontSave;
+        //    Tile5x5.filterMode = FilterMode.Point;
+        //    Tile5x5.wrapMode = TextureWrapMode.Repeat;
+        //    Color[] tempc = new Color[25];
+        //    for (int i = 0; i < tempc.Length; i++)
+        //    {
+        //        tempc[i] = new Color(Tile5x5int[i] * 0.04f, 0, 0, 0);
+        //    }
+        //
+        //    Tile5x5.SetPixels(tempc);
+        //    Tile5x5.Apply();
+        //    Shader.SetGlobalTexture("Tile5x5", Tile5x5);
+        //    Shader.SetGlobalFloat("HxTileSize", 5);
+        //}
+        //else
+        //{
+        //    Shader.SetGlobalTexture("Tile5x5", Tile5x5);
+        //    Shader.SetGlobalFloat("HxTileSize", Tile5x5.width);
+        //
+        //}
 
     }
 

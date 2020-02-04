@@ -58,7 +58,7 @@ namespace VLB
                 ret = false;
             }
 
-            if (beamA.noiseEnabled != beamB.noiseEnabled)
+            if (beamA.isNoiseEnabled != beamB.isNoiseEnabled)
             {
                 AppendErrorMessage(ref reasons, "3D Noise enabled mismatch");
                 ret = false;

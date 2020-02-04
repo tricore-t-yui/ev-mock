@@ -20,6 +20,16 @@
         TraditionalTransparency,
     }
 
+    public enum NoiseMode
+    {
+        /// <summary> 3D Noise is disabled </summary>
+        Disabled,
+        /// <summary> 3D Noise is enabled: noise will look static compared to the world </summary>
+        WorldSpace,
+        /// <summary> 3D Noise is enabled: noise will look static compared to the beam position </summary>
+        LocalSpace,
+    }
+
     public enum MeshType
     {
         Shared, // Use the global shared mesh (recommended setting, since it will save a lot on memory). Will use the geometry properties set on Config.

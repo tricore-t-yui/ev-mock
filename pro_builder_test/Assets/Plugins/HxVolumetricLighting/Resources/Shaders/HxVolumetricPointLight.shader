@@ -230,6 +230,8 @@ samplerCUBE PointCookieTexture;
 
 
 		o.pos = v.vertex;
+		if (_ProjectionParams.x < 0)
+			o.pos.y = -o.pos.y;
 		o.uv = ComputeScreenPos(o.pos);
 #ifdef FULL_ON
 		o.ray = mul(unity_ObjectToWorld, v.vertex);
@@ -405,6 +407,7 @@ samplerCUBE PointCookieTexture;
 		return vrout;
 	}
 
+	float4 _Dithering_Coords;
 
 	vr frag(v2f i)
 	{
@@ -457,8 +460,11 @@ samplerCUBE PointCookieTexture;
 
 #endif
 		
-		float index = frac(tex2Dlod(Tile5x5, float4(fmod((_ScreenParams.xy * VolumeScale) * uv, HxTileSize) / HxTileSize, 0, 0)).r + hxRayOffset);
-	
+		//float index = frac(tex2Dlod(Tile5x5, float4(fmod((_ScreenParams.xy * VolumeScale) * uv, HxTileSize) / HxTileSize, 0, 0)).r + hxRayOffset);
+		float index = tex2Dlod(Tile5x5, float4(uv * _Dithering_Coords.xy + _Dithering_Coords.zw, 0, 0)).r;// +float3(0.001, 0.001, 0.001);
+
+
+
 		return MarchColor(wpos,index, uv);// , near, far);
 	
 	}
@@ -483,7 +489,7 @@ samplerCUBE PointCookieTexture;
 		Blend One One
 			ZWrite Off
 			ZTest Always
-			Cull Front
+			Cull Back
 			CGPROGRAM
 #pragma target 3.0
 #pragma vertex vert2

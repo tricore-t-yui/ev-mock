@@ -44,7 +44,7 @@ namespace VLB
         public bool intensityFromLight = true;
 
         /// <summary>
-        /// Disabled: the inside and outside intensity values are the same and controlled by intensitySimple property
+        /// Disabled: the inside and outside intensity values are the same and controlled by intensityGlobal property
         /// Enabled: the inside and outside intensity values are distinct (intensityInside and intensityOutside)
         /// </summary>
         public bool intensityModeAdvanced = false;
@@ -55,7 +55,7 @@ namespace VLB
         [FormerlySerializedAs("alphaInside")]
         [Range(Consts.IntensityMin, Consts.IntensityMax)] public float intensityInside = Consts.IntensityDefault;
 
-        [System.Obsolete("Use 'intensitySimple' or 'intensityInside' instead")]
+        [System.Obsolete("Use 'intensityGlobal' or 'intensityInside' instead")]
         public float alphaInside { get { return intensityInside; } set { intensityInside = value; } }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VLB
         [FormerlySerializedAs("alphaOutside"), FormerlySerializedAs("alpha")]
         [Range(Consts.IntensityMin, Consts.IntensityMax)] public float intensityOutside = Consts.IntensityDefault;
 
-        [System.Obsolete("Use 'intensitySimple' or 'intensityOutside' instead")]
+        [System.Obsolete("Use 'intensityGlobal' or 'intensityOutside' instead")]
         public float alphaOutside { get { return intensityOutside; } set { intensityOutside = value; } }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace VLB
         /// <summary>
         /// End radius of the cone geometry
         /// </summary>
-        public float coneRadiusEnd { get { return fallOffEnd * Mathf.Tan(spotAngle * Mathf.Deg2Rad * 0.5f); } }
+        public float coneRadiusEnd { get { return Utils.ComputeConeRadiusEnd(fallOffEnd, spotAngle); } }
 
         /// <summary>
         /// Volume (in unit^3) of the cone (from the base to fallOffEnd)
@@ -215,7 +215,7 @@ namespace VLB
         public float fadeStart { get { return fallOffStart; } set { fallOffStart = value; } }
 
         /// <summary>
-        /// Distance from the light source (in units) the beam is entirely faded out (alpha = 0, no more cone mesh).
+        /// Distance from the light source (in units) the beam is entirely faded out.
         /// </summary>
         [FormerlySerializedAs("fadeEnd")]
         public float fallOffEnd = Consts.FallOffEnd;
@@ -249,12 +249,6 @@ namespace VLB
         [Range(0f, 1f)]
         public float glareBehind = Consts.GlareBehind;
 
-        [System.Obsolete("Use 'glareFrontal' instead")]
-        public float boostDistanceInside = 0.5f;
-
-        [System.Obsolete("This property has been merged with 'fresnelPow'")]
-        public float fresnelPowInside = 6f;
-
         /// <summary>
         /// Modulate the thickness of the beam when looking at it from the side.
         /// Higher values produce thinner beam with softer transition at beam edges.
@@ -263,9 +257,17 @@ namespace VLB
         public float fresnelPow = Consts.FresnelPow;
 
         /// <summary>
-        /// Enable 3D Noise effect
+        /// Enable 3D Noise effect and choose the mode
         /// </summary>
-        public bool noiseEnabled = false;
+        public NoiseMode noiseMode = Consts.NoiseModeDefault;
+
+        public bool isNoiseEnabled { get { return noiseMode != NoiseMode.Disabled; } }
+
+        [System.Obsolete("Use 'noiseMode' instead")]
+        public bool noiseEnabled { get { return isNoiseEnabled; } set { noiseMode = value ? NoiseMode.WorldSpace : NoiseMode.Disabled; } }
+
+        [FormerlySerializedAs("noiseEnabled")]
+        [SerializeField] bool _DEPRECATED_NoiseEnabled = false;
 
         /// <summary>
         /// Contribution factor of the 3D Noise (when enabled).
@@ -352,23 +354,25 @@ namespace VLB
         /// <summary> Bounds of the geometry's mesh (if the geometry exists) </summary>
         public Bounds bounds { get { return m_BeamGeom != null ? m_BeamGeom.meshRenderer.bounds : new Bounds(Vector3.zero, Vector3.zero); } }
 
-        Plane m_PlaneWS;
-
-        /// <summary> Set the clipping plane equation. This function is used internally by the DynamicOcclusion component. </summary>
-        public void SetClippingPlane(Plane planeWS) { if (m_BeamGeom) m_BeamGeom.SetClippingPlane(planeWS); m_PlaneWS = planeWS; }
-
-        /// <summary> Disable the clipping plane. This function is used internally by the DynamicOcclusion component. </summary>
-        public void SetClippingPlaneOff() { if (m_BeamGeom) m_BeamGeom.SetClippingPlaneOff(); m_PlaneWS = new Plane(); }
+        /// <summary> This function is used internally by the DynamicOcclusion component. </summary>
+        public void SetDynamicOcclusion(DynamicOcclusion dynamicOcclusion) { if (m_BeamGeom) m_BeamGeom.dynamicOcclusion = dynamicOcclusion; }
 
 
         public bool IsColliderHiddenByDynamicOccluder(Collider collider)
         {
             Debug.Assert(collider, "You should pass a valid Collider to VLB.VolumetricLightBeam.IsColliderHiddenByDynamicOccluder");
 
-            if (!m_PlaneWS.IsValid())
+            if (m_BeamGeom == null)
                 return false;
 
-            var isInside = GeometryUtility.TestPlanesAABB(new Plane[] { m_PlaneWS }, collider.bounds);
+            var dynOcclusion = m_BeamGeom.dynamicOcclusion;
+            if (dynOcclusion == null)
+                return false;
+
+            if (!dynOcclusion.planeEquationWS.IsValid())
+                return false;
+
+            var isInside = GeometryUtility.TestPlanesAABB(new Plane[] { dynOcclusion.planeEquationWS }, collider.bounds);
             return !isInside;
         }
 
@@ -621,7 +625,7 @@ namespace VLB
 
             fresnelPow = Consts.FresnelPow;
 
-            noiseEnabled = false;
+            noiseMode = Consts.NoiseModeDefault;
             noiseIntensity = Consts.NoiseIntensityDefault;
             noiseScaleUseGlobal = true;
             noiseScaleLocal = Consts.NoiseScaleDefault;
@@ -749,6 +753,12 @@ namespace VLB
                 // intensity global/advanced mode is a feature of 1.61
                 intensityFromLight = false;
                 intensityModeAdvanced = !Mathf.Approximately(intensityInside, intensityOutside);
+            }
+
+            if (serializedVersion < 1710)
+            {
+                // noiseMode is a feature of 1.71
+                noiseMode = _DEPRECATED_NoiseEnabled ? NoiseMode.WorldSpace : NoiseMode.Disabled;
             }
 
             Utils.MarkCurrentSceneDirty();

@@ -22,7 +22,7 @@ namespace VLB
         SerializedProperty fallOffEndFromLight, fallOffStart, fallOffEnd;
         SerializedProperty attenuationEquation, attenuationCustomBlending;
         SerializedProperty depthBlendDistance, cameraClippingDistance;
-        SerializedProperty noiseEnabled, noiseIntensity, noiseScaleUseGlobal, noiseScaleLocal, noiseVelocityUseGlobal, noiseVelocityLocal;
+        SerializedProperty noiseMode, noiseIntensity, noiseScaleUseGlobal, noiseScaleLocal, noiseVelocityUseGlobal, noiseVelocityLocal;
         SerializedProperty fadeOutBegin, fadeOutEnd;
         SerializedProperty sortingLayerID, sortingOrder;
 
@@ -79,7 +79,7 @@ namespace VLB
             cameraClippingDistance = FindProperty((VolumetricLightBeam x) => x.cameraClippingDistance);
 
             // NOISE
-            noiseEnabled = FindProperty((VolumetricLightBeam x) => x.noiseEnabled);
+            noiseMode = FindProperty((VolumetricLightBeam x) => x.noiseMode);
             noiseIntensity = FindProperty((VolumetricLightBeam x) => x.noiseIntensity);
             noiseScaleUseGlobal = FindProperty((VolumetricLightBeam x) => x.noiseScaleUseGlobal);
             noiseScaleLocal = FindProperty((VolumetricLightBeam x) => x.noiseScaleLocal);
@@ -113,7 +113,6 @@ namespace VLB
             SerializedProperty m_Property;
             bool m_DisableGroup = false;
             GUIContent m_Content = null;
-            float m_Width = 75.0f;
 
             void Enable()
             {
@@ -130,12 +129,11 @@ namespace VLB
                 EditorGUILayout.EndHorizontal();
             }
 
-            public ButtonToggleScope(SerializedProperty prop, bool disableGroup, GUIContent content, float width)
+            public ButtonToggleScope(SerializedProperty prop, bool disableGroup, GUIContent content)
             {
                 m_Property = prop;
                 m_DisableGroup = disableGroup;
                 m_Content = content;
-                m_Width = width;
                 Enable();
             }
 
@@ -159,10 +157,23 @@ namespace VLB
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.showMixedValue = m_Property.hasMultipleDifferentValues;
 
+                var style = EditorGUI.showMixedValue ? ms_ToggleButtonStyleMixedValue : (m_Property.boolValue ? ms_ToggleButtonStyleToggled : ms_ToggleButtonStyleNormal);
+                var calcSize = style.CalcSize(m_Content);
+
+            #if UNITY_2019_3_OR_NEWER
+                var defaultColor = GUI.backgroundColor;
+                if(m_Property.boolValue)
+                    GUI.backgroundColor = new Color(0.75f, 0.75f, 0.75f);
+            #endif
+
                 GUILayout.Button(
                     m_Content,
-                    EditorGUI.showMixedValue ? ms_ToggleButtonStyleMixedValue : (m_Property.boolValue ? ms_ToggleButtonStyleToggled : ms_ToggleButtonStyleNormal),
-                    GUILayout.MaxWidth(m_Width));
+                    style,
+                    GUILayout.MaxWidth(calcSize.x));
+
+            #if UNITY_2019_3_OR_NEWER
+                GUI.backgroundColor = defaultColor;
+            #endif
 
                 EditorGUI.showMixedValue = false;
                 if (EditorGUI.EndChangeCheck())
@@ -176,8 +187,7 @@ namespace VLB
 
             return new ButtonToggleScope(prop,
                 true,   // disableGroup
-                EditorStrings.FromSpotLight,
-                65f);
+                EditorStrings.FromSpotLight);
         }
 
         static ButtonToggleScope ButtonToggleScopeAdvanced(SerializedProperty prop, bool visible)
@@ -186,15 +196,13 @@ namespace VLB
 
             return new ButtonToggleScope(prop,
                 false,  // disableGroup
-                EditorStrings.IntensityModeAdvanced,
-                30f);
+                EditorStrings.IntensityModeAdvanced);
         }
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             Debug.Assert(m_Entities.Count > 0);
-            EditorGUILayout.Separator();
 
             bool hasLightSpot = false;
             var light = m_Entities[0].GetComponent<Light>();
@@ -207,20 +215,23 @@ namespace VLB
                 }
             }
 
-            if (HeaderFoldable(EditorStrings.HeaderBasic))
+            if (HeaderFoldableBegin(EditorStrings.HeaderBasic))
             {
                 // Color
                 using (ButtonToggleScopeFromLight(colorFromLight, hasLightSpot))
-                using (new EditorGUILayout.HorizontalScope()) // mandatory to have the color picker on the same line
                 {
-                    EditorGUILayout.PropertyField(colorMode, EditorStrings.ColorMode);
+                    if (!hasLightSpot) EditorGUILayout.BeginHorizontal();    // mandatory to have the color picker on the same line (when the button "from light" is not here)
+                    {
+                        EditorGUILayout.PropertyField(colorMode, EditorStrings.ColorMode);
 
-                    if (colorMode.enumValueIndex == (int)ColorMode.Gradient)
-                        EditorGUILayout.PropertyField(colorGradient, EditorStrings.ColorGradient);
-                    else
-                        EditorGUILayout.PropertyField(color, EditorStrings.ColorFlat);
+                        if (colorMode.enumValueIndex == (int)ColorMode.Gradient)
+                            EditorGUILayout.PropertyField(colorGradient, EditorStrings.ColorGradient);
+                        else
+                            EditorGUILayout.PropertyField(color, EditorStrings.ColorFlat);
+                    }
+                    if (!hasLightSpot) EditorGUILayout.EndHorizontal();
                 }
-
+                
                 // Blending Mode
                 EditorGUILayout.PropertyField(blendingMode, EditorStrings.BlendingMode);
 
@@ -234,7 +245,7 @@ namespace VLB
                     using (ButtonToggleScopeAdvanced(intensityModeAdvanced, advancedModeButton))
                     {
                         advancedModeEnabled = intensityModeAdvanced.HasAtLeastOneValue(true);
-                        EditorGUILayout.PropertyField(intensityOutside, advancedModeEnabled ? EditorStrings.IntensityOutside : EditorStrings.IntensitySimple);
+                        EditorGUILayout.PropertyField(intensityOutside, advancedModeEnabled ? EditorStrings.IntensityOutside : EditorStrings.IntensityGlobal);
                     }
                 }
 
@@ -263,9 +274,9 @@ namespace VLB
                 trackChangesDuringPlaytime.ToggleLeft(EditorStrings.TrackChanges);
                 DrawAnimatorWarning();
             }
-            DrawLineSeparator();
-
-            if(HeaderFoldable(EditorStrings.HeaderAttenuation))
+            HeaderFoldableEnd();
+            
+            if(HeaderFoldableBegin(EditorStrings.HeaderAttenuation))
             {
                 EditorGUILayout.BeginHorizontal();
                 {
@@ -286,13 +297,14 @@ namespace VLB
                 else
                     fallOffStart.FloatSlider(EditorStrings.FallOffStart, 0f, fallOffEnd.floatValue - Consts.FallOffDistancesMinThreshold);
             }
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if(HeaderFoldable(EditorStrings.Header3DNoise))
+            if(HeaderFoldableBegin(EditorStrings.Header3DNoise))
             {
-                EditorGUILayout.PropertyField(noiseEnabled, EditorStrings.NoiseEnabled);
+                noiseMode.CustomEnum<NoiseMode>(EditorStrings.NoiseMode, EditorStrings.NoiseModeEnumDescriptions);
 
-                if (noiseEnabled.boolValue)
+                bool showNoiseProps = HasAtLeastOneBeamWith((VolumetricLightBeam beam) => { return beam.isNoiseEnabled; });
+                if (showNoiseProps)
                 {
                     EditorGUILayout.PropertyField(noiseIntensity, EditorStrings.NoiseIntensity);
 
@@ -323,9 +335,9 @@ namespace VLB
                         EditorGUILayout.HelpBox(Noise3D.isNotSupportedString, MessageType.Info);
                 }
             }
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if(HeaderFoldable(EditorStrings.HeaderBlendingDistances))
+            if(HeaderFoldableBegin(EditorStrings.HeaderBlendingDistances))
             {
                 EditorGUILayout.PropertyField(cameraClippingDistance, EditorStrings.CameraClippingDistance);
 
@@ -336,9 +348,9 @@ namespace VLB
                     content.text += depthBlendDistance.floatValue > 0.0 ? " (on)" : " (off)";
                 EditorGUILayout.PropertyField(depthBlendDistance, content);
             }
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if(HeaderFoldable(EditorStrings.HeaderGeometry))
+            if(HeaderFoldableBegin(EditorStrings.HeaderGeometry))
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -375,9 +387,9 @@ namespace VLB
                     EditorGUILayout.HelpBox(m_Entities[0].meshStats, MessageType.Info);
                 }
             }
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if (HeaderFoldable(EditorStrings.HeaderFadeOut))
+            if (HeaderFoldableBegin(EditorStrings.HeaderFadeOut))
             {
                 bool wasEnabled = fadeOutBegin.floatValue <= fadeOutEnd.floatValue;
                 foreach (var entity in m_Entities)
@@ -429,16 +441,14 @@ namespace VLB
                     }
                 }
             }
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if (HeaderFoldable(EditorStrings.Header2D))
+            if (HeaderFoldableBegin(EditorStrings.Header2D))
             {
-        
                 DrawSortingLayer();
                 DrawSortingOrder();
             }
-
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
             if (DrawInfos())
             {
@@ -447,7 +457,7 @@ namespace VLB
 
             DrawCustomActionButtons();
             DrawAdditionalFeatures();
-
+            
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -566,7 +576,7 @@ namespace VLB
 
             if (tips.Count > 0 || !string.IsNullOrEmpty(gpuInstancingReport))
             {
-                if (HeaderFoldable(EditorStrings.HeaderInfos))
+                if (HeaderFoldableBegin(EditorStrings.HeaderInfos))
                 {
                     foreach (var tip in tips)
                         EditorGUILayout.HelpBox(tip, MessageType.Info);
@@ -574,6 +584,7 @@ namespace VLB
                     if (!string.IsNullOrEmpty(gpuInstancingReport))
                         EditorGUILayout.HelpBox(gpuInstancingReport, MessageType.Warning);
                 }
+                HeaderFoldableEnd();
                 return true;
             }
             return false;

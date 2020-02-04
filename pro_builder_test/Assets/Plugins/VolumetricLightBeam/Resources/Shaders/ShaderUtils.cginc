@@ -19,7 +19,7 @@ TEXTURE2D(_CameraDepthTexture);
 //SAMPLER(sampler_CameraDepthTexture);
 inline float VLB_SampleDepthTexture(float4 uv)
 {
-    float2 screenParams = _ScaledScreenParams.x > 0 ? _ScaledScreenParams.xy : _ScreenParams.xy;
+    float2 screenParams = VLB_GET_PROP(_CameraBufferSizeSRP) * (_ScaledScreenParams.x > 0 ? _ScaledScreenParams.xy : _ScreenParams.xy);
     uint2 pixelCoords = uint2( (uv.xy/uv.w) * screenParams );
     return LOAD_TEXTURE2D_LOD(_CameraDepthTexture, pixelCoords, 0).r;
 }
@@ -46,6 +46,8 @@ UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 inline float SampleSceneZ_Eye(float4 uv)    { return VLB_LinearEyeDepth(VLB_SampleDepthTexture(uv)); }
 //inline float SampleSceneZ_01(float4 uv)     { return Linear01Depth(VLB_SampleDepthTexture(uv)); }
 
+#define VLB_CAMERA_NEAR_PLANE _ProjectionParams.y // https://docs.unity3d.com/Manual/SL-UnityShaderVariables.html
+
 inline float4 DepthFade_VS_ComputeProjPos(float4 vertex_in, float4 vertex_out)
 {
     float4 projPos = ComputeScreenPos(vertex_out);
@@ -55,8 +57,8 @@ inline float4 DepthFade_VS_ComputeProjPos(float4 vertex_in, float4 vertex_out)
 
 inline float DepthFade_PS_BlendDistance(float4 projPos, float distance)
 {
-    float sceneZ = max(0, SampleSceneZ_Eye(projPos) - _ProjectionParams.g);
-    float partZ = max(0, projPos.z - _ProjectionParams.g);
+    float sceneZ = max(0, SampleSceneZ_Eye(projPos) - VLB_CAMERA_NEAR_PLANE);
+    float partZ = max(0, projPos.z - VLB_CAMERA_NEAR_PLANE);
     return saturate((sceneZ - partZ) / distance);
 }
 
@@ -79,14 +81,17 @@ inline float DepthFade_PS_BlendDistance(float sceneZ, float3 geomPosObjectSpace,
 uniform sampler3D _VLB_NoiseTex3D;
 uniform float4 _VLB_NoiseGlobal;
 
-float3 Noise3D_GetUVW(float3 wpos)
+float3 Noise3D_GetUVW(float3 posWorldSpace, float3 posLocalSpace)
 {
     float4 noiseLocal = VLB_GET_PROP(_NoiseLocal);
-    float3 noiseParam = VLB_GET_PROP(_NoiseParam);
+    float4 noiseParam = VLB_GET_PROP(_NoiseParam);
     float3 velocity = lerp(noiseLocal.xyz, _VLB_NoiseGlobal.xyz, noiseParam.y);
     float scale = lerp(noiseLocal.w, _VLB_NoiseGlobal.w, noiseParam.z);
-	//return frac(wpos.xyz * scale + (_Time.y * velocity)); // frac doesn't give good results on VS
-	return (wpos.xyz * scale + (_Time.y * velocity));
+
+    float3 posRef = lerp(posWorldSpace, posLocalSpace, noiseParam.w); // 0 -> World Space ; 1 -> Local Space
+
+	//return frac(posRef.xyz * scale + (_Time.y * velocity)); // frac doesn't give good results on VS
+	return (posRef.xyz * scale + (_Time.y * velocity));
 }
 
 float Noise3D_GetFactorFromUVW(float3 uvw)
@@ -95,11 +100,6 @@ float Noise3D_GetFactorFromUVW(float3 uvw)
     float intensity = noiseParam.x;
 	float noise = tex3D(_VLB_NoiseTex3D, uvw).a;
     return lerp(1, noise, intensity);
-}
-
-float Noise3D_GetFactorFromWorldPos(float3 wpos)
-{
-    return Noise3D_GetFactorFromUVW(Noise3D_GetUVW(wpos));
 }
 #endif // VLB_NOISE_3D
 

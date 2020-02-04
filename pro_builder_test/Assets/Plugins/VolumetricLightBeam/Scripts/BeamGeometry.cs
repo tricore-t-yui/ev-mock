@@ -106,7 +106,7 @@ namespace VLB
         void SetFadeOutFactorProp(float value)
         {
             MaterialChangeStart();
-            SetMaterialProp("_FadeOutFactor", value);
+            SetMaterialProp(ShaderProperties.FadeOutFactor, value);
             MaterialChangeStop();
         }
 
@@ -204,6 +204,13 @@ namespace VLB
 
             gameObject.hideFlags = hideFlags;
 
+#if UNITY_EDITOR
+            // Apply the same static flags to the BeamGeometry than the VLB GAO
+            var flags = UnityEditor.GameObjectUtility.GetStaticEditorFlags(master.gameObject);
+            flags &= ~(UnityEditor.StaticEditorFlags.ContributeGI); // remove the Lightmap static flag since it will generate error messages when selecting the BeamGeometry GAO in the editor
+            UnityEditor.GameObjectUtility.SetStaticEditorFlags(gameObject, flags);
+#endif
+
             RestartFadeOutCoroutine();
         }
 
@@ -263,8 +270,8 @@ namespace VLB
             transform.localScale = new Vector3(maxRadius, maxRadius, m_Master.fallOffEnd);
         }
 
-        bool isNoiseEnabled { get { return m_Master.noiseEnabled && m_Master.noiseIntensity > 0f && Noise3D.isSupported; } } // test Noise3D.isSupported the last
-        bool isClippingPlaneEnabled { get { return m_ClippingPlaneWS.normal.sqrMagnitude > 0; } }
+        bool isNoiseEnabled { get { return m_Master.isNoiseEnabled && m_Master.noiseIntensity > 0f && Noise3D.isSupported; } } // test Noise3D.isSupported the last
+        bool isClippingPlaneEnabled { get { return dynamicOcclusion ? (dynamicOcclusion.planeEquationWS.normal.sqrMagnitude > 0) : false; } }
 #pragma warning disable 0162
         bool isDepthBlendEnabled { get { return GpuInstancing.forceEnableDepthBlend || m_Master.depthBlendDistance > 0f; } }
 #pragma warning restore 0162
@@ -307,36 +314,36 @@ namespace VLB
             return mat != null;
         }
 
-        void SetMaterialProp(string name, float value)
+        void SetMaterialProp(int nameID, float value)
         {
             if (m_CustomMaterial)
-                m_CustomMaterial.SetFloat(name, value);
+                m_CustomMaterial.SetFloat(nameID, value);
             else
-                MaterialManager.materialPropertyBlock.SetFloat(name, value);
+                MaterialManager.materialPropertyBlock.SetFloat(nameID, value);
         }
 
-        void SetMaterialProp(string name, Vector4 value)
+        void SetMaterialProp(int nameID, Vector4 value)
         {
             if (m_CustomMaterial)
-                m_CustomMaterial.SetVector(name, value);
+                m_CustomMaterial.SetVector(nameID, value);
             else
-                MaterialManager.materialPropertyBlock.SetVector(name, value);
+                MaterialManager.materialPropertyBlock.SetVector(nameID, value);
         }
 
-        void SetMaterialProp(string name, Color value)
+        void SetMaterialProp(int nameID, Color value)
         {
             if (m_CustomMaterial)
-                m_CustomMaterial.SetColor(name, value);
+                m_CustomMaterial.SetColor(nameID, value);
             else
-                MaterialManager.materialPropertyBlock.SetColor(name, value);
+                MaterialManager.materialPropertyBlock.SetColor(nameID, value);
         }
 
-        void SetMaterialProp(string name, Matrix4x4 value)
+        void SetMaterialProp(int nameID, Matrix4x4 value)
         {
             if (m_CustomMaterial)
-                m_CustomMaterial.SetMatrix(name, value);
+                m_CustomMaterial.SetMatrix(nameID, value);
             else
-                MaterialManager.materialPropertyBlock.SetMatrix(name, value);
+                MaterialManager.materialPropertyBlock.SetMatrix(nameID, value);
         }
 
         void MaterialChangeStart()
@@ -353,7 +360,10 @@ namespace VLB
 
         void SendMaterialClippingPlaneProp()
         {
-            SetMaterialProp("_ClippingPlaneWS", new Vector4(m_ClippingPlaneWS.normal.x, m_ClippingPlaneWS.normal.y, m_ClippingPlaneWS.normal.z, m_ClippingPlaneWS.distance));
+            Debug.Assert(dynamicOcclusion != null);
+            var planeWS = dynamicOcclusion.planeEquationWS;
+            SetMaterialProp(ShaderProperties.ClippingPlaneWS, new Vector4(planeWS.normal.x, planeWS.normal.y, planeWS.normal.z, planeWS.distance));
+            SetMaterialProp(ShaderProperties.ClippingPlaneProps, dynamicOcclusion.fadeDistanceToPlane);
         }
 
         public void UpdateMaterialAndBounds()
@@ -373,20 +383,20 @@ namespace VLB
                 }
 
                 float slopeRad = (m_Master.coneAngle * Mathf.Deg2Rad) / 2; // use coneAngle (instead of spotAngle) which is more correct with the geometry
-                SetMaterialProp("_ConeSlopeCosSin", new Vector2(Mathf.Cos(slopeRad), Mathf.Sin(slopeRad)));
+                SetMaterialProp(ShaderProperties.ConeSlopeCosSin, new Vector2(Mathf.Cos(slopeRad), Mathf.Sin(slopeRad)));
 
                 // kMinRadius and kMinApexOffset prevents artifacts when fresnel computation is done in the vertex shader
                 const float kMinRadius = 0.0001f;
                 var coneRadius = new Vector2(Mathf.Max(m_Master.coneRadiusStart, kMinRadius), Mathf.Max(m_Master.coneRadiusEnd, kMinRadius));
-                SetMaterialProp("_ConeRadius", coneRadius);
+                SetMaterialProp(ShaderProperties.ConeRadius, coneRadius);
 
                 const float kMinApexOffset = 0.0001f;
                 float nonNullApex = Mathf.Sign(m_Master.coneApexOffsetZ) * Mathf.Max(Mathf.Abs(m_Master.coneApexOffsetZ), kMinApexOffset);
-                SetMaterialProp("_ConeApexOffsetZ", nonNullApex);
+                SetMaterialProp(ShaderProperties.ConeApexOffsetZ, nonNullApex);
 
                 if (m_Master.colorMode == ColorMode.Flat)
                 {
-                    SetMaterialProp("_ColorFlat", m_Master.color);
+                    SetMaterialProp(ShaderProperties.ColorFlat, m_Master.color);
                 }
                 else
                 {
@@ -395,32 +405,49 @@ namespace VLB
                     // pass the gradient matrix in OnWillRenderObject()
                 }
 
-                SetMaterialProp("_AlphaInside", m_Master.intensityInside);
-                SetMaterialProp("_AlphaOutside", m_Master.intensityOutside);
-                SetMaterialProp("_AttenuationLerpLinearQuad", m_Master.attenuationLerpLinearQuad);
-                SetMaterialProp("_DistanceFadeStart", m_Master.fallOffStart);
-                SetMaterialProp("_DistanceFadeEnd", m_Master.fallOffEnd);
-                SetMaterialProp("_DistanceCamClipping", m_Master.cameraClippingDistance);
-                SetMaterialProp("_FresnelPow", Mathf.Max(0.001f, m_Master.fresnelPow)); // no pow 0, otherwise will generate inf fresnel and issues on iOS
-                SetMaterialProp("_GlareBehind", m_Master.glareBehind);
-                SetMaterialProp("_GlareFrontal", m_Master.glareFrontal);
-                SetMaterialProp("_DrawCap", m_Master.geomCap ? 1 : 0);
+                SetMaterialProp(ShaderProperties.AlphaInside, m_Master.intensityInside);
+                SetMaterialProp(ShaderProperties.AlphaOutside, m_Master.intensityOutside);
+                SetMaterialProp(ShaderProperties.AttenuationLerpLinearQuad, m_Master.attenuationLerpLinearQuad);
+                SetMaterialProp(ShaderProperties.DistanceFadeStart, m_Master.fallOffStart);
+                SetMaterialProp(ShaderProperties.DistanceFadeEnd, m_Master.fallOffEnd);
+                SetMaterialProp(ShaderProperties.DistanceCamClipping, m_Master.cameraClippingDistance);
+                SetMaterialProp(ShaderProperties.FresnelPow, Mathf.Max(0.001f, m_Master.fresnelPow)); // no pow 0, otherwise will generate inf fresnel and issues on iOS
+                SetMaterialProp(ShaderProperties.GlareBehind, m_Master.glareBehind);
+                SetMaterialProp(ShaderProperties.GlareFrontal, m_Master.glareFrontal);
+                SetMaterialProp(ShaderProperties.DrawCap, m_Master.geomCap ? 1 : 0);
 
                 if (isDepthBlendEnabled)
                 {
-                    SetMaterialProp("_DepthBlendDistance", m_Master.depthBlendDistance);
+                    SetMaterialProp(ShaderProperties.DepthBlendDistance, m_Master.depthBlendDistance);
                 }
 
                 if (isNoiseEnabled)
                 {
                     Noise3D.LoadIfNeeded();
-                    SetMaterialProp("_NoiseLocal", new Vector4(m_Master.noiseVelocityLocal.x, m_Master.noiseVelocityLocal.y, m_Master.noiseVelocityLocal.z, m_Master.noiseScaleLocal));
-                    SetMaterialProp("_NoiseParam", new Vector3(m_Master.noiseIntensity, m_Master.noiseVelocityUseGlobal ? 1f : 0f, m_Master.noiseScaleUseGlobal ? 1f : 0f));
+                    SetMaterialProp(ShaderProperties.NoiseLocal, new Vector4(
+                        m_Master.noiseVelocityLocal.x,
+                        m_Master.noiseVelocityLocal.y,
+                        m_Master.noiseVelocityLocal.z,
+                        m_Master.noiseScaleLocal));
+
+                    SetMaterialProp(ShaderProperties.NoiseParam, new Vector4(
+                        m_Master.noiseIntensity,
+                        m_Master.noiseVelocityUseGlobal ? 1f : 0f,
+                        m_Master.noiseScaleUseGlobal ? 1f : 0f,
+                        m_Master.noiseMode == NoiseMode.WorldSpace ? 0f : 1f));
                 }
+
+                ComputeLocalMatrix(); // compute matrix before sending it to the shader
+
+#if VLB_SRP_SUPPORT
+                if (IsUsingCustomRenderPipeline() && Config.Instance.actualRenderingMode == RenderingMode.GPUInstancing)
+                {
+                    SetMaterialProp(ShaderProperties.LocalToWorldMatrix, transform.localToWorldMatrix);
+                    SetMaterialProp(ShaderProperties.WorldToLocalMatrix, transform.worldToLocalMatrix);
+                }
+#endif
             }
             MaterialChangeStop();
-
-            ComputeLocalMatrix();
 
 #if DEBUG_SHOW_MESH_NORMALS
             for (int vertexInd = 0; vertexInd < coneMesh.vertexCount; vertexInd++)
@@ -442,27 +469,24 @@ namespace VLB
 #endif
         }
 
-        Plane m_ClippingPlaneWS;
+        DynamicOcclusion _dynamicOcclusion;
 
-        public void SetClippingPlane(Plane planeWS)
+        public DynamicOcclusion dynamicOcclusion
         {
-            m_ClippingPlaneWS = planeWS;
-            if (m_CustomMaterial)
+            get { return _dynamicOcclusion; }
+            set
             {
-                m_CustomMaterial.EnableKeyword("VLB_CLIPPING_PLANE");
-                SendMaterialClippingPlaneProp();
+                _dynamicOcclusion = value;
+                if (m_CustomMaterial)
+                {
+                    bool hasDynOcclusion = _dynamicOcclusion != null;
+                    m_CustomMaterial.SetKeywordEnabled("VLB_CLIPPING_PLANE", hasDynOcclusion);
+                    if (hasDynOcclusion)
+                        SendMaterialClippingPlaneProp();
+                }
+                else
+                    UpdateMaterialAndBounds();
             }
-            else
-                UpdateMaterialAndBounds();
-        }
-
-        public void SetClippingPlaneOff()
-        {
-            m_ClippingPlaneWS = new Plane();
-            if (m_CustomMaterial)
-                m_CustomMaterial.DisableKeyword("VLB_CLIPPING_PLANE");
-            else
-                UpdateMaterialAndBounds();
         }
 
 #if VLB_SRP_SUPPORT
@@ -509,12 +533,20 @@ namespace VLB
                     var camPosOS = m_Master.transform.InverseTransformPoint(cam.transform.position);
                     var camForwardVectorOSN = transform.InverseTransformDirection(cam.transform.forward).normalized;
                     float camIsInsideBeamFactor = cam.orthographic ? -1f : m_Master.GetInsideBeamFactorFromObjectSpacePos(camPosOS);
-                    SetMaterialProp("_CameraParams", new Vector4(camForwardVectorOSN.x, camForwardVectorOSN.y, camForwardVectorOSN.z, camIsInsideBeamFactor));
+                    SetMaterialProp(ShaderProperties.CameraParams, new Vector4(camForwardVectorOSN.x, camForwardVectorOSN.y, camForwardVectorOSN.z, camIsInsideBeamFactor));
+
+#if UNITY_2017_3_OR_NEWER && VLB_SRP_SUPPORT // ScalableBufferManager introduced in Unity 2017.3
+                    if (IsUsingCustomRenderPipeline())
+                    {
+                        var bufferSize = cam.allowDynamicResolution ? new Vector2(ScalableBufferManager.widthScaleFactor, ScalableBufferManager.heightScaleFactor) : Vector2.one;
+                        SetMaterialProp(ShaderProperties.CameraBufferSizeSRP, bufferSize);
+                    }
+#endif
 
                     if (m_Master.colorMode == ColorMode.Gradient)
                     {
                         // Send the gradient matrix every frame since it's not a shader's property
-                        SetMaterialProp("_ColorGradientMatrix", m_ColorGradientMatrix);
+                        SetMaterialProp(ShaderProperties.ColorGradientMatrix, m_ColorGradientMatrix);
                     }
                 }
                 MaterialChangeStop();

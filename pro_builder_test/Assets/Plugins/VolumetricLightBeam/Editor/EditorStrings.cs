@@ -26,7 +26,7 @@ namespace VLB
         public static readonly GUIContent ColorFlat = new GUIContent("", "Use the color picker to set a plain RGBA color (takes account of the alpha value).");
 
         public static readonly GUIContent IntensityModeAdvanced = new GUIContent("Adv", "Advanced Mode: control inside and outside intensity values independently.");
-        public static readonly GUIContent IntensitySimple = new GUIContent("Intensity", "Global beam intensity. If you want to control values for inside and outside independently, use the advanced mode.");
+        public static readonly GUIContent IntensityGlobal = new GUIContent("Intensity", "Global beam intensity. If you want to control values for inside and outside independently, use the advanced mode.");
         public static readonly GUIContent IntensityOutside = new GUIContent("Intensity (outside)", "Beam outside intensity (when looking at the beam from behind).");
         public static readonly GUIContent IntensityInside = new GUIContent("Intensity (inside)",  "Beam inside intensity (when looking at the beam from the inside directly at the source).");
 
@@ -47,10 +47,16 @@ namespace VLB
         public static readonly GUIContent FallOffStart = new GUIContent("Start Distance", "Distance from the light source (in units) the beam intensity will start to fall-off.");
         public static readonly GUIContent FallOffEnd = new GUIContent("Range Limit", "Distance from the light source (in units) the beam is entirely faded out");
 
-        public static readonly GUIContent NoiseEnabled = new GUIContent("Enabled", "Enable 3D Noise effect");
+        public static readonly GUIContent NoiseMode = new GUIContent("Enabled", "Enable 3D Noise effect and choose the mode:\n- World Space: the noise will look 'grounded' in the world\n- Local Space: the noise will look 'tied' to the beam");
         public static readonly GUIContent NoiseIntensity = new GUIContent("Intensity", "Higher intensity means the noise contribution is stronger and more visible");
         public static readonly GUIContent NoiseScale = new GUIContent("Scale", "3D Noise texture scaling: higher scale make the noise more visible, but potentially less realistic");
         public static readonly GUIContent NoiseVelocity = new GUIContent("Velocity", "World Space direction and speed of the noise scrolling, simulating the fog/smoke movement");
+        public static readonly GUIContent[] NoiseModeEnumDescriptions = new GUIContent[]
+        {
+            new GUIContent("Disabled"),
+            new GUIContent("Enabled (World Space)"),
+            new GUIContent("Enabled (Local Space)"),
+        };
 
         public static readonly GUIContent CameraClippingDistance = new GUIContent("Camera", "Distance from the camera the beam will fade with.\n- 0.0: hard intersection\n- Higher values produce soft intersection when the camera is near the cone triangles.");
         public static readonly GUIContent DepthBlendDistance = new GUIContent("Opaque geometry", "Distance from the world geometry the beam will fade with.\n- 0.0 (feature disabled): hard intersection but faster (doesn't require to update the depth texture).\n- Higher values produce soft intersection when the beam intersects world's geometry, but require to update the camera's depth texture.");
@@ -111,6 +117,7 @@ namespace VLB
         public static readonly GUIContent DynOcclusionMaxSurfaceDot = new GUIContent("Max Angle", "Max angle (in degrees) between the beam and the surface in order to be considered as occluder.");
         public static readonly GUIContent DynOcclusionPlaneAlignment = new GUIContent("Alignment", "Alignment of the computed clipping plane:\n- Surface: align to the surface normal which blocks the beam. Works better for large occluders such as floors and walls.\n- Beam: keep the plane aligned with the beam direction. Works better with more complex occluders or with corners.");
         public static readonly GUIContent DynOcclusionPlaneOffset = new GUIContent("Offset Units", "Translate the plane. We recommend to set a small positive offset in order to handle non-flat surface better.");
+        public static readonly GUIContent DynOcclusionFadeDistanceToPlane = new GUIContent("Fade Distance Units", "Fade out the beam before the computed clipping plane in order to soften the transition.");
         public static readonly GUIContent DynOcclusionEditorShowDebugPlane = new GUIContent("Show Debug Plane", "Draw debug plane on the scene view.");
         public static readonly GUIContent DynOcclusionEditorRaycastAtEachFrame = new GUIContent("Update in Editor", "Perform occlusion tests and raycasts in Editor.");
 
