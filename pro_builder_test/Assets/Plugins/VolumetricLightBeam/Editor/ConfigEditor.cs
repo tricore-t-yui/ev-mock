@@ -148,7 +148,7 @@ namespace VLB
                 {
                     EditorGUI.BeginChangeCheck();
                     {
-                        if (HeaderFoldable("Beam Geometry"))
+                        if (HeaderFoldableBegin("Beam Geometry"))
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
@@ -161,9 +161,9 @@ namespace VLB
 
                             geometryTag.stringValue = EditorGUILayout.TagField(EditorStrings.ConfigGeometryTag, geometryTag.stringValue);
                         }
-                        DrawLineSeparator();
+                        HeaderFoldableEnd();
 
-                        if (HeaderFoldable("Rendering"))
+                        if (HeaderFoldableBegin("Rendering"))
                         {
                             RenderQueueGUIDraw();
 
@@ -200,14 +200,14 @@ namespace VLB
                                 ReimportShaders();
                             }
                         }
+                        HeaderFoldableEnd();
                     }
                     if (EditorGUI.EndChangeCheck())
                     {
                         VolumetricLightBeam._EditorSetAllMeshesDirty();
                     }
-                    DrawLineSeparator();
 
-                    if (HeaderFoldable("Shared Mesh"))
+                    if (HeaderFoldableBegin("Shared Mesh"))
                     {
                         EditorGUI.BeginChangeCheck();
                         EditorGUILayout.PropertyField(sharedMeshSides, EditorStrings.ConfigSharedMeshSides);
@@ -222,25 +222,25 @@ namespace VLB
                         meshInfo += string.Format("\nShared Mesh stats: {0} vertices, {1} triangles", MeshGenerator.GetSharedMeshVertexCount(), MeshGenerator.GetSharedMeshIndicesCount() / 3);
                         EditorGUILayout.HelpBox(meshInfo, MessageType.Info);
                     }
-                    DrawLineSeparator();
+                    HeaderFoldableEnd();
 
-                    if (HeaderFoldable("Global 3D Noise"))
+                    if (HeaderFoldableBegin("Global 3D Noise"))
                     {
                         EditorGUILayout.PropertyField(globalNoiseScale, EditorStrings.ConfigGlobalNoiseScale);
                         EditorGUILayout.PropertyField(globalNoiseVelocity, EditorStrings.ConfigGlobalNoiseVelocity);
                     }
-                    DrawLineSeparator();
+                    HeaderFoldableEnd();
 
-                    if (HeaderFoldable("Camera to compute Fade Out"))
+                    if (HeaderFoldableBegin("Camera to compute Fade Out"))
                     {
                         EditorGUI.BeginChangeCheck();
                         fadeOutCameraTag.stringValue = EditorGUILayout.TagField(EditorStrings.ConfigFadeOutCameraTag, fadeOutCameraTag.stringValue);
                         if (EditorGUI.EndChangeCheck() && Application.isPlaying)
                             (target as Config).ForceUpdateFadeOutCamera();
                     }
-                    DrawLineSeparator();
+                    HeaderFoldableEnd();
 
-                    if (HeaderFoldable("Internal Data (do not change)"))
+                    if (HeaderFoldableBegin("Internal Data (do not change)"))
                     {
                         EditorGUILayout.PropertyField(beamShader1Pass, EditorStrings.ConfigBeamShader1Pass);
                         EditorGUILayout.PropertyField(beamShader2Pass, EditorStrings.ConfigBeamShader2Pass);
@@ -255,7 +255,7 @@ namespace VLB
                         if (Noise3D.isSupported && !Noise3D.isProperlyLoaded)
                             EditorGUILayout.HelpBox(EditorStrings.HelpNoiseLoadingFailed, MessageType.Error);
                     }
-                    DrawLineSeparator();
+                    HeaderFoldableEnd();
 
                     using (new EditorGUILayout.HorizontalScope())
                     {

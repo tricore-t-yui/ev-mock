@@ -33,9 +33,12 @@ Properties
     _CameraPosObjectSpace("Camera Position Object Space", Vector) = (0,0,0,0)
 
     _ClippingPlaneWS("Clipping Plane WS", Vector) = (0,0,0,0)
+    _ClippingPlaneProps("Clipping Plane Props", Float) = 0.25
 
     _BlendSrcFactor("BlendSrcFactor", Int) = 1 // One
     _BlendDstFactor("BlendDstFactor", Int) = 1 // One
+
+    _CameraBufferSizeSRP("Camera Buffer Size SRP", Vector) = (1,1,0,0)
 }
 
 Category

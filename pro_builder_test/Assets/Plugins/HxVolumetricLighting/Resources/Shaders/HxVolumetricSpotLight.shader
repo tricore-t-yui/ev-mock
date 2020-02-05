@@ -99,6 +99,9 @@ Shader "Hidden/HxVolumetricSpotLight"
 
 
 		o.pos = v.vertex;
+		if (_ProjectionParams.x < 0)
+			o.pos.y = -o.pos.y;
+
 		o.uv = ComputeScreenPos(o.pos);
 #ifdef FULL_ON
 		o.ray = mul(unity_ObjectToWorld, v.vertex);
@@ -448,7 +451,7 @@ return CUSTOM_SAMPLE_SHADOW(_ShadowMapTexture, float4(suv.xy, z_buffer_value, 0)
 return 1;
 #endif
 }
-
+float4 _Dithering_Coords;
 vr MarchColor(float3 dir, float dis, float3 wpos, float2 uv, float2 InterleavePos, float3 EnterPoint, float3 ExitPoint)
 {
 	vr vrout;
@@ -487,8 +490,10 @@ vr MarchColor(float3 dir, float dis, float3 wpos, float2 uv, float2 InterleavePo
 	float stepSize = (length(Difff) / NUM_SAMPLES);
 	float3 dirScaled = normalize(Difff) * stepSize;
 
-	InterleavePos = InterleavePos.xy / HxTileSize;
-	float index = frac(tex2Dlod(Tile5x5, float4(InterleavePos.xy, 0, 0)).r + hxRayOffset);
+	//InterleavePos = InterleavePos.xy / HxTileSize;
+	//float index = frac(tex2Dlod(Tile5x5, float4(InterleavePos.xy, 0, 0)).r + hxRayOffset);
+	float index = tex2Dlod(Tile5x5, float4(uv * _Dithering_Coords.xy + _Dithering_Coords.zw, 0, 0)).r;
+
 	float3 Offset = dirScaled * (index);
 	float3 OffsetWorld = dirScaledWorld * index;
 
@@ -706,7 +711,7 @@ vr MarchColor(float3 dir, float dis, float3 wpos, float2 uv, float2 InterleavePo
 		Pass
 		{
 			ZTest Always
-			Cull Front
+			Cull Back
 			CGPROGRAM
 #pragma target 3.0
 #pragma vertex vert2

@@ -58,7 +58,7 @@ namespace VLB_Samples
                     beam.coneRadiusStart = Random.Range(0f, 0.1f);
                     beam.geomCustomSides = Random.Range(12, 36);
                     beam.fresnelPow = Random.Range(1, 7.5f);
-                    beam.noiseEnabled = NoiseEnabled;
+                    beam.noiseMode = NoiseEnabled ? VLB.NoiseMode.WorldSpace : VLB.NoiseMode.Disabled;
 
                     var rotater = gao.GetComponent<Rotater>();
                     rotater.EulerSpeed = new Vector3(0, Random.Range(-500, 500), 0);

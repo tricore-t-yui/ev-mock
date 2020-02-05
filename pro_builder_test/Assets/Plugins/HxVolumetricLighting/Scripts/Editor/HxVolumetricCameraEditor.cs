@@ -514,7 +514,7 @@ public class HxVolumetricCameraEditor : Editor
         if (EditorGUILayout.BeginFadeGroup(m_ShowTemporal.faded))
         {
             EditorGUILayout.PropertyField(m_TemporalSampling);
-            EditorGUILayout.PropertyField(m_DitherSpeed);
+           // EditorGUILayout.PropertyField(m_DitherSpeed);
             EditorGUILayout.PropertyField(m_LuminanceFeedback);
             EditorGUILayout.PropertyField(m_MaxFeedback);
         }

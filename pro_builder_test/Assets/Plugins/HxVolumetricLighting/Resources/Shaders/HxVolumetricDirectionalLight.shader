@@ -134,6 +134,7 @@ Shader "Hidden/HxVolumetricDirectionalLight"
 	float3 CameraFoward;
 	float VolumeScale;
 	sampler2D Tile5x5;
+	float4 _Dithering_Coords;
 	float ExtinctionEffect;
 	float3 LightColour;
 	float3 LightColour2;
@@ -277,8 +278,8 @@ Shader "Hidden/HxVolumetricDirectionalLight"
 		float3 currentPos = start;// - (rayDir * _ProjectionParams.y/2);//- (rayDir * rayDistance);
 
 
-		float index = frac(tex2Dlod(Tile5x5, float4(fmod((_ScreenParams.xy * VolumeScale) * uv, HxTileSize) / HxTileSize, 0, 0)).r + hxRayOffset);
-
+		//float index = frac(tex2Dlod(Tile5x5, float4(fmod((_ScreenParams.xy * VolumeScale) * uv, HxTileSize) / HxTileSize, 0, 0)).r + hxRayOffset);
+		float index = tex2Dlod(Tile5x5, float4(uv * _Dithering_Coords.xy + _Dithering_Coords.zw, 0, 0)).r;
 		//float index = tex2D(Tile5x5, interleavedPos.xy).r;
 		float rayStartOffset = stepSize * index;
 		currentPos -= (rayStartOffset ) * rayDir.xyz;

@@ -51,10 +51,10 @@ namespace VLB
         public const float GlareFrontal = 0.5f;
         public const float GlareBehind = 0.5f;
 
+        public const NoiseMode NoiseModeDefault = NoiseMode.Disabled;
         public const float NoiseIntensityMin = 0.0f;
         public const float NoiseIntensityMax = 1.0f;
         public const float NoiseIntensityDefault = 0.5f;
-
         public const float NoiseScaleMin = 0.01f;
         public const float NoiseScaleMax = 2f;
         public const float NoiseScaleDefault = 0.5f;
@@ -77,6 +77,7 @@ namespace VLB
         public const float DynOcclusionMaxSurfaceAngleMax = 90f;
         public const PlaneAlignment DynOcclusionPlaneAlignmentDefault = PlaneAlignment.Surface;
         public const float DynOcclusionPlaneOffsetDefault = 0.1f;
+        public const float DynOcclusionFadeDistanceToPlaneDefault = 0.25f;
 
         // CONFIG
         public const bool ConfigGeometryOverrideLayerDefault = true;

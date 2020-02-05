@@ -235,6 +235,12 @@ namespace VLB
         {
             HandleBackwardCompatibility(pluginVersion, Version.Current);
             pluginVersion = Version.Current;
+
+#if UNITY_EDITOR
+            var instanceNoAssert = GetInstance(false);
+            if (instanceNoAssert != null)
+                OnRenderPipelineChanged(instanceNoAssert.renderPipeline);
+#endif
         }
 
         void HandleBackwardCompatibility(int serializedVersion, int newVersion)
@@ -255,32 +261,31 @@ namespace VLB
 
         // Singleton management
         static Config m_Instance = null;
-        public static Config Instance
+        public static Config Instance { get { return GetInstance(true); } }
+
+        private static Config GetInstance(bool assertIfNotFound)
         {
-            get
-            {
 #if UNITY_EDITOR
-                // Do not cache the instance during editing in order to handle new asset created or moved.
-                if (!Application.isPlaying || m_Instance == null)
+            // Do not cache the instance during editing in order to handle new asset created or moved.
+            if (!Application.isPlaying || m_Instance == null)
 #else
                 if (m_Instance == null)
 #endif
+            {
+                var foundOverride = Resources.Load<ConfigOverride>(ConfigOverride.kAssetName);
+                if (foundOverride)
                 {
-                    var foundOverride = Resources.Load<ConfigOverride>(ConfigOverride.kAssetName);
-                    if (foundOverride)
-                    {
-                        m_Instance = foundOverride;
-                    }
-                    else
-                    {
-                        var found = Resources.Load<Config>(Config.kAssetName);
-                        Debug.Assert(found != null, string.Format("Can't find any resource of type '{0}'. Make sure you have a ScriptableObject of this type in a 'Resources' folder.", typeof(Config)));
-                        m_Instance = found;
-                    }
+                    m_Instance = foundOverride;
                 }
-
-                return m_Instance;
+                else
+                {
+                    var found = Resources.Load<Config>(Config.kAssetName);
+                    Debug.Assert(!assertIfNotFound || found != null, string.Format("Can't find any resource of type '{0}'. Make sure you have a ScriptableObject of this type in a 'Resources' folder.", typeof(Config)));
+                    m_Instance = found;
+                }
             }
+
+            return m_Instance;
         }
     }
 }

@@ -28,6 +28,9 @@ public class HxVolumetricLight : MonoBehaviour
         return myDummyLight;
     }
 
+    Transform _transform;
+    public Transform myTransform { get { if (_transform == null) { _transform = transform; } return _transform; } set { _transform = value; } }
+
     CommandBuffer BufferRender;
     CommandBuffer BufferCopy;
     Projector myProjector;
@@ -500,9 +503,9 @@ public class HxVolumetricLight : MonoBehaviour
                 CameraBuffer = BufferRender;
                 BufferRender.Clear();
             }
-            if (RenderShadows && HxVolumetricCamera.Active.ShadowFix) { Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, HxVolumetricCamera.Active.transform.position, HxVolumetricCamera.Active.transform.rotation, HxVolumetricCamera.ShadowMaterial, 0, HxVolumetricCamera.ActiveCamera, 0, null, true); }
+            if (RenderShadows && HxVolumetricCamera.Active.ShadowFix) { Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, HxVolumetricCamera.Active.myTransform.position, HxVolumetricCamera.Active.myTransform.rotation, HxVolumetricCamera.ShadowMaterial, 0, HxVolumetricCamera.ActiveCamera, 0, null, true); }
 
-            Vector3 forward = transform.forward;
+            Vector3 forward = myTransform.forward;
 
             if (CustomFogHeightEnabled ? FogHeightEnabled : HxVolumetricCamera.Active.FogHeightEnabled)
             {
@@ -516,7 +519,7 @@ public class HxVolumetricLight : MonoBehaviour
             CameraBuffer.SetGlobalVector("SunSize", new Vector2((phaseG2 == 0 ? 0 : 1), ((CustomSunBleed ? SunBleed : HxVolumetricCamera.Active.SunBleed) ? 1 : 0)));
             phaseG2 = Mathf.Lerp(0.9999f, 0.995f, Mathf.Pow(phaseG2, 4));
 
-           // if (RenderShadows) { Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, Matrix4x4.TRS(HxVolumetricCamera.Active.transform.position, Quaternion.identity, new Vector3(HxVolumetricCamera.Active.MaxDirectionalRayDistance, HxVolumetricCamera.Active.MaxDirectionalRayDistance, HxVolumetricCamera.Active.MaxDirectionalRayDistance) * 2), HxVolumetricCamera.ShadowMaterial, 0, HxVolumetricCamera.ActiveCamera, 0, null, ShadowCastingMode.ShadowsOnly); }
+           // if (RenderShadows) { Graphics.DrawMesh(HxVolumetricCamera.BoxMesh, Matrix4x4.TRS(HxVolumetricCamera.Active.myTransform.position, Quaternion.identity, new Vector3(HxVolumetricCamera.Active.MaxDirectionalRayDistance, HxVolumetricCamera.Active.MaxDirectionalRayDistance, HxVolumetricCamera.Active.MaxDirectionalRayDistance) * 2), HxVolumetricCamera.ShadowMaterial, 0, HxVolumetricCamera.ActiveCamera, 0, null, ShadowCastingMode.ShadowsOnly); }
 
 
             LoadVolumeData();
@@ -765,7 +768,7 @@ public class HxVolumetricLight : MonoBehaviour
 #endif
 
       
-        float Distance = ClosestDistanceToCone(HxVolumetricCamera.Active.transform.position);
+        float Distance = ClosestDistanceToCone(HxVolumetricCamera.Active.myTransform.position);
 
         float distanceLerp = CalcLightInstensityDistance(Distance);
 
@@ -830,7 +833,7 @@ public class HxVolumetricLight : MonoBehaviour
 
                 Vector4 phase = new Vector4(1.0f / (4.0f * Mathf.PI), 1.0f - (phaseG * phaseG), 1.0f + (phaseG * phaseG), 2.0f * phaseG);
                 cameraBuffer.SetGlobalVector(PhasePID, phase);
-                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, transform.position);
+                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, myTransform.position);
 
                 cameraBuffer.SetGlobalVector(_LightParamsPID, new Vector4((CustomStrength ? Strength : LightShadowStrength()), 1f / LightRange(), LightRange(), (CustomIntensity ? Intensity : LightIntensity())));
 
@@ -854,7 +857,7 @@ public class HxVolumetricLight : MonoBehaviour
                 cameraBuffer.SetGlobalVector(NoiseScalePID, finalScale);
                 if (OffsetUpdated == false) { OffsetUpdated = true; Offset += NoiseVelocity * Time.deltaTime; }
                 cameraBuffer.SetGlobalVector(NoiseOffsetPID, (CustomNoiseVelocity ? Offset : HxVolumetricCamera.Active.Offset));
-                Vector3 forward = transform.forward;
+                Vector3 forward = myTransform.forward;
                 cameraBuffer.SetGlobalVector(_SpotLightParamsPID, new Vector4(forward.x, forward.y, forward.z, (LightSpotAngle() + 0.01f) / 2f * Mathf.Deg2Rad));
                 if (propertyBlock == null) { propertyBlock = new MaterialPropertyBlock(); }
                 propertyBlock.SetTexture(_LightTexture0PID, (LightCookie() == null ? HxVolumetricCamera.Active.SpotLightCookie : LightCookie()));
@@ -878,7 +881,7 @@ public class HxVolumetricLight : MonoBehaviour
                     if (n != null) { propertyBlock.SetFloat("hxNoiseContrast", getContrast()); propertyBlock.SetTexture("NoiseTexture3D", n); }
                 }
 
-                if (lastBounds.SqrDistance(HxVolumetricCamera.Active.transform.position) < ((HxVolumetricCamera.ActiveCamera.nearClipPlane * 2) * (HxVolumetricCamera.ActiveCamera.nearClipPlane * 2)))
+                if (lastBounds.SqrDistance(HxVolumetricCamera.Active.myTransform.position) < ((HxVolumetricCamera.ActiveCamera.nearClipPlane * 2) * (HxVolumetricCamera.ActiveCamera.nearClipPlane * 2)))
                 {
 
                     cameraBuffer.DrawMesh(HxVolumetricCamera.QuadMesh, LightMatrix, HxVolumetricCamera.GetSpotMaterial(mid), 0, 0, propertyBlock);
@@ -888,7 +891,7 @@ public class HxVolumetricLight : MonoBehaviour
                     cameraBuffer.DrawMesh(HxVolumetricCamera.SpotLightMesh, LightMatrix, HxVolumetricCamera.GetSpotMaterial(mid), 0, 1, propertyBlock);
                 }
 
-                   // cameraBuffer.DrawMesh(HxVolumetricCamera.SpotLightMesh, LightMatrix, HxVolumetricCamera.GetSpotMaterial(mid), 0, (lastBounds.SqrDistance(HxVolumetricCamera.Active.transform.position) < ((HxVolumetricCamera.ActiveCamera.nearClipPlane * 2) * (HxVolumetricCamera.ActiveCamera.nearClipPlane * 2)) ? 0 : 1), propertyBlock);
+                   // cameraBuffer.DrawMesh(HxVolumetricCamera.SpotLightMesh, LightMatrix, HxVolumetricCamera.GetSpotMaterial(mid), 0, (lastBounds.SqrDistance(HxVolumetricCamera.Active.myTransform.position) < ((HxVolumetricCamera.ActiveCamera.nearClipPlane * 2) * (HxVolumetricCamera.ActiveCamera.nearClipPlane * 2)) ? 0 : 1), propertyBlock);
                 
 
                 if (RenderShadows)
@@ -907,7 +910,7 @@ public class HxVolumetricLight : MonoBehaviour
 
 
 
-        float dis = Mathf.Sqrt(lastBounds.SqrDistance(HxVolumetricCamera.ActiveCamera.transform.position));
+        float dis = Mathf.Sqrt(lastBounds.SqrDistance(HxVolumetricCamera.Active.myTransform.position));
         float distanceLerp = CalcLightInstensityDistance(dis);
 
         //DrawIntersect();
@@ -933,7 +936,7 @@ public class HxVolumetricLight : MonoBehaviour
 
                 Vector4 phase = new Vector4(1.0f / (4.0f * Mathf.PI), 1.0f - (phaseG * phaseG), 1.0f + (phaseG * phaseG), 2.0f * phaseG);
                 cameraBuffer.SetGlobalVector(PhasePID, phase);
-                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, transform.position);
+                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, myTransform.position);
 
                 cameraBuffer.SetGlobalVector(_LightParamsPID, new Vector4((CustomStrength ? Strength : LightShadowStrength()), 1f / LightRange(), LightRange(), (CustomIntensity ? Intensity : LightIntensity())));
 
@@ -946,7 +949,7 @@ public class HxVolumetricLight : MonoBehaviour
                 cameraBuffer.SetGlobalVector(NoiseScalePID, finalScale);
                 if (OffsetUpdated == false) { OffsetUpdated = true; Offset += NoiseVelocity * Time.deltaTime; }
                 cameraBuffer.SetGlobalVector(NoiseOffsetPID, (CustomNoiseVelocity ? Offset : HxVolumetricCamera.Active.Offset));
-                Vector3 forward = transform.forward;
+                Vector3 forward = myTransform.forward;
                 cameraBuffer.SetGlobalVector(_SpotLightParamsPID, new Vector4(forward.x, forward.y, forward.z, (LightSpotAngle() + 0.01f) / 2f * Mathf.Deg2Rad));
                 if (propertyBlock == null) { propertyBlock = new MaterialPropertyBlock(); }
                 propertyBlock.SetTexture(_hxProjectorTexturePID, myProjector.material.GetTexture(_hxProjectorTexturePID));
@@ -962,9 +965,9 @@ public class HxVolumetricLight : MonoBehaviour
 
 
 
-             cameraBuffer.SetGlobalVector("UpFrustumOffset", transform.up * (myProjector.orthographic ? myProjector.orthographicSize : 0));
+             cameraBuffer.SetGlobalVector("UpFrustumOffset", myTransform.up * (myProjector.orthographic ? myProjector.orthographicSize : 0));
     
-             cameraBuffer.SetGlobalVector("RightFrustumOffset", transform.right * (myProjector.orthographic ? myProjector.orthographicSize * myProjector.aspectRatio : 0));
+             cameraBuffer.SetGlobalVector("RightFrustumOffset", myTransform.right * (myProjector.orthographic ? myProjector.orthographicSize * myProjector.aspectRatio : 0));
 
             int mid = MID(false, HxVolumetricCamera.ActiveFull());
 
@@ -1085,7 +1088,7 @@ public class HxVolumetricLight : MonoBehaviour
 #if UNITY_EDITOR
         HxVolumetricCamera.Active.PointUsed = true;
 #endif
-        float distance = Mathf.Max(Vector3.Distance(HxVolumetricCamera.Active.transform.position, transform.position) - LightRange(), 0);
+        float distance = Mathf.Max(Vector3.Distance(HxVolumetricCamera.Active.myTransform.position, myTransform.position) - LightRange(), 0);
         float distanceLerp = CalcLightInstensityDistance(distance);
 
         if (distanceLerp > 0)
@@ -1140,7 +1143,7 @@ public class HxVolumetricLight : MonoBehaviour
                 Vector4 phase = new Vector4(1.0f / (4.0f * Mathf.PI), 1.0f - (phaseG * phaseG), 1.0f + (phaseG * phaseG), 2.0f * phaseG);
 
                 cameraBuffer.SetGlobalVector(PhasePID, phase);
-                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, transform.position);
+                cameraBuffer.SetGlobalVector(_CustomLightPositionPID, myTransform.position);
                 cameraBuffer.SetGlobalVector(_LightParamsPID, new Vector4((CustomStrength ? Strength : LightShadowStrength()), 1f / LightRange(), LightRange(), (CustomIntensity ? Intensity : LightIntensity())));
                 cameraBuffer.SetGlobalVector(DensityPID, new Vector4(d, GetSampleCount(RenderShadows), 0, (CustomExtinction ? Extinction : HxVolumetricCamera.Active.Extinction)));
 
@@ -1313,12 +1316,12 @@ public class HxVolumetricLight : MonoBehaviour
     float ClosestDistanceToCone(Vector3 Point)
     {
         //this could be faster. but it works.
-        Vector3 Axis = transform.forward * LightRange();
-        Vector3 planePosition = (transform.position + Axis);
-        float planeDistance = Vector3.Dot(transform.forward, (Point - planePosition));
+        Vector3 Axis = myTransform.forward * LightRange();
+        Vector3 planePosition = (myTransform.position + Axis);
+        float planeDistance = Vector3.Dot(myTransform.forward, (Point - planePosition));
         if (planeDistance == 0) { return 0; }
 
-        Vector3 closestPoint = Point - planeDistance * transform.forward;
+        Vector3 closestPoint = Point - planeDistance * myTransform.forward;
         float s = Mathf.Tan(LightSpotAngle() / 2f * Mathf.Deg2Rad) * LightRange();
 
         Vector3 dif = (closestPoint - planePosition);
@@ -1331,7 +1334,7 @@ public class HxVolumetricLight : MonoBehaviour
 
         float a = Mathf.Deg2Rad * LightSpotAngle();
 
-        float c = Mathf.Acos((Vector3.Dot((Point - transform.position), -Axis)) / ((Point - transform.position).magnitude * LightRange()));
+        float c = Mathf.Acos((Vector3.Dot((Point - myTransform.position), -Axis)) / ((Point - myTransform.position).magnitude * LightRange()));
         if (Mathf.Abs(c - a) >= Mathf.PI / 2.0f)
         {
             return 0; //inside
@@ -1339,7 +1342,7 @@ public class HxVolumetricLight : MonoBehaviour
         closestPoint = planePosition + dif.normalized * s;
 
 
-        closestPoint = ClosestPointOnLine(closestPoint, transform.position, Point);
+        closestPoint = ClosestPointOnLine(closestPoint, myTransform.position, Point);
 
 
 
@@ -1361,6 +1364,9 @@ public class HxVolumetricLight : MonoBehaviour
     Vector3 maxBounds;
     HxOctreeNode<HxVolumetricLight>.NodeObject octreeNode;
 
+
+
+
     void UpdateLightMatrix()
     {
         LastRange = LightRange();
@@ -1368,14 +1374,14 @@ public class HxVolumetricLight : MonoBehaviour
         lastType = GetLightType();
         if (GetLightType() == LightType.Point)
         {
-            LightMatrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(LightRange() * 2f, LightRange() * 2f, LightRange() * 2f)); matrixReconstruct = false;
+            LightMatrix = Matrix4x4.TRS(myTransform.position, myTransform.rotation, new Vector3(LightRange() * 2f, LightRange() * 2f, LightRange() * 2f)); matrixReconstruct = false;
         }
         else if (GetLightType() == LightType.Spot)
         {
 
             float s = Mathf.Tan(LightSpotAngle() / 2f * Mathf.Deg2Rad) * LightRange();
 
-            LightMatrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(s * 2f, s * 2f, LightRange()));
+            LightMatrix = Matrix4x4.TRS(myTransform.position, myTransform.rotation, new Vector3(s * 2f, s * 2f, LightRange()));
         }
         else if (GetLightType() == LightType.Area)
         {
@@ -1385,17 +1391,17 @@ public class HxVolumetricLight : MonoBehaviour
 
                 if (myProjector.orthographic)
                 {
-                    LightMatrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(myProjector.orthographicSize * myProjector.aspectRatio * 2, myProjector.orthographicSize * 2, LightRange()));
+                    LightMatrix = Matrix4x4.TRS(myTransform.position, myTransform.rotation, new Vector3(myProjector.orthographicSize * myProjector.aspectRatio * 2, myProjector.orthographicSize * 2, LightRange()));
                 }
                 else
                 {
                     float s = Mathf.Tan(LightSpotAngle() / 2f * Mathf.Deg2Rad) * LightRange();
-                    LightMatrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(s * 2f , s * 2f, LightRange()));
+                    LightMatrix = Matrix4x4.TRS(myTransform.position, myTransform.rotation, new Vector3(s * 2f , s * 2f, LightRange()));
                 }
             }
 
         }
-        transform.hasChanged = false;
+        myTransform.hasChanged = false;
         matrixReconstruct = false;
     }
 
@@ -1548,10 +1554,10 @@ public class HxVolumetricLight : MonoBehaviour
            Vector3 bottomDenom;
          Vector3 bottom;
 
-        Vector3 _SpotLightParams = transform.forward;
-        Vector3 rayDir = HxVolumetricCamera.Active.transform.forward;
-        Vector3 _CustomLightPosition = transform.position;
-        Vector3 _WorldSpaceCameraPos = HxVolumetricCamera.Active.transform.position;
+        Vector3 _SpotLightParams = myTransform.forward;
+        Vector3 rayDir = HxVolumetricCamera.Active.myTransform.forward;
+        Vector3 _CustomLightPosition = myTransform.position;
+        Vector3 _WorldSpaceCameraPos = HxVolumetricCamera.Active.myTransform.position;
 
             bottomDenom.x = Vector3.Dot(_SpotLightParams, rayDir);
             bottom.x = Vector3.Dot(((_CustomLightPosition + _SpotLightParams * LightRange()) - _WorldSpaceCameraPos), _SpotLightParams);
@@ -1663,13 +1669,13 @@ public class HxVolumetricLight : MonoBehaviour
     public void UpdatePosition(bool first = false)
     {
 
-        if (first || transform.hasChanged || matrixReconstruct || LastRange != LightRange() || LastSpotAngle != LightSpotAngle() || lastType != GetLightType() || (GetLightType() == LightType.Area && (LastAspect != GetAspect() || LastOrthoSize == GetOrthoSize() || LastOrtho == GetOrtho() )))
+        if (first || myTransform.hasChanged || matrixReconstruct || LastRange != LightRange() || LastSpotAngle != LightSpotAngle() || lastType != GetLightType() || (GetLightType() == LightType.Area && (LastAspect != GetAspect() || LastOrthoSize == GetOrthoSize() || LastOrtho == GetOrtho() )))
         {
             if (GetLightType() == LightType.Point)
             {
                 Vector3 dif = new Vector3(LightRange(), LightRange(), LightRange());
-                minBounds = transform.position - dif;
-                maxBounds = transform.position + dif;
+                minBounds = myTransform.position - dif;
+                maxBounds = myTransform.position + dif;
                 lastBounds.SetMinMax(minBounds, maxBounds);
 
                 if (!first) { CheckLightType(); HxVolumetricCamera.LightOctree.Move(octreeNode, minBounds, maxBounds); } else { lastType = GetLightType(); }
@@ -1678,10 +1684,10 @@ public class HxVolumetricLight : MonoBehaviour
             }
             else if (GetLightType() == LightType.Spot)
             {
-                Vector3 pos = transform.position;
-                Vector3 forward = transform.forward;
-                Vector3 right = transform.right;
-                Vector3 up = transform.up;
+                Vector3 pos = myTransform.position;
+                Vector3 forward = myTransform.forward;
+                Vector3 right = myTransform.right;
+                Vector3 up = myTransform.up;
 
                 Vector3 farCenter = pos + forward * LightRange();
 
@@ -1710,10 +1716,10 @@ public class HxVolumetricLight : MonoBehaviour
             {
                 if (myProjector != null)
                 {
-                    Vector3 pos = transform.position;
-                    Vector3 forward = transform.forward;
-                    Vector3 right = transform.right;
-                    Vector3 up = transform.up;
+                    Vector3 pos = myTransform.position;
+                    Vector3 forward = myTransform.forward;
+                    Vector3 right = myTransform.right;
+                    Vector3 up = myTransform.up;
 
                     Vector3 farCenter = pos + forward * LightRange();
                     Vector3 nearCenter = pos + forward * myProjector.nearClipPlane;

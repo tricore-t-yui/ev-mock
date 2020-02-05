@@ -58,9 +58,10 @@ namespace VLB
         /// </summary>
         public float planeOffset = Consts.DynOcclusionPlaneOffsetDefault;
 
-        VolumetricLightBeam m_Master = null;
-        int m_FrameCountToWait = 0;
-        float m_RangeMultiplier = 1f;
+        /// <summary>
+        /// Fade out the beam before the computed clipping plane in order to soften the transition.
+        /// </summary>
+        public float fadeDistanceToPlane = Consts.DynOcclusionFadeDistanceToPlaneDefault;
 
         public class HitResult
         {
@@ -100,7 +101,6 @@ namespace VLB
 
             public bool hasCollider { get { return collider2D || collider3D; } }
 
-#if UNITY_EDITOR
             public string name
             {
                 get
@@ -120,13 +120,22 @@ namespace VLB
                     else return new Bounds();
                 }
             }
-#endif
         }
+
+        /// <summary>
+        /// Get information about the current occluder hit by the beam.
+        /// Can be null if the beam is not occluded.
+        /// </summary>
+        public HitResult currentHit { get; private set; }
+
+        VolumetricLightBeam m_Master = null;
+        int m_FrameCountToWait = 0;
+        float m_RangeMultiplier = 1f;
+        public Plane planeEquationWS { get; private set; }
 
 #if UNITY_EDITOR
         public struct EditorDebugData
         {
-            public HitResult currentHit;
             public int lastFrameUpdate;
         }
         public EditorDebugData editorDebugData;
@@ -150,6 +159,7 @@ namespace VLB
         {
             minOccluderArea = Mathf.Max(minOccluderArea, 0f);
             waitFrameCount = Mathf.Clamp(waitFrameCount, 1, 60);
+            fadeDistanceToPlane = Mathf.Max(fadeDistanceToPlane, 0f);
         }
 
         void OnEnable()
@@ -157,9 +167,10 @@ namespace VLB
             m_Master = GetComponent<VolumetricLightBeam>();
             Debug.Assert(m_Master);
 
+            currentHit = null;
+
 #if UNITY_EDITOR
             EditorLoadPrefs();
-            editorDebugData.currentHit = null;
             editorDebugData.lastFrameUpdate = 0;
 #endif
         }
@@ -352,49 +363,45 @@ namespace VLB
                 break;
             }
 
-#if UNITY_EDITOR
-            editorDebugData.currentHit = hit;
-#endif
+            currentHit = hit;
         }
 
         void SetHitNull()
         {
             SetClippingPlaneOff();
-#if UNITY_EDITOR
-            editorDebugData.currentHit = null;
-#endif
+            currentHit = null;
         }
 
         void SetClippingPlane(Plane planeWS)
         {
             planeWS = planeWS.TranslateCustom(planeWS.normal * planeOffset);
-            m_Master.SetClippingPlane(planeWS);
-#if UNITY_EDITOR
-            SetDebugPlane(planeWS);
-#endif
+            SetPlaneWS(planeWS);
+            m_Master.SetDynamicOcclusion(this);
         }
 
         void SetClippingPlaneOff()
         {
-            m_Master.SetClippingPlaneOff();
+            SetPlaneWS(new Plane());
+            m_Master.SetDynamicOcclusion(null);
+        }
+
+        void SetPlaneWS(Plane planeWS)
+        {
+            planeEquationWS = planeWS;
+
 #if UNITY_EDITOR
-            SetDebugPlane(new Plane());
+            m_DebugPlaneLocal = planeWS;
+            if (m_DebugPlaneLocal.IsValid())
+            {
+                float dist;
+                if (m_DebugPlaneLocal.Raycast(new Ray(transform.position, transform.forward), out dist))
+                    m_DebugPlaneLocal.distance = dist; // compute local distance
+            }
 #endif
         }
 
 #if UNITY_EDITOR
         Plane m_DebugPlaneLocal;
-
-        void SetDebugPlane(Plane planeWS)
-        {
-            m_DebugPlaneLocal = planeWS;
-            if (planeWS.IsValid())
-            {
-                float dist;
-                if (planeWS.Raycast(new Ray(transform.position, transform.forward), out dist))
-                    m_DebugPlaneLocal.distance = dist; // compute local distance
-            }
-        }
 
         void OnDrawGizmos()
         {

@@ -98,6 +98,9 @@ Shader "Hidden/HxVolumetricProjector"
 		v2f o;
 #if UNITY_SINGLE_PASS_STEREO
 		o.pos = UnityObjectToClipPos(v.vertex);
+		if (_ProjectionParams.x < 0)
+			o.pos.y = -o.pos.y;
+
 		o.pos.z = min(_ProjectionParams.z, o.pos.z);
 		o.uv = ComputeScreenPos(o.pos);
 #ifdef FULL_ON
@@ -105,6 +108,9 @@ Shader "Hidden/HxVolumetricProjector"
 #endif
 #else
 		o.pos = mul(VolumetricMVP, v.vertex);
+		if (_ProjectionParams.x < 0)
+			o.pos.y = -o.pos.y;
+
 		o.pos.z = min(_ProjectionParams.z, o.pos.z);
 		o.uv = ComputeScreenPos(o.pos);
 #ifdef FULL_ON
@@ -623,7 +629,7 @@ vr MarchColor(float3 dir, float dis, float3 wpos, float2 uv, float2 InterleavePo
 		Pass
 		{
 			ZTest Always
-			Cull Front
+			Cull Back
 			CGPROGRAM
 #pragma target 3.0
 #pragma vertex vert2

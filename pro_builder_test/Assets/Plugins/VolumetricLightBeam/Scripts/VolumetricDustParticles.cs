@@ -46,6 +46,13 @@ namespace VLB
         public float density = 5f;
 
         /// <summary>
+        /// The minimum distance (from the light source) where the particles are spawned.
+        /// The higher it is, the more the particles are spawned away from the light source.
+        /// </summary>
+        [Range(0f, 1f)]
+        public float spawnMinDistance = 0f;
+        
+        /// <summary>
         /// The maximum distance (from the light source) where the particles are spawned.
         /// The lower it is, the more the particles are gathered near the light source.
         /// </summary>
@@ -195,7 +202,10 @@ namespace VLB
             {
                 var thickness = Mathf.Clamp01(1 - (m_Master.fresnelPow / Consts.FresnelPowMaxValue));
 
-                var coneLength = m_Master.fallOffEnd * spawnMaxDistance;
+                if (spawnMinDistance > spawnMaxDistance)
+                    Utils.Swap(ref spawnMinDistance, ref spawnMaxDistance);
+                
+                var coneLength = m_Master.fallOffEnd * (spawnMaxDistance - spawnMinDistance);
                 var ratePerSec = coneLength * density;
                 int maxParticles = (int)(ratePerSec * 4);
 
@@ -246,14 +256,22 @@ namespace VLB
 
                 main.maxParticles = maxParticles;
 
-                var shape = m_Particles.shape;
-                shape.shapeType = ParticleSystemShapeType.ConeVolume;
-                shape.radius = m_Master.coneRadiusStart * Mathf.Lerp(0.3f, 1f, thickness);
-                shape.angle = m_Master.coneAngle * 0.5f * Mathf.Lerp(0.7f, 1f, thickness);
-                shape.length = coneLength;
+                {
+                    var shape = m_Particles.shape;
+                    shape.shapeType = ParticleSystemShapeType.ConeVolume;
 
-                shape.arc = 360f;
-                shape.randomDirectionAmount = (direction == Direction.Random) ? 1f : 0f;
+                    float coneAngle = m_Master.coneAngle * Mathf.Lerp(0.7f, 1f, thickness);
+                    shape.angle = coneAngle * 0.5f;
+
+                    float radiusStart = m_Master.coneRadiusStart * Mathf.Lerp(0.3f, 1.0f, thickness);
+                    float radiusEnd = Utils.ComputeConeRadiusEnd(m_Master.fallOffEnd, coneAngle);
+                    shape.radius = Mathf.Lerp(radiusStart, radiusEnd, spawnMinDistance);
+
+                    shape.length = coneLength;
+                    shape.position = new Vector3(0f, 0f, m_Master.fallOffEnd * spawnMinDistance);
+                    shape.arc = 360f;
+                    shape.randomDirectionAmount = (direction == Direction.Random) ? 1f : 0f;
+                }
 
                 var emission = m_Particles.emission;
                 var rate = emission.rateOverTime;

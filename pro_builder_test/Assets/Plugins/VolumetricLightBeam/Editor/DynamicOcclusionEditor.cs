@@ -8,7 +8,7 @@ namespace VLB
     [CanEditMultipleObjects]
     public class DynamicOcclusionEditor : EditorCommon
     {
-        SerializedProperty dimensions, layerMask, considerTriggers, minOccluderArea, planeAlignment, maxSurfaceDot, planeOffset, waitFrameCount, minSurfaceRatio;
+        SerializedProperty dimensions, layerMask, considerTriggers, minOccluderArea, planeAlignment, maxSurfaceDot, planeOffset, fadeDistanceToPlane, waitFrameCount, minSurfaceRatio;
 
         public override bool RequiresConstantRepaint() { return Application.isPlaying || DynamicOcclusion.editorRaycastAtEachFrame; }
 
@@ -23,6 +23,7 @@ namespace VLB
             minOccluderArea = FindProperty((DynamicOcclusion x) => x.minOccluderArea);
             planeAlignment = FindProperty((DynamicOcclusion x) => x.planeAlignment);
             planeOffset = FindProperty((DynamicOcclusion x) => x.planeOffset);
+            fadeDistanceToPlane = FindProperty((DynamicOcclusion x) => x.fadeDistanceToPlane);
             waitFrameCount = FindProperty((DynamicOcclusion x) => x.waitFrameCount);
             minSurfaceRatio = FindProperty((DynamicOcclusion x) => x.minSurfaceRatio);
             maxSurfaceDot = FindProperty((DynamicOcclusion x) => x.maxSurfaceDot);
@@ -31,9 +32,8 @@ namespace VLB
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            EditorGUILayout.Separator();
 
-            if (HeaderFoldable(EditorStrings.DynOcclusionHeaderRaycasting))
+            if (HeaderFoldableBegin(EditorStrings.DynOcclusionHeaderRaycasting))
             {
                 dimensions.CustomEnum<OccluderDimensions>(EditorStrings.DynOcclusionDimensions, EditorStrings.DynOcclusionDimensionsEnumDescriptions);
                 EditorGUILayout.PropertyField(layerMask, EditorStrings.DynOcclusionLayerMask);
@@ -56,9 +56,9 @@ namespace VLB
                 EditorGUILayout.PropertyField(waitFrameCount, EditorStrings.DynOcclusionWaitFrameCount);
             }
 
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if (HeaderFoldable(EditorStrings.DynOcclusionHeaderOccluderSurface))
+            if (HeaderFoldableBegin(EditorStrings.DynOcclusionHeaderOccluderSurface))
             {
                 minSurfaceRatio.FloatSlider(
                     EditorStrings.DynOcclusionMinSurfaceRatio,
@@ -75,17 +75,18 @@ namespace VLB
                     );
             }
 
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if (HeaderFoldable(EditorStrings.DynOcclusionHeaderClippingPlane))
+            if (HeaderFoldableBegin(EditorStrings.DynOcclusionHeaderClippingPlane))
             {
                 EditorGUILayout.PropertyField(planeAlignment, EditorStrings.DynOcclusionPlaneAlignment);
                 EditorGUILayout.PropertyField(planeOffset, EditorStrings.DynOcclusionPlaneOffset);
+                EditorGUILayout.PropertyField(fadeDistanceToPlane, EditorStrings.DynOcclusionFadeDistanceToPlane);
             }
 
-            DrawLineSeparator();
+            HeaderFoldableEnd();
 
-            if (HeaderFoldable(EditorStrings.DynOcclusionHeaderEditorDebug))
+            if (HeaderFoldableBegin(EditorStrings.DynOcclusionHeaderEditorDebug))
             {
                 EditorGUI.BeginChangeCheck();
                 DynamicOcclusion.editorShowDebugPlane = EditorGUILayout.Toggle(EditorStrings.DynOcclusionEditorShowDebugPlane, DynamicOcclusion.editorShowDebugPlane);
@@ -109,7 +110,7 @@ namespace VLB
                     {
                         var instance = (target as DynamicOcclusion);
                         Debug.Assert(instance);
-                        var hit = instance.editorDebugData.currentHit;
+                        var hit = instance.currentHit;
                         var lastFrameUpdate = instance.editorDebugData.lastFrameUpdate;
 
                         var occluderInfo = string.Format("Last update {0} frame(s) ago\n", Time.frameCount - lastFrameUpdate);
@@ -118,6 +119,8 @@ namespace VLB
                     }
                 }
             }
+            HeaderFoldableEnd();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

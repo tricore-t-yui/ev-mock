@@ -61,7 +61,10 @@ namespace VLB
 
         public static void Delete(Shader shader)
         {
-            AssetDatabase.DeleteAsset(GetPath(shader));
+            string path = GetPath(shader);
+            var dummyMat = AssetDatabase.LoadAssetAtPath<Material>(path); // make sure the asset exists before deleting it, otherwise it can raise exceptions in specific conditions
+            if (dummyMat != null)
+                AssetDatabase.DeleteAsset(path);
         }
 #endif
     }

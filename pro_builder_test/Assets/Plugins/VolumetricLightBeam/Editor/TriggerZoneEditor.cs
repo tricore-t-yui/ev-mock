@@ -11,7 +11,6 @@ namespace VLB
     {
         SerializedProperty setIsTrigger, rangeMultiplier;
         List<VolumetricLightBeam> m_Beams;
-        static bool ms_ShowTips = true;
 
         protected override void OnEnable()
         {
@@ -36,13 +35,11 @@ namespace VLB
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            EditorGUILayout.Separator();
 
             EditorGUILayout.PropertyField(setIsTrigger, new GUIContent("Set Is Trigger", "Define if the Collider will be created as a convex trigger (not physical, most common behavior) or as a regular collider (physical)."));
             EditorGUILayout.PropertyField(rangeMultiplier, new GUIContent("Range Multiplier", "Change the length of the Collider.\nFor example, set 2.0 to make the Collider 2x longer than the beam."));
 
-            ms_ShowTips = EditorGUILayout.Foldout(ms_ShowTips, "Infos");
-            if (ms_ShowTips)
+            if (HeaderFoldableBegin("Infos"))
             {
                 EditorGUILayout.HelpBox("Generate a Collider with the same shape than the beam", MessageType.Info);
 
@@ -55,6 +52,7 @@ namespace VLB
                     }
                 }
             }
+            HeaderFoldableEnd();
 
             serializedObject.ApplyModifiedProperties();
         }
