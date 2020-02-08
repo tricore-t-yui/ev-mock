@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using ShadowState = ShadowParameter.StateType;
+using NormalStateType = ShadowParameter.NormalStateType;
 
 public class ShadowManager : MonoBehaviour
 {
     [SerializeField]
     ShadowParameter parameter = default;
+    [SerializeField]
+    SkinnedMeshRenderer meshRenderer = default;
     [SerializeField]
     Animator animator = default;
     [SerializeField]
@@ -15,6 +18,7 @@ public class ShadowManager : MonoBehaviour
 
     ShadowState currentState = ShadowState.Normal;
     SoundAreaSpawner soundSpawner = default;
+    PlayerDamageEvent damageEvent = default;
 
     bool stateChangeTrigger = false;
     public int nextStateId = -1;
@@ -24,11 +28,15 @@ public class ShadowManager : MonoBehaviour
     /// <summary>
     /// 開始
     /// </summary>
-    void Start()
+    void Awake()
     {
+        currentState = ShadowState.Normal;
         // サウンドエリアスポナーを取得
         soundSpawner = FindObjectOfType<SoundAreaSpawner>();
         if (soundSpawner == null) { Debug.LogError("soundAreaSpawner is null"); }
+
+        // ダメージイベント
+        damageEvent = FindObjectOfType<PlayerDamageEvent>();
 
         shadowStates = new ShadowStateBase[]
         {
@@ -41,10 +49,16 @@ public class ShadowManager : MonoBehaviour
         for (int i = 0; i < shadowStates.Length; i++)
         {
             // 初期化
-            shadowStates[i].Initialize(parameter,animator, agent);
+            shadowStates[i].Initialize(parameter,meshRenderer,animator, agent);
         }
 
-        // 開始
+        animator.SetBool("IsStaticState", parameter.IsStaticState);
+        animator.SetBool("IsWander", (parameter.NormalState == NormalStateType.Wanderer) ? true : false);
+    }
+
+    void OnEnable()
+    {
+        currentState = ShadowState.Normal;
         shadowStates[(int)currentState].Entry();
     }
 
@@ -114,52 +128,40 @@ public class ShadowManager : MonoBehaviour
         SetNextState(ShadowState.Alert);
     }
 
-    public void OnCautionRangeExit(Collider other)
-    {
-        // プレイヤーのみ
-        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 注意状態のみ
-        if (currentState != ShadowState.Alert) { return; }
-        // 通常状態に変更
-        SetNextState(ShadowState.Normal);
-        // 辺りに注意しているときの待機フラグをオフにする
-        animator.SetBool("IsWaiting", false);
-    }
-
     /// <summary>
-    /// 音を聞いた
+    /// 音が聞こえた
     /// </summary>
-    public void OnListenNoise(Collider other)
+    public void OnHeardNoise(Collider other)
     {
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
-        // 警戒状態・戦闘状態中のみ
+        // 警戒状態のみ
         if (currentState != ShadowState.Caution) { return; }
-        // 移動先位置を更新
+        // 音の発信源を目的地に設定
         agent.SetDestination(other.transform.position);
     }
 
-    // <summary>
-    /// 対象を見つけた
+    /// <summary>
+    /// プレイヤーを見つけた
     /// </summary>
     /// <param name="other"></param>
-    public void OnShadowVisible(Collider other)
+    public void OnDetectPlayer(Collider other)
     {
-        // 戦闘状態に変更
         SetNextState(ShadowState.Fighting);
-        // 移動先位置を更新
-        agent.SetDestination(other.transform.position);
     }
 
-    // <summary>
-    /// プレイヤーを追いかける
-    /// </summary>
-    /// <param name="other"></param>
     public void ChasePlayer(Collider other)
     {
-        // プレイヤーのみ
-        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 移動先位置を更新
+        if (currentState != ShadowState.Fighting) { return; }
         agent.SetDestination(other.transform.position);
+    }
+
+    public void OnAttackRangeEnter(Collider other)
+    {
+        // 戦闘状態のみ
+        if (currentState != ShadowState.Fighting) { return; }
+        animator.SetTrigger("Attaking");
+        damageEvent.Invoke(transform, 0);
+        animator.SetBool("IsWaiting", true);
     }
 }

@@ -12,44 +12,51 @@ public class ShadowStateCaution : ShadowStateBase
     {
         // 移動速度を設定
         agent.speed = parameter.CautionMoveSpeed;
+
+        // 初期位置に戻るフラグをオフにする
+        isReturnPosition = false;
+
+        animator.SetBool("IsWaiting", false);
     }
 
+    /// <summary>
+    /// 更新
+    /// </summary>
     public override void Update()
     {
-        if (isReturnPosition)
-        {
-            if (agent.remainingDistance < (parameter.InitialPosition - agent.transform.position).magnitude)
-            {
-                isReturnPosition = false;
-                // 通常状態に変更
-                SetNextState((int)ShadowState.Normal);
-            }
-        }
-        else
+        if ((parameter.InitialPosition - agent.destination).magnitude > agent.stoppingDistance)
         {
             if (agent.remainingDistance < agent.stoppingDistance)
             {
                 animator.SetBool("IsWaiting", true);
-                waitCounter += Time.deltaTime;
+            }
 
+            if (animator.GetBool("IsWaiting"))
+            {
+                waitCounter += Time.deltaTime;
                 if (waitCounter > parameter.CautionWaitTime)
                 {
-                    isReturnPosition = true;
-                    // 初期位置に戻る
-                    agent.SetDestination(parameter.InitialPosition);
                     animator.SetBool("IsWaiting", false);
+                    agent.SetDestination(parameter.InitialPosition);
+                    waitCounter = 0;
                 }
             }
-            else
+        }
+        else
+        {
+            if (agent.remainingDistance < agent.stoppingDistance &&
+               (parameter.InitialPosition - agent.destination).magnitude < agent.stoppingDistance)
             {
-                animator.SetBool("IsWaiting", false);
+                SetNextState((int)ShadowState.Normal);
             }
-           
         }
     }
 
+    /// <summary>
+    /// 終了
+    /// </summary>
     public override void Exit()
     {
-        isReturnPosition = false;
+        animator.SetBool("IsWaiting", false);
     }
 }

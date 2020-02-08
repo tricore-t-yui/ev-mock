@@ -7,6 +7,8 @@ public class ShadowStateBase
 {
     // 影人間パラメータ
     protected ShadowParameter parameter = default;
+    // メッシュ
+    protected SkinnedMeshRenderer meshRenderer = default;
     // アニメーター
     protected Animator animator = default;
     // ナビメッシュエージェント
@@ -20,9 +22,10 @@ public class ShadowStateBase
     /// </summary>
     /// <param name="animator"></param>
     /// <param name="agent"></param>
-    public void Initialize(ShadowParameter parameter,Animator animator,NavMeshAgent agent)
+    public void Initialize(ShadowParameter parameter,SkinnedMeshRenderer meshRenderer,Animator animator,NavMeshAgent agent)
     {
         this.parameter = parameter;
+        this.meshRenderer = meshRenderer;
         this.animator = animator;
         this.agent = agent;
     }

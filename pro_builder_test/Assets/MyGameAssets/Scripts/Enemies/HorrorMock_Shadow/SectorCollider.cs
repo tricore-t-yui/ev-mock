@@ -30,6 +30,9 @@ public class SectorCollider : MonoBehaviour
     public float Distance { get { return distance; } set { distance = value; } }
 
     [SerializeField]
+    Color borderColor = default;
+
+    [SerializeField]
     ColliderEvent visibleEnter = default;
     [SerializeField]
     ColliderEvent visibleStay = default;
@@ -110,9 +113,9 @@ public class SectorCollider : MonoBehaviour
         Vector3 downBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.up * -1) * transform.forward) * distance;
 
         // デバッグ用に境界ベクトルを表示
-        Debug.DrawRay(transform.position, leftBorder, Color.green);
-        Debug.DrawRay(transform.position, rightBorder, Color.green);
-        Debug.DrawRay(transform.position, upBorder, Color.green);
-        Debug.DrawRay(transform.position, downBorder, Color.green);
+        Debug.DrawRay(transform.position, leftBorder,borderColor);
+        Debug.DrawRay(transform.position, rightBorder, borderColor);
+        Debug.DrawRay(transform.position, upBorder, borderColor);
+        Debug.DrawRay(transform.position, downBorder, borderColor);
     }
 }
