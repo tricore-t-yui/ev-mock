@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1410817394}
   - component: {fileID: 1410817393}
   m_Layer: 5
-  m_Name: Text (6)
+  m_Name: TutorialText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -763,13 +763,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9207272422422245552}
+  - component: {fileID: 1283344604}
   m_Layer: 5
   m_Name: ParameterText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9207272422422245552
 RectTransform:
   m_ObjectHideFlags: 0
@@ -795,6 +796,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1283344604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197961341441321707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4192b6e136064b9f8e64d50c44fdd0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDisplay: 1
+  stateController: {fileID: 0}
+  staminaController: {fileID: 0}
+  healthController: {fileID: 0}
+  breathController: {fileID: 0}
+  hideController: {fileID: 0}
+  soundAreaSpawner: {fileID: 0}
+  texts:
+  - {fileID: 1744040127}
+  - {fileID: 4394555468340661764}
+  - {fileID: 1954135545}
+  - {fileID: 451366195}
+  - {fileID: 1947123859}
+  - {fileID: 1340023793}
 --- !u!1 &1160724126309859691
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +1008,92 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3810202670835299191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7738012397910278403}
+  - component: {fileID: 372656551637504177}
+  - component: {fileID: 4289513499697003879}
+  m_Layer: 5
+  m_Name: TriggerEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7738012397910278403
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3810202670835299191}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2257606231285593071}
+  m_Father: {fileID: 3843493001073311935}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &372656551637504177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3810202670835299191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a53eedb5fc3f2a44b220b2aa76476fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnBase: {fileID: 4816228079026142168}
+  tirggerEffect: []
+--- !u!114 &4289513499697003879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3810202670835299191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59dfbc0f4f3a98b4ebf4ad40fc3f43aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolName: TriggerEffect
+  matchPoolScale: 0
+  matchPoolLayer: 0
+  dontReparent: 0
+  _dontDestroyOnLoad: 0
+  logMessages: 0
+  _perPrefabPoolOptions:
+  - prefab: {fileID: 2257606231285593071}
+    preloadAmount: 10
+    preloadTime: 0
+    preloadFrames: 2
+    preloadDelay: 0
+    limitInstances: 0
+    limitAmount: 100
+    limitFIFO: 0
+    cullDespawned: 0
+    cullAbove: 50
+    cullDelay: 60
+    cullMaxPerPass: 5
+    _logMessages: 0
+    spawnPool: {fileID: 0}
+  maxParticleDespawnTime: 300
 --- !u!1 &3843492999882751780
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,8 +1397,6 @@ GameObject:
   - component: {fileID: 3843493001073311928}
   - component: {fileID: 3843493001073311929}
   - component: {fileID: 3843493001073311930}
-  - component: {fileID: 1224328289}
-  - component: {fileID: 2971156355183845757}
   m_Layer: 5
   m_Name: EffectCanvas
   m_TagString: Untagged
@@ -1308,6 +1419,7 @@ RectTransform:
   - {fileID: 4922685485456992260}
   - {fileID: 9207272422422245552}
   - {fileID: 1410817392}
+  - {fileID: 7738012397910278403}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1376,53 +1488,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
---- !u!114 &1224328289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3843493001073311931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4d601dd407e540528cb57b8f7e1b801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  breathController: {fileID: 0}
-  healthController: {fileID: 0}
-  staminaController: {fileID: 0}
-  objectDamageController: {fileID: 0}
-  breathEffect: {fileID: 1413129467}
-  healthEffect: {fileID: 1364132393}
-  staminaEffect: {fileID: 714637041}
-  fadeOut: {fileID: 4815370046824202971}
-  objectDamageEffect: {fileID: 1489261365}
---- !u!114 &2971156355183845757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3843493001073311931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4192b6e136064b9f8e64d50c44fdd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDisplay: 1
-  stateController: {fileID: 0}
-  staminaController: {fileID: 0}
-  healthController: {fileID: 0}
-  breathController: {fileID: 0}
-  hideController: {fileID: 0}
-  soundAreaSpawner: {fileID: 0}
-  texts:
-  - {fileID: 1744040127}
-  - {fileID: 4394555468340661764}
-  - {fileID: 1954135545}
-  - {fileID: 451366195}
-  - {fileID: 1947123859}
-  - {fileID: 1340023793}
 --- !u!1 &3843493001755384552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1621,6 +1686,95 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4816228079026142168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2257606231285593071}
+  - component: {fileID: 410427620023716203}
+  - component: {fileID: 5470778591952170429}
+  - component: {fileID: 5671607054576705213}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2257606231285593071
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816228079026142168}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7738012397910278403}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &410427620023716203
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816228079026142168}
+  m_CullTransparentMesh: 0
+--- !u!114 &5470778591952170429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816228079026142168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5671607054576705213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816228079026142168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a0b0ea24940c4ba47aae5bdba66d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawner: {fileID: 372656551637504177}
+  image: {fileID: 5470778591952170429}
+  waitSecond: 3
 --- !u!1 &4953316069382879752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,8 +2050,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4922685485456992260}
+  - component: {fileID: 1394909059}
   m_Layer: 0
-  m_Name: EffectImage
+  m_Name: StatusEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1927,6 +2082,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1394909059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6893046583943192168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d601dd407e540528cb57b8f7e1b801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathController: {fileID: 0}
+  healthController: {fileID: 0}
+  staminaController: {fileID: 0}
+  objectDamageController: {fileID: 0}
+  breathEffect: {fileID: 1413129467}
+  healthEffect: {fileID: 1364132393}
+  staminaEffect: {fileID: 714637041}
+  fadeOut: {fileID: 4815370046824202971}
+  objectDamageEffect: {fileID: 1489261365}
 --- !u!1 &9166695925330899774
 GameObject:
   m_ObjectHideFlags: 0
