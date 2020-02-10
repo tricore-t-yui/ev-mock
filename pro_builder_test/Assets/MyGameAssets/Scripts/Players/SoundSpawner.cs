@@ -18,6 +18,13 @@ public class SoundSpawner : MonoBehaviour
         Walk,
         Dash,
         DamageObject,
+
+        // NOTE:k.oishi トリガーに触れたときのサウンドの名前がわからないのでとりあえずサンプルとして用意しています。
+        TriggerSound1,
+        TriggerSound2,
+        TriggerSound3,
+        TriggerSound4,
+        TriggerSound5,
     }
 
     [SerializeField]
