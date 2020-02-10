@@ -16,7 +16,6 @@ public class ShadowStateCaution : ShadowStateBase
         // 初期位置に戻るフラグをオフにする
         isReturnPosition = false;
 
-        animator.SetBool("IsWaiting", false);
     }
 
     /// <summary>

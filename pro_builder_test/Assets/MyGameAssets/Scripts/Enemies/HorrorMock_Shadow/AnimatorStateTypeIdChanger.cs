@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class AnimatorStateTypeIdChanger : StateMachineBehaviour
 {
-    [SerializeField]
-    int changeStateId = 0;
-
     /// <summary>
     /// 開始
     /// </summary>
@@ -15,6 +12,6 @@ public class AnimatorStateTypeIdChanger : StateMachineBehaviour
     /// <param name="layerIndex"></param>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        animator.SetInteger("AnimatorStateTypeId", changeStateId);
+        animator.SetInteger("AnimatorStateTypeId", animator.GetInteger("NextStateTypeId"));
     }
 }

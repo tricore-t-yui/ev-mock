@@ -28,6 +28,12 @@ public class ShadowStateFighting : ShadowStateBase
                 animator.SetBool("IsWaiting", false);
                 animator.ResetTrigger("Attaking");
                 waitCounter = 0;
+
+                if (parameter.IsAttackedDisappear)
+                {
+                    animator.gameObject.SetActive(false);
+                    animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
+                }
             }
         }
     }

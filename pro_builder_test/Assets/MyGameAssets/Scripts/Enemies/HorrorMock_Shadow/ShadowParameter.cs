@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class RangeParameter
+{
+    [Header("State Range")]
+    public ShadowParameter.StateType stateType = default;
+    public float appearRangeRadius = 4;
+    public float cautionRangeRadius = 3;
+    public float fightingRangeRadius = 2;
+}
+
 public class ShadowParameter : MonoBehaviour
 {
     public enum StateType
     {
         Normal,
-        Alert,
         Caution,
         Fighting,
     }
@@ -33,6 +42,9 @@ public class ShadowParameter : MonoBehaviour
     }
 
     [SerializeField]
+    SphereCollider appearRangeCollider = default;
+
+    [SerializeField]
     SphereCollider cautionRangeCollider = default;
 
     [SerializeField]
@@ -44,13 +56,34 @@ public class ShadowParameter : MonoBehaviour
     [SerializeField]
     SectorCollider attackRange = default;
 
+
+    [Header("◆[Range Settings]")]
+    [SerializeField]
+    RangeParameter[] rangeParameters = new RangeParameter[3];
+
+    [Header("View Range")]
+    [SerializeField]
+    float viewAngle = 120;
+    public float ViewAngle => viewAngle;
+    [SerializeField]
+    float viewDistance = 1;
+    public float ViewDistance => viewDistance;
+
+    [Header("Attack Range")]
+    [SerializeField]
+    float attackAngle = 120;
+    public float AttackAngle => attackAngle;
+    [SerializeField]
+    float attackDistance = 1;
+    public float AttackDistance => attackDistance;
+
     [Space(15)]
     [Header("◆[State : Normal(通常状態)]◆")]
     [SerializeField]
     float normalMoveSpeed = 1;
     public float NormalMoveSpeed => normalMoveSpeed;
 
-    [Space(10)]
+    [Space(5)]
     [SerializeField]
     NormalStateType normalStateType = NormalStateType.Waiting;
     public NormalStateType NormalState => normalStateType;
@@ -72,14 +105,11 @@ public class ShadowParameter : MonoBehaviour
     float randomRangeRadiusMax = 1;
     public float RandomRangeRadiusMax => randomRangeRadiusMax;
 
-    [Header("View Range Settings")]
     [SerializeField]
-    float viewAngle = 120;
-    [SerializeField]
-    float viewDistance = 1;
+    [Range(0, 1)]
+    float appearFadeTime = 0.1f;
+    public float AppearFadeTime => appearFadeTime;
 
-    [Space(15)]
-    [Header("◆[State : Alert(注意状態)]◆")]
     [SerializeField]
     float safeSoundLevelMax = 5;
     public float SafeSoundLevelMax => safeSoundLevelMax;
@@ -99,9 +129,6 @@ public class ShadowParameter : MonoBehaviour
     float cautionMoveSpeed = 1.5f;
     public float CautionMoveSpeed => cautionMoveSpeed;
 
-    [SerializeField]
-    float cautionRangeRadius = 1;
-
 
     [Space(15)]
     [Header("◆[State : Fighting(戦闘状態)]◆")]
@@ -113,39 +140,29 @@ public class ShadowParameter : MonoBehaviour
     float fightingMoveSpeed = 2;
     public float FightingMoveSpeed => fightingMoveSpeed;
 
-    [SerializeField]
-    float fightingRangeRadius = 0.5f;
-
-    [Header("Attack Range Settings")]
-    [SerializeField]
-    float attackAngle = 120;
-    [SerializeField]
-    float attackDistance = 1;
-
 
     [Space(15)]
     [Header("◆[Special Action Settings]")]
-    [SerializeField]
-    SpecialActionType specialActionType = SpecialActionType.Normal;
-
-    [Header("■HighSpeedAttack")]
-    [SerializeField]
-    float superFastMoveSpeed = 3;
-    public float SuperFastMoveSpeed => superFastMoveSpeed;
 
     [SerializeField]
-    float disappearDerayTime = 1;
-    public float DisappearDerayTime => disappearDerayTime;
+    bool isAttackedDisappear = false;
+    public bool IsAttackedDisappear => isAttackedDisappear;
 
-    [Header("■CameraFadeOutDisappear")]
     [SerializeField]
-    float disappearDistance = 1;
+    bool isApproachedDisappear = false;
+    public bool IsApproachedDisappear => isApproachedDisappear;
+
+    [SerializeField]
+    bool isCameraFadeOutDisappear = false;
+    public bool IsCameraFadeOutDisappear => isCameraFadeOutDisappear;
+
+    [SerializeField]
+    bool isRespawn = false;
+    public bool IsRespawn => isRespawn;
+
+    [SerializeField]
+    float disappearDistance = 0;
     public float DisappearDistance => disappearDistance;
-
-    [Header("■ApproachingDisappear")]
-    [SerializeField]
-    float approachingDistance = 1;
-    public float ApproachingDistance => approachingDistance;
 
     [Space(15)]
     [Header("[Other Settings]")]
@@ -154,21 +171,20 @@ public class ShadowParameter : MonoBehaviour
     public bool IsStaticState => isStaticState;
 
     [SerializeField]
-    bool isAutoSpawn = true;
+    bool isInitialAutoSpawn = true;
 
     // 初期位置
     public Vector3 InitialPosition { get; private set; }
 
     /// <summary>
-    /// 開始
+    /// 初期化
     /// </summary>
-    void Awake()
+    public void Initialize()
     {
-        gameObject.SetActive(isAutoSpawn ? true : false); 
+        gameObject.SetActive(isInitialAutoSpawn ? true : false);
 
         // コライダーのサイズを反映
-        cautionRangeCollider.radius = cautionRangeRadius;
-        fightingRangeCollider.radius = fightingRangeRadius;
+        ChangeStateRangeRadius(StateType.Normal);
         fieldOfView.Angle = viewAngle;
         fieldOfView.Distance = viewDistance;
         attackRange.Angle = attackAngle;
@@ -182,11 +198,24 @@ public class ShadowParameter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ステートごとの範囲の変更
+    /// </summary>
+    /// <param name="type"></param>
+    public void ChangeStateRangeRadius(StateType type)
+    {
+        appearRangeCollider.radius = rangeParameters[(int)type].appearRangeRadius;
+        cautionRangeCollider.radius = rangeParameters[(int)type].cautionRangeRadius;
+        fightingRangeCollider.radius = rangeParameters[(int)type].fightingRangeRadius;
+    }
+
     void OnDrawGizmos()
     {
         // コライダーのサイズを反映
-        cautionRangeCollider.radius = cautionRangeRadius;
-        fightingRangeCollider.radius = fightingRangeRadius;
+        if (!UnityEditor.EditorApplication.isPlaying)
+        {
+            ChangeStateRangeRadius(StateType.Normal);
+        }
         fieldOfView.Angle = viewAngle;
         fieldOfView.Distance = viewDistance;
         attackRange.Angle = attackAngle;
@@ -225,8 +254,10 @@ public class ShadowParameter : MonoBehaviour
         }
         Gizmos.color = Color.cyan;
         Vector3 pos = (InitialPosition != Vector3.zero) ? InitialPosition : transform.position;
-        Gizmos.DrawWireSphere(pos, randomRangeRadiusMin);
-        Gizmos.DrawWireSphere(pos, randomRangeRadiusMax);
+        UnityEditor.Handles.color = Color.cyan;
+        UnityEditor.Handles.DrawWireDisc(pos,Vector3.up, randomRangeRadiusMin);
+        UnityEditor.Handles.DrawWireDisc(pos,Vector3.up, randomRangeRadiusMax);
+        Gizmos.color = Color.white;
         Gizmos.color = Color.white;
     }
 }

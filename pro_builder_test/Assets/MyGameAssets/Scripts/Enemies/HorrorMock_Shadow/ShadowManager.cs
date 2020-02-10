@@ -17,11 +17,14 @@ public class ShadowManager : MonoBehaviour
     NavMeshAgent agent = default;
 
     ShadowState currentState = ShadowState.Normal;
+    GameObject player = default;
     SoundAreaSpawner soundSpawner = default;
     PlayerDamageEvent damageEvent = default;
 
     bool stateChangeTrigger = false;
     public int nextStateId = -1;
+
+    float appearFadeCounter = 0;
 
     ShadowStateBase[] shadowStates;
 
@@ -30,6 +33,7 @@ public class ShadowManager : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        parameter.Initialize();
         currentState = ShadowState.Normal;
         // サウンドエリアスポナーを取得
         soundSpawner = FindObjectOfType<SoundAreaSpawner>();
@@ -38,10 +42,12 @@ public class ShadowManager : MonoBehaviour
         // ダメージイベント
         damageEvent = FindObjectOfType<PlayerDamageEvent>();
 
+        // プレイヤー
+        player = GameObject.FindGameObjectWithTag("Player");
+
         shadowStates = new ShadowStateBase[]
         {
-            new ShadowStateNormal(),
-            new ShadowStateAlert(soundSpawner),
+            new ShadowStateNormal(soundSpawner),
             new ShadowStateCaution(),
             new ShadowStateFighting(),
         };
@@ -51,15 +57,15 @@ public class ShadowManager : MonoBehaviour
             // 初期化
             shadowStates[i].Initialize(parameter,meshRenderer,animator, agent);
         }
-
-        animator.SetBool("IsStaticState", parameter.IsStaticState);
-        animator.SetBool("IsWander", (parameter.NormalState == NormalStateType.Wanderer) ? true : false);
     }
 
     void OnEnable()
     {
         currentState = ShadowState.Normal;
         shadowStates[(int)currentState].Entry();
+        agent.Warp(parameter.InitialPosition);
+        animator.SetBool("IsStaticState", parameter.IsStaticState);
+        animator.SetBool("IsWander", (parameter.NormalState == NormalStateType.Wanderer) ? true : false);
     }
 
     /// <summary>
@@ -92,6 +98,27 @@ public class ShadowManager : MonoBehaviour
         }
         // 移動速度をアニメーターのパラメーターに反映
         animator.SetFloat("CurrentMoveSpeed", agent.speed);
+
+        if ((player.transform.position - transform.position).magnitude < parameter.DisappearDistance)
+        {
+            if (parameter.IsApproachedDisappear)
+            {
+                gameObject.SetActive(false);
+                animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
+            }
+
+            if (parameter.IsCameraFadeOutDisappear)
+            {
+                if (!meshRenderer.isVisible)
+                {
+                    gameObject.SetActive(false);
+                    animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
+                }
+            }
+        }
+
+        // 見える範囲を判定
+        parameter.ChangeStateRangeRadius(currentState);
     }
 
     /// <summary>
@@ -116,35 +143,83 @@ public class ShadowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 警戒状態に入った
+    /// 見える範囲に入った
     /// </summary>
-    public void OnCautionRangeEnter(Collider other)
+    /// <param name="other"></param>
+    public void OnAppearRangeEnter(Collider other)
     {
-        // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 通常状態のみ
-        if (currentState != ShadowState.Normal) { return; }
-        // 注意状態に変更
-        SetNextState(ShadowState.Alert);
     }
 
     /// <summary>
-    /// 音が聞こえた
+    /// 見える範囲に入り続けている
     /// </summary>
+    /// <param name="other"></param>
+    public void OnAppearRangeStay(Collider other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        meshRenderer.enabled = true;
+        appearFadeCounter += parameter.AppearFadeTime;
+        if (appearFadeCounter < 1)
+        {
+            appearFadeCounter += parameter.AppearFadeTime;
+            meshRenderer.material.color = new Color(
+                meshRenderer.material.color.r,
+                meshRenderer.material.color.g,
+                meshRenderer.material.color.b,
+                appearFadeCounter);
+        }
+    }
+
+    /// <summary>
+    /// 見える範囲から出た
+    /// </summary>
+    /// <param name="other"></param>
+    public void OnAppearRangeExit(Collider other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        appearFadeCounter = 0;
+        meshRenderer.enabled = false;
+    }
+
+    /// <summary>
+    /// 警戒範囲に入った
+    /// </summary>
+    /// <param name="other"></param>
+    public void OnCautionRangeEnter(Collider other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player") &&
+            other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
+
+        if (currentState != ShadowState.Normal) { return; }
+
+        animator.SetBool("IsCautionEnter", true);
+    }
+
+    /// <summary>
+    /// 警戒範囲から出た
+    /// </summary>
+    /// <param name="other"></param>
+    public void OnCautionRangeExit(Collider other)
+    {
+        animator.SetBool("IsCautionEnter", false);
+    }
+
+    /// <summary>
+    /// 音を聞いた
+    /// </summary>
+    /// <param name="other"></param>
     public void OnHeardNoise(Collider other)
     {
-        // ノイズのみ
-        if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
-        // 警戒状態のみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player") &&
+            other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
+
         if (currentState != ShadowState.Caution) { return; }
-        // 音の発信源を目的地に設定
+
         agent.SetDestination(other.transform.position);
     }
 
-    /// <summary>
-    /// プレイヤーを見つけた
-    /// </summary>
-    /// <param name="other"></param>
     public void OnDetectPlayer(Collider other)
     {
         SetNextState(ShadowState.Fighting);
@@ -153,6 +228,8 @@ public class ShadowManager : MonoBehaviour
     public void ChasePlayer(Collider other)
     {
         if (currentState != ShadowState.Fighting) { return; }
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
         agent.SetDestination(other.transform.position);
     }
 

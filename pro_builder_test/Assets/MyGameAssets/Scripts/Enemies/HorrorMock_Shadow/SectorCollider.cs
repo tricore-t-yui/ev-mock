@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class SectorCollider : MonoBehaviour
 {
@@ -111,7 +112,7 @@ public class SectorCollider : MonoBehaviour
         Vector3 upBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.up) * transform.forward) * distance;
         // 下側の境界ベクトル
         Vector3 downBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.up * -1) * transform.forward) * distance;
-
+        
         // デバッグ用に境界ベクトルを表示
         Debug.DrawRay(transform.position, leftBorder,borderColor);
         Debug.DrawRay(transform.position, rightBorder, borderColor);
