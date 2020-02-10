@@ -13,9 +13,12 @@ public class TriggerEffectSpawner : MonoBehaviour
     /// </summary>
     public enum EffectType
     {
+        // NOTE:k.oishi 名前がわからないのでとりあえずサンプルとして用意しています。
         SAMPLE1,
         SAMPLE2,
         SAMPLE3,
+        SAMPLE4,
+        SAMPLE5,
     }
 
     [SerializeField]
