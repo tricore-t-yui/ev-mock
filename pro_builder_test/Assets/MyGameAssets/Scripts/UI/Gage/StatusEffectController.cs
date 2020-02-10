@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 画面エフェクト管理クラス
+/// ステータスの画面エフェクト管理クラス
 /// </summary>
-public class ScreenEffectController : MonoBehaviour
+public class StatusEffectController : MonoBehaviour
 {
     /// <summary>
-    /// イメージのタイプ
+    /// エフェクトのタイプ
     /// </summary>
-    enum ImageType
+    enum EffectType
     {
         BREATH,
         HEALTH,
@@ -46,23 +46,23 @@ public class ScreenEffectController : MonoBehaviour
     void Update()
     {
         // それぞれの状態に応じてによってエフェクト表示
-        breathEffect.color = DisplayEffect(ImageType.BREATH);
-        healthEffect.color = DisplayEffect(ImageType.HEALTH);
-        staminaEffect.color = DisplayEffect(ImageType.STAMINA);
-        objectDamageEffect.color = DisplayEffect(ImageType.OBJECTDAMAGE);
+        breathEffect.color = DisplayEffect(EffectType.BREATH);
+        healthEffect.color = DisplayEffect(EffectType.HEALTH);
+        staminaEffect.color = DisplayEffect(EffectType.STAMINA);
+        objectDamageEffect.color = DisplayEffect(EffectType.OBJECTDAMAGE);
     }
 
     /// <summary>
     /// エフェクト表示
     /// </summary>
-    Color DisplayEffect(ImageType type)
+    Color DisplayEffect(EffectType type)
     {
         // イメージのカラー
         Color color = new Color(0,0,0);
         // 75 /? = 0.5
         switch(type)
         {
-            case ImageType.BREATH:
+            case EffectType.BREATH:
                 color = breathEffect.color;
                 if (breathController.NowAmount <= 75)
                 {
@@ -73,19 +73,19 @@ public class ScreenEffectController : MonoBehaviour
                     color.a = 0;
                 }
                 break;
-            case ImageType.HEALTH:
+            case EffectType.HEALTH:
                 color = healthEffect.color;
                 color.a = 1.0f - (healthController.NowAmount / 100);
                 break;
-            case ImageType.STAMINA:
+            case EffectType.STAMINA:
                 color = staminaEffect.color;
                 color.a = 0.02f - (staminaController.NowAmount / 5000);
                 break;
-            case ImageType.FADEOUT:
+            case EffectType.FADEOUT:
                 color = fadeOut.color;
                 color.a = 1;
                 break;
-            case ImageType.OBJECTDAMAGE:
+            case EffectType.OBJECTDAMAGE:
                 color = objectDamageEffect.color;
                 color.a = objectDamageController.NowDamage / 100;
                 break;
