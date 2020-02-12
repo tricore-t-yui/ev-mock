@@ -5,77 +5,51 @@ using UnityEngine.AI;
 
 public class EnemyHideObjectAccesser : MonoBehaviour
 {
-    Dictionary<int, Animator> hideAnimator = new Dictionary<int, Animator>();
-
+    [SerializeField]
+    Animator animator = default;
     [SerializeField]
     NavMeshAgent agent = default;
 
-    PlayerHideController hideController = default;
-    PlayerDamageEvent damageEvent = default;
-    GameObject currentHide = default;
-    Animator currentHideAnimator = default;
-    bool isHide = false;
-    int hideType = 0;
-    bool isApproachHide = false;
+    GameObject player = default;
 
+    [SerializeField]
+    float lockerAttackRange = 1;
+    [SerializeField]
+    float bedAttackRange = 1;
+
+    PlayerHideController hideController = default;
+    Dictionary<int, Animator> hideAnimatorTable = new Dictionary<int, Animator>();
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
     void Start()
     {
-        // ハイドコントローラー
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        hideController = player.GetComponent<PlayerHideController>();
-
-        damageEvent = FindObjectOfType<PlayerDamageEvent>() ?? damageEvent;
+        // ハイドコントローラーを取得
+        hideController = GameObject.FindObjectOfType<PlayerHideController>();
+        // プレイヤー
+        player = GameObject.FindGameObjectWithTag("Player");
 
         // ロッカー
-        foreach ( GameObject hide in GameObject.FindGameObjectsWithTag("Locker"))
+        foreach (GameObject hide in GameObject.FindGameObjectsWithTag("Locker"))
         {
-            Animator animator = hide.GetComponent<Animator>();
-            hideAnimator.Add(hide.GetInstanceID(), animator);
+            Animator anim = hide.GetComponent<Animator>();
+            hideAnimatorTable.Add(hide.GetInstanceID(), anim);
         }
 
         // ベッド
         foreach (GameObject hide in GameObject.FindGameObjectsWithTag("Bed"))
         {
-            Animator animator = hide.GetComponent<Animator>();
-            hideAnimator.Add(hide.GetInstanceID(), animator);
+            Animator anim = hide.GetComponent<Animator>();
+            hideAnimatorTable.Add(hide.GetInstanceID(), anim);
         }
     }
 
     /// <summary>
     /// 更新
     /// </summary>
-    void Update()
+    public void Update()
     {
-        currentHide = hideController.HideObj;
-        isHide = (hideController.IsHideLocker || hideController.IsHideBed);
-        hideType = (isHide ? (hideController.IsHideLocker ? 1 : 2) : 0);
-    }
-
-    public void OnCautionRangeStay(Collider other)
-    {
-        if (isHide)
-        {
-            isApproachHide = true;
-        }
-    }
-
-    public void OnArrivaledHide(Collider other)
-    {
-        if (isHide)
-        {
-            isApproachHide = false;
-            transform.LookAt(other.transform);
-            currentHideAnimator = hideAnimator[currentHide.GetInstanceID()];
-            if (hideType == 1)
-            {
-                currentHideAnimator.SetBool("DragOut", true);
-                damageEvent.Invoke(transform, 50);
-                currentHideAnimator.SetBool("DragOut", false);
-            }
-            else
-            {
-                damageEvent.Invoke(transform, 50);
-            }
-        }
+        
     }
 }

@@ -5,7 +5,7 @@ using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 using WandererType = EnemyParameter.WandererType;
 
-public class ShadowStateNormal : StateBase
+public class TsunStateNormal : StateBase
 {
     // 現在のチェックポイントのID
     int currentCheckPointId = 0;
@@ -20,7 +20,7 @@ public class ShadowStateNormal : StateBase
     /// コンストラクタ
     /// </summary>
     /// <param name="sound"></param>
-    public ShadowStateNormal(SoundAreaSpawner sound)
+    public TsunStateNormal(SoundAreaSpawner sound)
     {
         soundSpawner = sound;
     }
@@ -86,7 +86,7 @@ public class ShadowStateNormal : StateBase
             detectedNoiseLevel = 0;
         }
 
-        // 徘徊タイプの影人間である
+        // 徘徊タイプのツンである
         if (parameter.NormalState == NormalStateType.Wanderer)
         {
             // 目標位置につーいた！

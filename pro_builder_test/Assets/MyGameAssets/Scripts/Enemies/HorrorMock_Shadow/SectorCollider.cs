@@ -9,9 +9,9 @@ public class SectorCollider : MonoBehaviour
     // コライダー用のUnityEvent
     [System.Serializable]
     public class ColliderEvent : UnityEvent<Collider> { }
-
-    [SerializeField]
+    // スフィアコライダー
     SphereCollider sphereCollider = default;
+
     [SerializeField]
     Transform baseTransform = default;
     [SerializeField]
@@ -42,8 +42,17 @@ public class SectorCollider : MonoBehaviour
 
     void Start()
     {
-        targetLayer = LayerMask.NameToLayer(targetLayerName);
+        GameObject colliderObject = new GameObject("Collider");
+        colliderObject.transform.parent = transform;
+        colliderObject.transform.localPosition = Vector3.zero;
+        Rigidbody rb = transform.gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        sphereCollider = colliderObject.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
         sphereCollider.radius = distance;
+
+        targetLayer = LayerMask.NameToLayer(targetLayerName);
     }
 
     private void Update()
@@ -102,8 +111,6 @@ public class SectorCollider : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        sphereCollider.radius = distance;
-
         // 左側の境界ベクトル
         Vector3 leftBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.right * -1) * transform.forward) * distance;
         // 右側の境界ベクトル

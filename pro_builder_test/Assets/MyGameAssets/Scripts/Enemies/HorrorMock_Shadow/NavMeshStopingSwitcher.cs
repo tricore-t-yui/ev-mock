@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NavMeshStopingSwitcher : MonoBehaviour
+public class NavMeshStopingSwitcher
 {
     // 移動の状態
     public enum AnmationTag
@@ -17,20 +17,25 @@ public class NavMeshStopingSwitcher : MonoBehaviour
         Attack,      // 攻撃
     }
 
-    [SerializeField]
     Animator animator = default;
-    [SerializeField]
     NavMeshAgent agent = default;
 
     // アニメーターのタグのハッシュ
     int currentAnimatorTagHash = 0;
     int prevAnimatorTagHash = 0;
 
+    // タグハッシュテーブル
     Dictionary<AnmationTag, int> tagHashTable = new Dictionary<AnmationTag, int>();
 
-    void Start()
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="animator"></param>
+    /// <param name="agent"></param>
+    public void Initialize(Animator animator,NavMeshAgent agent)
     {
-        agent.isStopped = true;
+        this.animator = animator;
+        this.agent = agent;
 
         // ステートごとの名前を文字列で取得
         string[] tagNames = System.Enum.GetNames(typeof(AnmationTag));
@@ -45,9 +50,19 @@ public class NavMeshStopingSwitcher : MonoBehaviour
     }
 
     /// <summary>
+    /// 開始
+    /// </summary>
+    public void Entry()
+    {
+        agent.isStopped = true;
+        currentAnimatorTagHash = 0;
+        prevAnimatorTagHash = 0;
+    }
+
+    /// <summary>
     /// 更新
     /// </summary>
-    void Update()
+    public void Update()
     {
         currentAnimatorTagHash = animator.GetCurrentAnimatorStateInfo(0).tagHash;
 
@@ -57,7 +72,11 @@ public class NavMeshStopingSwitcher : MonoBehaviour
         prevAnimatorTagHash = currentAnimatorTagHash;
     }
 
-    public bool IsMoveStartMoment()
+    /// <summary>
+    /// モーション開始直前
+    /// </summary>
+    /// <returns></returns>
+    bool IsMoveStartMoment()
     {
         bool current = (currentAnimatorTagHash == tagHashTable[AnmationTag.MoveStart]);
         bool prev    = (prevAnimatorTagHash != tagHashTable[AnmationTag.MoveStart]);
@@ -69,7 +88,11 @@ public class NavMeshStopingSwitcher : MonoBehaviour
         return false;
     }
 
-    public bool IsMoveLooping()
+    /// <summary>
+    /// モーション中
+    /// </summary>
+    /// <returns></returns>
+    bool IsMoveLooping()
     {
         bool current = (currentAnimatorTagHash == tagHashTable[AnmationTag.MoveLoop]);
         bool prev = (prevAnimatorTagHash != tagHashTable[AnmationTag.MoveLoop]);
@@ -81,7 +104,11 @@ public class NavMeshStopingSwitcher : MonoBehaviour
         return false;
     }
 
-    public bool IsMoveEndMoment()
+    /// <summary>
+    /// モーションの終了直前
+    /// </summary>
+    /// <returns></returns>
+    bool IsMoveEndMoment()
     {
         bool current = (currentAnimatorTagHash == tagHashTable[AnmationTag.MoveEnd] ||
                         currentAnimatorTagHash == tagHashTable[AnmationTag.Attack]);

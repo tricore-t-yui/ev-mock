@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ShadowStateBase
+[CreateAssetMenu]
+public class StateBase : ScriptableObject
 {
-    // 影人間パラメータ
-    protected ShadowParameter parameter = default;
-    // メッシュ
-    protected SkinnedMeshRenderer meshRenderer = default;
+    // パラメーター
+    protected EnemyParameter parameter = default;
     // アニメーター
     protected Animator animator = default;
     // ナビメッシュエージェント
     protected NavMeshAgent agent = default;
+    // メッシュレンダラー
+    protected SkinnedMeshRenderer meshRenderer = default;
 
-    public int  NextStateId { get; private set; } = -1;
-    public bool StateChangeTrigger { get; private set; } = false;
+    public bool IsSetedNextState { get; private set; } = false;
+    public int NextStateId { get; private set; } = 0;
 
     /// <summary>
     /// 初期化
     /// </summary>
+    /// <param name="parameter"></param>
     /// <param name="animator"></param>
     /// <param name="agent"></param>
-    public void Initialize(ShadowParameter parameter,SkinnedMeshRenderer meshRenderer,Animator animator,NavMeshAgent agent)
+    /// <param name="meshRenderer"></param>
+    public void Initialize(EnemyParameter parameter,Animator animator,NavMeshAgent agent,SkinnedMeshRenderer meshRenderer)
     {
         this.parameter = parameter;
-        this.meshRenderer = meshRenderer;
         this.animator = animator;
         this.agent = agent;
+        this.meshRenderer = meshRenderer;
     }
 
     /// <summary>
@@ -55,21 +58,21 @@ public class ShadowStateBase
     }
 
     /// <summary>
-    /// 次のステートをセット
+    /// 次のステートのIDをセット
     /// </summary>
     /// <param name="stateId"></param>
-    public virtual void SetNextState(int stateId)
+    public void SetNextState(int stateId)
     {
-        StateChangeTrigger = true;
         NextStateId = stateId;
+        IsSetedNextState = true;
     }
 
     /// <summary>
-    /// ステート変更トリガーをリセット
+    /// 次のステートに変更するフラグをリセット
     /// </summary>
-    /// <returns></returns>
-    public void ResetTrigger()
+    public void ResetNextStateFlag()
     {
-        StateChangeTrigger = false;
+        NextStateId = -1;
+        IsSetedNextState = false;
     }
 }
