@@ -21,9 +21,6 @@ public class StateMachine
     int nextStateId = -1;
 
     [HideInInspector]
-    float spawnCounter = 0;
-
-    [HideInInspector]
     public bool isAppear = false;
     float appearFadeCounter = 0;
 
@@ -73,7 +70,7 @@ public class StateMachine
         // 範囲の初期化
         parameter.ChangeRangeRadius(currentState);
         // 初期位置にワープ
-        agent.Warp(parameter.InitialPosition);
+        //agent.Warp(parameter.InitialPosition);
 
         // 透明状態で出現させるとき
         if (!parameter.IsAlwaysAppear)
@@ -91,8 +88,6 @@ public class StateMachine
         }
         states[(int)currentState].Entry();
 
-        // パスのリセット
-        agent.ResetPath();
         // 待機 or 徘徊に設定
         animator.SetBool("IsWander", (parameter.NormalState == NormalStateType.Wanderer) ? true : false);
 

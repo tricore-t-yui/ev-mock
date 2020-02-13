@@ -6,7 +6,14 @@ using Sirenix.OdinInspector;
 [System.Serializable]
 public class RangeParameter
 {
+    public RangeParameter(EnemyParameter.StateType type)
+    {
+        stateType = type;
+    }
+
+    [EnableIf("isActivate")]
     public EnemyParameter.StateType stateType = default;
+    bool isActivate = false;
     [Range(0,100)]
     public float appear = 0;
     [Range(0.1f, 100)]
@@ -39,20 +46,32 @@ public class EnemyParameter : MonoBehaviour
         Random,     // ランダム
     }
 
+    bool isActivate = false;
+
+    [EnableIf("isActivate")]
     [SerializeField]
     StateColliderEvent appearRange = default;
+
+    [EnableIf("isActivate")]
     [SerializeField]
     StateColliderEvent cautionRange = default;
+
+    [EnableIf("isActivate")]
     [SerializeField]
     StateColliderEvent fightingRange = default;
+
+    [EnableIf("isActivate")]
     [Space(5)]
     [SerializeField]
     SectorCollider viewRange = default;
+
+    [EnableIf("isActivate")]
     [SerializeField]
     SectorCollider attackRange = default;
 
-    [Header("◆[Range Settings]")]
-    [ValidateInput("IsAlwaysAppearFunc", "常時姿が見える状態になっています。\nAppear(見える範囲)の設定は無効になります。", MessageType = InfoMessageType.Info)]
+    [Title("[Range Parameters(範囲系パラメータ)]")]
+    [Tooltip("距離に限らず常に姿が見えるようになります。")]
+    [ValidateInput("IsAlwaysAppearFunc", "常に姿が見える状態になっています。\nAppear(見える範囲)の設定は無効になります。", MessageType = InfoMessageType.Info)]
     [SerializeField]
     bool isAlwaysAppear = false;
     public bool IsAlwaysAppear => isAlwaysAppear;
@@ -63,55 +82,85 @@ public class EnemyParameter : MonoBehaviour
     }
 
     [SerializeField]
-    RangeParameter[] rangeParameters = new RangeParameter[3];
-    public RangeParameter[] RangeParameters => rangeParameters;
-    
+    [ListDrawerSettings(HideAddButton = true,HideRemoveButton = true,Expanded = true,ShowItemCount = false,ShowPaging = false,DraggableItems = false)]
+    RangeParameter[] stateRanges = new RangeParameter[3]
+    {
+        new RangeParameter(StateType.Normal),
+        new RangeParameter(StateType.Caution),
+        new RangeParameter(StateType.Fighting),
+    };
+    public RangeParameter[] StateRanges => stateRanges;
+
     [Header("View Range")]
+    [Tooltip("視野範囲の角度を指定します。")]
     [SerializeField]
     float viewAngle = 120;
     public float ViewAngle => viewAngle;
+    [Tooltip("視野範囲の距離を指定します。")]
     [SerializeField]
     float viewDistance = 1;
     public float ViewDistance => viewDistance;
 
     [Header("Attack Range")]
+    [Tooltip("攻撃範囲の角度を指定します。")]
     [SerializeField]
     float attackAngle = 120;
     public float AttackAngle => attackAngle;
+    [Tooltip("攻撃範囲の距離を指定します。")]
     [SerializeField]
     float attackDistance = 0.5f;
     public float AttackDistance => attackDistance;
 
 
     [Space(15)]
-    [Header("◆[State : Normal(通常状態)]◆")]
+    [Title("[State : Normal(通常状態)]")]
+    [Tooltip("通常状態時の移動速度を設定します。")]
     [SerializeField]
     float normalMoveSpeed = 1;
     public float NormalMoveSpeed => normalMoveSpeed;
 
+    [Tooltip("通常状態時の種類を指定します。待機型or徘徊型")]
     [SerializeField]
     NormalStateType normalStateType = NormalStateType.Waiting;
     public NormalStateType NormalState => normalStateType;
 
+    [Space(10)]
+    [Tooltip("徘徊の種類を指定します。")]
+    [ShowIf("IsNormalStateWanderer")]
     [SerializeField]
     WandererType wandererType = WandererType.Route;
     public WandererType Wanderer => wandererType;
 
-    [Space(5)]
+    [ShowIf("IsNormalStateWanderer")]
+    [ShowIf("IsWandererRoute")]
     [SerializeField]
     RouteCheckPointList routeCheckPoints = default;
     List<Vector3> worldCheckPoint = new List<Vector3>();
     public IReadOnlyList<Vector3> RouteCheckPoints => worldCheckPoint;
 
+    [ShowIf("IsNormalStateWanderer")]
+    [HideIf("IsWandererRoute")]
     [SerializeField]
     float randomRangeRadiusMin = 0.5f;
     public float RandomRangeRadiusMin => randomRangeRadiusMin;
 
+    [ShowIf("IsNormalStateWanderer")]
+    [HideIf("IsWandererRoute")]
     [SerializeField]
     float randomRangeRadiusMax = 1;
     public float RandomRangeRadiusMax => randomRangeRadiusMax;
 
-    [Space(5)]
+    bool IsNormalStateWanderer()
+    {
+        return normalStateType == NormalStateType.Wanderer;
+    }
+
+     bool IsWandererRoute()
+     {
+        return wandererType == WandererType.Route;
+     }
+
+    [Space(10)]
     [SerializeField]
     [Range(0, 1)]
     float appearFadeTime = 0.1f;
@@ -131,7 +180,7 @@ public class EnemyParameter : MonoBehaviour
 
 
     [Space(15)]
-    [Header("◆[State : Caution(警戒状態)]◆")]
+    [Title("[State : Caution(警戒状態)]")]
     [SerializeField]
     float cautionWaitTime = 0;
     public float CautionWaitTime => cautionWaitTime;
@@ -140,9 +189,12 @@ public class EnemyParameter : MonoBehaviour
     float cautionMoveSpeed = 1.5f;
     public float CautionMoveSpeed => cautionMoveSpeed;
 
+    [SerializeField]
+    float returnWarpDistance = 1;
+    public float ReturnWarpDistance => returnWarpDistance;
 
     [Space(15)]
-    [Header("◆[State : Fighting(戦闘状態)]◆")]
+    [Title("[State : Fighting(戦闘状態)]")]
     [SerializeField]
     float fightingWaitTime = 0;
     public float FightingWaitTime => fightingWaitTime;
@@ -162,7 +214,7 @@ public class EnemyParameter : MonoBehaviour
 
 
     [Space(15)]
-    [Header("◆[Special Action Settings]")]
+    [Title("[Special Action Settings(特殊アクション)]")]
 
     [SerializeField]
     bool isAttackedDisappear = false;
@@ -186,7 +238,7 @@ public class EnemyParameter : MonoBehaviour
 
 
     [Space(15)]
-    [Header("[Other Settings]")]
+    [Title("[Other Settings(その他)]")]
     [SerializeField]
     bool isStaticState = false;
     public bool IsStaticState => isStaticState;
@@ -196,21 +248,6 @@ public class EnemyParameter : MonoBehaviour
 
     // 初期位置
     public Vector3 InitialPosition { get; private set; }
-
-
-    [Space(15)]
-    [Header("◆[Debug Settings]")]
-    [SerializeField]
-    Color appearRangeColor = Color.green;
-
-    [SerializeField]
-    Color cautionRangeColor = Color.yellow;
-
-    [SerializeField]
-    Color fightingRangeColor = Color.red;
-
-    [SerializeField]
-    Color randomRangeColor = Color.cyan;
 
     /// <summary>
     /// 初期化
@@ -233,7 +270,7 @@ public class EnemyParameter : MonoBehaviour
         if (isAlwaysAppear)
         {
             // 全ての見える範囲をオニする
-            System.Array.ForEach(rangeParameters, elem => elem.appear = 0);
+            System.Array.ForEach(stateRanges, elem => elem.appear = 0);
         }
 
     }
@@ -244,7 +281,7 @@ public class EnemyParameter : MonoBehaviour
     /// <param name="type"></param>
     public void ChangeRangeRadius(StateType type)
     {
-        RangeParameter rangeParameter = System.Array.Find(rangeParameters, elem => elem.stateType == type);
+        RangeParameter rangeParameter = System.Array.Find(stateRanges, elem => elem.stateType == type);
         appearRange.Radius = rangeParameter.appear;
         cautionRange.Radius = rangeParameter.caution;
         fightingRange.Radius = rangeParameter.fighting;
@@ -252,12 +289,12 @@ public class EnemyParameter : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        UnityEditor.Handles.color = appearRangeColor;
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, rangeParameters[0].appear);
-        UnityEditor.Handles.color = cautionRangeColor;
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, rangeParameters[0].caution);
-        UnityEditor.Handles.color = fightingRangeColor;
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, rangeParameters[0].fighting);
+        UnityEditor.Handles.color = new Color(0,1,0,0.5f);
+        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].appear);
+        UnityEditor.Handles.color = new Color(1, 1, 0, 0.5f);
+        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].caution);
+        UnityEditor.Handles.color = new Color(1, 0, 0, 0.5f);
+        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].fighting);
         UnityEditor.Handles.color = Color.white;
 
         viewRange.Angle      = viewAngle;
@@ -296,7 +333,7 @@ public class EnemyParameter : MonoBehaviour
         {
             randomRangeRadiusMax = randomRangeRadiusMin;
         }
-        Gizmos.color = randomRangeColor;
+        Gizmos.color = Color.cyan;
         Vector3 pos = (InitialPosition != Vector3.zero) ? InitialPosition : transform.position;
         UnityEditor.Handles.color = Color.cyan;
         UnityEditor.Handles.DrawWireDisc(pos, Vector3.up, randomRangeRadiusMin);

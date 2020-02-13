@@ -25,7 +25,6 @@ public class Tsun : MonoBehaviour
             new TsunStateNormal(tsunStateMachine.soundSpawner),
             new TsunStateCaution(),
             new TsunStateFighting(),
-
         };
 
         // ステートマシンの初期化
@@ -59,14 +58,44 @@ public class Tsun : MonoBehaviour
     }
 
     /// <summary>
-    /// 移動目標位置のセット
+    /// スポーンさせる
     /// </summary>
-    public void SetTargetPos(Vector3 pos)
+    /// <param name="state"></param>
+    public void Spawn(StateType state, Vector3 targetPosition = default)
     {
-        // 警戒状態に変更
-        tsunStateMachine.SetNextState(StateType.Caution);
-        // 移動目標位置をセット
-        tsunStateMachine.agent.SetDestination(pos);
+        gameObject.SetActive(true);
+        if (targetPosition != default) { tsunStateMachine.agent.SetDestination(targetPosition); }
+        tsunStateMachine.currentState = state;
+        tsunStateMachine.animator.SetInteger("NextStateTypeId",(int)state);
+        tsunStateMachine.animator.SetInteger("AnimatorStateTypeId", (int)state);
+    }
+
+    /// <summary>
+    /// プレイヤーが見える範囲に入った
+    /// </summary>
+    public void OnPlayerEnterToAppearRange(Collider other)
+    {
+        // 通常状態のみ
+        //if (shadowStateMachine.currentState != StateType.Normal) { return; }
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // 出現フラグを起こす
+        tsunStateMachine.isAppear = true;
+    }
+
+    /// <summary>
+    /// プレイヤー見える範囲から出た
+    /// </summary>
+    public void OnPlayerExitToAppearRange(Collider other)
+    {
+        // 通常状態のみ
+        //if (shadowStateMachine.currentState != StateType.Normal) { return; }
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // 出現フラグを起こす
+        tsunStateMachine.isAppear = false;
     }
 
     /// <summary>
@@ -75,7 +104,7 @@ public class Tsun : MonoBehaviour
     /// <param name="other"></param>
     public void OnHeardNoise(Collider other)
     {
-        if (!tsunStateMachine.parameter.IsDetectNoiseToTransparent)
+        if (!tsunStateMachine.animator.GetBool("IsAppear"))
         {
             // 警戒状態のみ
             if (tsunStateMachine.currentState != StateType.Caution) { return; }
@@ -85,7 +114,6 @@ public class Tsun : MonoBehaviour
 
         // 移動目標位置を発信源に
         tsunStateMachine.agent.SetDestination(other.transform.position);
-        tsunStateMachine.animator.SetBool("IsAppear", true);
     }
 
     /// <summary>

@@ -66,14 +66,26 @@ public class ShadowStateCaution : StateBase
                 isReturn = false;
             }
 
-            // 初期位置を目標位置にする
-            agent.SetDestination(parameter.InitialPosition);
+            // 初期位置まで距離が一定以上離れていたら
+            if ((agent.transform.position - parameter.InitialPosition).magnitude > parameter.ReturnWarpDistance)
+            {
+                // 初期位置まで瞬間移動する
+                agent.Warp(parameter.InitialPosition);
+                // 通常状態に戻る
+                SetNextState((int)StateType.Normal);
+            }
+            else
+            {
+                // 初期位置を目標位置にする
+                agent.SetDestination(parameter.InitialPosition);
+            }
 
             // 初期位置に着いたら
             if (agent.remainingDistance < agent.stoppingDistance)
             {
                 // 通常状態に戻る
                 SetNextState((int)StateType.Normal);
+                isReturn = false;
             }
         }
     }

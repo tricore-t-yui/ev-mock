@@ -5,17 +5,27 @@ using UnityEngine.AI;
 
 public class EnemyHideObjectAccesser : MonoBehaviour
 {
+    public enum HideType
+    {
+        Locker,
+        Bed,
+    }
+
+    HideType hideType = HideType.Locker;
+
     [SerializeField]
     Animator animator = default;
     [SerializeField]
     NavMeshAgent agent = default;
+    [SerializeField]
+    EnemyParameter parameter = default;
 
     GameObject player = default;
 
+    PlayerDamageEvent damageEvent = default;
+
     [SerializeField]
-    float lockerAttackRange = 1;
-    [SerializeField]
-    float bedAttackRange = 1;
+    float[] attackRange = new float[System.Enum.GetNames(typeof(HideType)).Length];
 
     PlayerHideController hideController = default;
     Dictionary<int, Animator> hideAnimatorTable = new Dictionary<int, Animator>();
@@ -25,6 +35,8 @@ public class EnemyHideObjectAccesser : MonoBehaviour
     /// </summary>
     void Start()
     {
+        damageEvent = FindObjectOfType<PlayerDamageEvent>();
+
         // ハイドコントローラーを取得
         hideController = GameObject.FindObjectOfType<PlayerHideController>();
         // プレイヤー
@@ -50,6 +62,25 @@ public class EnemyHideObjectAccesser : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        
+        if (hideController.HideObj == null) { return; }
+
+        if (hideController.HideObj.tag == "Locker") { hideType = HideType.Locker; }
+        else if (hideController.HideObj.tag == "Bed") { hideType = HideType.Bed; }
+
+        // 警戒か戦闘のみ
+        if (animator.GetInteger("AnimatorStateTypeId") != 0)
+        {
+            GameObject hide = hideController.HideObj;
+            if ((hide.transform.position - transform.position).magnitude < attackRange[(int)hideType])
+            {
+                if (hide.tag == "Locker")
+                {
+                    Animator anim = hideAnimatorTable[hide.GetInstanceID()];
+                    anim.SetBool("DragOut", true);
+                    anim.SetBool("DragOut", false);
+                }
+                damageEvent.Invoke(transform, parameter.Damage);
+            }
+        }
     }
 }

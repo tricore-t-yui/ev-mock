@@ -43,14 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8c841820f9f154da7b8919cf089827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTransform: {fileID: 5554824159177192317}
-  rotationOffset: {x: 0.70710677, y: 0, z: 0, w: -0.70710677}
+  baseTransform: {fileID: 3315339731598062243}
+  rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   raycastMask:
     serializedVersion: 2
     m_Bits: 32000
   targetLayerName: Player
   angle: 120
-  distance: 1
+  distance: 3
   borderColor: {r: 0, g: 1, b: 0.08090758, a: 1}
   visibleEnter:
     m_PersistentCalls:
@@ -346,6 +346,7 @@ GameObject:
   - component: {fileID: 3315339731598062243}
   - component: {fileID: 3315339731598062244}
   - component: {fileID: 3315339731598062245}
+  - component: {fileID: 1820468864057453119}
   - component: {fileID: 2341461984401515456}
   - component: {fileID: 4128825655281897044}
   m_Layer: 0
@@ -413,6 +414,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1820468864057453119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315339731598062247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd51b433bd02d3469c729ab9ee04512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3315339731598062244}
+  agent: {fileID: 3315339731598062245}
+  parameter: {fileID: 4128825655281897044}
+  attackRange:
+  - 1
+  - 2
 --- !u!114 &2341461984401515456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,19 +475,19 @@ MonoBehaviour:
   viewRange: {fileID: 3123629697305880472}
   attackRange: {fileID: 2601207460495203472}
   isAlwaysAppear: 1
-  rangeParameters:
+  stateRanges:
   - stateType: 0
     appear: 0
-    caution: 2.43
-    fighting: 1
+    caution: 0.1
+    fighting: 0.1
   - stateType: 1
     appear: 0
-    caution: 2
-    fighting: 1
+    caution: 0.1
+    fighting: 0.1
   - stateType: 2
     appear: 0
-    caution: 2
-    fighting: 1
+    caution: 0.1
+    fighting: 0.1
   viewAngle: 120
   viewDistance: 1
   attackAngle: 120
@@ -485,6 +504,7 @@ MonoBehaviour:
   isDetectNoiseToTransparent: 1
   cautionWaitTime: 3
   cautionMoveSpeed: 1.5
+  returnWarpDistance: 1
   fightingWaitTime: 2
   attackedWaitTime: 5
   fightingMoveSpeed: 2
@@ -496,10 +516,6 @@ MonoBehaviour:
   disappearDistance: 5
   isStaticState: 0
   isInitialAutoSpawn: 1
-  appearRangeColor: {r: 0, g: 1, b: 0, a: 1}
-  cautionRangeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  fightingRangeColor: {r: 1, g: 0, b: 0, a: 1}
-  randomRangeColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &3325102817006509370
 GameObject:
   m_ObjectHideFlags: 0

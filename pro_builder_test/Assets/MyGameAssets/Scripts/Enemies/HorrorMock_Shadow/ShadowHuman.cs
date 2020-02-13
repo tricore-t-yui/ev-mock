@@ -50,6 +50,19 @@ public class ShadowHuman : MonoBehaviour
     }
 
     /// <summary>
+    /// スポーンさせる
+    /// </summary>
+    /// <param name="state"></param>
+    public void Spawn(StateType state, Vector3 targetPosition = default)
+    {
+        shadowStateMachine.currentState = state;
+        gameObject.SetActive(true);
+        if (targetPosition != default) { shadowStateMachine.agent.SetDestination(targetPosition); }
+        shadowStateMachine.animator.SetInteger("NextStateTypeId", (int)state);
+        shadowStateMachine.animator.SetInteger("AnimatorStateTypeId", (int)state);
+    }
+
+    /// <summary>
     /// 現在のステートを取得
     /// </summary>
     /// <returns></returns>
