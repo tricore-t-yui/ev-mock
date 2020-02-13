@@ -125,13 +125,14 @@ public class EnemyParameter : MonoBehaviour
     public NormalStateType NormalState => normalStateType;
 
     [Space(10)]
-    [Tooltip("徘徊の種類を指定します。")]
     [ShowIf("IsNormalStateWanderer")]
+    [Tooltip("徘徊の種類を指定します。")]
     [SerializeField]
     WandererType wandererType = WandererType.Route;
     public WandererType Wanderer => wandererType;
 
     [ShowIf("IsNormalStateWanderer")]
+    [Tooltip("ルート徘徊時のチェックポイントを設定します。")]
     [ShowIf("IsWandererRoute")]
     [SerializeField]
     RouteCheckPointList routeCheckPoints = default;
@@ -139,12 +140,14 @@ public class EnemyParameter : MonoBehaviour
     public IReadOnlyList<Vector3> RouteCheckPoints => worldCheckPoint;
 
     [ShowIf("IsNormalStateWanderer")]
+    [Tooltip("ランダム徘徊時の最小範囲を設定します。")]
     [HideIf("IsWandererRoute")]
     [SerializeField]
     float randomRangeRadiusMin = 0.5f;
     public float RandomRangeRadiusMin => randomRangeRadiusMin;
 
     [ShowIf("IsNormalStateWanderer")]
+    [Tooltip("ランダム徘徊時の最大範囲を設定します。")]
     [HideIf("IsWandererRoute")]
     [SerializeField]
     float randomRangeRadiusMax = 1;
@@ -161,19 +164,23 @@ public class EnemyParameter : MonoBehaviour
      }
 
     [Space(10)]
+    [Tooltip("姿が現れるときのフェードを設定します。\n値が小さいほど滑らかに現れます。")]
     [SerializeField]
     [Range(0, 1)]
     float appearFadeTime = 0.1f;
     public float AppearFadeTime => appearFadeTime;
 
+    [Tooltip("最初に音を聞いたときに、この値よりも大きなレベルの音を鳴らすと即警戒に移行します。")]
     [SerializeField]
     float safeSoundLevelMax = 5;
     public float SafeSoundLevelMax => safeSoundLevelMax;
 
+    [Tooltip("最初に音を聞いたときに、警戒に移行するまでの時間を設定します。")]
     [SerializeField]
     float safeTime = 1;
     public float SafeTime => safeTime;
 
+    [Tooltip("姿が見えていない状態で音を検知できるかどうかを設定します。\nオンの場合は姿が見えていなくても音を検知すれば警戒に移行して追ってきます。")]
     [SerializeField]
     bool isDetectNoiseToTransparent = false;
     public bool IsDetectNoiseToTransparent => isDetectNoiseToTransparent;
