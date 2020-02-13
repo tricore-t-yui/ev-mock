@@ -28,15 +28,18 @@ public class SoundTrigger : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        var rate = Random.Range(0.0f, 1.0f);
-        Debug.Log("Enter rate:" + rate);
-        if (rate > 1.0f - (appearRate / 100.0f))
+        if (other.tag == "Player")
         {
-            StartCoroutine(PlayInternal());
-        }
-        else if (isOneChance)
-        {
-            Destroy(gameObject);
+            var rate = Random.Range(0.0f, 1.0f);
+            Debug.Log("Enter rate:" + rate);
+            if (rate > 1.0f - (appearRate / 100.0f))
+            {
+                StartCoroutine(PlayInternal());
+            }
+            else if (isOneChance)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

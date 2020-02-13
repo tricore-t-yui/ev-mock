@@ -42,17 +42,20 @@ public class ScreenEffectTrigger : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        var rate = Random.Range(0.0f, 1.0f);
-        Debug.Log("Enter rate:" + rate);
-        if (rate > 1.0f - (appearRate / 100.0f))
+        if (other.tag == "Player")
         {
-            if (shakeRate > 0)
-                StartCoroutine(DoShake());
-            StartCoroutine(PlayInternal());
-        }
-        else if (isOneChance)
-        {
-            Destroy(gameObject);
+            var rate = Random.Range(0.0f, 1.0f);
+            Debug.Log("Enter rate:" + rate);
+            if (rate > 1.0f - (appearRate / 100.0f))
+            {
+                if (shakeRate > 0)
+                    StartCoroutine(DoShake());
+                StartCoroutine(PlayInternal());
+            }
+            else if (isOneChance)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
