@@ -44,6 +44,7 @@ public class KageAnimParameterList : MonoBehaviour
         currentSpeed,
         isPlayingNextBehavior,
         isStaticState,
+        attackType,
     }
 
     // アニメーター
