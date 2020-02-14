@@ -205,12 +205,17 @@ public class EnemyParameter : MonoBehaviour
 
     [SerializeField]
     float fightingMoveSpeed = 2;
-    public float FightingMoveSpeed => fightingMoveSpeed;
+    public float FightingMoveSpeed => fightingMoveSpeed;    
 
     [SerializeField]
     [Range(0,100)]
     float damage = 0;
     public float Damage => damage;
+
+    [Header("Cry Sound Settings")]
+    [SerializeField]
+    CrySoundParameter cryParameter = default;
+    public CrySoundParameter CryParameter => cryParameter;
 
 
     [Space(15)]
@@ -236,6 +241,14 @@ public class EnemyParameter : MonoBehaviour
     float disappearDistance = 0;
     public float DisappearDistance => disappearDistance;
 
+    [Space(5)]
+    [SerializeField]
+    bool isNotAttackApproached = false;
+    public bool IsNotAttackApproached => isNotAttackApproached;
+
+    [SerializeField]
+    float approachedDistance = 1;
+    public float ApproachedDistance => approachedDistance;
 
     [Space(15)]
     [Title("[Other Settings(その他)]")]

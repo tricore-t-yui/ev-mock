@@ -52,7 +52,7 @@ public class TsunStateNormal : StateBase
     public override void Update()
     {
         // 影人間が出現している
-        if (animator.GetBool("IsAppear"))
+        if (animator.GetBool("IsDetectedNoise"))
         {
             // 時間を減らしていく
             safeCounter -= Time.deltaTime;

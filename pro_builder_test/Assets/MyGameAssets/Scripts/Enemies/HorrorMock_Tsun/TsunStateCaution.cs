@@ -76,6 +76,8 @@ public class TsunStateCaution : StateBase
                 agent.Warp(parameter.InitialPosition);
                 // 通常状態に戻る
                 SetNextState((int)StateType.Normal);
+                // 音が聞こえなくなった
+                animator.SetBool("IsDetectedNoise", false);
             }
 
             // 初期位置に着いたら
@@ -83,6 +85,8 @@ public class TsunStateCaution : StateBase
             {
                 // 通常状態に戻る
                 SetNextState((int)StateType.Normal);
+                // 音が聞こえなくなった
+                animator.SetBool("IsDetectedNoise", false);
             }
         }
     }
