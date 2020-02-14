@@ -26,15 +26,26 @@ public class ScreenEffectTrigger : MonoBehaviour
     [SerializeField, Tooltip("表示と同時に鳴らすサウンド。なければ鳴らさない")]
     AudioClip clip;
 
+    [SerializeField,Tooltip("トリガーグループ。0以外で数字が同じやつは、発動したら消える(サウンドと共通)")]
+    int triggerGrup = 0;
+
     Image image;
     CanvasGroup group;
     AudioSource source;
+
+    public int TriggerGroup { get { return triggerGrup; } }
 
     private void Awake()
     {
         image = GetComponentInChildren<Image>();
         group = GetComponentInChildren<CanvasGroup>();
         source = GetComponentInChildren<AudioSource>();
+        EffectTriggerGroup.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        EffectTriggerGroup.Remove(this);
     }
 
     /// <summary>
@@ -50,6 +61,9 @@ public class ScreenEffectTrigger : MonoBehaviour
             {
                 if (shakeRate > 0)
                     StartCoroutine(DoShake());
+
+                EffectTriggerGroup.Remove(this);
+                EffectTriggerGroup.DestroyGroup(triggerGrup);
                 StartCoroutine(PlayInternal());
             }
             else if (isOneChance)

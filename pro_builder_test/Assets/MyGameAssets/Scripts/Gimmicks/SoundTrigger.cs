@@ -16,11 +16,22 @@ public class SoundTrigger : MonoBehaviour
     [SerializeField, Tooltip("鳴らすオーディオのリスト。複数あった場合はランダム再生")]
     List<AudioClip> audioList;
 
+    [SerializeField, Tooltip("トリガーグループ。0以外で数字が同じやつは、発動したら消える(画像エフェクトと共通)")]
+    int triggerGrup = 0;
+
     AudioSource source;
+
+    public int TriggerGroup{ get{ return triggerGrup; } }
 
     private void Awake()
     {
         source = GetComponentInChildren<AudioSource>();
+        EffectTriggerGroup.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        EffectTriggerGroup.Remove(this);
     }
 
     /// <summary>
@@ -34,6 +45,8 @@ public class SoundTrigger : MonoBehaviour
             Debug.Log("Enter rate:" + rate);
             if (rate > 1.0f - (appearRate / 100.0f))
             {
+                EffectTriggerGroup.Remove(this);
+                EffectTriggerGroup.DestroyGroup(triggerGrup);
                 StartCoroutine(PlayInternal());
             }
             else if (isOneChance)
