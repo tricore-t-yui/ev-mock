@@ -55,7 +55,7 @@ MonoBehaviour:
   visibleEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -66,7 +66,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: AttackPlayer
         m_Mode: 0
         m_Arguments:
@@ -80,7 +80,7 @@ MonoBehaviour:
   visibleStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
@@ -94,6 +94,179 @@ MonoBehaviour:
   visibleExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &816440183171373365
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7530609732132308372}
+  - component: {fileID: 2277185184526457839}
+  m_Layer: 0
+  m_Name: Shadow_Step
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7530609732132308372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816440183171373365}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8587313454051687206}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &2277185184526457839
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816440183171373365}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 51cea84a75946704b8b95a4fcd6ec117, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1 &1308924313955638264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8587313454051687206}
+  - component: {fileID: 7590145412180485241}
+  m_Layer: 0
+  m_Name: Sound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8587313454051687206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308924313955638264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7530609732132308372}
+  m_Father: {fileID: 4484567948180639831}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7590145412180485241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308924313955638264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb57dfe5da451f4dbda944a00375d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - {fileID: 2277185184526457839}
 --- !u!1 &1397433015476032321
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +322,7 @@ MonoBehaviour:
   visibleEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -163,7 +336,7 @@ MonoBehaviour:
   visibleStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
@@ -177,6 +350,36 @@ MonoBehaviour:
   visibleExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &2609247086053449492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809384083681709963}
+  m_Layer: 0
+  m_Name: Spawned
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &809384083681709963
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609247086053449492}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2879245434732186201}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4401717240550156274
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +412,7 @@ Transform:
   - {fileID: 5442381789137039724}
   - {fileID: 6785268800169274783}
   - {fileID: 9143247351197531118}
+  - {fileID: 2879245434732186201}
   m_Father: {fileID: 4484567948180639831}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -916,7 +1120,7 @@ GameObject:
   - component: {fileID: 4484567948180639824}
   - component: {fileID: 4484567948180639825}
   - component: {fileID: 5093990402372542406}
-  - component: {fileID: 3748258423406776503}
+  - component: {fileID: 7861255609434570461}
   - component: {fileID: 2986616820252028064}
   m_Layer: 0
   m_Name: ShadowHuman
@@ -924,7 +1128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4484567948180639831
 Transform:
   m_ObjectHideFlags: 0
@@ -940,6 +1144,7 @@ Transform:
   - {fileID: 4484567948084092746}
   - {fileID: 4484567948504542078}
   - {fileID: 3931988713604867382}
+  - {fileID: 8587313454051687206}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -109.242004, z: 0}
@@ -1002,7 +1207,7 @@ MonoBehaviour:
   attackRange:
   - 1
   - 2
---- !u!114 &3748258423406776503
+--- !u!114 &7861255609434570461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1014,19 +1219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da6d1535f7e55641953cac041a258ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shadowStateMachine:
-    parameter: {fileID: 2986616820252028064}
-    animator: {fileID: 4484567948180639824}
-    agent: {fileID: 4484567948180639825}
-    meshRenderer: {fileID: 4484567948084092745}
-    InitialState: 0
-    currentState: 0
-    isAppear: 0
-    attackTypeId: 0
-    player: {fileID: 0}
-    soundSpawner: {fileID: 0}
-    damageEvent: {fileID: 0}
-    states: []
+  parameter: {fileID: 2986616820252028064}
+  animator: {fileID: 4484567948180639824}
+  agent: {fileID: 4484567948180639825}
+  meshRenderer: {fileID: 4484567948084092745}
+  crySoundSpawner: {fileID: 7538052814172874607}
 --- !u!114 &2986616820252028064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1063,14 +1260,14 @@ MonoBehaviour:
   attackAngle: 120
   attackDistance: 0.5
   normalMoveSpeed: 1
-  normalStateType: 0
+  normalStateType: 1
   wandererType: 1
   routeCheckPoints: {fileID: 11400000, guid: a836fcd39f997f8498e076fbeaa77ab2, type: 2}
   randomRangeRadiusMin: 1.8
   randomRangeRadiusMax: 2
   appearFadeTime: 0.1
   safeSoundLevelMax: 10
-  safeTime: 10
+  safeTime: 5
   isDetectNoiseToTransparent: 0
   cautionWaitTime: 3
   cautionMoveSpeed: 1.5
@@ -1078,12 +1275,19 @@ MonoBehaviour:
   fightingWaitTime: 2
   attackedWaitTime: 5
   fightingMoveSpeed: 2
-  damage: 0
+  damage: 10
+  cryParameter:
+    soundExpansionSpeed: 2
+    soundReductionSpeed: 1
+    soundSizeMax: 10
+    soundSpawnInterval: 0.5
   isAttackedDisappear: 0
   isApproachedDisappear: 0
   isCameraFadeOutDisappear: 0
   isRespawn: 0
   disappearDistance: 5
+  isNotAttackApproached: 0
+  approachedDistance: 1
   isStaticState: 0
   isInitialAutoSpawn: 1
 --- !u!1 &4484567948267446293
@@ -1271,6 +1475,88 @@ Transform:
   m_Father: {fileID: 4484567948267446292}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.19237636, y: -0.2501129, z: -89.09065}
+--- !u!1 &6378515810073243857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4283824901195136121}
+  - component: {fileID: 7538052814172874607}
+  - component: {fileID: 5795349861445903991}
+  m_Layer: 0
+  m_Name: SpawnPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4283824901195136121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378515810073243857}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2879245434732186201}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7538052814172874607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378515810073243857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26dfefa5552a9c41baaa8637e3f6625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pool: {fileID: 5795349861445903991}
+  parameter: {fileID: 2986616820252028064}
+  spawnedParent: {fileID: 809384083681709963}
+--- !u!114 &5795349861445903991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378515810073243857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59dfbc0f4f3a98b4ebf4ad40fc3f43aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolName: CrySound
+  matchPoolScale: 0
+  matchPoolLayer: 0
+  dontReparent: 0
+  _dontDestroyOnLoad: 0
+  logMessages: 0
+  _perPrefabPoolOptions:
+  - prefab: {fileID: 3940379721151561948, guid: 1d9ff2a01d52e8b4c89889503fbe2cda,
+      type: 3}
+    preloadAmount: 10
+    preloadTime: 0
+    preloadFrames: 2
+    preloadDelay: 0
+    limitInstances: 0
+    limitAmount: 100
+    limitFIFO: 0
+    cullDespawned: 0
+    cullAbove: 50
+    cullDelay: 60
+    cullMaxPerPass: 5
+    _logMessages: 0
+    spawnPool: {fileID: 0}
+  maxParticleDespawnTime: 300
 --- !u!1 &7866699597520328934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,22 +1606,11 @@ MonoBehaviour:
     m_Bits: 16777472
   enterEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
-        m_MethodName: OnPlayerEnterToCautionRange
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   stayEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnHeardNoise
         m_Mode: 0
         m_Arguments:
@@ -1346,7 +1621,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
@@ -1359,18 +1634,7 @@ MonoBehaviour:
         m_CallState: 2
   exitEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
-        m_MethodName: OnPlayerExitToCautionRange
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8111729272100255417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,7 +1685,7 @@ MonoBehaviour:
   enterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -1435,7 +1699,7 @@ MonoBehaviour:
   stayEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
@@ -1449,6 +1713,38 @@ MonoBehaviour:
   exitEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &8287718687379925383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2879245434732186201}
+  m_Layer: 0
+  m_Name: CrySound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2879245434732186201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8287718687379925383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4283824901195136121}
+  - {fileID: 809384083681709963}
+  m_Father: {fileID: 3931988713604867382}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9083737400537459417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1499,7 +1795,7 @@ MonoBehaviour:
   enterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnPlayerEnterToAppearRange
         m_Mode: 0
         m_Arguments:
@@ -1516,7 +1812,7 @@ MonoBehaviour:
   exitEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3748258423406776503}
+      - m_Target: {fileID: 7861255609434570461}
         m_MethodName: OnPlayerExitToAppearRange
         m_Mode: 0
         m_Arguments:

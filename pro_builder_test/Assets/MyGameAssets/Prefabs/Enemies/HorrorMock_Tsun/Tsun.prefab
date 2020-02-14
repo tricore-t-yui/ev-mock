@@ -50,12 +50,12 @@ MonoBehaviour:
     m_Bits: 32000
   targetLayerName: Player
   angle: 120
-  distance: 3
+  distance: 1
   borderColor: {r: 0, g: 1, b: 0.08090758, a: 1}
   visibleEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -69,8 +69,8 @@ MonoBehaviour:
   visibleStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
-        m_MethodName: OnHeardNoise
+      - m_Target: {fileID: 2558205288852106064}
+        m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -169,7 +169,7 @@ MonoBehaviour:
   visibleEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -180,7 +180,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: AttackPlayer
         m_Mode: 0
         m_Arguments:
@@ -194,7 +194,7 @@ MonoBehaviour:
   visibleStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 3315339731598062244}
   - component: {fileID: 3315339731598062245}
   - component: {fileID: 1820468864057453119}
-  - component: {fileID: 2341461984401515456}
+  - component: {fileID: 2558205288852106064}
   - component: {fileID: 4128825655281897044}
   m_Layer: 0
   m_Name: Tsun
@@ -432,7 +432,7 @@ MonoBehaviour:
   attackRange:
   - 1
   - 2
---- !u!114 &2341461984401515456
+--- !u!114 &2558205288852106064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -444,19 +444,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6619243d3879b40969bd0605a91277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tsunStateMachine:
-    parameter: {fileID: 4128825655281897044}
-    animator: {fileID: 3315339731598062244}
-    agent: {fileID: 3315339731598062245}
-    meshRenderer: {fileID: 5130499143453696554}
-    InitialState: 0
-    currentState: 0
-    isAppear: 0
-    attackTypeId: 0
-    player: {fileID: 0}
-    soundSpawner: {fileID: 0}
-    damageEvent: {fileID: 0}
-    states: []
+  parameter: {fileID: 4128825655281897044}
+  animator: {fileID: 3315339731598062244}
+  agent: {fileID: 3315339731598062245}
+  meshRenderer: {fileID: 5130499143453696554}
 --- !u!114 &4128825655281897044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1109,7 +1100,7 @@ MonoBehaviour:
   enterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnDetectedPlayer
         m_Mode: 0
         m_Arguments:
@@ -1123,8 +1114,8 @@ MonoBehaviour:
   stayEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3315339731598062247}
-        m_MethodName: 
+      - m_Target: {fileID: 2558205288852106064}
+        m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1344,7 +1335,7 @@ MonoBehaviour:
   enterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnPlayerEnterToAppearRange
         m_Mode: 0
         m_Arguments:
@@ -1361,7 +1352,7 @@ MonoBehaviour:
   exitEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnPlayerExitToAppearRange
         m_Mode: 0
         m_Arguments:
@@ -1642,7 +1633,7 @@ MonoBehaviour:
   stayEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: OnHeardNoise
         m_Mode: 0
         m_Arguments:
@@ -1653,7 +1644,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2341461984401515456}
+      - m_Target: {fileID: 2558205288852106064}
         m_MethodName: ChasePlayer
         m_Mode: 0
         m_Arguments:

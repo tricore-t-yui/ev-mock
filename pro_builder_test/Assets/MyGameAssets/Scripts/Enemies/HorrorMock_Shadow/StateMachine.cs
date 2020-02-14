@@ -5,48 +5,71 @@ using UnityEngine.AI;
 using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 
-[System.Serializable]
-public class StateMachine
+public class StateMachine : MonoBehaviour
 {
-    public EnemyParameter parameter = default;
-    public Animator animator = default;
-    public NavMeshAgent agent = default;
-    public SkinnedMeshRenderer meshRenderer = default;
+    // 敵のパラメーター
+    [SerializeField]
+    protected EnemyParameter parameter = default;
 
-    public StateType InitialState = default;
-    [HideInInspector]
-    public StateType currentState = default;
+    // アニメーター
+    [SerializeField]
+    protected Animator animator = default;
 
-    bool stateChangeTrigger = false;
-    int nextStateId = -1;
+    // ナビメッシュ
+    [SerializeField]
+    protected NavMeshAgent agent = default;
 
-    [HideInInspector]
-    public bool isAppear = false;
-    float appearFadeCounter = 0;
-
-    [HideInInspector]
-    public int attackTypeId = 0;
-
-    [HideInInspector]
-    public GameObject player = default;
-
-    [HideInInspector]
-    public SoundAreaSpawner soundSpawner = default;
-
-    [HideInInspector]
-    public PlayerDamageEvent damageEvent = default;
-
-    [HideInInspector]
-    public StateBase[] states;
+    // メッシュレンダラー
+    [SerializeField]
+    protected SkinnedMeshRenderer meshRenderer = default;
 
     // ナビメッシュの移動制御
     NavMeshStopingSwitcher navMeshStopingSwitcher = new NavMeshStopingSwitcher();
+
+    // サウンドスポナー
+    [SerializeField]
+    ShadowCrySoundSpawner crySoundSpawner = default;
+
+    [SerializeField]
+    EnemySoundPlayer soundPlayer = default;
+
+    // 現在のステート
+    public StateType currentState { get; protected set; } = StateType.Normal;
+
+    // ステート変更トリガー
+    bool stateChangeTrigger = false;
+    // 次のステートのiD
+    int nextStateId = -1;
+
+    // 出現フラグ
+    protected bool isAppear = false;
+    // 出現フェード
+    float appearFadeCounter = 0;
+
+    // 攻撃の種類
+    protected int attackTypeId = 0;
+
+    // プレイヤー
+    protected GameObject player = default;
+
+    // サウンドスポナー
+    protected SoundAreaSpawner soundSpawner = default;
+
+    // ダメージイベント
+    protected PlayerDamageEvent damageEvent = default;
+
+    // ステート
+    protected StateBase[] states;
 
     /// <summary>
     /// 初期化
     /// </summary>
     public void Initialize(StateBase[] states)
     {
+        // 各クラスのインスタンスを取得
+        player = GameObject.FindGameObjectWithTag("Player");
+        damageEvent = GameObject.FindObjectOfType<PlayerDamageEvent>();
+
         // インスタンスを取得
         this.states = states;
 
@@ -58,19 +81,23 @@ public class StateMachine
 
         // ナビメッシュの移動制御クラスの初期化
         navMeshStopingSwitcher.Initialize(animator, agent);
+
+        // ステートの遷移を行うかどうか
+        animator.SetBool("IsStaticState", parameter.IsStaticState);
+    }
+
+    void Start()
+    {
+        Entry(parameter);
     }
 
     /// <summary>
     /// 開始
     /// </summary>
-    public void Entry()
+    public void Entry(EnemyParameter parameter)
     {
-        // 初期ステートを設定
-        SetNextState(InitialState);
         // 範囲の初期化
         parameter.ChangeRangeRadius(currentState);
-        // 初期位置にワープ
-        //agent.Warp(parameter.InitialPosition);
 
         // 透明状態で出現させるとき
         if (!parameter.IsAlwaysAppear)
@@ -93,6 +120,30 @@ public class StateMachine
 
         // ナビメッシュの移動制御クラスの開始処理
         navMeshStopingSwitcher.Entry();
+    }
+
+    public void Spawn(StateType type,Vector3 target = default)
+    {
+        gameObject.SetActive(true);
+        currentState = type;
+        animator.SetInteger("NextStateTypeId", (int)type);
+        animator.SetInteger("AnimatorStateTypeId", (int)type);
+        // 初期位置にワープ
+        agent.Warp(parameter.InitialPosition);
+        if (target != default) { agent.SetDestination(target); }
+        // スポーン時の処理を行う
+        Entry(parameter);
+    }
+
+    public void Spawn(StateType type,EnemyParameter parameter, Vector3 target = default)
+    {
+        gameObject.SetActive(true);
+        currentState = type;
+        animator.SetInteger("NextStateTypeId", (int)type);
+        animator.SetInteger("AnimatorStateTypeId", (int)type);
+        if (target != default) { agent.SetDestination(target); }
+        // スポーン時の処理を行う
+        Entry(parameter);
     }
 
     /// <summary>
@@ -168,6 +219,25 @@ public class StateMachine
 
         // 移動速度をパラメータに反映
         animator.SetFloat("CurrentMoveSpeed", agent.speed);
+
+        // 戦闘状態時にサウンドスポナーをオンにする
+        if (crySoundSpawner != null)
+        {
+            if (currentState == StateType.Fighting)
+            {
+                if (!crySoundSpawner.gameObject.activeSelf)
+                {
+                    crySoundSpawner.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                if (crySoundSpawner.gameObject.activeSelf)
+                {
+                    crySoundSpawner.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -217,5 +287,103 @@ public class StateMachine
         states[(int)currentState].Exit();
         currentState = type;
         states[(int)currentState].Entry();
+    }
+
+    /// <summary>
+    /// プレイヤーが見える範囲に入った
+    /// </summary>
+    public void OnPlayerEnterToAppearRange(Collider other)
+    {
+        // 通常状態のみ
+        //if (shadowStateMachine.currentState != StateType.Normal) { return; }
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // 出現フラグを起こす
+        isAppear = true;
+    }
+
+    /// <summary>
+    /// プレイヤー見える範囲から出た
+    /// </summary>
+    public void OnPlayerExitToAppearRange(Collider other)
+    {
+        // 通常状態のみ
+        //if (shadowStateMachine.currentState != StateType.Normal) { return; }
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // 出現フラグを起こす
+        isAppear = false;
+    }
+
+    /// <summary>
+    /// 音を聞いた！
+    /// </summary>
+    /// <param name="other"></param>
+    public void OnHeardNoise(Collider other)
+    {
+        if (!parameter.IsAlwaysAppear)
+        {
+            // 見えている
+            if (!isAppear) { return; }
+        }
+        // ノイズのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
+
+        // 移動目標位置を発信源に
+        agent.SetDestination(other.transform.position);
+
+        // 音を聞いた
+        animator.SetBool("IsDetectedNoise", true);
+    }
+
+    /// <summary>
+    /// プレイヤーを発見した！
+    /// </summary>
+    /// <param name="other"></param>
+    public void OnDetectedPlayer(Collider other)
+    {
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // 戦闘状態に
+        SetNextState(StateType.Fighting);
+
+        // プレイヤーを移動目標位置に
+        agent.SetDestination(other.transform.position);
+    }
+
+    /// <summary>
+    /// プレイヤーを追いかける
+    /// </summary>
+    public void ChasePlayer(Collider other)
+    {
+        // 戦闘状態のみ
+        if (currentState != StateType.Fighting) { return; }
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+
+        // プレイヤーを移動目標位置に
+        agent.SetDestination(other.transform.position);
+    }
+
+    /// <summary>
+    /// プレイヤーに攻撃！
+    /// </summary>
+    /// <param name="other"></param>
+    public void AttackPlayer(Collider other)
+    {
+        // 戦闘状態のみ
+        if (currentState != StateType.Fighting) { return; }
+
+        // 攻撃の種類をセット
+        animator.SetInteger("AttackConditionType", attackTypeId);
+        // 攻撃トリガーをセット
+        animator.SetTrigger("Attaking");
+        // 待機フラグを立てる
+        animator.SetBool("IsWaiting", true);
+        // ダメージイベント
+        damageEvent.Invoke(transform, parameter.Damage);
     }
 }

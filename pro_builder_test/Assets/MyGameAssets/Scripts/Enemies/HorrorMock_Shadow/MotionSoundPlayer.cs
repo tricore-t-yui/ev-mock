@@ -7,19 +7,14 @@ using UnityEditor.Animations;
 [System.Serializable]
 public struct MotionSoundParameter
 {
-    public string soundName;
     public AudioSource audioSource;
-    public bool isLoop;
-    public string loopIntervalOfParameterName;
     public float loopIntervalCounterMax;
 
-    [HideInInspector]
-    public float loopInterval;
     [HideInInspector]
     public float loopIntervalCounter;
 }
 
-public class MotionSoundPlayer : MonoBehaviour
+public class SoundPlayer : MonoBehaviour
 {
     [SerializeField]
     Animator animator = default;
@@ -31,9 +26,7 @@ public class MotionSoundPlayer : MonoBehaviour
     {
         foreach(MotionSoundParameter parameter in soundParameters)
         {
-            if (parameter.isLoop)
-            {
-            }
+           
         }
     }
 }

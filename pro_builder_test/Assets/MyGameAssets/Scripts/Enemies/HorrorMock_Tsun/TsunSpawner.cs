@@ -45,7 +45,7 @@ public class TsunSpawner : MonoBehaviour
     {
         foreach(SpawnParameter parameter in spawnParameters)
         {
-            // 活動中のツンが１体でもいる場合は何もしない
+            // 活動中のツンが１体でもいる場合は何もしない（自分以外）
             if (spawnParameters.Exists(elem => elem.spawnState == SpawnParameter.SpawnState.Spawn &&
                                                elem != parameter)) { continue; }
 
@@ -53,13 +53,13 @@ public class TsunSpawner : MonoBehaviour
             {
                 // １体でも戦闘状態の影人間がいれば
                 if (parameter.shadowTrigger.Exists(
-                    elem => elem.GetCurrentState() == EnemyParameter.StateType.Fighting))
+                    elem => elem.currentState == EnemyParameter.StateType.Fighting))
                 {
                     // スポーンフラグをオン
                     parameter.spawnState = SpawnParameter.SpawnState.Start;
 
                     // おこている影人間を取得（複数いる場合は最後におこたやーつ）
-                    detectedShadowOfTsun = parameter.shadowTrigger.FindLast(elem => elem.GetCurrentState() == EnemyParameter.StateType.Fighting);
+                    detectedShadowOfTsun = parameter.shadowTrigger.FindLast(elem => elem.currentState == EnemyParameter.StateType.Fighting);
                 }
             }
 
@@ -67,7 +67,7 @@ public class TsunSpawner : MonoBehaviour
             else if (parameter.spawnState == SpawnParameter.SpawnState.Spawn)
             {
                 // 通常状態に戻った
-                if (parameter.spawnTsun.GetCurrentState() == EnemyParameter.StateType.Normal)
+                if (parameter.spawnTsun.currentState == EnemyParameter.StateType.Normal)
                 {
                     // デスポーン
                     parameter.spawnTsun.gameObject.SetActive(false);
