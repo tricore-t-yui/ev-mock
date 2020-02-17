@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Text.RegularExpressions;
 using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 
@@ -99,20 +100,33 @@ public class StateMachine : MonoBehaviour
         // 範囲の初期化
         parameter.ChangeRangeRadius(currentState);
 
-        // 透明状態で出現させるとき
-        if (!parameter.IsAlwaysAppear)
+        if (!parameter.Inverse)
         {
             // 出現フラグを倒す
             isAppear = false;
-            appearFadeCounter = 1;
+            if (parameter.IsTransparencyByDistance)
+            {
+                appearFadeCounter = parameter.TransparencyMin;
+            }
+            else
+            {
+                appearFadeCounter = 0;
+            }
         }
-        // そうでなければ
         else
         {
             // 出現フラグを倒す
             isAppear = true;
-            appearFadeCounter = 0;
+            if (parameter.IsTransparencyByDistance)
+            {
+                appearFadeCounter = parameter.TransparencyMax;
+            }
+            else
+            {
+                appearFadeCounter = 1;
+            }
         }
+
         states[(int)currentState].Entry();
 
         // 待機 or 徘徊に設定
@@ -180,36 +194,71 @@ public class StateMachine : MonoBehaviour
         }
 
         // 出現フラグが起きた
-        if (!parameter.IsAlwaysAppear)
+        if (!parameter.IsTransparencyByDistance)
         {
-            if (isAppear)
+            if (!parameter.Inverse)
             {
-                if (appearFadeCounter < 1)
+                if (isAppear)
                 {
                     appearFadeCounter += parameter.AppearFadeTime;
-                    Color result = new Color(
-                        meshRenderer.material.color.r,
-                        meshRenderer.material.color.g,
-                        meshRenderer.material.color.b,
-                        appearFadeCounter);
-                    meshRenderer.material.color = result;
                 }
-            }
-            // 出現フラグ折れてるうう
-            else
-            {
-                if (appearFadeCounter > 0)
+                // 出現フラグ折れてるうう
+                else
                 {
                     appearFadeCounter -= parameter.AppearFadeTime;
-                    Color result = new Color(
-                        meshRenderer.material.color.r,
-                        meshRenderer.material.color.g,
-                        meshRenderer.material.color.b,
-                        appearFadeCounter);
-                    meshRenderer.material.color = result;
+                }
+            }
+            else
+            {
+                if (!isAppear)
+                {
+                    appearFadeCounter += parameter.AppearFadeTime;
+                }
+                // 出現フラグ折れてるうう
+                else
+                {
+                    appearFadeCounter -= parameter.AppearFadeTime;
                 }
             }
         }
+        else
+        {
+            if (!parameter.Inverse)
+            {
+                // プレイヤーとの距離によって影人間の透明度を変える
+                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
+
+                // プレイヤーとの距離を０～１に丸め込む
+                dist = dist / parameter.StateRanges[(int)currentState].appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                appearFadeCounter = (parameter.TransparencyMax - parameter.TransparencyMin) - dist;
+            }
+            else
+            {
+                // プレイヤーとの距離によって影人間の透明度を変える
+                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
+
+                // プレイヤーとの距離を０～１に丸め込む
+                dist = dist / parameter.StateRanges[(int)currentState].appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                appearFadeCounter = parameter.TransparencyMin + dist;
+            }
+        }
+        // 現在の透明度が最小と最大を超えないように補正
+        if (parameter.IsTransparencyByDistance)
+        {
+            appearFadeCounter = Mathf.Clamp(appearFadeCounter, parameter.TransparencyMin, parameter.TransparencyMax);
+        }
+        else
+        {
+            appearFadeCounter = Mathf.Clamp(appearFadeCounter, 0, 1);
+        }
+
+        // 透明度をメッシュに反映
+        Color result = new Color(
+                    meshRenderer.material.color.r,
+                    meshRenderer.material.color.g,
+                    meshRenderer.material.color.b,
+                    appearFadeCounter);
+        meshRenderer.material.color = result;
 
         // ナビメッシュの移動制御クラスの更新
         navMeshStopingSwitcher.Update();
@@ -323,7 +372,7 @@ public class StateMachine : MonoBehaviour
     /// <param name="other"></param>
     public void OnHeardNoise(Collider other)
     {
-        if (!parameter.IsAlwaysAppear)
+        if (!parameter.IsDetectNoiseToTransparent)
         {
             // 見えている
             if (!isAppear) { return; }

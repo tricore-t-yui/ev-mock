@@ -70,16 +70,6 @@ public class EnemyParameter : MonoBehaviour
     SectorCollider attackRange = default;
 
     [Title("[Range Parameters(範囲系パラメータ)]")]
-    [Tooltip("距離に限らず常に姿が見えるようになります。")]
-    [ValidateInput("IsAlwaysAppearFunc", "常に姿が見える状態になっています。\nAppear(見える範囲)の設定は無効になります。", MessageType = InfoMessageType.Info)]
-    [SerializeField]
-    bool isAlwaysAppear = false;
-    public bool IsAlwaysAppear => isAlwaysAppear;
-
-    public bool IsAlwaysAppearFunc(bool value)
-    {
-        return !value;
-    }
 
     [SerializeField]
     [ListDrawerSettings(HideAddButton = true,HideRemoveButton = true,Expanded = true,ShowItemCount = false,ShowPaging = false,DraggableItems = false)]
@@ -164,12 +154,31 @@ public class EnemyParameter : MonoBehaviour
      }
 
     [Space(10)]
+    [SerializeField]
+    bool inverse = false;
+    public bool Inverse => inverse;
+
+    [SerializeField]
+    bool isTransparencyByDistance = false;
+    public bool IsTransparencyByDistance => isTransparencyByDistance;
+
     [Tooltip("姿が現れるときのフェードを設定します。\n値が小さいほど滑らかに現れます。")]
     [SerializeField]
     [Range(0, 1)]
     float appearFadeTime = 0.1f;
     public float AppearFadeTime => appearFadeTime;
 
+    [SerializeField]
+    [Range(0, 1)]
+    float transparencyMin = 0.5f;
+    public float TransparencyMin => transparencyMin;
+
+    [SerializeField]
+    [Range(0, 1)]
+    float transparencyMax = 1;
+    public float TransparencyMax => transparencyMax;
+
+    [Space(10)]
     [Tooltip("最初に音を聞いたときに、この値よりも大きなレベルの音を鳴らすと即警戒に移行します。")]
     [SerializeField]
     float safeSoundLevelMax = 5;
@@ -284,13 +293,6 @@ public class EnemyParameter : MonoBehaviour
                 Vector3 newWorldPos = new Vector3(newPos.x, transform.position.y, newPos.y);
                 worldCheckPoint.Add(newWorldPos);
             }
-        }
-
-        // 常時姿が見える状態
-        if (isAlwaysAppear)
-        {
-            // 全ての見える範囲をオニする
-            System.Array.ForEach(stateRanges, elem => elem.appear = 0);
         }
 
     }

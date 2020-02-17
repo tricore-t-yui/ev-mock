@@ -1224,6 +1224,7 @@ MonoBehaviour:
   agent: {fileID: 4484567948180639825}
   meshRenderer: {fileID: 4484567948084092745}
   crySoundSpawner: {fileID: 7538052814172874607}
+  soundPlayer: {fileID: 0}
 --- !u!114 &2986616820252028064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1241,7 +1242,6 @@ MonoBehaviour:
   fightingRange: {fileID: 8751535101564063586}
   viewRange: {fileID: 4280475228960441708}
   attackRange: {fileID: 3758052974969323108}
-  isAlwaysAppear: 0
   stateRanges:
   - stateType: 0
     appear: 4
@@ -1265,7 +1265,11 @@ MonoBehaviour:
   routeCheckPoints: {fileID: 11400000, guid: a836fcd39f997f8498e076fbeaa77ab2, type: 2}
   randomRangeRadiusMin: 1.8
   randomRangeRadiusMax: 2
+  isTransparencyByDistance: 0
   appearFadeTime: 0.1
+  transparencyVariableRatio: 0.1
+  transparencyMin: 0.5
+  transparencyMax: 1
   safeSoundLevelMax: 10
   safeTime: 5
   isDetectNoiseToTransparent: 0
@@ -1728,7 +1732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2879245434732186201
 Transform:
   m_ObjectHideFlags: 0
