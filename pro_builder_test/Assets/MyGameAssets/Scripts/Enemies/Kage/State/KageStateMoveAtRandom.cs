@@ -120,8 +120,7 @@ public class KageStateMoveAtRandom : StateMachineBehaviour
         // コライダーの範囲内で目標位置を取得
         float radius = Random.Range(radiusMin, radiusMax);
         float angle = Random.Range(0.0f,Mathf.PI*2);
-        Vector3 nextPos = rangeColliderMin.transform.position +  new Vector3(Mathf.Cos(angle), pos.y, Mathf.Sin(angle)) * radius;
-
+        Vector3 nextPos = rangeColliderMin.transform.position +  new Vector3(Mathf.Cos(angle),0, Mathf.Sin(angle)) * radius;
         return nextPos;
     }
 
