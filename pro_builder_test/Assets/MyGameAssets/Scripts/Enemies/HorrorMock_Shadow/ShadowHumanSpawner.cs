@@ -56,7 +56,7 @@ public class ShadowHumanSpawner : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetInstanceID() == shadowHuman.gameObject.GetInstanceID())
+        if (other.tag == "Player")
         {
             isSpawn = true;
         }
