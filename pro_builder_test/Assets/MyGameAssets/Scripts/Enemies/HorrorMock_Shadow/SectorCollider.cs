@@ -23,11 +23,11 @@ public class SectorCollider : MonoBehaviour
     int targetLayer = 0;
 
     [SerializeField]
-    float angle = 60;
+    float angle = 0;
     public float Angle { get { return angle; } set { angle = value; } }
 
     [SerializeField]
-    float distance = 1;
+    float distance = 0;
     public float Distance { get { return distance; } set { distance = value; } }
 
     [SerializeField]

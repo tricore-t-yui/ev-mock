@@ -86,4 +86,13 @@ public class TsunStateFighting : StateBase
             }
         }
     }
+
+    /// <summary>
+    /// 終了
+    /// </summary>
+    public override void Exit()
+    {
+        // 待機を解除する
+        animator.SetBool("IsWaiting", false);
+    }
 }
