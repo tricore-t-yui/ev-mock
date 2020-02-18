@@ -141,7 +141,7 @@ public class StateMachine : MonoBehaviour
         navMeshStopingSwitcher.Entry();
     }
 
-    public void Spawn(StateType type, Vector3 spawnPos = default,Vector3 target = default)
+    public void Spawn(StateType type,Vector3 target = default, Vector3 spawnPos = default)
     {
         gameObject.SetActive(true);
         currentState = type;
@@ -155,7 +155,7 @@ public class StateMachine : MonoBehaviour
         Entry(parameter);
     }
 
-    public void Spawn(StateType type,EnemyParameter parameter, Vector3 spawnPos = default, Vector3 target = default)
+    public void Spawn(StateType type,EnemyParameter parameter, Vector3 target = default, Vector3 spawnPos = default)
     {
         gameObject.SetActive(true);
         currentState = type;

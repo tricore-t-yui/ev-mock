@@ -90,7 +90,7 @@ public class TsunSpawner : MonoBehaviour
                 if (parameter.spawnCounter > parameter.spawnDelayTime)
                 {
                     // スポーンさせる
-                    parameter.spawnTsun.Spawn(EnemyParameter.StateType.Caution,LotterySpawnPos(parameter),detectedShadowOfTsun.transform.position);
+                    parameter.spawnTsun.Spawn(EnemyParameter.StateType.Caution,detectedShadowOfTsun.transform.position, LotterySpawnPos(parameter));
 
                     // スポーンステート変更
                     parameter.spawnState = SpawnParameter.SpawnState.Spawn;
