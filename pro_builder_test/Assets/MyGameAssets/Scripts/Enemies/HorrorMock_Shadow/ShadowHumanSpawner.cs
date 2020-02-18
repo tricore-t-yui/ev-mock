@@ -14,6 +14,8 @@ public class ShadowHumanSpawner : MonoBehaviour
     [SerializeField]
     ShadowHuman shadowHuman = default;
 
+    GameObject player = default;
+
     [SerializeField]
     [EnumToggleButtons]
     Type spawnerType = Type.Spawn;
@@ -24,6 +26,11 @@ public class ShadowHumanSpawner : MonoBehaviour
 
     bool isSpawn = false;
 
+
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 
     /// <summary>
     /// 更新
@@ -37,7 +44,7 @@ public class ShadowHumanSpawner : MonoBehaviour
             {
                 if (spawnerType == Type.Spawn)
                 {
-                    shadowHuman.Spawn(EnemyParameter.StateType.Fighting);
+                    shadowHuman.Spawn(EnemyParameter.StateType.Fighting,player.transform.position);
                 }
                 else
                 {
