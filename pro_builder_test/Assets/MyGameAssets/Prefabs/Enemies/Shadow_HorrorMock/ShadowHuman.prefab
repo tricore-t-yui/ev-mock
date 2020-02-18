@@ -1189,7 +1189,7 @@ NavMeshAgent:
   m_Height: 1.4
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &5093990402372542406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,10 +1240,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrideController: {fileID: 22100000, guid: 854f26a52cd632b46aa92d41a6cfbbd5, type: 2}
   clipParameters:
-  - animationName: "\u6226\u95D8\u5F85\u6A5F"
-    oldClipName: attackWaitLoop
-    newClip: {fileID: -4017433775611325843, guid: 5c7296b3c99402d4aabda55ffc49532c,
+  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u958B\u59CB"
+    oldClipName: knockStart
+    newClip: {fileID: 1572724011824183297, guid: 21c8111a4117b874eb82cd908bedf8ab,
       type: 3}
+  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u30EB\u30FC\u30D7"
+    oldClipName: knockLoop
+    newClip: {fileID: 1572724011824183297, guid: 21c8111a4117b874eb82cd908bedf8ab,
+      type: 3}
+  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u7D42\u4E86"
+    oldClipName: knockEnd
+    newClip: {fileID: 1572724011824183297, guid: 21c8111a4117b874eb82cd908bedf8ab,
+      type: 3}
+  - animationName: "\u6226\u95D8_\u5F85\u6A5F\u30EB\u30FC\u30D7"
+    oldClipName: attackWaitLoop
+    newClip: {fileID: 0}
+  - animationName: "\u6226\u95D8_\u8D70\u308A\u958B\u59CB"
+    oldClipName: attackRunStart
+    newClip: {fileID: 0}
+  - animationName: "\u6226\u95D8_\u8D70\u308A\u30EB\u30FC\u30D7"
+    oldClipName: attackRunLoop
+    newClip: {fileID: 0}
+  - animationName: "\u6226\u95D8_\u8D70\u308A\u7D42\u4E86"
+    oldClipName: attackRunEnd
+    newClip: {fileID: 0}
 --- !u!114 &2986616820252028064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,6 +1329,8 @@ MonoBehaviour:
   isCameraFadeOutDisappear: 0
   isRespawn: 0
   disappearDistance: 5
+  isDisappearWait: 0
+  disappearWaitTime: 0
   isStaticState: 0
   isInitialAutoSpawn: 1
 --- !u!1 &4484567948267446293

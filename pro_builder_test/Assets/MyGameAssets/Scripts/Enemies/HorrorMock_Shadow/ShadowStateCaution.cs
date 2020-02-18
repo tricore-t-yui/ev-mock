@@ -95,6 +95,7 @@ public class ShadowStateCaution : StateBase
     /// </summary>
     public override void Exit()
     {
-
+        // 待機を解除する
+        animator.SetBool("IsWaiting", false);
     }
 }

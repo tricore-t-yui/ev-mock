@@ -69,6 +69,12 @@ public class EnemyParameter : MonoBehaviour
     [SerializeField]
     SectorCollider attackRange = default;
 
+    [SerializeField]
+    [Tooltip("初期ステートを設定します。" +
+        "\nこのステートから開始します。")]
+    StateType initialState = StateType.Normal;
+    public StateType InitialState => initialState;
+
     [Title("[Range Parameters(範囲系パラメータ)]")]
     [SerializeField]
     [ListDrawerSettings(HideAddButton = true,HideRemoveButton = true,Expanded = true,ShowItemCount = false,ShowPaging = false,DraggableItems = false)]
@@ -292,6 +298,19 @@ public class EnemyParameter : MonoBehaviour
     float disappearDistance = 0;
     public float DisappearDistance => disappearDistance;
 
+    [SerializeField]
+    [Tooltip("一定距離近づいたあと、しばらく待機してから消えるかどうかを設定します。" +
+        "\nオンの場合は一定時間待機してから消えます。")]
+    bool isDisappearWait = false;
+    public bool IsDisappearWait => isDisappearWait; 
+
+    [SerializeField]
+    [ShowIf("isDisappearWait")]
+    [Tooltip("一定距離近づいてから消えるまでの待機時間を設定します。" +
+        "\nこの時間の経過後にその場から消えます。")]
+    float disappearWaitTime = 1;
+    public float DisappearWaitTime => disappearWaitTime;
+
     [Space(15)]
     [Title("[Other Settings(その他)]")]
     [SerializeField]
@@ -313,6 +332,14 @@ public class EnemyParameter : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
+        if (viewAngle < 0.01f || viewDistance < 0.01f)
+        {
+            viewRange.gameObject.SetActive(false);
+        }
+        if (attackAngle < 0.01f || attackDistance < 0.01f)
+        {
+            attackRange.gameObject.SetActive(false);
+        }
         InitialPosition = transform.position;
 
         if (routeCheckPoints != null)
