@@ -5,21 +5,11 @@ using Sirenix.OdinInspector;
 using System.Linq;
 
 [System.Serializable]
-public class SpawnPosParameter
-{
-    [HorizontalGroup("hg1",LabelWidth = 30,PaddingRight = 10)]
-    public Vector2 pos = Vector2.zero;
-    [HorizontalGroup("hg1")]
-    [Range(0, 100)]
-    public float rate = 100;
-}
-
-[System.Serializable]
 public class SpawnParameter
 {
     public Tsun spawnTsun = default;
     public float spawnDelayTime = 0;
-    public List<SpawnPosParameter> spawnPos = default;
+    public List<Vector2> spawnPos = default;
     public List<ShadowHuman> shadowTrigger = default;
 
     [HideInInspector]
@@ -124,8 +114,8 @@ public class TsunSpawner : MonoBehaviour
                 parameter.spawnPos.ForEach(elem =>
                 {
                     Gizmos.color = Color.black;
-                    Gizmos.DrawLine(parameter.spawnTsun.transform.position,new Vector3(elem.pos.x,parameter.spawnTsun.transform.position.y,elem.pos.y));
-                    Gizmos.DrawSphere(new Vector3(elem.pos.x, parameter.spawnTsun.transform.position.y, elem.pos.y), 0.1f);
+                    Gizmos.DrawLine(parameter.spawnTsun.transform.position,new Vector3(elem.x,parameter.spawnTsun.transform.position.y,elem.y));
+                    Gizmos.DrawSphere(new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y), 0.1f);
                     Gizmos.color = Color.white;
                 });
             }
@@ -139,25 +129,6 @@ public class TsunSpawner : MonoBehaviour
     /// <returns></returns>
     public Vector3 LotterySpawnPos(SpawnParameter parameter)
     {
-        // 全ての出現確率の合計値を取得
-        float totalRate = parameter.spawnPos.Sum(elem => elem.rate);
-
-        // 乱数を生成
-        float rand = Random.Range(0, totalRate);
-
-        foreach(SpawnPosParameter posParameter in parameter.spawnPos)
-        {
-            // 乱数を確率で引いていく
-            rand -= posParameter.rate;
-
-            if (rand <= 0)
-            {
-                // 乱数が０になった時点の座標を返す
-                return new Vector3(posParameter.pos.x, parameter.spawnTsun.transform.position.y, posParameter.pos.y);
-            }
-        }
-        // ここにきたら抽選に失敗
-        Debug.LogError("lottery failed.");
-        return Vector3.zero;
+        return parameter.spawnPos.Min(elem => detectedShadowOfTsun.transform.position - new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y));
     }
 }
