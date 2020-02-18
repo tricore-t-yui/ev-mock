@@ -1126,7 +1126,7 @@ GameObject:
   m_Layer: 0
   m_Name: ShadowHuman
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1281,56 +1281,57 @@ MonoBehaviour:
   fightingRange: {fileID: 8751535101564063586}
   viewRange: {fileID: 4280475228960441708}
   attackRange: {fileID: 3758052974969323108}
+  initialState: 0
   stateRanges:
   - stateType: 0
     appear: 4
-    caution: 3
+    caution: 2.5
     fighting: 1
   - stateType: 1
-    appear: 50
-    caution: 3
+    appear: 4
+    caution: 2.5
     fighting: 1
   - stateType: 2
-    appear: 50
-    caution: 3
+    appear: 4
+    caution: 2.5
     fighting: 1
   viewAngle: 120
   viewDistance: 1
   attackAngle: 120
   attackDistance: 0.5
-  normalMoveSpeed: 1
-  normalStateType: 1
-  wandererType: 1
-  routeCheckPoints: {fileID: 11400000, guid: a836fcd39f997f8498e076fbeaa77ab2, type: 2}
-  randomRangeRadiusMin: 1.8
-  randomRangeRadiusMax: 2
+  normalMoveSpeed: 0.5
+  normalStateType: 0
+  wandererType: 0
+  routeCheckPoints: {fileID: 0}
+  randomRangeRadiusMin: 3
+  randomRangeRadiusMax: 3.5
   inverse: 0
   isTransparencyByDistance: 0
   appearFadeTime: 0.1
-  transparencyMin: 0.5
+  transparencyMin: 0
   transparencyMax: 1
-  safeSoundLevelMax: 10
-  safeTime: 5
+  safeSoundLevelMax: 5
+  safeTime: 3
   isDetectNoiseToTransparent: 0
-  cautionWaitTime: 3
-  cautionMoveSpeed: 1.5
-  returnWarpDistance: 0
-  fightingWaitTime: 2
-  attackedWaitTime: 5
+  cautionWaitTime: 1
+  cautionMoveSpeed: 1
+  returnWarpDistance: 10
+  fightingWaitTime: 0.5
+  attackedWaitTime: 3
   fightingMoveSpeed: 2
-  damage: 10
+  damage: 0
   cryParameter:
-    soundExpansionSpeed: 2
+    soundExpansionSpeed: 1
     soundReductionSpeed: 1
-    soundSizeMax: 10
-    soundSpawnInterval: 0.5
+    soundSizeMax: 1
+    soundSpawnInterval: 1
   isAttackedDisappear: 0
   isApproachedDisappear: 0
   isCameraFadeOutDisappear: 0
   isRespawn: 0
-  disappearDistance: 5
+  disappearDistance: 4
   isDisappearWait: 0
-  disappearWaitTime: 0
+  disappearWaitTime: 2
   isStaticState: 0
   isInitialAutoSpawn: 1
 --- !u!1 &4484567948267446293

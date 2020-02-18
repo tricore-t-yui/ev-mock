@@ -15,11 +15,11 @@ public class RangeParameter
     public EnemyParameter.StateType stateType = default;
     bool isActivate = false;
     [Range(0,100)]
-    public float appear = 0;
+    public float appear = 4;
     [Range(0.1f, 100)]
-    public float caution = 0;
+    public float caution = 2.5f;
     [Range(0.1f, 100)]
-    public float fighting = 0;
+    public float fighting = 1;
 }
 
 public class EnemyParameter : MonoBehaviour
@@ -111,7 +111,7 @@ public class EnemyParameter : MonoBehaviour
     [Title("[State : Normal(通常状態)]")]
     [Tooltip("通常状態時の移動速度を設定します。")]
     [SerializeField]
-    float normalMoveSpeed = 1;
+    float normalMoveSpeed = 0.5f;
     public float NormalMoveSpeed => normalMoveSpeed;
 
     [Tooltip("通常状態時の種類を指定します。待機型or徘徊型")]
@@ -138,14 +138,14 @@ public class EnemyParameter : MonoBehaviour
     [Tooltip("ランダム徘徊時の最小範囲を設定します。")]
     [HideIf("IsWandererRoute")]
     [SerializeField]
-    float randomRangeRadiusMin = 0.5f;
+    float randomRangeRadiusMin = 3;
     public float RandomRangeRadiusMin => randomRangeRadiusMin;
 
     [ShowIf("IsNormalStateWanderer")]
     [Tooltip("ランダム徘徊時の最大範囲を設定します。")]
     [HideIf("IsWandererRoute")]
     [SerializeField]
-    float randomRangeRadiusMax = 1;
+    float randomRangeRadiusMax = 3.5f;
     public float RandomRangeRadiusMax => randomRangeRadiusMax;
 
     bool IsNormalStateWanderer()
@@ -186,7 +186,7 @@ public class EnemyParameter : MonoBehaviour
         "\nどんなに離れてもこの値より透明にはなりません。")]
     [ShowIf("isTransparencyByDistance")]
     [Range(0, 1)]
-    float transparencyMin = 0.5f;
+    float transparencyMin = 0;
     public float TransparencyMin => transparencyMin;
 
     [SerializeField]
@@ -206,7 +206,7 @@ public class EnemyParameter : MonoBehaviour
     [Tooltip("最初に音を聞いたときに、警戒に移行するまでの時間を設定します。" +
         "\nこの時間までに警戒範囲から離れれば気づかれません。")]
     [SerializeField]
-    float safeTime = 1;
+    float safeTime = 3;
     public float SafeTime => safeTime;
 
     [Tooltip("姿が見えていない状態で音を検知できるかどうかを設定します。\nオンの場合は姿が見えていなくてもプレイヤーが発した音を検知すれば警戒に移行して迫ってきます。")]
@@ -220,19 +220,19 @@ public class EnemyParameter : MonoBehaviour
     [Tooltip("警戒状態時の待機時間を設定します。" +
         "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
     [SerializeField]
-    float cautionWaitTime = 0;
+    float cautionWaitTime = 1;
     public float CautionWaitTime => cautionWaitTime;
 
     [SerializeField]
     [Tooltip("警戒状態時の移動速度を設定します。" +
         "\nプレイヤーが発した音を聞いたときはこの速度で近づいてきます。")]
-    float cautionMoveSpeed = 1.5f;
+    float cautionMoveSpeed = 1;
     public float CautionMoveSpeed => cautionMoveSpeed;
 
     [SerializeField]
     [Tooltip("プレイヤーを見失ったり音を聞きとれなくなったときに、もとの徘徊ルートや待機位置に戻ります。" +
         "\n戻る際にもとの位置との距離がこの値よりも遠かったときは瞬間移動を行います。")]
-    float returnWarpDistance = 1;
+    float returnWarpDistance = 10;
     public float ReturnWarpDistance => returnWarpDistance;
 
     [Space(15)]
@@ -240,13 +240,13 @@ public class EnemyParameter : MonoBehaviour
     [SerializeField]
     [Tooltip("戦闘状態時の待機時間を設定します。" +
         "\nプレイヤーを途中で見失ったときにこの時間で待機を行います。")]
-    float fightingWaitTime = 0;
+    float fightingWaitTime = 0.5f;
     public float FightingWaitTime => fightingWaitTime;
 
     [SerializeField]
     [Tooltip("攻撃後の待機時間を設定します。" +
         "\nプレイヤーを攻撃したあとはこの時間でしばらく待機します。")]
-    float attackedWaitTime = 0;
+    float attackedWaitTime = 3;
     public float AttackedWaitTime => attackedWaitTime;
 
     [SerializeField]
@@ -295,7 +295,7 @@ public class EnemyParameter : MonoBehaviour
     [SerializeField]
     [Tooltip("どのくらい近づいたら消えるかを設定します。" +
         "\n敵にこの距離よりも近づくと消えます。")]
-    float disappearDistance = 0;
+    float disappearDistance = 4;
     public float DisappearDistance => disappearDistance;
 
     [SerializeField]
@@ -308,7 +308,7 @@ public class EnemyParameter : MonoBehaviour
     [ShowIf("isDisappearWait")]
     [Tooltip("一定距離近づいてから消えるまでの待機時間を設定します。" +
         "\nこの時間の経過後にその場から消えます。")]
-    float disappearWaitTime = 1;
+    float disappearWaitTime = 2;
     public float DisappearWaitTime => disappearWaitTime;
 
     [Space(15)]
@@ -382,41 +382,47 @@ public class EnemyParameter : MonoBehaviour
         attackRange.Distance = attackDistance;
 
         // ルートを線で描画
-        if (routeCheckPoints != null)
+        if (normalStateType == NormalStateType.Wanderer && wandererType == WandererType.Route)
         {
-            for (int i = 0; i < routeCheckPoints.Count; i++)
+            if (routeCheckPoints != null)
             {
-                Vector3 checkPoint = Vector3.zero;
-                Vector3 nextCheckPoint = Vector3.zero;
-                if (!UnityEditor.EditorApplication.isPlaying)
+                for (int i = 0; i < routeCheckPoints.Count; i++)
                 {
-                    int nextIndex = (i == routeCheckPoints.Count - 1) ? 0 : i + 1;
-                    checkPoint = new Vector3(routeCheckPoints[i].x, transform.position.y, routeCheckPoints[i].y);
-                    nextCheckPoint = new Vector3(routeCheckPoints[nextIndex].x, transform.position.y, routeCheckPoints[nextIndex].y);
-                    checkPoint += new Vector3(transform.position.x, 0, transform.position.z);
-                    nextCheckPoint += new Vector3(transform.position.x, 0, transform.position.z);
+                    Vector3 checkPoint = Vector3.zero;
+                    Vector3 nextCheckPoint = Vector3.zero;
+                    if (!UnityEditor.EditorApplication.isPlaying)
+                    {
+                        int nextIndex = (i == routeCheckPoints.Count - 1) ? 0 : i + 1;
+                        checkPoint = new Vector3(routeCheckPoints[i].x, transform.position.y, routeCheckPoints[i].y);
+                        nextCheckPoint = new Vector3(routeCheckPoints[nextIndex].x, transform.position.y, routeCheckPoints[nextIndex].y);
+                        checkPoint += new Vector3(transform.position.x, 0, transform.position.z);
+                        nextCheckPoint += new Vector3(transform.position.x, 0, transform.position.z);
+                    }
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(checkPoint, nextCheckPoint);
+                    Gizmos.DrawWireSphere(checkPoint, 0.1f);
+                    Gizmos.color = Color.white;
                 }
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(checkPoint, nextCheckPoint);
-                Gizmos.DrawWireSphere(checkPoint, 0.1f);
-                Gizmos.color = Color.white;
             }
         }
 
         // ランダム範囲を描画
-        if (randomRangeRadiusMin > randomRangeRadiusMax)
+        if (normalStateType == NormalStateType.Wanderer && wandererType == WandererType.Random)
         {
-            randomRangeRadiusMin = randomRangeRadiusMax;
+            if (randomRangeRadiusMin > randomRangeRadiusMax)
+            {
+                randomRangeRadiusMin = randomRangeRadiusMax;
+            }
+            if (randomRangeRadiusMax < randomRangeRadiusMin)
+            {
+                randomRangeRadiusMax = randomRangeRadiusMin;
+            }
+            Gizmos.color = Color.cyan;
+            Vector3 pos = (InitialPosition != Vector3.zero) ? InitialPosition : transform.position;
+            UnityEditor.Handles.color = Color.cyan;
+            UnityEditor.Handles.DrawWireDisc(pos, Vector3.up, randomRangeRadiusMin);
+            UnityEditor.Handles.DrawWireDisc(pos, Vector3.up, randomRangeRadiusMax);
+            Gizmos.color = Color.white;
         }
-        if (randomRangeRadiusMax < randomRangeRadiusMin)
-        {
-            randomRangeRadiusMax = randomRangeRadiusMin;
-        }
-        Gizmos.color = Color.cyan;
-        Vector3 pos = (InitialPosition != Vector3.zero) ? InitialPosition : transform.position;
-        UnityEditor.Handles.color = Color.cyan;
-        UnityEditor.Handles.DrawWireDisc(pos, Vector3.up, randomRangeRadiusMin);
-        UnityEditor.Handles.DrawWireDisc(pos, Vector3.up, randomRangeRadiusMax);
-        Gizmos.color = Color.white;
     }
 }
