@@ -50,6 +50,11 @@ public class StateMachine : MonoBehaviour
     // 攻撃の種類
     protected int attackTypeId = 0;
 
+    // 待機カウンター
+    float disappearWaitCounter = 0;
+    // 待機フラグ
+    bool isApproached = false;
+
     // プレイヤー
     protected GameObject player = default;
 
@@ -136,25 +141,28 @@ public class StateMachine : MonoBehaviour
         navMeshStopingSwitcher.Entry();
     }
 
-    public void Spawn(StateType type,Vector3 target = default)
+    public void Spawn(StateType type,Vector3 target = default, Vector3 spawnPos = default)
     {
         gameObject.SetActive(true);
         currentState = type;
         animator.SetInteger("NextStateTypeId", (int)type);
         animator.SetInteger("AnimatorStateTypeId", (int)type);
         // 初期位置にワープ
-        agent.Warp(parameter.InitialPosition);
+        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); }
+        else                     { agent.Warp(spawnPos); }
         if (target != default) { agent.SetDestination(target); }
         // スポーン時の処理を行う
         Entry(parameter);
     }
 
-    public void Spawn(StateType type,EnemyParameter parameter, Vector3 target = default)
+    public void Spawn(StateType type,EnemyParameter parameter, Vector3 target = default, Vector3 spawnPos = default)
     {
         gameObject.SetActive(true);
         currentState = type;
         animator.SetInteger("NextStateTypeId", (int)type);
         animator.SetInteger("AnimatorStateTypeId", (int)type);
+        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); }
+        else                     { agent.Warp(spawnPos); }
         if (target != default) { agent.SetDestination(target); }
         // スポーン時の処理を行う
         Entry(parameter);
@@ -294,24 +302,51 @@ public class StateMachine : MonoBehaviour
     /// </summary>
     public void ControlSpecialAction()
     {
-        // 影人間とプレイヤーとの距離が一定以内かどうか
-        if ((player.transform.position - agent.transform.position).magnitude < parameter.DisappearDistance)
+        // 一定距離近づいたら消える
+        if (parameter.IsApproachedDisappear)
         {
-            // 一定距離近づいたら消える
-            if (parameter.IsApproachedDisappear)
+            // 影人間とプレイヤーとの距離が一定以内かどうか
+            if ((player.transform.position - agent.transform.position).magnitude < parameter.DisappearDistance)
+            {
+                if (!parameter.IsDisappearWait)
+                {
+                    disappearWaitCounter = parameter.DisappearWaitTime;
+                }
+
+                // 待機する
+                animator.SetBool("IsWaiting", parameter.IsDisappearWait ? true : false);
+                isApproached = true;
+            }
+
+            // 一定時間待機したら
+            if (isApproached)
+            {
+                // 待機する
+                animator.SetBool("IsWaiting", parameter.IsDisappearWait ? true : false);
+                disappearWaitCounter += Time.deltaTime;
+                if (disappearWaitCounter > parameter.DisappearWaitTime)
+                {
+                    isAppear = false;
+                    appearFadeCounter -= parameter.AppearFadeTime;
+                    if (appearFadeCounter < 0.001f)
+                    {
+                        // 待機解除
+                        agent.gameObject.SetActive(false);
+                        isApproached = false;
+                        animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
+                        disappearWaitCounter = 0;
+                    }
+                }
+            }
+        }
+
+        // カメラからフェードアウトで消える
+        if (parameter.IsCameraFadeOutDisappear)
+        {
+            if (!meshRenderer.isVisible)
             {
                 agent.gameObject.SetActive(false);
                 animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
-            }
-
-            // カメラからフェードアウトで消える
-            if (parameter.IsCameraFadeOutDisappear)
-            {
-                if (!meshRenderer.isVisible)
-                {
-                    agent.gameObject.SetActive(false);
-                    animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
-                }
             }
         }
     }

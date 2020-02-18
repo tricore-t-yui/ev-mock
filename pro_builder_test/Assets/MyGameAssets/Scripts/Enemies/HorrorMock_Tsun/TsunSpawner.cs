@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
+using System.Linq;
 
 [System.Serializable]
 public class SpawnParameter
 {
     public Tsun spawnTsun = default;
     public float spawnDelayTime = 0;
+    public List<Vector2> spawnPos = default;
     public List<ShadowHuman> shadowTrigger = default;
 
     [HideInInspector]
@@ -34,6 +37,9 @@ public class TsunSpawner : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // 乱数のシード値を設定
+        Random.InitState((int)System.DateTime.Now.Ticks);
+
         // 全てのツンをオフにする
         spawnParameters.ForEach(elem => elem.spawnTsun.gameObject.SetActive(false));
     }
@@ -84,7 +90,7 @@ public class TsunSpawner : MonoBehaviour
                 if (parameter.spawnCounter > parameter.spawnDelayTime)
                 {
                     // スポーンさせる
-                    parameter.spawnTsun.Spawn(EnemyParameter.StateType.Caution,detectedShadowOfTsun.transform.position);
+                    parameter.spawnTsun.Spawn(EnemyParameter.StateType.Caution,detectedShadowOfTsun.transform.position, LotterySpawnPos(parameter));
 
                     // スポーンステート変更
                     parameter.spawnState = SpawnParameter.SpawnState.Spawn;
@@ -104,7 +110,25 @@ public class TsunSpawner : MonoBehaviour
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(parameter.spawnTsun.transform.position, shadow.transform.position);
                 Gizmos.color = Color.white;
+
+                parameter.spawnPos.ForEach(elem =>
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawLine(parameter.spawnTsun.transform.position,new Vector3(elem.x,parameter.spawnTsun.transform.position.y,elem.y));
+                    Gizmos.DrawSphere(new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y), 0.1f);
+                    Gizmos.color = Color.white;
+                });
             }
         }
+    }
+
+    /// <summary>
+    /// スポーン位置を抽選
+    /// </summary>
+    /// <param name="parameter"></param>
+    /// <returns></returns>
+    public Vector3 LotterySpawnPos(SpawnParameter parameter)
+    {
+        return parameter.spawnPos.Min(elem => detectedShadowOfTsun.transform.position - new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y));
     }
 }

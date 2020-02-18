@@ -23,4 +23,20 @@ public class ShadowHuman : StateMachine
         // ステートマシンの初期化
         Initialize(states);
     }
+
+    void OnEnable()
+    {
+        if (parameter.InitialState == StateType.Normal)
+        {
+            Spawn(StateType.Normal);
+        }
+        else if (parameter.InitialState == StateType.Caution)
+        {
+            Spawn(StateType.Caution, player.transform.position);
+        }
+        else if (parameter.InitialState == StateType.Fighting)
+        {
+            Spawn(StateType.Fighting, player.transform.position);
+        }
+    }
 }
