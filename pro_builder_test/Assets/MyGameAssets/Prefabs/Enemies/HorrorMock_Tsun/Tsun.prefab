@@ -50,7 +50,7 @@ MonoBehaviour:
     m_Bits: 32000
   targetLayerName: Player
   angle: 120
-  distance: 1
+  distance: 2
   borderColor: {r: 0, g: 1, b: 0.08090758, a: 1}
   visibleEnter:
     m_PersistentCalls:
@@ -481,10 +481,22 @@ MonoBehaviour:
     appear: 4
     caution: 2.5
     fighting: 1
-  viewAngle: 120
-  viewDistance: 1
-  attackAngle: 120
-  attackDistance: 0.5
+  viewAngles:
+  - 120
+  - 120
+  - 120
+  viewDistances:
+  - 2
+  - 2
+  - 2
+  attackAngles:
+  - 120
+  - 120
+  - 120
+  attackDistances:
+  - 0.5
+  - 0.5
+  - 0.5
   normalMoveSpeed: 0.5
   normalStateType: 0
   wandererType: 0
@@ -1341,7 +1353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 4
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -1636,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 2.5
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 16777472

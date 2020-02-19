@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b325430b742d646ca8565c58580abc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDisplayCursor: 0
+  isDebug: 0
   statusController: {fileID: 0}
   moveController: {fileID: 0}
   stateController: {fileID: 2129991352404032482}
@@ -68,6 +68,11 @@ MonoBehaviour:
   damageController: {fileID: 0}
   tunObject: {fileID: 0}
   kageManager: {fileID: 0}
+  dollGetController: {fileID: 0}
+  tutorialTriggerManager: {fileID: 0}
+  returnTransitionMethod: 0
+  goingEnemy: {fileID: 0}
+  returnEnemy: {fileID: 0}
   enemySpawn:
   - {fileID: 0}
   - {fileID: 0}
@@ -281,31 +286,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerStateController
       objectReference: {fileID: 0}
-    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
-        type: 3}
-      propertyPath: eventStartCaller
-      value: 
-      objectReference: {fileID: 1739048302}
-    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
-        type: 3}
-      propertyPath: eventCaller
-      value: 
-      objectReference: {fileID: 938220026}
-    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
-        type: 3}
-      propertyPath: eventEndCaller
-      value: 
-      objectReference: {fileID: 2125227118}
-    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
-        type: 3}
-      propertyPath: keyController
-      value: 
-      objectReference: {fileID: 132313234}
-    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
-        type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1294684738}
     - target: {fileID: 8602450410144442734, guid: af8161f40d30549eb862f0d46dfadbe9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -360,6 +340,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: eventStartCaller
+      value: 
+      objectReference: {fileID: 1739048302}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: eventCaller
+      value: 
+      objectReference: {fileID: 938220026}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: eventEndCaller
+      value: 
+      objectReference: {fileID: 2125227118}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: keyController
+      value: 
+      objectReference: {fileID: 132313234}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1294684738}
+    - target: {fileID: 8602450410144442735, guid: af8161f40d30549eb862f0d46dfadbe9,
+        type: 3}
+      propertyPath: playerDamageEvent
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af8161f40d30549eb862f0d46dfadbe9, type: 3}

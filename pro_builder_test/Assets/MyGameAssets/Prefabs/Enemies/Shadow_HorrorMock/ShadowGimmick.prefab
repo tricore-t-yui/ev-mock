@@ -49,8 +49,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32000
   targetLayerName: Player
-  angle: 0
-  distance: 0
+  angle: 120
+  distance: 0.5
   borderColor: {r: 1, g: 0, b: 0, a: 1}
   visibleEnter:
     m_PersistentCalls:
@@ -1124,8 +1124,8 @@ GameObject:
   - component: {fileID: 7844321748342145893}
   - component: {fileID: 2986616820252028064}
   m_Layer: 0
-  m_Name: ShadowHuman 1
-  m_TagString: Untagged
+  m_Name: ShadowGimmick
+  m_TagString: ShadowGimmick
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1295,10 +1295,22 @@ MonoBehaviour:
     appear: 50
     caution: 2.5
     fighting: 1
-  viewAngle: 120
-  viewDistance: 1
-  attackAngle: 0
-  attackDistance: 0
+  viewAngles:
+  - 120
+  - 120
+  - 120
+  viewDistances:
+  - 1
+  - 1
+  - 1
+  attackAngles:
+  - 120
+  - 120
+  - 120
+  attackDistances:
+  - 0.5
+  - 0.5
+  - 0.5
   normalMoveSpeed: 0.5
   normalStateType: 0
   wandererType: 0
@@ -1644,7 +1656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 2.5
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 16777472
@@ -1832,7 +1844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 50
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
