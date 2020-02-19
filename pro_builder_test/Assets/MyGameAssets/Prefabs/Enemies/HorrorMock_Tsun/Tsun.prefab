@@ -467,42 +467,43 @@ MonoBehaviour:
   fightingRange: {fileID: 7587901185120169366}
   viewRange: {fileID: 3123629697305880472}
   attackRange: {fileID: 2601207460495203472}
+  initialState: 0
   stateRanges:
   - stateType: 0
-    appear: 0
-    caution: 0.1
-    fighting: 0.1
+    appear: 4
+    caution: 2.5
+    fighting: 1
   - stateType: 1
-    appear: 0
-    caution: 0.1
-    fighting: 0.1
+    appear: 4
+    caution: 2.5
+    fighting: 1
   - stateType: 2
-    appear: 0
-    caution: 0.1
-    fighting: 0.1
+    appear: 4
+    caution: 2.5
+    fighting: 1
   viewAngle: 120
   viewDistance: 1
   attackAngle: 120
   attackDistance: 0.5
-  normalMoveSpeed: 1
+  normalMoveSpeed: 0.5
   normalStateType: 0
-  wandererType: 1
-  routeCheckPoints: {fileID: 11400000, guid: a836fcd39f997f8498e076fbeaa77ab2, type: 2}
-  randomRangeRadiusMin: 1.8
-  randomRangeRadiusMax: 2
+  wandererType: 0
+  routeCheckPoints: {fileID: 0}
+  randomRangeRadiusMin: 3
+  randomRangeRadiusMax: 3.5
   inverse: 0
   isTransparencyByDistance: 0
   appearFadeTime: 0.1
-  transparencyMin: 0.5
+  transparencyMin: 0
   transparencyMax: 1
-  safeSoundLevelMax: 10
-  safeTime: 10
-  isDetectNoiseToTransparent: 1
-  cautionWaitTime: 3
-  cautionMoveSpeed: 1.5
-  returnWarpDistance: 1
-  fightingWaitTime: 2
-  attackedWaitTime: 5
+  safeSoundLevelMax: 5
+  safeTime: 3
+  isDetectNoiseToTransparent: 0
+  cautionWaitTime: 1
+  cautionMoveSpeed: 1
+  returnWarpDistance: 10
+  fightingWaitTime: 0.5
+  attackedWaitTime: 3
   fightingMoveSpeed: 2
   damage: 0
   cryParameter:
@@ -514,7 +515,9 @@ MonoBehaviour:
   isApproachedDisappear: 0
   isCameraFadeOutDisappear: 0
   isRespawn: 0
-  disappearDistance: 5
+  disappearDistance: 4
+  isDisappearWait: 0
+  disappearWaitTime: 2
   isStaticState: 0
   isInitialAutoSpawn: 1
 --- !u!1 &3325102817006509370
