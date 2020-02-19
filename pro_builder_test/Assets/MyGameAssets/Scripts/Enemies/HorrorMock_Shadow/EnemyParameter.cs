@@ -236,12 +236,6 @@ public class EnemyParameter : MonoBehaviour
     float safeTime = 3;
     public float SafeTime => safeTime;
 
-    [Tooltip("姿が見えていない状態で音を検知できるかどうかを設定します。\nオンの場合は姿が見えていなくてもプレイヤーが発した音を検知すれば警戒に移行して迫ってきます。")]
-    [SerializeField]
-    bool isDetectNoiseToTransparent = false;
-    public bool IsDetectNoiseToTransparent => isDetectNoiseToTransparent;
-
-
     [Space(15)]
     [Title("[State : Caution(警戒状態)]")]
     [Tooltip("警戒状態時の待機時間を設定します。" +

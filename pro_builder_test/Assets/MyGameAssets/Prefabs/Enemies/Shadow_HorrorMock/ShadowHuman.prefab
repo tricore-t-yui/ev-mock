@@ -1342,20 +1342,32 @@ MonoBehaviour:
   stateRanges:
   - stateType: 0
     appear: 4
-    caution: 2.5
+    caution: 2
     fighting: 1
   - stateType: 1
-    appear: 4
-    caution: 2.5
+    appear: 50
+    caution: 3
     fighting: 1
   - stateType: 2
-    appear: 4
-    caution: 2.5
+    appear: 50
+    caution: 4
     fighting: 1
-  viewAngle: 120
-  viewDistance: 1
-  attackAngle: 120
-  attackDistance: 0.5
+  viewAngles:
+  - 120
+  - 120
+  - 120
+  viewDistances:
+  - 1
+  - 1
+  - 1
+  attackAngles:
+  - 120
+  - 120
+  - 120
+  attackDistances:
+  - 0.5
+  - 0.5
+  - 0.5
   normalMoveSpeed: 0.5
   normalStateType: 0
   wandererType: 0
@@ -1367,9 +1379,8 @@ MonoBehaviour:
   appearFadeTime: 0.1
   transparencyMin: 0
   transparencyMax: 1
-  safeSoundLevelMax: 5
-  safeTime: 3
-  isDetectNoiseToTransparent: 0
+  safeSoundLevelMax: 10
+  safeTime: 5
   cautionWaitTime: 1
   cautionMoveSpeed: 1
   returnWarpDistance: 10
@@ -1701,7 +1712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 2
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 16777472
@@ -1889,7 +1900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 4
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 256

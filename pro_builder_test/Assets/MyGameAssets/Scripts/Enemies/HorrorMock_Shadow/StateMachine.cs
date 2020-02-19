@@ -409,6 +409,7 @@ public class StateMachine : MonoBehaviour
 
         // 出現フラグを起こす
         isAppear = false;
+        animator.SetBool("IsDetectedNoise", false);
     }
 
     /// <summary>
@@ -417,11 +418,6 @@ public class StateMachine : MonoBehaviour
     /// <param name="other"></param>
     public void OnHeardNoise(Collider other)
     {
-        if (!parameter.IsDetectNoiseToTransparent)
-        {
-            // 見えている
-            if (!isAppear) { return; }
-        }
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
 
