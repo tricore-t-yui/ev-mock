@@ -129,6 +129,18 @@ public class TsunSpawner : MonoBehaviour
     /// <returns></returns>
     public Vector3 LotterySpawnPos(SpawnParameter parameter)
     {
-        return parameter.spawnPos.Min(elem => detectedShadowOfTsun.transform.position - new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y));
+        Vector3 ret = Vector3.zero;
+        float minDist = float.MaxValue;
+        foreach (var elem in parameter.spawnPos)
+        {
+            var spawnPosv3 = new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y);
+            var dist = (detectedShadowOfTsun.transform.position - spawnPosv3).sqrMagnitude;
+            if(dist < minDist)
+            {
+                ret = spawnPosv3;
+                minDist = dist;
+            }
+        }
+        return ret;
     }
 }
