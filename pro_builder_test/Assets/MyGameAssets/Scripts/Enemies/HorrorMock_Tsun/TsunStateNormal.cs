@@ -86,7 +86,7 @@ public class TsunStateNormal : StateBase
             detectedNoiseLevel = 0;
         }
 
-        // 徘徊タイプのツンである
+        // 徘徊タイプの影人間である
         if (parameter.NormalState == NormalStateType.Wanderer)
         {
             // 目標位置につーいた！

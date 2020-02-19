@@ -77,7 +77,7 @@ public class EnemyParameter : MonoBehaviour
 
     [Title("[Range Parameters(範囲系パラメータ)]")]
     [SerializeField]
-    [ListDrawerSettings(HideAddButton = true,HideRemoveButton = true,Expanded = true,ShowItemCount = false,ShowPaging = false,DraggableItems = false)]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, Expanded = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
     RangeParameter[] stateRanges = new RangeParameter[3]
     {
         new RangeParameter(StateType.Normal),
@@ -87,24 +87,51 @@ public class EnemyParameter : MonoBehaviour
     public RangeParameter[] StateRanges => stateRanges;
 
     [Header("View Range(視野範囲(緑扇形)の設定)")]
+    
+    [SerializeField]
     [Tooltip("視野範囲の角度を指定します。")]
-    [SerializeField]
-    float viewAngle = 120;
-    public float ViewAngle => viewAngle;
-    [Tooltip("視野範囲の距離を指定します。")]
-    [SerializeField]
-    float viewDistance = 1;
-    public float ViewDistance => viewDistance;
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    float[] viewAngles =
+    {
+        120,
+        120,
+        120,
+    };
+    public float[] ViewAngles => viewAngles;
 
+    [SerializeField]
+    [Tooltip("視野範囲の距離を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    float[] viewDistances =
+    {
+        1,
+        1,
+        1,
+    };
+    public float[] ViewDistances => viewDistances;
+
+    [SerializeField]
     [Header("Attack Range(戦闘範囲(赤扇形)の設定)")]
     [Tooltip("攻撃範囲の角度を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    float[] attackAngles =
+    {
+        120,
+        120,
+        120,
+    };
+    public float[] AttackAngles => attackAngles;
+
     [SerializeField]
-    float attackAngle = 120;
-    public float AttackAngle => attackAngle;
     [Tooltip("攻撃範囲の距離を指定します。")]
-    [SerializeField]
-    float attackDistance = 0.5f;
-    public float AttackDistance => attackDistance;
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true,  ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    float[] attackDistances =
+    {
+        0.5f,
+        0.5f,
+        0.5f,
+    };
+    public float[] AttackDistances => attackDistances;
 
 
     [Space(15)]
@@ -332,11 +359,11 @@ public class EnemyParameter : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        if (viewAngle < 0.01f || viewDistance < 0.01f)
+        if (viewAngles[0] < 0.01f || viewDistances[0] < 0.01f)
         {
             viewRange.gameObject.SetActive(false);
         }
-        if (attackAngle < 0.01f || attackDistance < 0.01f)
+        if (attackAngles[0] < 0.01f || attackDistances[0] < 0.01f)
         {
             attackRange.gameObject.SetActive(false);
         }
@@ -364,6 +391,11 @@ public class EnemyParameter : MonoBehaviour
         appearRange.Radius = rangeParameter.appear;
         cautionRange.Radius = rangeParameter.caution;
         fightingRange.Radius = rangeParameter.fighting;
+
+        viewRange.Angle = viewAngles[(int)type];
+        viewRange.Distance = viewDistances[(int)type];
+        attackRange.Angle = attackAngles[(int)type];
+        attackRange.Distance = attackDistances[(int)type];
     }
 
     private void OnDrawGizmos()
@@ -375,11 +407,6 @@ public class EnemyParameter : MonoBehaviour
         UnityEditor.Handles.color = new Color(1, 0, 0, 0.5f);
         UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].fighting);
         UnityEditor.Handles.color = Color.white;
-
-        viewRange.Angle      = viewAngle;
-        viewRange.Distance   = viewDistance;
-        attackRange.Angle    = attackAngle;
-        attackRange.Distance = attackDistance;
 
         // ルートを線で描画
         if (normalStateType == NormalStateType.Wanderer && wandererType == WandererType.Route)

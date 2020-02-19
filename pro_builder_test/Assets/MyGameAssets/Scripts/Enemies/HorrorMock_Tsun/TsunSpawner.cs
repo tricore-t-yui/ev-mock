@@ -72,6 +72,13 @@ public class TsunSpawner : MonoBehaviour
             // スポーン中
             else if (parameter.spawnState == SpawnParameter.SpawnState.Spawn)
             {
+                if (parameter.spawnTsun.currentState == EnemyParameter.StateType.Caution)
+                {
+                    if (detectedShadowOfTsun != null)
+                    {
+                        parameter.spawnTsun.SetTargetPos(detectedShadowOfTsun.transform.position);
+                    }
+                }
                 // 通常状態に戻った
                 if (parameter.spawnTsun.currentState == EnemyParameter.StateType.Normal)
                 {

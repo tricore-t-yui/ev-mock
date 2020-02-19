@@ -373,6 +373,16 @@ public class StateMachine : MonoBehaviour
         states[(int)currentState].Entry();
     }
 
+    private void OnDrawGizmos()
+    {
+        parameter.ChangeRangeRadius(currentState);
+    }
+
+    public void SetTargetPos(Vector3 pos)
+    {
+        agent.SetDestination(pos);
+    }
+
     /// <summary>
     /// プレイヤーが見える範囲に入った
     /// </summary>
@@ -462,12 +472,12 @@ public class StateMachine : MonoBehaviour
         if (currentState != StateType.Fighting) { return; }
 
         // 攻撃の種類をセット
-        animator.SetInteger("AttackConditionType", attackTypeId);
+        animator.SetInteger("AttackConditionType", 0);
         // 攻撃トリガーをセット
         animator.SetTrigger("Attaking");
-        // 待機フラグを立てる
-        animator.SetBool("IsWaiting", true);
         // ダメージイベント
         damageEvent.Invoke(transform, parameter.Damage);
+        // 待機フラグを立てる
+        animator.SetBool("IsWaiting", true);
     }
 }
