@@ -71,6 +71,9 @@ public class PlayerSoundData : ScriptableObject
     [SerializeField]
     [Tooltip("落ちたときの音")]
     float fall = 10;
+    [SerializeField]
+    [Tooltip("スタミナが半分以下になった時の音")]
+    float stamina = 10;
 
     // 各値のプロパティ
     public float Hide => hide;
@@ -94,4 +97,5 @@ public class PlayerSoundData : ScriptableObject
     public float BarefootObjectDamage => barefootObjectDamage;
     public float ShoesObjectDamage => shoesObjectDamage;
     public float Fall => fall;
+    public float Stamina => stamina;
 }

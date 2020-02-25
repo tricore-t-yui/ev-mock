@@ -17,15 +17,21 @@ public class PlayerStatusController : MonoBehaviour
     [SerializeField]
     PlayerObjectDamageController objectDamageController = default;  // オブジェクトダメージクラス
 
+    [SerializeField]
+    bool isUseStamina = false;                                     // スタミナを使うかどうか
+
     /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
     public void StateUpdate(MoveType type, bool isSquat)
     {
-        breathController.StateUpdate(type);
-        staminaController.StateUpdate(type, isSquat);
+        breathController.StateUpdate(type, isUseStamina);
         objectDamageController.StateUpdate(type);
         healthController.HealthRecovery();
+        if (isUseStamina)
+        {
+            staminaController.StateUpdate(type, isSquat);
+        }
     }
 
     /// <summary>
@@ -34,9 +40,12 @@ public class PlayerStatusController : MonoBehaviour
     public void DeepBreathRecovery()
     {
         breathController.DeepBreathRecovery();
-        staminaController.DeepBreathRecovery();
         objectDamageController.DeepBreathRecovery();
         healthController.HealthRecovery();
+        if (isUseStamina)
+        {
+            staminaController.DeepBreathRecovery();
+        }
     }
 
     /// <summary>
@@ -45,8 +54,11 @@ public class PlayerStatusController : MonoBehaviour
     public void ResetStatus()
     {
         breathController.ResetAmount();
-        staminaController.ResetAmount();
         objectDamageController.ResetDamage();
         healthController.ResetAmount();
+        if (isUseStamina)
+        {
+            staminaController.ResetAmount();
+        }
     }
 }

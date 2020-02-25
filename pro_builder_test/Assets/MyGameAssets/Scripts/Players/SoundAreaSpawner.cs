@@ -34,6 +34,7 @@ public class SoundAreaSpawner : MonoBehaviour
         BAREFOOTDAMAGEOBJECT,   // 裸足でダメージオブジェクトを踏んだとき
         SHOESDAMAGEOBJECT,      // 靴でダメージオブジェクトを踏んだとき
         FALL,                   // 落下
+        STAMINA,                // スタミナの消費量に応じて
     }
 
     [SerializeField]
@@ -155,6 +156,7 @@ public class SoundAreaSpawner : MonoBehaviour
             case ActionSoundType.MEDIUMCONFUSION: addLevel = soundData.BreathMediumConfusion; break;
             case ActionSoundType.LARGECONFUSION: addLevel = soundData.BreathLargeConfusion; break;
             case ActionSoundType.FALL: addLevel = soundData.Fall; break;
+            case ActionSoundType.STAMINA:addLevel = soundData.Stamina; break;
         }
 
         soundLevel += addLevel;

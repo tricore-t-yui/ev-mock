@@ -27,6 +27,8 @@ public class PlayerBreathController : MonoBehaviour
     [SerializeField]
     PlayerHideController hideController = default;              // 隠れるクラス
     [SerializeField]
+    playerStaminaController staminaController = default;        // スタミナクラス
+    [SerializeField]
     SoundAreaSpawner soundArea = default;                       // 音管理クラス
     [SerializeField]
     KeyController keyController = default;                      // キー操作クラス
@@ -104,7 +106,7 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 各ステートに合わせた処理
     /// </summary>
-    public void StateUpdate(MoveType type)
+    public void StateUpdate(MoveType type, bool isUseStamina)
     {
         if (!isDebug)
         {
@@ -113,6 +115,7 @@ public class PlayerBreathController : MonoBehaviour
             {
                 case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
                 case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
+                case MoveType.DASH: if (!isUseStamina) { NowAmount -= playerData.StaminaDecrement; } break;
                 case MoveType.BREATHHOLD: NowAmount -= playerData.StealthDecrement; break;
                 case MoveType.BREATHHOLDMOVE: NowAmount -= playerData.StealthDecrement; break;
                 case MoveType.HIDE: ConsumeHideBreath(); break;
@@ -200,6 +203,14 @@ public class PlayerBreathController : MonoBehaviour
             case HeartSoundType.NORMAL: hideDecrement = playerData.HideSmallDecrement; break;
             case HeartSoundType.MEDIUM: hideDecrement = playerData.HideMediumDecrement; break;
             case HeartSoundType.LARGE: hideDecrement = playerData.HideLargeDecrement; break;
+        }
+    }
+
+    void AddStaminaSound()
+    {
+        if(staminaController.NowAmount >= 50)
+        {
+            soundArea.AddSoundLevel(ActionSoundType.STAMINA);
         }
     }
 
