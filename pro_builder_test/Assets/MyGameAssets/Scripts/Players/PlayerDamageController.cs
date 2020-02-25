@@ -64,7 +64,6 @@ public class PlayerDamageController : MonoBehaviour
         switch (Type)
         {
             case DamageType.NORMAL:
-                playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * -5, ForceMode.Impulse);
                 animationContoller.AnimStart(AnimationType.DAMAGE); break;
             case DamageType.HIDEBED:
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT);
