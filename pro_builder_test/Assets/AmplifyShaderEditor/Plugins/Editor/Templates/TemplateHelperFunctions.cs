@@ -608,6 +608,55 @@ namespace AmplifyShaderEditor
 			{"vf"   ,TemplateInfoOnSematics.VFACE}
 		};
 
+		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToDefineFrag = new Dictionary<TemplateInfoOnSematics, string>
+		{
+			{TemplateInfoOnSematics.POSITION ,"ASE_NEEDS_FRAG_POSITION"},
+			{TemplateInfoOnSematics.CLIP_POS ,"ASE_NEEDS_FRAG_CLIP_POS"},
+			{TemplateInfoOnSematics.SCREEN_POSITION_NORMALIZED,"ASE_NEEDS_FRAG_SCREEN_POSITION_NORMALIZED" },
+			{TemplateInfoOnSematics.COLOR, "ASE_NEEDS_FRAG_COLOR"},
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES0,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES0" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES1,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES1" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES2,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES2" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES3,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES3" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES4,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES4" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES5,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES5" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES6,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES6" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES7,"ASE_NEEDS_FRAG_TEXTURE_COORDINATES7" },
+			{TemplateInfoOnSematics.NORMAL,"ASE_NEEDS_FRAG_NORMAL" },
+			{TemplateInfoOnSematics.TANGENT ,"ASE_NEEDS_FRAG_TANGENT"},
+			{TemplateInfoOnSematics.WORLD_NORMAL,"ASE_NEEDS_FRAG_WORLD_NORMAL"},
+			{TemplateInfoOnSematics.WORLD_TANGENT,"ASE_NEEDS_FRAG_WORLD_TANGENT"},
+			{TemplateInfoOnSematics.WORLD_BITANGENT,"ASE_NEEDS_FRAG_WORLD_BITANGENT"},
+			{TemplateInfoOnSematics.WORLD_VIEW_DIR,"ASE_NEEDS_FRAG_WORLD_VIEW_DIR"},
+			{TemplateInfoOnSematics.WORLD_POSITION,"ASE_NEEDS_FRAG_WORLD_POSITION"},
+			{TemplateInfoOnSematics.RELATIVE_WORLD_POS,"ASE_NEEDS_FRAG_RELATIVE_WORLD_POS"},
+			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_FRAG_VFACE"}
+		};
+
+		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToDefineVertex = new Dictionary<TemplateInfoOnSematics, string>
+		{
+			{TemplateInfoOnSematics.POSITION ,"ASE_NEEDS_VERT_POSITION"},
+			{TemplateInfoOnSematics.CLIP_POS ,"ASE_NEEDS_VERT_CLIP_POS"},
+			{TemplateInfoOnSematics.SCREEN_POSITION_NORMALIZED,"ASE_NEEDS_VERT_SCREEN_POSITION_NORMALIZED" },
+			{TemplateInfoOnSematics.COLOR, "ASE_NEEDS_VERT_COLOR"},
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES0,"ASE_NEEDS_VERT_TEXTURE_COORDINATES0" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES1,"ASE_NEEDS_VERT_TEXTURE_COORDINATES1" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES2,"ASE_NEEDS_VERT_TEXTURE_COORDINATES2" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES3,"ASE_NEEDS_VERT_TEXTURE_COORDINATES3" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES4,"ASE_NEEDS_VERT_TEXTURE_COORDINATES4" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES5,"ASE_NEEDS_VERT_TEXTURE_COORDINATES5" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES6,"ASE_NEEDS_VERT_TEXTURE_COORDINATES6" },
+			{TemplateInfoOnSematics.TEXTURE_COORDINATES7,"ASE_NEEDS_VERT_TEXTURE_COORDINATES7" },
+			{TemplateInfoOnSematics.NORMAL,"ASE_NEEDS_VERT_NORMAL" },
+			{TemplateInfoOnSematics.TANGENT ,"ASE_NEEDS_VERT_TANGENT"},
+			{TemplateInfoOnSematics.WORLD_NORMAL,"ASE_NEEDS_VERT_WORLD_NORMAL"},
+			{TemplateInfoOnSematics.WORLD_TANGENT,"ASE_NEEDS_VERT_WORLD_TANGENT"},
+			{TemplateInfoOnSematics.WORLD_BITANGENT,"ASE_NEEDS_VERT_WORLD_BITANGENT"},
+			{TemplateInfoOnSematics.WORLD_VIEW_DIR,"ASE_NEEDS_VERT_WORLD_VIEW_DIR"},
+			{TemplateInfoOnSematics.WORLD_POSITION,"ASE_NEEDS_VERT_WORLD_POSITION"},
+			{TemplateInfoOnSematics.RELATIVE_WORLD_POS,"ASE_NEEDS_VERT_RELATIVE_WORLD_POS"},
+			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_VERT_VFACE"}
+		};
 
 		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToLocalVar = new Dictionary<TemplateInfoOnSematics, string>
 		{
@@ -807,7 +856,7 @@ namespace AmplifyShaderEditor
 		public static string ASEPassPattern = @"\/\*ase_pass[:]*([a-zA-Z:]*)\*\/";
 		public static string BlendWholeWordPattern = @"\bBlend\b";
 		public static string BlendOpWholeWordPattern = @"\bBlendOp\b";
-		public static string ALphaToMaskPattern = @"\bAlphaToMask (\w*)";
+		public static string AlphaToMaskPattern = @"\bAlphaToMask (\w*)";
 		public static string CullWholeWordPattern = @"\bCull\b";
 		public static string ColorMaskWholeWordPattern = @"\bColorMask\b";
 		public static string StencilWholeWordPattern = @"\bStencil\b";
@@ -834,7 +883,7 @@ namespace AmplifyShaderEditor
 
 		public static readonly string LocalVarPattern = @"\/\*ase_local_var[:]*(\w*)\*\/\s*(\w*)\s+(\w*)";
 
-		public static readonly string SubShaderLODPattern = @"\sLOD\s+(\w+)";
+		public static readonly string SubShaderLODPattern = @"\sLOD\s+(\d+)";
 
 		public static readonly string PassNamePattern = "Name\\s+\\\"([\\w\\+\\-\\*\\/\\(\\) ]*)\\\"";
 

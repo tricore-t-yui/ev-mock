@@ -48,9 +48,16 @@ namespace AmplifyShaderEditor
 			base.SetPreviewInputs();
 
 			if( m_inputPorts[ 0 ].IsConnected )
-				m_previewMaterialPassId = 1;
+			{
+				if( m_normalSpace == ViewSpace.Tangent )
+					m_previewMaterialPassId = 1;
+				else
+					m_previewMaterialPassId = 2;
+			}
 			else
+			{
 				m_previewMaterialPassId = 0;
+			}
 		}
 
 		public override void DrawProperties()

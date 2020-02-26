@@ -306,7 +306,7 @@ namespace AmplifyShaderEditor
 		private bool m_selectNodeToFocus = true;
 
 		[NonSerialized]
-		public Dictionary<int, bool> VisitedChanged = new Dictionary<int, bool>();
+		public Dictionary<string, bool> VisitedChanged = new Dictionary<string, bool>();
 
 		[SerializeField]
 		private List<Toast> m_messages = new List<Toast>();
@@ -2245,6 +2245,7 @@ namespace AmplifyShaderEditor
 
 					OutputPort outputPort = node.InputPorts[ lastId ].GetOutputConnection( 0 );
 					ParentNode outputNode = m_mainGraphInstance.GetNode( outputPort.NodeId );
+					bool outputIsWireNode = outputNode is WireNode;
 
 					Undo.RegisterCompleteObjectUndo( this, Constants.UndoCreateConnectionId );
 					node.RecordObject( Constants.UndoCreateConnectionId );
@@ -2258,10 +2259,24 @@ namespace AmplifyShaderEditor
 						inputNode.RecordObject( Constants.UndoCreateConnectionId );
 						inputPorts.Add( inputPort );
 					}
-
+					
 					for( int i = 0; i < inputPorts.Count; i++ )
 					{
-						m_mainGraphInstance.CreateConnection( inputPorts[ i ].NodeId, inputPorts[ i ].PortId, outputPort.NodeId, outputPort.PortId );
+						if( outputIsWireNode )
+						{
+							if( i == 0 )
+							{
+								m_mainGraphInstance.CreateConnection( inputPorts[ i ].NodeId, inputPorts[ i ].PortId, outputPort.NodeId, outputPort.PortId );
+							}
+							else
+							{
+								UIUtils.DeleteConnection( true, inputPorts[ i ].NodeId, inputPorts[ i ].PortId, false, true );
+							}
+						}
+						else
+						{
+							m_mainGraphInstance.CreateConnection( inputPorts[ i ].NodeId, inputPorts[ i ].PortId, outputPort.NodeId, outputPort.PortId );
+						}
 					}
 
 					UIUtils.DeleteConnection( true, node.UniqueId, node.InputPorts[ lastId ].PortId, false, true );
@@ -4591,11 +4606,18 @@ namespace AmplifyShaderEditor
 		void OnGUI()
 		{
 #if UNITY_2019_1_OR_NEWER
-			// hack fix for mouse selecting text fields
+			// hack fix for mouse selecting text fields when window is opening or window not focused?
 			if( m_fixFocusRepaint && Event.current.type == EventType.Repaint )
 			{
-				EditorGUI.FocusTextInControl( null );
-				GUIUtility.keyboardControl = 0;
+				// hack over hack: makes texture fields selectable again when window is not focused
+				if( ( EditorGUIUtility.editingTextField && EditorGUIUtility.hotControl != 0 ) ||
+					!( EditorGUIUtility.editingTextField && EditorGUIUtility.hotControl == EditorGUIUtility.keyboardControl && EditorGUIUtility.keyboardControl != 0 )
+					)
+				{
+					EditorGUI.FocusTextInControl( null );
+					GUIUtility.keyboardControl = 0;
+				}
+
 				m_fixOnFocus = false;
 				m_fixFocusRepaint = false;
 			}
@@ -5408,7 +5430,7 @@ namespace AmplifyShaderEditor
 			for( int i = nodeCount - 1; i >= 0; i-- )
 			{
 				ParentNode node = CurrentGraph.AllNodes[ i ];
-				if( node != null && !VisitedChanged.ContainsKey( node.UniqueId ) )
+				if( node != null && !VisitedChanged.ContainsKey( node.OutputId ) )
 				{
 					bool result = node.RecursivePreviewUpdate();
 					if( result )
@@ -5869,5 +5891,6 @@ namespace AmplifyShaderEditor
 		public InnerWindowEditorVariables InnerWindowVariables { get { return m_innerEditorVariables; } }
 		public TemplatesManager TemplatesManagerInstance { get { return m_templatesManager; } }
 		public Material CurrentMaterial { get { return CurrentGraph.CurrentMaterial; } }
+		public Clipboard ClipboardInstance { get { return m_clipboard; } }
 	}
 }

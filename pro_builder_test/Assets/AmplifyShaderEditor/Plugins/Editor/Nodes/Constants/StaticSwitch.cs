@@ -34,10 +34,13 @@ namespace AmplifyShaderEditor
 		private bool m_createToggle = true;
 
 		private const string IsLocalStr = "Is Local";
-
+#if UNITY_2019_1_OR_NEWER
+		[SerializeField]
+		private bool m_isLocal = true;
+#else
 		[SerializeField]
 		private bool m_isLocal = false;
-
+#endif
 		private GUIContent m_checkContent;
 		private GUIContent m_popContent;
 
@@ -345,10 +348,10 @@ namespace AmplifyShaderEditor
 		void DrawEnumList()
 		{
 			EditorGUI.BeginChangeCheck();
-			m_keywordEnumAmount = EditorGUILayoutIntSlider( AmountStr, m_keywordEnumAmount, 2, 9 );
+			KeywordEnumAmount = EditorGUILayoutIntSlider( AmountStr, KeywordEnumAmount, 2, 9 );
 			if( EditorGUI.EndChangeCheck() )
 			{
-				CurrentSelectedInput = Mathf.Clamp( CurrentSelectedInput, 0, m_keywordEnumAmount - 1 );
+				CurrentSelectedInput = Mathf.Clamp( CurrentSelectedInput, 0, KeywordEnumAmount - 1 );
 				UpdateLabels();
 			}
 			EditorGUI.indentLevel++;
@@ -369,8 +372,8 @@ namespace AmplifyShaderEditor
 
 		public void UpdateLabels()
 		{
-			int maxinputs = m_keywordModeType == KeywordModeType.KeywordEnum ? m_keywordEnumAmount : 2;
-			m_keywordEnumAmount = Mathf.Clamp( m_keywordEnumAmount, 0, maxinputs );
+			int maxinputs = m_keywordModeType == KeywordModeType.KeywordEnum ? KeywordEnumAmount : 2;
+			KeywordEnumAmount = Mathf.Clamp( KeywordEnumAmount, 0, maxinputs );
 			m_keywordEnumList = new string[ maxinputs ];
 
 			for( int i = 0; i < maxinputs; i++ )
@@ -403,6 +406,18 @@ namespace AmplifyShaderEditor
 				{
 					m_keywordModeType = KeywordModeType.Toggle;
 					UpdateLabels();
+				}
+
+				if( CurrentVarMode == StaticSwitchVariableMode.Reference )
+				{
+					UIUtils.UnregisterPropertyNode( this );
+				}
+				else
+				{
+					if( m_createToggle )
+						UIUtils.RegisterPropertyNode( this );
+					else
+						UIUtils.UnregisterPropertyNode( this );
 				}
 			}
 
@@ -861,6 +876,9 @@ namespace AmplifyShaderEditor
 			base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
 
 			StaticSwitch node = ( m_staticSwitchVarMode == StaticSwitchVariableMode.Reference && m_reference != null ) ? m_reference : this;
+
+			this.OrderIndex = node.RawOrderIndex;
+			this.OrderIndexOffset = node.OrderIndexOffset;
 			//if( m_keywordModeType == KeywordModeType.KeywordEnum )
 
 			//node.RegisterPragmas( ref dataCollector );
@@ -1016,19 +1034,14 @@ namespace AmplifyShaderEditor
 
 			if( UIUtils.CurrentShaderVersion() > 14403 )
 			{
-				m_keywordEnumAmount = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
-				for( int i = 0; i < m_keywordEnumAmount; i++ )
+				KeywordEnumAmount = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
+				for( int i = 0; i < KeywordEnumAmount; i++ )
 				{
 					m_defaultKeywordNames[ i ] = GetCurrentParam( ref nodeParams );
 				}
 
 				UpdateLabels();
 			}
-
-			if( m_createToggle )
-				UIUtils.RegisterPropertyNode( this );
-			else
-				UIUtils.UnregisterPropertyNode( this );
 
 			if( UIUtils.CurrentShaderVersion() > 16304 )
 			{
@@ -1042,6 +1055,18 @@ namespace AmplifyShaderEditor
 			else
 			{
 				CurrentVarMode = (StaticSwitchVariableMode)m_variableMode;
+			}
+
+			if( CurrentVarMode == StaticSwitchVariableMode.Reference )
+			{
+				UIUtils.UnregisterPropertyNode( this );
+			}
+			else
+			{
+				if( m_createToggle )
+					UIUtils.RegisterPropertyNode( this );
+				else
+					UIUtils.UnregisterPropertyNode( this );
 			}
 
 			if( UIUtils.CurrentShaderVersion() > 16700 )
@@ -1102,8 +1127,8 @@ namespace AmplifyShaderEditor
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_createToggle );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_currentKeyword );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_keywordModeType );
-			IOUtils.AddFieldValueToString( ref nodeInfo, m_keywordEnumAmount );
-			for( int i = 0; i < m_keywordEnumAmount; i++ )
+			IOUtils.AddFieldValueToString( ref nodeInfo, KeywordEnumAmount );
+			for( int i = 0; i < KeywordEnumAmount; i++ )
 			{
 				IOUtils.AddFieldValueToString( ref nodeInfo, m_keywordEnumList[ i ] );
 			}
@@ -1150,11 +1175,23 @@ namespace AmplifyShaderEditor
 		}
 		public bool IsStaticSwitchDirty { get { return m_isStaticSwitchDirty; } }
 		public KeywordModeType KeywordModeTypeValue { get { return m_keywordModeType; } }
-		public int KeywordEnumAmount { get { return m_keywordEnumAmount; } }
 		public int DefaultValue { get { return m_defaultValue; } }
 		public int MaterialValue { get { return m_materialValue; } }
 		public string CurrentKeyword { get { return m_currentKeyword; } }
 		public bool CreateToggle { get { return m_createToggle; } }
 
+		public int KeywordEnumAmount
+		{
+			get
+			{
+				return m_keywordEnumAmount;
+			}
+			set
+			{
+				m_keywordEnumAmount = value;
+				m_defaultValue = Mathf.Clamp( m_defaultValue, 0, m_keywordEnumAmount - 1 );
+				m_materialValue = Mathf.Clamp( m_defaultValue, 0, m_keywordEnumAmount - 1 );
+			}
+		}
 	}
 }

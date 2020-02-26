@@ -304,8 +304,10 @@ namespace AmplifyShaderEditor
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.Pragmas = outlineDataCollector.Pragmas;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.Defines = outlineDataCollector.Defines;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.Uniforms = outlineDataCollector.Uniforms;
+			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.InstancedProperties = outlineDataCollector.InstancedProperties;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.GrabPasses = outlineDataCollector.GrabPass;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.UniformList = outlineDataCollector.UniformsList;
+			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.InstancedPropertiesList = outlineDataCollector.InstancedPropertiesList;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.VertexData = outlineDataCollector.VertexData;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.Instructions = outlineDataCollector.Instructions;
 			UIUtils.CurrentWindow.OutsideGraph.CurrentStandardSurface.OutlineHelper.Functions = outlineDataCollector.Functions;

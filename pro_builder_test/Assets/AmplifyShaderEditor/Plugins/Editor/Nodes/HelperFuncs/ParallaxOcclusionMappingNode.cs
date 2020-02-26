@@ -319,7 +319,7 @@ namespace AmplifyShaderEditor
 			}
 
 
-			string localVarName = "OffsetPOM" + UniqueId;
+			string localVarName = "OffsetPOM" + OutputId;
 			string textCoordsST = string.Empty;
 			//string textureSTType = dataCollector.IsSRP ? "float4 " : "uniform float4 ";
 			//dataCollector.AddToUniforms( UniqueId, textureSTType + texture +"_ST;");

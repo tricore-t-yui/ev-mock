@@ -6,6 +6,7 @@ namespace AmplifyShaderEditor
 	public static class GeneratorUtils
 	{
 		public const string ObjectScaleStr = "ase_objectScale";
+		public const string ParentObjectScaleStr = "ase_parentObjectScale";
 		public const string ScreenDepthStr = "ase_screenDepth";
 		public const string ViewPositionStr = "ase_viewPos";
 		public const string WorldViewDirectionStr = "ase_worldViewDir";
@@ -43,6 +44,7 @@ namespace AmplifyShaderEditor
 		private const string Float4Format = "float4 {0} = {1};";
 		private const string GrabFunctionHeader = "inline float4 ASE_ComputeGrabScreenPos( float4 pos )";
 		private const string GrabFunctionCall = "ASE_ComputeGrabScreenPos( {0} )";
+		private const string Identity4x4 = "ase_identity4x4";
 		private static readonly string[] GrabFunctionBody = {
 			"#if UNITY_UV_STARTS_AT_TOP",
 			"float scale = -1.0;",
@@ -55,6 +57,14 @@ namespace AmplifyShaderEditor
 			"return o;"
 		};
 
+		// MATRIX IDENTITY
+		static public string GenerateIdentity4x4( ref MasterNodeDataCollector dataCollector, int uniqueId )
+		{
+			dataCollector.AddLocalVariable( uniqueId, "float4x4 ase_identity4x4 = float4x4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);" );
+			return Identity4x4;
+		}
+
+
 		// OBJECT SCALE
 		static public string GenerateObjectScale( ref MasterNodeDataCollector dataCollector, int uniqueId )
 		{
@@ -65,6 +75,16 @@ namespace AmplifyShaderEditor
 			string value = "float3( length( unity_ObjectToWorld[ 0 ].xyz ), length( unity_ObjectToWorld[ 1 ].xyz ), length( unity_ObjectToWorld[ 2 ].xyz ) )";
 			dataCollector.AddLocalVariable( uniqueId, PrecisionType.Float, WirePortDataType.FLOAT3, ObjectScaleStr, value );
 			return ObjectScaleStr;
+		}
+
+		static public string GenerateRotationIndependentObjectScale( ref MasterNodeDataCollector dataCollector, int uniqueId )
+		{
+			if( dataCollector.IsTemplate )
+				return dataCollector.TemplateDataCollectorInstance.GenerateRotationIndependentObjectScale( ref dataCollector, uniqueId );
+
+			string value = "(1.0/float3( length( unity_WorldToObject[ 0 ].xyz ), length( unity_WorldToObject[ 1 ].xyz ), length( unity_WorldToObject[ 2 ].xyz ) ))";
+			dataCollector.AddLocalVariable( uniqueId, PrecisionType.Float, WirePortDataType.FLOAT3, ParentObjectScaleStr, value );
+			return ParentObjectScaleStr;
 		}
 
 		// WORLD POSITION

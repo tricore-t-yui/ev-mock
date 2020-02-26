@@ -389,7 +389,8 @@ namespace AmplifyShaderEditor
 				base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalVar );
 				string propertyName = CurrentPropertyReference;
 				OnPropertyNameChanged();
-				bool emptyName = string.IsNullOrEmpty( m_propertyInspectorName ) || propertyName == GrabTextureDefault;
+				//bool emptyName = string.IsNullOrEmpty( m_propertyInspectorName ) || propertyName == GrabTextureDefault;
+				bool emptyName = string.IsNullOrEmpty( m_propertyInspectorName ) || !m_useCustomGrab;
 				dataCollector.AddGrabPass( emptyName ? string.Empty : propertyName );
 				valueName = SetFetchedData( ref dataCollector, ignoreLocalVar );
 			}

@@ -27,6 +27,8 @@ namespace AmplifyShaderEditor
 														WirePortDataType.FLOAT4,
 														WirePortDataType.COLOR ,
 														WirePortDataType.INT);
+
+			m_previewShaderGUID = "1fca7774f364aee4d8c64e8634ef4be4";
 		}
 
 		public override void OnInputPortConnected( int portId, int otherNodeId, int otherPortId, bool activateNode = true )

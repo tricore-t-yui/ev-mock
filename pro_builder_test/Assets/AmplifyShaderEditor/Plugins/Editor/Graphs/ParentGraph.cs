@@ -1295,6 +1295,13 @@ namespace AmplifyShaderEditor
 				{
 					RefreshLinkedMasterNodes( true );
 					OnRefreshLinkedPortsComplete();
+					//If clipboard has cached nodes then a master node replacement will take place
+					//We need to re-cache master nodes to ensure applied options are correctly cached
+					//As first cache happens before that
+					if( m_parentWindow.ClipboardInstance.HasCachedMasterNodes )
+					{
+						m_parentWindow.ClipboardInstance.AddMultiPassNodesToClipboard( MultiPassMasterNodes.NodesList );
+					}
 					//RepositionTemplateNodes( CurrentMasterNode );
 				}
 			}
@@ -3055,7 +3062,7 @@ namespace AmplifyShaderEditor
 
 						currentPosition.y += nodesDict[ currPassName ].MasterNode.Position.height + 10;
 						nodesDict[ currPassName ].Used = true;
-						nodesDict[ currPassName ].MasterNode.SetTemplate( multipassData, false, false, subShaderIdx, passIdx );
+						nodesDict[ currPassName ].MasterNode.SetTemplate( multipassData, false, false, subShaderIdx, passIdx, SetTemplateSource.NewShader );
 						if( wasMainNode && !nodesDict[ currPassName ].MasterNode.IsMainOutputNode )
 						{
 							nodesDict[ currPassName ].MasterNode.ReleaseResources();
@@ -3074,7 +3081,7 @@ namespace AmplifyShaderEditor
 							currMasterNode.ReleaseResources();
 						}
 						masterNode.Vec2Position = currentPosition;
-						masterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx );
+						masterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx, SetTemplateSource.NewShader );
 						//currentPosition.y += masterNode.HeightEstimate + 10;
 					}
 				}
@@ -3303,7 +3310,7 @@ namespace AmplifyShaderEditor
 									CurrentCanvasMode = NodeAvailability.TemplateShader;
 								}
 								masterNode.Vec2Position = currentPosition;
-								masterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx );
+								masterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx, SetTemplateSource.NewShader );
 								//currentPosition.y += masterNode.HeightEstimate + 10;
 							}
 						}
@@ -3465,7 +3472,7 @@ namespace AmplifyShaderEditor
 							newMasterNode.IsMainOutputNode = true;
 						}
 						newMasterNode.Vec2Position = currentPosition;
-						newMasterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx );
+						newMasterNode.SetTemplate( multipassData, true, true, subShaderIdx, passIdx, SetTemplateSource.NewShader );
 
 						//currentPosition.y += newMasterNode.HeightEstimate + 10;
 					}
@@ -3605,6 +3612,14 @@ namespace AmplifyShaderEditor
 					m_multiPassMasterNodes.HasNode( node.UniqueId );
 		}
 
+		public TemplateMultiPassMasterNode GetMainMasterNodeOfLOD( int lod )
+		{
+			if( lod == -1 )
+				return CurrentMasterNode as TemplateMultiPassMasterNode;
+
+			return m_lodMultiPassMasterNodes[ lod ].NodesList.Find( x => x.IsMainOutputNode );
+		}
+
 		public TemplateMultiPassMasterNode GetMasterNodeOfPass( string passName, int lod )
 		{
 			if( lod == -1 )
@@ -3699,7 +3714,7 @@ namespace AmplifyShaderEditor
 							masterNode.ContainerGraph = this;
 							masterNode.Vec2Position = initialPosition;
 							AddNode( masterNode, true );
-							masterNode.SetTemplate( templateMultiPass, true, true, subShaderIdx, passIdx );
+							masterNode.SetTemplate( templateMultiPass, true, true, subShaderIdx, passIdx, SetTemplateSource.NewShader );
 							masterNode.CopyOptionsFrom( m_multiPassMasterNodes.NodesList[ nodeId++ ] );
 							if( masterNode.IsMainOutputNode || ( subShaderIdx == 0 && passIdx == 0 ) )
 							{

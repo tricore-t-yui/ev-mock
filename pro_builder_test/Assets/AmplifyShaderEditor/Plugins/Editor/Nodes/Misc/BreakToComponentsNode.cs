@@ -61,7 +61,7 @@ namespace AmplifyShaderEditor
 		{
 			get
 			{
-				return m_inputPorts[ 0 ].InputPreviewTexture;
+				return m_inputPorts[ 0 ].InputPreviewTexture( ContainerGraph );
 			}
 		}
 

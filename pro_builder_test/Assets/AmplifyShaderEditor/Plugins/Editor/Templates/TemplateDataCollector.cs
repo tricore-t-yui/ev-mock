@@ -856,6 +856,11 @@ namespace AmplifyShaderEditor
 					{
 						result = TemplateHelperFunctions.AutoSwizzleData( result, m_specialVertexLocalVars[ info ].DataType, type , isPosition );
 					}
+
+					string defineValue = string.Empty;
+					if( TemplateHelperFunctions.InfoToDefineVertex.TryGetValue( info, out defineValue ) )
+						m_currentDataCollector.AddToDefines( -1, defineValue );
+
 					return true;
 				}
 			}
@@ -869,6 +874,10 @@ namespace AmplifyShaderEditor
 					{
 						result = TemplateHelperFunctions.AutoSwizzleData( result, m_specialFragmentLocalVars[ info ].DataType, type, isPosition );
 					}
+					
+					string defineValue = string.Empty;
+					if( TemplateHelperFunctions.InfoToDefineFrag.TryGetValue( info, out defineValue ))
+						m_currentDataCollector.AddToDefines( -1, defineValue );
 					return true;
 				}
 
@@ -973,15 +982,22 @@ namespace AmplifyShaderEditor
 			}
 
 			string varName = normalize ? "normalizeWorldNormal" : GeneratorUtils.WorldNormalStr;
+
 			if( HasCustomInterpolatedData( varName, useMasterNodeCategory, customCategory ) )
 				return varName;
-			string vertexNormal = GetVertexNormal( precisionType, false, MasterNodePortCategory.Vertex );
-			string formatStr = string.Empty;
-			if( IsSRP )
-				formatStr = "TransformObjectToWorldNormal({0})";
-			else
-				formatStr = "UnityObjectToWorldNormal({0})";
-			string worldNormalValue = string.Format( formatStr, vertexNormal );
+
+			string worldNormalValue = string.Empty;
+
+			if( !GetCustomInterpolatedData( TemplateInfoOnSematics.WORLD_NORMAL, WirePortDataType.FLOAT3, precisionType, ref worldNormalValue, false, MasterNodePortCategory.Vertex ) )
+			{
+				string vertexNormal = GetVertexNormal( precisionType, false, MasterNodePortCategory.Vertex );
+				string formatStr = string.Empty;
+				if( IsSRP )
+					formatStr = "TransformObjectToWorldNormal({0})";
+				else
+					formatStr = "UnityObjectToWorldNormal({0})";
+				worldNormalValue = string.Format( formatStr, vertexNormal );
+			}
 
 			if( normalize )
 				worldNormalValue = string.Format( "normalize( {0} )", worldNormalValue );
@@ -1051,15 +1067,19 @@ namespace AmplifyShaderEditor
 			if( HasCustomInterpolatedData( varName, useMasterNodeCategory, customCategory ) )
 				return varName;
 
-			string vertexTangent = GetVertexTangent( WirePortDataType.FLOAT4, precisionType, false, MasterNodePortCategory.Vertex );
-			string formatStr = string.Empty;
+			string worldTangentValue = string.Empty;
+			if( !GetCustomInterpolatedData( TemplateInfoOnSematics.WORLD_TANGENT, WirePortDataType.FLOAT3, precisionType, ref worldTangentValue, false, MasterNodePortCategory.Vertex ) )
+			{
+				string vertexTangent = GetVertexTangent( WirePortDataType.FLOAT4, precisionType, false, MasterNodePortCategory.Vertex );
+				string formatStr = string.Empty;
 
-			if( IsSRP )
-				formatStr = "TransformObjectToWorldDir({0}.xyz)";
-			else
-				formatStr = "UnityObjectToWorldDir({0})";
+				if( IsSRP )
+					formatStr = "TransformObjectToWorldDir({0}.xyz)";
+				else
+					formatStr = "UnityObjectToWorldDir({0})";
 
-			string worldTangentValue = string.Format( formatStr, vertexTangent );
+				worldTangentValue = string.Format( formatStr, vertexTangent );
+			}
 			RegisterCustomInterpolatedData( varName, WirePortDataType.FLOAT3, precisionType, worldTangentValue, useMasterNodeCategory, customCategory );
 			return varName;
 		}
@@ -1089,10 +1109,15 @@ namespace AmplifyShaderEditor
 			if( HasCustomInterpolatedData( varName, useMasterNodeCategory, customCategory ) )
 				return varName;
 
-			string worldNormal = GetWorldNormal( precisionType, false, MasterNodePortCategory.Vertex );
-			string worldtangent = GetWorldTangent( precisionType, false, MasterNodePortCategory.Vertex );
-			string tangentSign = GetTangentSign( precisionType, false, MasterNodePortCategory.Vertex );
-			string worldBinormal = string.Format( "cross( {0}, {1} ) * {2}", worldNormal, worldtangent, tangentSign );
+			string worldBinormal = string.Empty;
+			if( !GetCustomInterpolatedData( TemplateInfoOnSematics.WORLD_BITANGENT, WirePortDataType.FLOAT3, precisionType, ref worldBinormal, false, MasterNodePortCategory.Vertex ) )
+			{
+				string worldNormal = GetWorldNormal( precisionType, false, MasterNodePortCategory.Vertex );
+				string worldtangent = GetWorldTangent( precisionType, false, MasterNodePortCategory.Vertex );
+				string tangentSign = GetTangentSign( precisionType, false, MasterNodePortCategory.Vertex );
+				worldBinormal = string.Format( "cross( {0}, {1} ) * {2}", worldNormal, worldtangent, tangentSign );
+			}
+
 			RegisterCustomInterpolatedData( varName, WirePortDataType.FLOAT3, PrecisionType.Float, worldBinormal, useMasterNodeCategory, customCategory );
 			return varName;
 		}
@@ -1169,6 +1194,23 @@ namespace AmplifyShaderEditor
 
 		}
 
+		public string GenerateRotationIndependentObjectScale( ref MasterNodeDataCollector dataCollector, int uniqueId )
+		{
+			string value = string.Empty;
+
+			if( m_currentSRPType != TemplateSRPType.BuiltIn )
+			{
+				value = "float3( length( GetWorldToObjectMatrix()[ 0 ].xyz ), length( GetWorldToObjectMatrix()[ 1 ].xyz ), length( GetWorldToObjectMatrix()[ 2 ].xyz ) )";
+			}
+			else
+			{
+				value = "float3( length( unity_WorldToObject[ 0 ].xyz ), length( unity_WorldToObject[ 1 ].xyz ), length( unity_WorldToObject[ 2 ].xyz ) )";
+			}
+			value = "( 1.0 / "+ value +" )";
+			dataCollector.AddLocalVariable( uniqueId, PrecisionType.Float, WirePortDataType.FLOAT3, GeneratorUtils.ParentObjectScaleStr, value );
+			return GeneratorUtils.ParentObjectScaleStr;
+		}
+
 		public string GenerateObjectScale( ref MasterNodeDataCollector dataCollector, int uniqueId )
 		{
 			string value = string.Empty;
@@ -1219,21 +1261,26 @@ namespace AmplifyShaderEditor
 			string vertexPos = m_availableVertData[ TemplateInfoOnSematics.POSITION ].VarName;
 
 			string worldPosConversion = string.Empty;
-			if( m_currentSRPType == TemplateSRPType.HD )
+
+			//Check if world pos already defined in the vertex body
+			if( !GetCustomInterpolatedData( TemplateInfoOnSematics.WORLD_POSITION, WirePortDataType.FLOAT3, precision, ref worldPosConversion, false, MasterNodePortCategory.Vertex ) )
 			{
+				if( m_currentSRPType == TemplateSRPType.HD )
+				{
 #if UNITY_2018_3_OR_NEWER
 				worldPosConversion = string.Format( "GetAbsolutePositionWS( TransformObjectToWorld( ({0}).xyz ) )", vertexPos );
 #else
-				worldPosConversion = string.Format( "GetAbsolutePositionWS( mul( GetObjectToWorldMatrix(), {0}).xyz )", vertexPos );
+					worldPosConversion = string.Format( "GetAbsolutePositionWS( mul( GetObjectToWorldMatrix(), {0}).xyz )", vertexPos );
 #endif
-			}
-			else if( m_currentSRPType == TemplateSRPType.Lightweight )
-			{
-				worldPosConversion = string.Format( "mul(GetObjectToWorldMatrix(), {0}).xyz", vertexPos );
-			}
-			else
-			{
-				worldPosConversion = string.Format( "mul(unity_ObjectToWorld, {0}).xyz", vertexPos );
+				}
+				else if( m_currentSRPType == TemplateSRPType.Lightweight )
+				{
+					worldPosConversion = string.Format( "mul(GetObjectToWorldMatrix(), {0}).xyz", vertexPos );
+				}
+				else
+				{
+					worldPosConversion = string.Format( "mul(unity_ObjectToWorld, {0}).xyz", vertexPos );
+				}
 			}
 			RegisterCustomInterpolatedData( varName, WirePortDataType.FLOAT3, precision, worldPosConversion, useMasterNodeCategory, customCategory );
 			return varName;

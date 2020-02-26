@@ -190,6 +190,7 @@ namespace AmplifyShaderEditor
 					m_defaultId = Shader.PropertyToID( "_Default" );
 
 				PreviewMaterial.SetInt( m_defaultId, ( (int)m_defaultTextureValue ) + 1 );
+				m_previewMaterialPassId = 0;
 			}
 			else
 			{
@@ -201,6 +202,7 @@ namespace AmplifyShaderEditor
 				if( m_typeId == -1 )
 					m_typeId = Shader.PropertyToID( "_Type" );
 
+				m_previewMaterialPassId = 1; 
 				SetPreviewTexture( Value );
 				//if( Value is Cubemap )
 				//{

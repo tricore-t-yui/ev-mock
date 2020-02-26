@@ -28,7 +28,13 @@ namespace AmplifyShaderEditor
 		private Vector4Node m_texCoordsHelper;
 
 		private UpperLeftWidgetHelper m_upperLeftWidget = new UpperLeftWidgetHelper();
-        protected override void CommonInit( int uniqueId )
+
+		private int m_cachedSamplerId = -1;
+		private int m_cachedSamplerIdArray = -1;
+		private int m_cachedSamplerIdCube = -1;
+		private int m_cachedSamplerId3D = -1;
+
+		protected override void CommonInit( int uniqueId )
         {
             base.CommonInit( uniqueId );
             AddInputPort( WirePortDataType.SAMPLER2D, false, "Tex" );
@@ -38,7 +44,8 @@ namespace AmplifyShaderEditor
             m_textLabelWidth = 80;
             m_autoWrapProperties = true;
             m_hasLeftDropdown = true;
-        }
+			m_previewShaderGUID = "25ba2903568b00343ae06788994cab54";
+		}
 
         public override void AfterCommonInit()
         {
@@ -52,7 +59,95 @@ namespace AmplifyShaderEditor
             }
         }
 
-        public override void OnInputPortConnected( int portId, int otherNodeId, int otherPortId, bool activateNode = true )
+		public override void RenderNodePreview()
+		{
+			//Runs at least one time
+			if( !m_initialized )
+			{
+				// nodes with no preview don't update at all
+				PreviewIsDirty = false;
+				return;
+			}
+
+			if( !PreviewIsDirty )
+				return;
+
+			SetPreviewInputs();
+
+			RenderTexture temp = RenderTexture.active;
+
+			RenderTexture.active = m_outputPorts[ 0 ].OutputPreviewTexture;
+			PreviewMaterial.SetInt( "_PreviewID", 0 );
+			Graphics.Blit( null, m_outputPorts[ 0 ].OutputPreviewTexture, PreviewMaterial, m_previewMaterialPassId );
+
+			RenderTexture.active = m_outputPorts[ 1 ].OutputPreviewTexture;
+			PreviewMaterial.SetInt( "_PreviewID", 1 );
+			Graphics.Blit( null, m_outputPorts[ 1 ].OutputPreviewTexture, PreviewMaterial, m_previewMaterialPassId );
+			RenderTexture.active = temp;
+
+			PreviewIsDirty = m_continuousPreviewRefresh;
+
+			FinishPreviewRender = true;
+		}
+
+		void SetPreviewTexture( Texture newValue )
+		{
+			if( newValue is Cubemap )
+			{
+				m_previewMaterialPassId = 3;
+				if( m_cachedSamplerIdCube == -1 )
+					m_cachedSamplerIdCube = Shader.PropertyToID( "_Cube" );
+
+				PreviewMaterial.SetTexture( m_cachedSamplerIdCube, newValue as Cubemap );
+			}
+			else if( newValue is Texture2DArray )
+			{
+
+				m_previewMaterialPassId = 2;
+				if( m_cachedSamplerIdArray == -1 )
+					m_cachedSamplerIdArray = Shader.PropertyToID( "_Array" );
+
+				PreviewMaterial.SetTexture( m_cachedSamplerIdArray, newValue as Texture2DArray );
+			}
+			else if( newValue is Texture3D )
+			{
+				m_previewMaterialPassId = 1;
+				if( m_cachedSamplerId3D == -1 )
+					m_cachedSamplerId3D = Shader.PropertyToID( "_Sampler3D" );
+
+				PreviewMaterial.SetTexture( m_cachedSamplerId3D, newValue as Texture3D );
+			}
+			else
+			{
+				m_previewMaterialPassId = 0;
+				if( m_cachedSamplerId == -1 )
+					m_cachedSamplerId = Shader.PropertyToID( "_Sampler" );
+
+				PreviewMaterial.SetTexture( m_cachedSamplerId, newValue );
+			}
+		}
+
+		public override void SetPreviewInputs()
+		{
+			base.SetPreviewInputs();
+			if( m_inputPorts[ 0 ].IsConnected )
+			{
+				SetPreviewTexture( m_inputPorts[ 0 ].InputPreviewTexture( ContainerGraph ) );
+			}
+			else if( m_referenceNode != null )
+			{
+				if( m_referenceNode.Value != null )
+				{
+					SetPreviewTexture( m_referenceNode.Value );
+				}
+				else
+				{
+					SetPreviewTexture( m_referenceNode.PreviewTexture );
+				}
+			}
+		}
+
+		public override void OnInputPortConnected( int portId, int otherNodeId, int otherPortId, bool activateNode = true )
         {
             base.OnInputPortConnected( portId, otherNodeId, otherPortId, activateNode );
             m_inputReferenceNode = m_inputPorts[ 0 ].GetOutputNode() as TexturePropertyNode;
@@ -116,6 +211,7 @@ namespace AmplifyShaderEditor
 
         public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )
         {
+			
 			if( !m_outputPorts[ 0 ].IsLocalValue( dataCollector.PortCategory ) )
 			{
 				base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
@@ -161,16 +257,11 @@ namespace AmplifyShaderEditor
 				m_texCoordsHelper.SetRawPropertyName( texTransform );
 				texTransform = m_texCoordsHelper.GenerateShaderForOutput( 0, ref dataCollector, false );
 
-				m_outputPorts[ 0 ].SetLocalValue( texTransform, dataCollector.PortCategory );
+				m_outputPorts[ 0 ].SetLocalValue( texTransform+ ".xy", dataCollector.PortCategory );
+				m_outputPorts[ 1 ].SetLocalValue( texTransform + ".zw", dataCollector.PortCategory );
 			}
 
-            switch( outputId )
-            {
-                case 0: return ( m_outputPorts[ 0 ].LocalValue( dataCollector.PortCategory ) + ".xy" );
-                case 1: return ( m_outputPorts[ 0 ].LocalValue( dataCollector.PortCategory ) + ".zw" );
-            }
-
-            return string.Empty;
+			return m_outputPorts[ outputId ].LocalValue( dataCollector.PortCategory );
         }
 
         public override void Draw( DrawInfo drawInfo )

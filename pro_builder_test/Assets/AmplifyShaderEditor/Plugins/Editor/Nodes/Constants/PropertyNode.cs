@@ -135,6 +135,10 @@ namespace AmplifyShaderEditor
 
 		protected bool m_propertyFromInspector;
 		protected double m_propertyFromInspectorTimestamp;
+
+		protected bool m_checkDuplicateProperty;
+		protected double m_checkDuplicatePropertyTimestamp;
+
 		protected double m_globalFetchTimestamp;
 
 		protected bool m_delayedDirtyProperty;
@@ -248,8 +252,47 @@ namespace AmplifyShaderEditor
 				if( forceUpdate || ( EditorApplication.timeSinceStartup - m_propertyFromInspectorTimestamp ) > MaxTimestamp )
 				{
 					m_propertyFromInspector = false;
-					RegisterPropertyName( true, m_propertyInspectorName, m_autoGlobalName, m_underscoredGlobal );
+					bool autoGlobal = m_autoGlobalName || m_currentParameterType == PropertyType.Global;
+					RegisterPropertyName( true, m_propertyInspectorName, autoGlobal, m_underscoredGlobal );
 					m_propertyNameIsDirty = true;
+				}
+			}
+		}
+
+		public void CheckDuplicateProperty()
+		{
+			if( m_checkDuplicateProperty &&
+				( EditorApplication.timeSinceStartup - m_checkDuplicatePropertyTimestamp ) > MaxTimestamp )
+			{
+				m_checkDuplicateProperty = false;
+				m_propertyName = UIUtils.GeneratePropertyName( m_propertyName, PropertyType.Global, false );
+
+				if( UIUtils.IsNumericName( m_propertyName ) )
+				{
+					UIUtils.ShowMessage( UniqueId, string.Format("Invalid property name '{0}' as it cannot start with numbers. Reverting to previous name.", m_propertyName ), MessageSeverity.Warning );
+					m_propertyName = m_oldName;
+					GUI.FocusControl( string.Empty );
+					return;
+				}
+
+				if( !m_propertyName.Equals( m_oldName ) )
+				{
+					if( UIUtils.IsUniformNameAvailable( m_propertyName ) || m_allowPropertyDuplicates )
+					{
+						UIUtils.ReleaseUniformName( UniqueId, m_oldName );
+
+						m_oldName = m_propertyName;
+						m_propertyNameIsDirty = true;
+						m_reRegisterName = false;
+						UIUtils.RegisterUniformName( UniqueId, m_propertyName );
+						OnPropertyNameChanged();
+					}
+					else
+					{
+						GUI.FocusControl( string.Empty );
+						RegisterFirstAvailablePropertyName( true, true );
+						UIUtils.ShowMessage( UniqueId, string.Format( "Duplicate property name found on edited node.\nAssigning first valid one {0}", m_propertyName ) );
+					}
 				}
 			}
 		}
@@ -838,7 +881,9 @@ namespace AmplifyShaderEditor
 				m_propertyName = EditorGUILayoutTextField( PropertyNameStr, m_propertyName );
 				if( EditorGUI.EndChangeCheck() )
 				{
-					BeginPropertyFromInspectorCheck();
+					//BeginPropertyFromInspectorCheck();
+					m_checkDuplicateProperty = true;
+					m_checkDuplicatePropertyTimestamp = EditorApplication.timeSinceStartup;
 				}
 				GUI.enabled = guiEnabledBuffer;
 				EditorGUI.BeginChangeCheck();
@@ -1015,7 +1060,7 @@ namespace AmplifyShaderEditor
 			}
 
 			CheckPropertyFromInspector();
-
+			CheckDuplicateProperty();
 			// RUN LAYOUT CHANGES AFTER TITLES CHANGE
 			base.OnNodeLayout( drawInfo );
 
@@ -1037,12 +1082,12 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public void RegisterFirstAvailablePropertyName( bool releaseOldOne )
+		public void RegisterFirstAvailablePropertyName( bool releaseOldOne, bool appendIndexToCurrOne = false )
 		{
 			if( releaseOldOne )
 				UIUtils.ReleaseUniformName( UniqueId, m_oldName );
 
-			if( m_isNodeBeingCopied )
+			if( m_isNodeBeingCopied || appendIndexToCurrOne )
 			{
 				if( string.IsNullOrEmpty( m_propertyName ) )
 					return;

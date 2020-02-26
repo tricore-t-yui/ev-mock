@@ -609,11 +609,16 @@ namespace AmplifyShaderEditor
 
 			OnPropertyNameChanged();
 
-			CheckReference();
+			if( CheckReference() )
+			{
+				OrderIndex = m_referenceSampler.RawOrderIndex;
+				OrderIndexOffset = m_referenceSampler.OrderIndexOffset;
+			}
 
 			bool isVertex = ( dataCollector.PortCategory == MasterNodePortCategory.Vertex || dataCollector.PortCategory == MasterNodePortCategory.Tessellation );
 
 			bool instanced = false;
+
 			if( m_referenceType == TexReferenceType.Instance && m_referenceSampler != null )
 				instanced = true;
 
@@ -656,7 +661,7 @@ namespace AmplifyShaderEditor
 			{
 				if( dataCollector.IsTemplate )
 				{
-					uvs = dataCollector.TemplateDataCollectorInstance.GetTextureCoord( m_uvSet, ( instanced ? m_referenceSampler.PropertyName : PropertyName ), UniqueId, CurrentPrecisionType );
+					uvs = dataCollector.TemplateDataCollectorInstance.GetTextureCoord( m_uvSet, propertyName/*( instanced ? m_referenceSampler.PropertyName : PropertyName )*/, UniqueId, CurrentPrecisionType );
 				}
 				else
 				{

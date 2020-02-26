@@ -401,7 +401,7 @@ namespace AmplifyShaderEditor
 
 			if( m_topTexPort.IsConnected )
 			{
-				PreviewMaterial.SetTexture( "_A", m_topTexPort.InputPreviewTexture );
+				PreviewMaterial.SetTexture( "_A", m_topTexPort.InputPreviewTexture( ContainerGraph ) );
 			}
 			else
 			{
@@ -410,11 +410,11 @@ namespace AmplifyShaderEditor
 			if( m_selectedTriplanarType == TriplanarType.Cylindrical && m_midTexture != null )
 			{
 				if( m_midTexPort.IsConnected )
-					PreviewMaterial.SetTexture( "_B", m_midTexPort.InputPreviewTexture );
+					PreviewMaterial.SetTexture( "_B", m_midTexPort.InputPreviewTexture( ContainerGraph ) );
 				else
 					PreviewMaterial.SetTexture( "_B", m_midTexture.Value );
 				if( m_botTexPort.IsConnected )
-					PreviewMaterial.SetTexture( "_C", m_botTexPort.InputPreviewTexture );
+					PreviewMaterial.SetTexture( "_C", m_botTexPort.InputPreviewTexture( ContainerGraph ) );
 				else
 					PreviewMaterial.SetTexture( "_C", m_botTexture.Value );
 			}
@@ -613,6 +613,7 @@ namespace AmplifyShaderEditor
 		{
 			if( m_midTexture == null )
 				return;
+
 			EditorGUI.BeginChangeCheck();
 			m_midTexture.ShowPropertyInspectorNameGUI();
 			m_midTexture.ShowPropertyNameGUI( true );
@@ -690,6 +691,7 @@ namespace AmplifyShaderEditor
 
 			m_topTexture.CheckDelayedDirtyProperty();
 			m_topTexture.CheckPropertyFromInspector();
+			m_topTexture.CheckDuplicateProperty();
 
 			if( m_selectedTriplanarType == TriplanarType.Cylindrical )
 			{
@@ -701,6 +703,7 @@ namespace AmplifyShaderEditor
 
 				m_midTexture.CheckDelayedDirtyProperty();
 				m_midTexture.CheckPropertyFromInspector();
+				m_midTexture.CheckDuplicateProperty();
 
 				if( m_botTexture.ReRegisterName )
 				{
@@ -710,6 +713,7 @@ namespace AmplifyShaderEditor
 
 				m_botTexture.CheckDelayedDirtyProperty();
 				m_botTexture.CheckPropertyFromInspector();
+				m_botTexture.CheckDuplicateProperty();
 			}
 		}
 

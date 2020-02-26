@@ -186,6 +186,7 @@ namespace AmplifyShaderEditor
 			m_hasLeftDropdown = true;
 			SetAdditonalTitleText( string.Format( Constants.SubTitleTypeFormatStr, m_type ) );
 			m_previewShaderGUID = "cd2d37ef5da190b42a91a5a690ba2a7d";
+			ConfigurePorts();
 		}
 
 		public override void OnEnable()
@@ -279,6 +280,7 @@ namespace AmplifyShaderEditor
 				}
 				break;
 			}
+			PreviewIsDirty = true;
 		}
 
 		public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )

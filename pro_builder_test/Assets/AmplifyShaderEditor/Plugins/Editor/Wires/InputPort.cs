@@ -154,7 +154,7 @@ namespace AmplifyShaderEditor
 			{
 				switch( m_dataType )
 				{
-					case WirePortDataType.OBJECT:
+					case WirePortDataType.OBJECT:break;
 					case WirePortDataType.FLOAT: m_previewInternalFloat = reset ? 0 : Convert.ToSingle( data[ 0 ] ); break;
 					case WirePortDataType.INT:
 					{
@@ -308,7 +308,7 @@ namespace AmplifyShaderEditor
 		{
 			switch( m_dataType )
 			{
-				case WirePortDataType.OBJECT:
+				case WirePortDataType.OBJECT:break;
 				case WirePortDataType.FLOAT:
 				{
 					if( forceDecimal && m_previewInternalFloat == (int)m_previewInternalFloat )
@@ -589,6 +589,10 @@ namespace AmplifyShaderEditor
 			switch( m_dataType )
 			{
 				case WirePortDataType.OBJECT:
+				{
+					InternalData = owner.EditorGUITextField( rect, label, InternalData );
+				}
+				break;
 				case WirePortDataType.FLOAT:
 				{
 					FloatInternalData = owner.EditorGUIFloatField( rect, label, FloatInternalData );
@@ -1164,9 +1168,13 @@ namespace AmplifyShaderEditor
 			get { return m_cachedPropertyId; }
 		}
 
-		public bool InputNodeHasPreview()
+		public bool InputNodeHasPreview( ParentGraph container )
 		{
-			ParentNode node = GetOutputNode( 0 );
+			ParentNode node = null;
+			if( m_externalReferences.Count > 0)
+			{
+				node = container.GetNode( m_externalReferences[ 0 ].NodeId );
+			}
 
 			if( node != null )
 				return node.HasPreviewShader;
@@ -1187,13 +1195,21 @@ namespace AmplifyShaderEditor
 				m_cachedPropertyId = Shader.PropertyToID( m_propertyName );
 		}
 
-		public void SetPreviewInputTexture()
+		public void SetPreviewInputTexture( ParentGraph container )
 		{
 			PreparePortCacheID();
 
 			if( (object)m_node == null )
-				m_node = UIUtils.GetNode( NodeId );
-			m_node.PreviewMaterial.SetTexture( m_cachedPropertyId, GetOutputConnection( 0 ).OutputPreviewTexture );
+			{
+				m_node = container.GetNode( NodeId );
+				//m_node = UIUtils.GetNode( NodeId );
+			}
+
+			if( ExternalReferences.Count>0 )
+			{
+				m_node.PreviewMaterial.SetTexture( m_cachedPropertyId, container.GetNode( ExternalReferences[ 0 ].NodeId ).GetOutputPortByUniqueId( ExternalReferences[ 0 ].PortId ).OutputPreviewTexture );
+			}
+			//m_node.PreviewMaterial.SetTexture( m_cachedPropertyId, GetOutputConnection( 0 ).OutputPreviewTexture );
 		}
 
 		private void SetPortPreviewShader( Shader portShader )
@@ -1205,7 +1221,7 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public void SetPreviewInputValue()
+		public void SetPreviewInputValue( ParentGraph container )
 		{
 			if( m_inputPreviewTexture == null )
 			{
@@ -1225,7 +1241,7 @@ namespace AmplifyShaderEditor
 				case WirePortDataType.FLOAT:
 				{
 					SetPortPreviewShader( UIUtils.FloatShader );
-
+					//Debug.Log( m_previewInternalFloat );
 					InputPreviewMaterial.SetFloat( CachedFloatPropertyID, m_previewInternalFloat );
 				}
 				break;
@@ -1288,8 +1304,16 @@ namespace AmplifyShaderEditor
 
 			PreparePortCacheID();
 
+			//if( (object)m_node == null )
+			//	m_node = UIUtils.GetNode( NodeId );
+
 			if( (object)m_node == null )
-				m_node = UIUtils.GetNode( NodeId );
+			{
+				m_node = container.GetNode( NodeId );
+				//m_node = UIUtils.GetNode( NodeId );
+			}
+			//m_propertyName = "_A";
+			//Debug.Log( m_propertyName );
 			m_node.PreviewMaterial.SetTexture( m_propertyName, m_inputPreviewTexture );
 		}
 
@@ -1428,14 +1452,29 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public RenderTexture InputPreviewTexture
+		//public RenderTexture InputPreviewTexture
+		//{
+		//	get
+		//	{
+		//		if( IsConnected )
+		//			return GetOutputConnection( 0 ).OutputPreviewTexture;
+		//		else
+		//			return m_inputPreviewTexture;
+		//	}
+		//}
+
+		public RenderTexture InputPreviewTexture( ParentGraph container )
 		{
-			get
+			if( IsConnected )
 			{
-				if( IsConnected )
-					return GetOutputConnection( 0 ).OutputPreviewTexture;
+				if( m_externalReferences.Count > 0 )
+					return container.GetNode( m_externalReferences[ 0 ].NodeId ).GetOutputPortByUniqueId( m_externalReferences[ 0 ].PortId ).OutputPreviewTexture;
 				else
-					return m_inputPreviewTexture;
+					return null;
+			}
+			else
+			{
+				return m_inputPreviewTexture;
 			}
 		}
 

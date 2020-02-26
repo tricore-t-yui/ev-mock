@@ -302,8 +302,8 @@ namespace AmplifyShaderEditor
 	{
 		//public const string PassOptionsMainPattern = @"\/\*ase_pass_options:([\w:= ]*)[\n]([\w: \t;\n&|,_\+-]*)\*\/";
 		//public const string SubShaderOptionsMainPattern = @"\/\*ase_subshader_options:([\w:= ]*)[\n]([\w: \t;\n&|,_\+-]*)\*\/";
-		public const string PassOptionsMainPattern = "\\/\\*ase_pass_options:([\\w:= ]*)[\n]([\\w: \t;\n&|,_\\+\\-\\(\\)\\[\\]\\\"\\=]*)\\*\\/";
-		public const string SubShaderOptionsMainPattern = "\\/\\*ase_subshader_options:([\\w:= ]*)[\n]([\\w: \t;\n&|,_\\+\\-\\(\\)\\[\\]\\\"\\=]*)\\*\\/";
+		public const string PassOptionsMainPattern = "\\/\\*ase_pass_options:([\\w:= ]*)[\n]([\\w: \t;\n&|,_\\+\\-\\(\\)\\[\\]\\\"\\=\\/]*)\\*\\/";
+		public const string SubShaderOptionsMainPattern = "\\/\\*ase_subshader_options:([\\w:= ]*)[\n]([\\w: \t;\n&|,_\\+\\-\\(\\)\\[\\]\\\"\\=\\/]*)\\*\\/";
 		public static readonly char OptionsDataSeparator = ',';
 		public static Dictionary<string, AseOptionsSetup> AseOptionsSetupDict = new Dictionary<string, AseOptionsSetup>()
 		{

@@ -200,14 +200,21 @@ namespace AmplifyShaderEditor
 		VertexData
 	}
 
-	public enum TransformSpace
+	public enum TransformSpaceFrom
 	{
 		Object = 0,
 		World,
 		View,
-		Clip,
 		Tangent
-		//Screen??
+	}
+
+	public enum TransformSpaceTo
+	{
+		Object = 0,
+		World,
+		View,
+		Tangent,
+		Clip
 	}
 
 	public class UIUtils
@@ -1007,7 +1014,7 @@ namespace AmplifyShaderEditor
 			GraphDropDown = new GUIStyle( MainSkin.customStyles[ (int)CustomStyle.GraphButton ] );
 			GraphDropDown.padding.right = 20;
 
-			Box = new GUIStyle( GUI.skin.box );
+			Box = new GUIStyle( MainSkin.box );
 			Button = new GUIStyle( GUI.skin.button );
 			TextArea = new GUIStyle( GUI.skin.textArea );
 			Label = new GUIStyle( GUI.skin.label );

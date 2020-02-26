@@ -75,7 +75,8 @@ namespace AmplifyShaderEditor
 		public void DrawCustomOptions( TemplateMultiPassMasterNode owner )
 		{
 			m_owner = owner;
-			if( m_passCustomOptionsSizeCheck > 0 )
+			
+			if( m_passCustomOptionsUI.Count > 0 )
 			{
 				NodeUtils.DrawNestedPropertyGroup( ref m_passCustomOptionsFoldout, m_passCustomOptionsLabel, DrawCustomOptionsBlock );
 			}
@@ -790,7 +791,6 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public bool HasCustomOptions { get { return m_passCustomOptionsSizeCheck > 0; } }
 		public List<TemplateOptionUIItem> PassCustomOptionsUI { get { return m_passCustomOptionsUI; } }
 
 	}

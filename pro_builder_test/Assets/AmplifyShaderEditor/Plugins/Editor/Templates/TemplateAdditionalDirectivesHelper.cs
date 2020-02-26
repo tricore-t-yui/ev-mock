@@ -156,11 +156,8 @@ namespace AmplifyShaderEditor
 	[Serializable]
 	public sealed class TemplateAdditionalDirectivesHelper : TemplateModuleParent
 	{
-#if UNITY_2019_3_OR_NEWER
-		private string NativeFoldoutStr = "Native ( Locked on Unity 2019.3 and above )";
-#else
 		private string NativeFoldoutStr = "Native";
-#endif
+
 		[SerializeField]
 		private List<AdditionalDirectiveContainer> m_additionalDirectives = new List<AdditionalDirectiveContainer>();
 
@@ -391,14 +388,14 @@ namespace AmplifyShaderEditor
 							if( m_additionalDirectives[ index ].Origin == AdditionalContainerOrigin.Native )
 							{
 								m_nativeRect = rect;
+#if UNITY_2019_3_OR_NEWER
+								m_nativeRect.y -= ( m_nativeRect.height - ( EditorGUIUtility.singleLineHeight + 5 ) ) * 0.5f;
+#endif
 								m_nativeRect.xMin += 2;
 								m_nativeRect.xMax -= 2;
 								m_nativeRect.yMax -= 2;
-#if UNITY_2019_3_OR_NEWER
-								EditorGUI.LabelField(m_nativeRect, NativeFoldoutStr );
-#else
+
 								NodeUtils.DrawNestedPropertyGroup( ref m_nativeDirectivesFoldout, rect, NativeFoldoutStr, DrawNativeItemsRect, 4 );
-#endif
 								return;
 							}
 
