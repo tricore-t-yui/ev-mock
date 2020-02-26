@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using StateType = EnemyParameter.StateType;
 
-public class ShadowHuman : StateMachine
+public class ShadowHuman : EnemyBase
 {
     /// <summary>
     /// 初期処理
@@ -26,6 +24,7 @@ public class ShadowHuman : StateMachine
 
     void OnEnable()
     {
+        // 状態によって生成処理を変える
         if (parameter.InitialState == StateType.Normal)
         {
             Spawn(StateType.Normal);

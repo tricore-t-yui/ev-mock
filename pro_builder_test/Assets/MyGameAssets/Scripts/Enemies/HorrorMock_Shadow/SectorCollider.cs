@@ -109,6 +109,7 @@ public class SectorCollider : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         // 左側の境界ベクトル
@@ -126,4 +127,5 @@ public class SectorCollider : MonoBehaviour
         Debug.DrawRay(transform.position, upBorder, borderColor);
         Debug.DrawRay(transform.position, downBorder, borderColor);
     }
+#endif
 }

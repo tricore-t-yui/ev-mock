@@ -68,6 +68,7 @@ public class OniSpawner : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     /// <summary>
     /// ギズモ
     /// </summary>
@@ -78,6 +79,7 @@ public class OniSpawner : MonoBehaviour
         // 線で結ぶ
         Gizmos.DrawLine(transform.position, transform.position + respawnPosition);
     }
+#endif
 
     void OnTriggerEnter(Collider other)
     {

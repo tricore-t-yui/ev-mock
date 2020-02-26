@@ -107,6 +107,7 @@ public class TsunSpawner : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         // ツンと影人間を線で結ぶ
@@ -128,6 +129,7 @@ public class TsunSpawner : MonoBehaviour
             }
         }
     }
+#endif
 
     /// <summary>
     /// スポーン位置を抽選

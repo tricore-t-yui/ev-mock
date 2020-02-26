@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -398,6 +397,7 @@ public class EnemyParameter : MonoBehaviour
         attackRange.Distance = attackDistances[(int)type];
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         UnityEditor.Handles.color = new Color(0,1,0,0.5f);
@@ -452,4 +452,5 @@ public class EnemyParameter : MonoBehaviour
             Gizmos.color = Color.white;
         }
     }
+#endif
 }

@@ -45,10 +45,12 @@ public class TunAreaData : MonoBehaviour
         return areaBounds.Contains(pos);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         // スポーン位置に球体を表示
         Gizmos.DrawSphere(spawnPos, 0.5f);
         Gizmos.DrawWireCube(areaBounds.center, areaBounds.size);
     }
+#endif
 }

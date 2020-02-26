@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 using WandererType = EnemyParameter.WandererType;
@@ -96,14 +94,6 @@ public class ShadowStateNormal : StateBase
                 agent.SetDestination(GetNextTargetPoint());
             }
         }
-    }
-
-    /// <summary>
-    /// 終了
-    /// </summary>
-    public override void Exit()
-    {
-        
     }
 
     /// <summary>

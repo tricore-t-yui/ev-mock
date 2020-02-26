@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using StateType = EnemyParameter.StateType;
+﻿using UnityEngine;
 
-public class Tsun : StateMachine
+/// <summary>
+/// ツン。ほとんど見た目が変わった影人間
+/// </summary>
+public class Tsun : EnemyBase
 {
     /// <summary>
     /// 初期処理
@@ -22,5 +22,10 @@ public class Tsun : StateMachine
 
         // ステートマシンの初期化
         Initialize(states);
+    }
+
+    public void SetTargetPos(Vector3 pos)
+    {
+        agent.SetDestination(pos);
     }
 }

@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
-[CreateAssetMenu]
-public class StateBase : ScriptableObject
+/// <summary>
+/// エネミーの行うステートの規定。
+/// </summary>
+public abstract class StateBase
 {
     // パラメーター
-    protected EnemyParameter parameter = default;
+    protected EnemyParameter parameter;
     // アニメーター
-    protected Animator animator = default;
+    protected Animator animator;
     // ナビメッシュエージェント
-    protected NavMeshAgent agent = default;
+    protected NavMeshAgent agent;
     // メッシュレンダラー
-    protected SkinnedMeshRenderer meshRenderer = default;
+    protected SkinnedMeshRenderer meshRenderer;
 
     public bool IsSetedNextState { get; private set; } = false;
     public int NextStateId { get; private set; } = 0;
@@ -36,26 +36,17 @@ public class StateBase : ScriptableObject
     /// <summary>
     /// 開始
     /// </summary>
-    public virtual void Entry()
-    {
-
-    }
+    public virtual void Entry() { }
 
     /// <summary>
     /// 更新
     /// </summary>
-    public virtual void Update()
-    {
-
-    }
+    public virtual void Update() { }
 
     /// <summary>
     /// 終了
     /// </summary>
-    public virtual void Exit()
-    {
-
-    }
+    public virtual void Exit() { }
 
     /// <summary>
     /// 次のステートのIDをセット

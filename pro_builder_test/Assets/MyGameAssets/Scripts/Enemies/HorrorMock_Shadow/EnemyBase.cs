@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
-using System.Text.RegularExpressions;
 using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 
-public class StateMachine : MonoBehaviour
+/// <summary>
+/// ツンとエネミーの共通処理
+/// </summary>
+public class EnemyBase : MonoBehaviour
 {
     // 敵のパラメーター
     [SerializeField]
@@ -105,31 +105,24 @@ public class StateMachine : MonoBehaviour
         // 範囲の初期化
         parameter.ChangeRangeRadius(currentState);
 
-        if (!parameter.Inverse)
+        if (parameter.IsTransparencyByDistance)
         {
-            // 出現フラグを倒す
-            isAppear = false;
-            if (parameter.IsTransparencyByDistance)
+            if (!parameter.Inverse)
             {
+                // 出現フラグを倒す
+                isAppear = false;
                 appearFadeCounter = parameter.TransparencyMin;
             }
             else
             {
-                appearFadeCounter = 0;
+                // 出現フラグを倒す
+                isAppear = true;
+                appearFadeCounter = parameter.TransparencyMax;
             }
         }
         else
         {
-            // 出現フラグを倒す
-            isAppear = true;
-            if (parameter.IsTransparencyByDistance)
-            {
-                appearFadeCounter = parameter.TransparencyMax;
-            }
-            else
-            {
-                appearFadeCounter = 1;
-            }
+            appearFadeCounter = 1;
         }
 
         states[(int)currentState].Entry();
@@ -204,30 +197,7 @@ public class StateMachine : MonoBehaviour
         // 出現フラグが起きた
         if (!parameter.IsTransparencyByDistance)
         {
-            if (!parameter.Inverse)
-            {
-                if (isAppear)
-                {
-                    appearFadeCounter += parameter.AppearFadeTime;
-                }
-                // 出現フラグ折れてるうう
-                else
-                {
-                    appearFadeCounter -= parameter.AppearFadeTime;
-                }
-            }
-            else
-            {
-                if (!isAppear)
-                {
-                    appearFadeCounter += parameter.AppearFadeTime;
-                }
-                // 出現フラグ折れてるうう
-                else
-                {
-                    appearFadeCounter -= parameter.AppearFadeTime;
-                }
-            }
+            appearFadeCounter = 1;
         }
         else
         {
@@ -254,10 +224,6 @@ public class StateMachine : MonoBehaviour
         if (parameter.IsTransparencyByDistance)
         {
             appearFadeCounter = Mathf.Clamp(appearFadeCounter, parameter.TransparencyMin, parameter.TransparencyMax);
-        }
-        else
-        {
-            appearFadeCounter = Mathf.Clamp(appearFadeCounter, 0, 1);
         }
 
         // 透明度をメッシュに反映
@@ -373,16 +339,6 @@ public class StateMachine : MonoBehaviour
         states[(int)currentState].Entry();
     }
 
-    private void OnDrawGizmos()
-    {
-        parameter.ChangeRangeRadius(currentState);
-    }
-
-    public void SetTargetPos(Vector3 pos)
-    {
-        agent.SetDestination(pos);
-    }
-
     /// <summary>
     /// プレイヤーが見える範囲に入った
     /// </summary>
@@ -480,4 +436,11 @@ public class StateMachine : MonoBehaviour
         // 待機フラグを立てる
         animator.SetBool("IsWaiting", true);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        parameter.ChangeRangeRadius(currentState);
+    }
+#endif
 }
