@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// トリガーに触れたとき音を出す
@@ -12,6 +13,9 @@ public class SoundTrigger : MonoBehaviour
 
     [SerializeField, Range(1, 100), Tooltip("イベントの出現確率")]
     int appearRate = 100;
+
+    [HideIf("isOneChance"), SerializeField, Range(0, 100), Tooltip("抽選が外れるたびに加算される出現確率")]
+    int addAppearRate = 0;
 
     [SerializeField, Tooltip("鳴らすオーディオのリスト。複数あった場合はランダム再生")]
     List<AudioClip> audioList;
@@ -39,6 +43,7 @@ public class SoundTrigger : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
+
         if (other.tag == "Player")
         {
             var rate = Random.Range(0.0f, 1.0f);
@@ -49,9 +54,17 @@ public class SoundTrigger : MonoBehaviour
                 EffectTriggerGroup.DestroyGroup(triggerGrup);
                 StartCoroutine(PlayInternal());
             }
-            else if (isOneChance)
+            else
             {
-                Destroy(gameObject);
+                if (isOneChance)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    appearRate += addAppearRate;
+                    if (appearRate > 100) appearRate = 100;
+                }
             }
         }
     }

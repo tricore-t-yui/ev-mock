@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// トリガーエフェクト表示のトリガー
@@ -13,6 +14,9 @@ public class ScreenEffectTrigger : MonoBehaviour
 
     [SerializeField, Range(1, 100), Tooltip("イベントの出現確率")]
     int appearRate = 100;
+
+    [HideIf("isOneChance"), SerializeField, Range(0, 100), Tooltip("抽選が外れるたびに加算される出現確率")]
+    int addAppearRate = 0;
 
     [SerializeField, Tooltip("表示時間")]
     float showTime = 2.0f;
@@ -66,9 +70,17 @@ public class ScreenEffectTrigger : MonoBehaviour
                 EffectTriggerGroup.DestroyGroup(triggerGrup);
                 StartCoroutine(PlayInternal());
             }
-            else if (isOneChance)
+            else
             {
-                Destroy(gameObject);
+                if (isOneChance)
+                { 
+                    Destroy(gameObject);
+                }
+                else
+                {
+                   appearRate += addAppearRate;
+                    if (appearRate > 100) appearRate = 100;
+                }
             }
         }
     }
