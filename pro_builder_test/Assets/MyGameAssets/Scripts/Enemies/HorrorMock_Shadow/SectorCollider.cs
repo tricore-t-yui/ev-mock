@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 
+/// <summary>
+/// 扇形コライダ
+/// </summary>
 public class SectorCollider : MonoBehaviour
 {
     // コライダー用のUnityEvent
@@ -98,14 +101,6 @@ public class SectorCollider : MonoBehaviour
         if (IsVisibleObject(other))
         {
             visibleStay.Invoke(other);
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (IsVisibleObject(other))
-        {
-            visibleExit.Invoke(other);
         }
     }
 

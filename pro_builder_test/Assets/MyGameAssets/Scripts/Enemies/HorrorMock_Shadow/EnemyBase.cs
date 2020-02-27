@@ -52,6 +52,7 @@ public class EnemyBase : MonoBehaviour
 
     // 待機カウンター
     float disappearWaitCounter = 0;
+
     // 待機フラグ
     bool isApproached = false;
 
@@ -107,7 +108,7 @@ public class EnemyBase : MonoBehaviour
 
         if (parameter.IsTransparencyByDistance)
         {
-            if (!parameter.Inverse)
+            if (!parameter.InverseTransparency)
             {
                 // 出現フラグを倒す
                 isAppear = false;
@@ -201,13 +202,13 @@ public class EnemyBase : MonoBehaviour
         }
         else
         {
-            if (!parameter.Inverse)
+            if (!parameter.InverseTransparency)
             {
                 // プレイヤーとの距離によって影人間の透明度を変える
                 float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
 
                 // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.StateRanges[(int)currentState].appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
                 appearFadeCounter = (parameter.TransparencyMax - parameter.TransparencyMin) - dist;
             }
             else
@@ -216,7 +217,7 @@ public class EnemyBase : MonoBehaviour
                 float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
 
                 // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.StateRanges[(int)currentState].appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
                 appearFadeCounter = parameter.TransparencyMin + dist;
             }
         }
@@ -368,9 +369,8 @@ public class EnemyBase : MonoBehaviour
     }
 
     /// <summary>
-    /// 音を聞いた！
+    /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
     /// </summary>
-    /// <param name="other"></param>
     public void OnHeardNoise(Collider other)
     {
         if (!parameter.IsDetectNoiseToTransparent)
@@ -381,11 +381,34 @@ public class EnemyBase : MonoBehaviour
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
 
-        // 移動目標位置を発信源に
-        agent.SetDestination(other.transform.position);
+        if (soundSpawner.TotalSoundLevel > 0)
+        {
+            // 移動目標位置を発信源に
+            agent.SetDestination(other.transform.position);
 
-        // 音を聞いた
-        animator.SetBool("IsDetectedNoise", true);
+            // 音を聞いた
+            animator.SetBool("IsDetectedNoise", true);
+        }
+    }
+
+    /// <summary>
+    /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
+    /// </summary>
+    public void OnHeardNoiseAtDirectDetectRange(Collider other)
+    {
+        if (!parameter.IsDetectNoiseToTransparent)
+        {
+            // 見えている
+            if (!isAppear) { return; }
+        }
+        // ノイズのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
+
+        // 一定レベル以上なら即攻撃状態
+        if(soundSpawner.TotalSoundLevel > parameter.DirectDetectSoundLevel)
+        {
+            SetNextState(StateType.Fighting);
+        }
     }
 
     /// <summary>

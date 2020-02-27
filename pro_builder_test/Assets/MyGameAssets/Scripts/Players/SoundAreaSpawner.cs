@@ -97,7 +97,7 @@ public class SoundAreaSpawner : MonoBehaviour
         // スポーンしてリストに追加
         var spawn = PoolManager.Pools["SoundArea"].Spawn(areaCollider);
         spawnList.Add(spawn);
-
+        
         // カウントをリセット
         spawnframeCount = 0;
     }
@@ -160,6 +160,9 @@ public class SoundAreaSpawner : MonoBehaviour
         }
 
         soundLevel += addLevel;
+
+        if (addLevel != 0)
+            Debug.Log("sound level:"+ soundLevel +" increased:" + type);
     }
 
     /// <summary>

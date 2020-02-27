@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class StateColliderEvent : MonoBehaviour
+/// <summary>
+/// トリガーイベントを他のイベントに通知する人
+/// </summary>
+public class TriggerEventDispatcher : MonoBehaviour
 {
     // コライダー用のUnityEvent
     [System.Serializable]

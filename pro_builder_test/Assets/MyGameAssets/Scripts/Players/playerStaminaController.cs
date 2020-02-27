@@ -35,7 +35,7 @@ public class playerStaminaController : MonoBehaviour
     {
         if (!isDebug)
         {
-            Debug.Log(RecoveryMagnification());
+            //Debug.Log(RecoveryMagnification());
             // 各ステートに合わせた処理を実行
             switch (type)
             {
