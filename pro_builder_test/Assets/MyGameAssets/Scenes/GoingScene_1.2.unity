@@ -1698,6 +1698,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7458615314284898727, guid: 9934758d5f9e944dcb23b97b7b23231b,
+        type: 3}
+      propertyPath: m_Name
+      value: ControllerObject
+      objectReference: {fileID: 0}
     - target: {fileID: 2129991352404032482, guid: 9934758d5f9e944dcb23b97b7b23231b,
         type: 3}
       propertyPath: player
@@ -1827,11 +1832,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7458615314284898727, guid: 9934758d5f9e944dcb23b97b7b23231b,
-        type: 3}
-      propertyPath: m_Name
-      value: ControllerObject
       objectReference: {fileID: 0}
     - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: enemySpawn.Array.size
@@ -2639,26 +2639,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d29d88278f45458d99e6b5199e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 1
-  scatteringBias: 1
-  useColorTemperatureTint: 0
-  overrideColor: 0
-  overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
-  useShadow: 0
-  shadowMapRenderTexture: {fileID: 0}
-  useCookie: 0
-  cookieMapRenderTexture: {fileID: 0}
-  enableOutOfPhaseColor: 0
-  outOfPhaseColorStrength: 0.1
-  outOfPhaseColor: {r: 0, g: 1, b: 1, a: 1}
-  shadowDataRenderTexture: {fileID: 0}
-  customDistanceFalloffThreshold: 0.5
-  customDistanceFalloffPower: 2
-  customCookieDistanceFalloffStartThreshold: 0.1
-  customCookieDistanceFalloffEndThreshold: 0.25
-  customCookieDistanceFalloffPower: 2
-  customAngularFalloffThreshold: 0.8
-  customAngularFalloffPower: 2
 --- !u!108 &265538416
 Light:
   m_ObjectHideFlags: 0
@@ -3023,32 +3003,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8334a49e76cafef4da22976db1613959, type: 3}
   m_Name: Default Aura Quality Settings
   m_EditorClassIdentifier: 
-  displayVolumetricLightingBuffer: 0
-  frustumGridResolution: {x: 160, y: 88, z: 128}
-  enableAutomaticStereoResizing: 1
-  farClipPlaneDistance: 128
-  depthBiasCoefficient: 0.35
-  enableVolumes: 1
-  enableVolumesTexture2DMask: 1
-  enableVolumesTexture3DMask: 1
-  enableVolumesNoiseMask: 1
-  enableAmbientLighting: 1
-  enableDirectionalLights: 1
-  enableDirectionalLightsShadows: 1
-  enableSpotLights: 1
-  enableSpotLightsShadows: 1
-  enablePointLights: 1
-  enablePointLightsShadows: 1
-  enableLightsCookies: 1
-  enableDithering: 1
-  texture3DFiltering: 1
-  enableDenoisingFilter: 0
-  denoisingFilterRange: 0
-  enableTemporalReprojection: 1
-  temporalReprojectionFactor: 0.95
-  enableOcclusionCulling: 1
-  occlusionCullingAccuracy: 2
-  enableLightProbes: 0
 --- !u!1 &297351832
 GameObject:
   m_ObjectHideFlags: 0
@@ -6697,26 +6651,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d29d88278f45458d99e6b5199e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 1
-  scatteringBias: 0
-  useColorTemperatureTint: 0
-  overrideColor: 0
-  overridingColor: {r: 0.999999, g: 0.999998, b: 0.999998, a: 1}
-  useShadow: 1
-  shadowMapRenderTexture: {fileID: 1908917897}
-  useCookie: 0
-  cookieMapRenderTexture: {fileID: 0}
-  enableOutOfPhaseColor: 0
-  outOfPhaseColorStrength: 0.25
-  outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 1553690254}
-  customDistanceFalloffThreshold: 0.5
-  customDistanceFalloffPower: 2
-  customCookieDistanceFalloffStartThreshold: 0.1
-  customCookieDistanceFalloffEndThreshold: 0.25
-  customCookieDistanceFalloffPower: 2
-  customAngularFalloffThreshold: 0.8
-  customAngularFalloffPower: 2
 --- !u!108 &571966744
 Light:
   m_ObjectHideFlags: 0
@@ -7293,160 +7227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b142c931e4f39c429a012dc68ba0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumeShape:
-    shape: 2
-    fading:
-      falloffExponent: 3
-      xPositiveCubeFade: 0.25
-      xNegativeCubeFade: 0.25
-      yPositiveCubeFade: 0.25
-      yNegativeCubeFade: 0.25
-      zPositiveCubeFade: 0.25
-      zNegativeCubeFade: 0.25
-      angularConeFade: 0.5
-      distanceConeFade: 0.5
-      widthCylinderFade: 0.5
-      yNegativeCylinderFade: 0.25
-      yPositiveCylinderFade: 0.25
-      distanceSphereFade: 0.5
-  useAsLightProbesProxyVolume: 0
-  lightProbesMultiplier: 1
-  texture2DMask:
-    enable: 0
-    texture: {fileID: 0}
-    textureIndex: -1
-    transform:
-      space: 1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-  texture3DMask:
-    enable: 0
-    texture: {fileID: 0}
-    textureIndex: -1
-    transform:
-      space: 1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-  noiseMask:
-    enable: 1
-    speed: 0.125
-    transform:
-      space: 0
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 5, y: 5, z: 5}
-  densityInjection:
-    enable: 1
-    strength: 0.1
-    useNoiseMask: 1
-    useNoiseMaskLevels: 1
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 5
-    useTexture2DMask: 1
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 1
-    useTexture3DMask: 1
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 1
-  scatteringInjection:
-    enable: 1
-    strength: 0.25
-    useNoiseMask: 1
-    useNoiseMaskLevels: 1
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-    useTexture2DMask: 1
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-    useTexture3DMask: 1
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-  lightInjection:
-    injectionParameters:
-      enable: 0
-      strength: 1
-      useNoiseMask: 1
-      useNoiseMaskLevels: 1
-      noiseMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 5
-      useTexture2DMask: 1
-      useTexture2DMaskLevels: 0
-      texture2DMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 1
-      useTexture3DMask: 1
-      useTexture3DMaskLevels: 0
-      texture3DMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-  ambientInjection:
-    enable: 0
-    strength: 0.1
-    useNoiseMask: 0
-    useNoiseMaskLevels: 0
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
-    useTexture2DMask: 0
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
-    useTexture3DMask: 0
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
 --- !u!4 &612609409
 Transform:
   m_ObjectHideFlags: 0
@@ -12622,6 +12402,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4069015275153794667, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: m_Name
+      value: SoundAreaSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069015275153794667, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: m_Layer
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: spawnframe
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4069015275153794679, guid: 3447c55d0811648f89060e4730a85357,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12676,21 +12471,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: spawnframe
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069015275153794667, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: m_Name
-      value: SoundAreaSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069015275153794667, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: m_Layer
-      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 89248814914946325, guid: 3447c55d0811648f89060e4730a85357,
         type: 3}
@@ -17175,26 +16955,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01d29d88278f45458d99e6b5199e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 1
-  scatteringBias: 0
-  useColorTemperatureTint: 0
-  overrideColor: 0
-  overridingColor: {r: 1, g: 1, b: 1, a: 1}
-  useShadow: 1
-  shadowMapRenderTexture: {fileID: 0}
-  useCookie: 1
-  cookieMapRenderTexture: {fileID: 0}
-  enableOutOfPhaseColor: 0
-  outOfPhaseColorStrength: 0.25
-  outOfPhaseColor: {r: 1, g: 0.48999998, b: 0.39999998, a: 1}
-  shadowDataRenderTexture: {fileID: 0}
-  customDistanceFalloffThreshold: 0.5
-  customDistanceFalloffPower: 2
-  customCookieDistanceFalloffStartThreshold: 0.1
-  customCookieDistanceFalloffEndThreshold: 0.25
-  customCookieDistanceFalloffPower: 2
-  customAngularFalloffThreshold: 0.8
-  customAngularFalloffPower: 2
 --- !u!108 &1308330557
 Light:
   m_ObjectHideFlags: 0
@@ -18607,6 +18367,16 @@ PrefabInstance:
       propertyPath: lockerAttackRange
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHuman (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4484567948180639831, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -18661,16 +18431,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
-        type: 3}
-      propertyPath: m_Name
-      value: ShadowHuman (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4484567947121529033, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -20124,41 +19884,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!84 &1553690254
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1554469929 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2184082033584704853, guid: 1ed9eff9cd8c4934887da860dbdc52da,
@@ -20519,160 +20244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b142c931e4f39c429a012dc68ba0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumeShape:
-    shape: 1
-    fading:
-      falloffExponent: 3
-      xPositiveCubeFade: 0.25
-      xNegativeCubeFade: 0.25
-      yPositiveCubeFade: 0.25
-      yNegativeCubeFade: 0.25
-      zPositiveCubeFade: 0.25
-      zNegativeCubeFade: 0.25
-      angularConeFade: 0.5
-      distanceConeFade: 0.5
-      widthCylinderFade: 0.5
-      yNegativeCylinderFade: 0.25
-      yPositiveCylinderFade: 0.25
-      distanceSphereFade: 0.5
-  useAsLightProbesProxyVolume: 0
-  lightProbesMultiplier: 1
-  texture2DMask:
-    enable: 0
-    texture: {fileID: 0}
-    textureIndex: -1
-    transform:
-      space: 1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-  texture3DMask:
-    enable: 0
-    texture: {fileID: 0}
-    textureIndex: -1
-    transform:
-      space: 1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-  noiseMask:
-    enable: 1
-    speed: 0.125
-    transform:
-      space: 0
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 5, y: 5, z: 5}
-  densityInjection:
-    enable: 1
-    strength: 0.1
-    useNoiseMask: 1
-    useNoiseMaskLevels: 1
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 5
-    useTexture2DMask: 1
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 1
-    useTexture3DMask: 1
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: 0
-      outputHiValue: 1
-      contrast: 1
-  scatteringInjection:
-    enable: 1
-    strength: 0.25
-    useNoiseMask: 1
-    useNoiseMaskLevels: 1
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-    useTexture2DMask: 1
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-    useTexture3DMask: 1
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 1
-      outputLowValue: -1
-      outputHiValue: 1
-      contrast: 1
-  lightInjection:
-    injectionParameters:
-      enable: 0
-      strength: 1
-      useNoiseMask: 1
-      useNoiseMaskLevels: 1
-      noiseMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 5
-      useTexture2DMask: 1
-      useTexture2DMaskLevels: 0
-      texture2DMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 1
-      useTexture3DMask: 1
-      useTexture3DMaskLevels: 0
-      texture3DMaskLevelParameters:
-        levelLowThreshold: 0
-        levelHiThreshold: 1
-        outputLowValue: 0
-        outputHiValue: 1
-        contrast: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-  ambientInjection:
-    enable: 0
-    strength: 4.77
-    useNoiseMask: 0
-    useNoiseMaskLevels: 0
-    noiseMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
-    useTexture2DMask: 0
-    useTexture2DMaskLevels: 0
-    texture2DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
-    useTexture3DMask: 0
-    useTexture3DMaskLevels: 0
-    texture3DMaskLevelParameters:
-      levelLowThreshold: 0
-      levelHiThreshold: 0
-      outputLowValue: 0
-      outputHiValue: 0
-      contrast: 0
 --- !u!4 &1583632374
 Transform:
   m_ObjectHideFlags: 0
@@ -21510,10 +21081,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: m_Name
+      value: ShadowHuman (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4484567948180639831, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.14
+      value: 1.46
       objectReference: {fileID: 0}
     - target: {fileID: 4484567948180639831, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -21523,7 +21104,7 @@ PrefabInstance:
     - target: {fileID: 4484567948180639831, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.32
+      value: 3.44
       objectReference: {fileID: 0}
     - target: {fileID: 4484567948180639831, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -21565,15 +21146,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+    - target: {fileID: 4484567948180639825, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
-      propertyPath: m_Name
-      value: ShadowHuman (1)
+      propertyPath: m_AngularSpeed
+      value: 720
       objectReference: {fileID: 0}
-    - target: {fileID: 4484567948180639827, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+    - target: {fileID: 4484567948180639825, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
-      propertyPath: m_IsActive
+      propertyPath: m_AutoBraking
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[0].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[1].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[2].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[3].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[4].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[5].newClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844321748342145893, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: clipParameters.Array.data[6].newClip
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -21588,16 +21209,67 @@ PrefabInstance:
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: isTransparencyByDistance
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: stateRanges.Array.data[0].appear
-      value: 4.7
+      value: 8.4
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: initialState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: normalStateType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: routeCheckPoints
+      value: 
+      objectReference: {fileID: 11400000, guid: 36c2be188d64b5847ad423a4d848cbc7,
+        type: 2}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: appearFadeTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: stateRanges.Array.data[0].caution
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208676744323116804, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: radius
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694797288544503968, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: radius
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751535101564063586, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280475228960441708, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: distance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280475228960441708, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: angle
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 2277185184526457839, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -21629,6 +21301,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2621288946534602668, guid: f70ee79cec0f4445a918b9e213fbdd3a,
+        type: 3}
+      propertyPath: m_Name
+      value: Sound
+      objectReference: {fileID: 0}
     - target: {fileID: 2621288946534602671, guid: f70ee79cec0f4445a918b9e213fbdd3a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21683,11 +21360,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2621288946534602668, guid: f70ee79cec0f4445a918b9e213fbdd3a,
-        type: 3}
-      propertyPath: m_Name
-      value: Sound
       objectReference: {fileID: 0}
     - target: {fileID: 2621288946128301264, guid: f70ee79cec0f4445a918b9e213fbdd3a,
         type: 3}
@@ -24088,41 +23760,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895909512}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1908917897
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &1913595568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24130,6 +23767,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3843493001073311931, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_Name
+      value: EffectCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3843493001073311935, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -24235,11 +23881,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3843493001073311931, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_Name
-      value: EffectCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 1410817392, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0.5
@@ -24292,10 +23933,6 @@ PrefabInstance:
         type: 3}
       propertyPath: tirggerEffect.Array.size
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Text
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1410817391, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: m_Name
@@ -25284,17 +24921,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59306422a2ca4454aabce3daa79c3334, type: 3}
   m_Name: New Aura Base Settings
   m_EditorClassIdentifier: 
-  useDensity: 1
-  density: 0.25
-  useScattering: 1
-  scattering: 0.5
-  useAmbientLighting: 1
-  ambientLightingStrength: 1
-  useColor: 0
-  color: {r: 0, g: 0.5, b: 0.5, a: 0.5}
-  colorStrength: 1
-  useExtinction: 0
-  extinction: 0.75
 --- !u!1 &2005194471
 GameObject:
   m_ObjectHideFlags: 0
@@ -27084,6 +26710,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1125087521836334063, guid: d9c93e799392d4a27b27c3528733220d,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 911210257}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: soundArea
+      value: 
+      objectReference: {fileID: 778975254}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 1594144943}
     - target: {fileID: 1360036397, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: gameController
       value: 
@@ -27104,11 +26747,6 @@ PrefabInstance:
       propertyPath: stateController
       value: 
       objectReference: {fileID: 911210257}
-    - target: {fileID: 1125087521836334063, guid: d9c93e799392d4a27b27c3528733220d,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 1125087521836334049, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27218,18 +26856,6 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: stateController
-      value: 
-      objectReference: {fileID: 911210257}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: soundArea
-      value: 
-      objectReference: {fileID: 778975254}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: sound
-      value: 
-      objectReference: {fileID: 1594144943}
     - target: {fileID: 603303255, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: frustumSettings.baseSettings
       value: 
@@ -27238,6 +26864,14 @@ PrefabInstance:
       propertyPath: frustumSettings.qualitySettings
       value: 
       objectReference: {fileID: 292430215}
+    - target: {fileID: 603303258, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 603303258, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: field of view
+      value: 41.979977
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
 --- !u!1001 &1552781020647255333
