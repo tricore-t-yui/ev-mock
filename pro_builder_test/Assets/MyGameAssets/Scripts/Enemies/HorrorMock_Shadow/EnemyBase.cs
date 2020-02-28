@@ -366,6 +366,7 @@ public class EnemyBase : MonoBehaviour
 
         // 出現フラグを起こす
         isAppear = false;
+        animator.SetBool("IsDetectedNoise", false);
     }
 
     /// <summary>
@@ -373,11 +374,6 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnHeardNoise(Collider other)
     {
-        if (!parameter.IsDetectNoiseToTransparent)
-        {
-            // 見えている
-            if (!isAppear) { return; }
-        }
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
 
