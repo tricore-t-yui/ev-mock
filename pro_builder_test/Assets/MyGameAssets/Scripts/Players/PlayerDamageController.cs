@@ -34,6 +34,8 @@ public class PlayerDamageController : MonoBehaviour
 
     HideObjectController hideObjectController = null;           // 隠れているオブジェクト
 
+    [SerializeField]
+    float BlowawayPower = 4;                                    // 吹き飛ばしのパワー
     public DamageType Type { get; private set; } = default;     // ダメージタイプ
     public Transform EnemyPos { get; private set; } = default;  // 敵のTransform
     public bool IsInvincible { get; private set; } = false;     // 無敵時間かどうか
@@ -69,12 +71,12 @@ public class PlayerDamageController : MonoBehaviour
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
-                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse); break;
             case DamageType.HIDELOCKER:
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT); break;
             case DamageType.DUCT:
                 animationContoller.AnimStart(AnimationType.DUCTDRAGOUT);
-                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse); break;
 
         }
 
