@@ -273,6 +273,11 @@ public class PlayerHideController : MonoBehaviour
         }
     }
 
+    public bool IsStealth()
+    {
+        return isStealth;
+    }
+
     // NOTE:k.oishi
     //      隠れているか+息止めしているかを調べれるようにIsHideStealth()を変更しましたが、
     //      IsHideStealth()を影人間、鬼、ツンのスクリプトでも使っているのでコンフリクト防止のために変更せずにコメント化しています。

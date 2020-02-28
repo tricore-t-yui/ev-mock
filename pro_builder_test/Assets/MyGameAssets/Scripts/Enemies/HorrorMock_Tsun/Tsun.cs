@@ -10,12 +10,10 @@ public class Tsun : EnemyBase
     /// </summary>
     void Awake()
     {
-        soundSpawner = GameObject.FindObjectOfType<SoundAreaSpawner>();
-
         // ステートクラスのインスタンスを生成
         StateBase[] states = new StateBase[]
         {
-            new TsunStateNormal(soundSpawner),
+            new TsunStateNormal(),
             new TsunStateCaution(),
             new TsunStateFighting(),
         };

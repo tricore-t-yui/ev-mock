@@ -13,12 +13,14 @@ public class SoundAreaSpawner : MonoBehaviour
     /// </summary>
     public enum ActionSoundType
     {
-        BREATHHOLD,             // 息止め
         HIDE,                   // 隠れる
         WAIT,                   // 待機
         WALK,                   // 歩き
+        BREATHHOLD_WALK,        // 歩き(息止め)
         STEALTH,                // 忍び歩き
+        BREATHHOLD_STEALTH,     // 忍び歩き(息止め)
         SQUAT,                  // しゃがみ 
+        BREATHHOLD_SQUAT,       // しゃがみ (息止め)
         DASH,                   // ダッシュ
         DOOROPEN,               // ドア開閉
         DASHDOOROPEN,           // ダッシュでドア開閉
@@ -45,6 +47,10 @@ public class SoundAreaSpawner : MonoBehaviour
     float spawnframe = 50;                                  // スポーンするまでのフレーム数
     [SerializeField]
     PlayerSoundData soundData = default;                    // 音発生の追加量
+    [SerializeField]
+    PlayerBreathController breathController;
+    [SerializeField]
+    PlayerEvents playerEvents;
 
     float areaRadius = 0;                                   // 音発生の領域の半径
     float soundLevel = 0;                                   // 音量レベル
@@ -126,43 +132,67 @@ public class SoundAreaSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 音のレベルの加算
+    /// 音のレベルのセット
     /// </summary>
-    public void AddSoundLevel(ActionSoundType type)
+    public void SetSoundLevel(ActionSoundType type)
     {
         // レベル加算用変数
-        float addLevel = 0;
+        float setLevel = 0;
         // 行動音によって音レベルを加算
         switch (type)
         {
-            case ActionSoundType.BREATHHOLD: addLevel = soundData.BreathHold; break;
-            case ActionSoundType.WAIT: addLevel = soundData.Wait; break;
-            case ActionSoundType.WALK: addLevel = soundData.Walk; break;
-            case ActionSoundType.STEALTH: addLevel = soundData.Stealth; break;
-            case ActionSoundType.SQUAT: addLevel = soundData.Squat; break;
-            case ActionSoundType.HIDE: addLevel = soundData.Hide; break;
-            case ActionSoundType.DOOROPEN: addLevel = soundData.DoorOpen; break;
-            case ActionSoundType.DEEPBREATH: addLevel = soundData.DeepBreath; break;
-            case ActionSoundType.DASHDOOROPEN: addLevel = soundData.DashDoorOpen; break;
-            case ActionSoundType.DASH: addLevel = soundData.Dash; break;
-            case ActionSoundType.BREATHLESSNESS: addLevel = soundData.Breathlessness; break;
-            case ActionSoundType.DAMAGE: addLevel = soundData.Damage; break;
-            case ActionSoundType.DAMAGEHALFHEALTH: addLevel = soundData.HalfBreath; break;
-            case ActionSoundType.DAMAGEPINCHHEALTH: addLevel = soundData.PinchBreath; break;
-            case ActionSoundType.BAREFOOT: addLevel = soundData.Barefoot; break;
-            case ActionSoundType.SHOESDAMAGEOBJECT: addLevel = soundData.ShoesObjectDamage; break;
-            case ActionSoundType.BAREFOOTDAMAGEOBJECT: addLevel = soundData.BarefootObjectDamage; break;
-            case ActionSoundType.SMALLCONFUSION: addLevel = soundData.BreathSmallConfusion; break;
-            case ActionSoundType.MEDIUMCONFUSION: addLevel = soundData.BreathMediumConfusion; break;
-            case ActionSoundType.LARGECONFUSION: addLevel = soundData.BreathLargeConfusion; break;
-            case ActionSoundType.FALL: addLevel = soundData.Fall; break;
-            case ActionSoundType.STAMINA:addLevel = soundData.Stamina; break;
+            case ActionSoundType.WAIT: setLevel = soundData.Wait; break;
+            case ActionSoundType.WALK: setLevel = soundData.Walk; break;
+            case ActionSoundType.BREATHHOLD_WALK: setLevel = soundData.BreathHoldWalk; break;
+            case ActionSoundType.STEALTH: setLevel = soundData.Stealth; break;
+            case ActionSoundType.BREATHHOLD_STEALTH: setLevel = soundData.BreathHoldStealth; break;
+            case ActionSoundType.SQUAT: setLevel = soundData.Squat; break;
+            case ActionSoundType.BREATHHOLD_SQUAT: setLevel = soundData.BreathHoldSquat; break;
+            case ActionSoundType.HIDE: setLevel = soundData.Hide; break;
+            case ActionSoundType.DOOROPEN: setLevel = soundData.DoorOpen; break;
+            case ActionSoundType.DEEPBREATH: setLevel = soundData.DeepBreath; break;
+            case ActionSoundType.DASHDOOROPEN: setLevel = soundData.DashDoorOpen; break;
+            case ActionSoundType.DASH: setLevel = soundData.Dash; break;
+            case ActionSoundType.BREATHLESSNESS: setLevel = soundData.Breathlessness; break;
+            case ActionSoundType.DAMAGE: setLevel = soundData.Damage; break;
+            case ActionSoundType.DAMAGEHALFHEALTH: setLevel = soundData.HalfBreath; break;
+            case ActionSoundType.DAMAGEPINCHHEALTH: setLevel = soundData.PinchBreath; break;
+            case ActionSoundType.BAREFOOT: setLevel = soundData.Barefoot; break;
+            case ActionSoundType.SHOESDAMAGEOBJECT: setLevel = soundData.ShoesObjectDamage; break;
+            case ActionSoundType.BAREFOOTDAMAGEOBJECT: setLevel = soundData.BarefootObjectDamage; break;
+            case ActionSoundType.FALL: setLevel = soundData.Fall; break;
+            case ActionSoundType.STAMINA:setLevel = soundData.Stamina; break;
         }
 
-        soundLevel += addLevel;
+        // 係数計算
+        switch(breathController.State) // 息切れレベル
+        {
+            case PlayerBreathController.BrethState.SMALLCONFUSION:
+                setLevel *= soundData.BreathSmallConfusionFactor;
+                break;
+            case PlayerBreathController.BrethState.MEDIUMCONFUSION:
+                setLevel *= soundData.BreathMediumConfusionFactor;
+                break;
+            case PlayerBreathController.BrethState.LARGECONFUSION:
+            case PlayerBreathController.BrethState.BREATHLESSNESS:
+                setLevel *= soundData.BreathLargeConfusionFactor;
+                break;
+            default:
+                break;
+        }
+        if(playerEvents.IsBreathHold)
+        {
+            setLevel *= soundData.BreathHoldFactor;
+        }
 
-        if (addLevel != 0)
-            Debug.Log("sound level:"+ soundLevel +" increased:" + type);
+        // 大きい音が鳴ったら大きい音優先
+        if (setLevel > soundLevel)
+        {
+            soundLevel = setLevel;
+        }
+
+        //if (setLevel != 0)
+        //    Debug.Log("sound level:"+ soundLevel +" increased:" + type + " playerStateController.IsBreathHold:" + playerEvents.IsBreathHold);
     }
 
     /// <summary>

@@ -9,8 +9,18 @@ using UnityEngine;
 public class PlayerSoundData : ScriptableObject
 {
     [SerializeField]
-    [Tooltip("息止め時の音")]
-    float breathHold = -5.5f;
+    [Tooltip("息止め時減衰係数")]
+    float breathHoldFactor = 0.2f;
+    [SerializeField]
+    [Tooltip("息が少し乱れているときの増加係数")]
+    float breathSmallConfusionFactor = 1.5f;
+    [SerializeField]
+    [Tooltip("息が乱れているときの増加係数")]
+    float breathMediumConfusionFactor = 2.0f;
+    [SerializeField]
+    [Tooltip("息が大きく乱れているときの増加係数")]
+    float breathLargeConfusionFactor = 2.0f;
+
     [SerializeField]
     [Tooltip("隠れているときの音")]
     float hide = 0;
@@ -21,11 +31,20 @@ public class PlayerSoundData : ScriptableObject
     [Tooltip("歩き時の音")]
     float walk = 3.5f;
     [SerializeField]
+    [Tooltip("歩き時の音(息止め)")]
+    float breathHoldWalk = 3.5f;
+    [SerializeField]
     [Tooltip("忍び歩き時の音")]
     float stealth = 0.5f;
     [SerializeField]
+    [Tooltip("忍び歩き時の音(息止め)")]
+    float breathHoldStealth = 0.5f;
+    [SerializeField]
     [Tooltip("しゃがみ時の音")]
     float squat = -2;
+    [SerializeField]
+    [Tooltip("しゃがみ時の音(息止め)")]
+    float breathHoldSquat = -2;
     [SerializeField]
     [Tooltip("走っているときの音")]
     float dash = 3.5f;
@@ -35,15 +54,6 @@ public class PlayerSoundData : ScriptableObject
     [SerializeField]
     [Tooltip("走りながらドアを開けたときの音")]
     float dashDoorOpen = 4;
-    [SerializeField]
-    [Tooltip("息が少し乱れているときの音")]
-    float breathSmallConfusion = 1;
-    [SerializeField]
-    [Tooltip("息が乱れているときの音")]
-    float breathMediumConfusion = 1.25f;
-    [SerializeField]
-    [Tooltip("息が大きく乱れているときの音")]
-    float breathLargeConfusion = 1.5f;
     [SerializeField]
     [Tooltip("息切れしたときの音")]
     float breathlessness = 4;
@@ -76,18 +86,21 @@ public class PlayerSoundData : ScriptableObject
     float stamina = 10;
 
     // 各値のプロパティ
+    public float BreathHoldFactor => breathHoldFactor;
+    public float BreathSmallConfusionFactor => breathSmallConfusionFactor;
+    public float BreathMediumConfusionFactor => breathMediumConfusionFactor;
+    public float BreathLargeConfusionFactor => breathLargeConfusionFactor;
     public float Hide => hide;
-    public float BreathHold => breathHold;
     public float Wait => wait;
     public float Walk => walk;
+    public float BreathHoldWalk => breathHoldWalk;
     public float Stealth => stealth;
+    public float BreathHoldStealth => breathHoldStealth;
     public float Squat => squat;
+    public float BreathHoldSquat => breathHoldSquat;
     public float Dash => dash;
     public float DoorOpen => doorOpen;
     public float DashDoorOpen => dashDoorOpen;
-    public float BreathSmallConfusion => breathSmallConfusion;
-    public float BreathMediumConfusion => breathMediumConfusion;
-    public float BreathLargeConfusion => breathLargeConfusion;
     public float Breathlessness => breathlessness;
     public float DeepBreath => deepBreath;
     public float Damage => damage;

@@ -17,7 +17,7 @@ public class PlayerDamageEvent : MonoBehaviour
     /// </summary>
     public void Invoke(Transform enemyPos,float damege)
     {
-        playerDamageEvent?.Invoke(enemyPos, damege);
+        playerDamageEvent.Invoke(enemyPos, damege);
     }
 
     /// <summary>
@@ -25,6 +25,6 @@ public class PlayerDamageEvent : MonoBehaviour
     /// </summary>
     public void Add(UnityAction<Transform,float> call)
     {
-        playerDamageEvent?.AddListener(call);
+        playerDamageEvent.AddListener(call);
     }
 }

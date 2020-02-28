@@ -8,12 +8,10 @@ public class ShadowHuman : EnemyBase
     /// </summary>
     void Awake()
     {
-        soundSpawner = GameObject.FindObjectOfType<SoundAreaSpawner>();
-
         // ステートクラスのインスタンスを生成
         StateBase[] states = new StateBase[]
         {
-            new ShadowStateNormal(soundSpawner),
+            new ShadowStateNormal(),
             new ShadowStateCaution(),
             new ShadowStateFighting(),
         };

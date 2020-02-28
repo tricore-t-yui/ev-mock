@@ -71,11 +71,11 @@ public class PlayerObjectDamageController : MonoBehaviour
         {
             if (stateController.IsShoes)
             {
-                soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.SHOESDAMAGEOBJECT);
+                soundArea.SetSoundLevel(SoundAreaSpawner.ActionSoundType.SHOESDAMAGEOBJECT);
             }
             else
             {
-                soundArea.AddSoundLevel(SoundAreaSpawner.ActionSoundType.BAREFOOTDAMAGEOBJECT);
+                soundArea.SetSoundLevel(SoundAreaSpawner.ActionSoundType.BAREFOOTDAMAGEOBJECT);
             }
 
             soundArea.SetIsDamageObjectSound(true); 
