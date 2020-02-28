@@ -64,7 +64,7 @@ public class PlayerBreathController : MonoBehaviour
         if (IsDisappear)
         {
             // 息切れ
-            soundArea.AddSoundLevel(ActionSoundType.BREATHLESSNESS);
+            soundArea.SetSoundLevel(ActionSoundType.BREATHLESSNESS);
             State = BrethState.BREATHLESSNESS;
         }
         else if((type != MoveType.HIDE && type != MoveType.BREATHHOLD && type != MoveType.BREATHHOLDMOVE)
@@ -73,19 +73,16 @@ public class PlayerBreathController : MonoBehaviour
             if (NowAmount <= playerData.SmallDisturbance)
             {
                 // 小さな乱れ
-                soundArea.AddSoundLevel(ActionSoundType.SMALLCONFUSION);
                 State = BrethState.SMALLCONFUSION;
 
                 if (NowAmount <= playerData.MediumDisturbance)
                 {
                     // 乱れ
-                    soundArea.AddSoundLevel(ActionSoundType.MEDIUMCONFUSION);
                     State = BrethState.MEDIUMCONFUSION;
 
                     if (NowAmount <= playerData.LargeDisturbance)
                     {
                         // 大きな乱れ
-                        soundArea.AddSoundLevel(ActionSoundType.LARGECONFUSION);
                         State = BrethState.LARGECONFUSION;
                     }
                 }
@@ -210,7 +207,7 @@ public class PlayerBreathController : MonoBehaviour
     {
         if(staminaController.NowAmount >= 50)
         {
-            soundArea.AddSoundLevel(ActionSoundType.STAMINA);
+            soundArea.SetSoundLevel(ActionSoundType.STAMINA);
         }
     }
 

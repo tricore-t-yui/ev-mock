@@ -11,17 +11,7 @@ public class ShadowStateNormal : StateBase
     float safeCounter = 0;
     // 感知した音のレベル
     float detectedNoiseLevel = 0;
-    // サウンドスポナー
-    SoundAreaSpawner soundSpawner = default;
-
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    /// <param name="sound"></param>
-    public ShadowStateNormal(SoundAreaSpawner sound)
-    {
-        soundSpawner = sound;
-    }
+    Vector3 noisePos;
 
     /// <summary>
     /// 開始
@@ -49,7 +39,7 @@ public class ShadowStateNormal : StateBase
     /// </summary>
     public override void Update()
     {
-        // 影人間が出現している
+        // 音を聞いている
         if (animator.GetBool("IsDetectedNoise"))
         {
             // 時間を減らしていく
@@ -59,24 +49,20 @@ public class ShadowStateNormal : StateBase
             detectedNoiseLevel = soundSpawner.TotalSoundLevel;
             // ０以下は０にする
             if (detectedNoiseLevel <= 0) { detectedNoiseLevel = 0; }
-
-            if (detectedNoiseLevel > parameter.SafeSoundLevelMax)
-            {
-                // 警戒に移行
-                SetNextState((int)StateType.Caution);
-            }
-
             // サウンドレベルを丸め込む
             safeCounter -= detectedNoiseLevel * 0.1f;
 
             // 猶予時間が０になったら
             if (safeCounter <= 0)
             {
+                // 移動目標位置を発信源に
+                agent.SetDestination(noisePos);
+
                 // 警戒に移行
                 SetNextState((int)StateType.Caution);
             }
         }
-        // 出現していないよ
+        // 音を聞いていない
         else
         {
             // カウンターやレベルを初期化
@@ -115,6 +101,22 @@ public class ShadowStateNormal : StateBase
             float radius = Random.Range(parameter.RandomRangeRadiusMin, parameter.RandomRangeRadiusMax);
             float angle = Random.Range(0.0f, Mathf.PI * 2);
             return parameter.InitialPosition + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+        }
+    }
+    
+    /// <summary>
+     /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
+     /// </summary>
+    public override void OnHearNoise(GameObject noise)
+    {
+        //////////////////
+        // 警戒、通常共通
+        //////////////////
+        if (soundSpawner.TotalSoundLevel > 0)
+        {
+            noisePos = noise.transform.position;
+            // 音を聞いた
+            animator.SetBool("IsDetectedNoise", true);
         }
     }
 }

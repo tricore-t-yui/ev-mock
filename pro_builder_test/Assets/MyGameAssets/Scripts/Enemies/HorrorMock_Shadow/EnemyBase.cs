@@ -73,6 +73,8 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void Initialize(StateBase[] states)
     {
+        soundSpawner = GameObject.FindObjectOfType<SoundAreaSpawner>();
+
         // 各クラスのインスタンスを取得
         player = GameObject.FindGameObjectWithTag("Player");
         damageEvent = GameObject.FindObjectOfType<PlayerDamageEvent>();
@@ -81,7 +83,7 @@ public class EnemyBase : MonoBehaviour
         this.states = states;
 
         // 各ステートの初期化を行う
-        System.Array.ForEach(states, state => state?.Initialize(parameter, animator, agent, meshRenderer));
+        System.Array.ForEach(states, state => state?.Initialize(parameter, animator, agent, meshRenderer, soundSpawner, this));
 
         // パラメーターの初期化
         parameter.Initialize();
@@ -341,6 +343,17 @@ public class EnemyBase : MonoBehaviour
     }
 
     /// <summary>
+    /// プレイヤーに攻撃。モーション入れば確定ヒットとする
+    /// </summary>
+    public void AttackPlayer(Collider other)
+    {
+        // 攻撃の種類をセット
+        animator.SetInteger("AttackConditionType", 0);
+        // ダメージイベント
+        damageEvent.Invoke(transform, parameter.Damage);
+    }
+
+    /// <summary>
     /// プレイヤーが見える範囲に入った
     /// </summary>
     public void OnPlayerEnterToAppearRange(Collider other)
@@ -366,94 +379,69 @@ public class EnemyBase : MonoBehaviour
 
         // 出現フラグを起こす
         isAppear = false;
-        animator.SetBool("IsDetectedNoise", false);
     }
 
     /// <summary>
-    /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
+    /// 聴覚範囲に入った
     /// </summary>
-    public void OnHeardNoise(Collider other)
+    public void OnEnterNoiseHearRange(Collider other)
     {
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
-
-        if (soundSpawner.TotalSoundLevel > 0)
-        {
-            // 移動目標位置を発信源に
-            agent.SetDestination(other.transform.position);
-
-            // 音を聞いた
-            animator.SetBool("IsDetectedNoise", true);
-        }
+        states[(int)currentState].OnHearNoise(other.gameObject);
     }
 
     /// <summary>
-    /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
+    /// 直接攻撃移行聴覚範囲に入った
     /// </summary>
-    public void OnHeardNoiseAtDirectDetectRange(Collider other)
+    public void OnEnterDirectDetectRange(Collider other)
     {
-        if (!parameter.IsDetectNoiseToTransparent)
-        {
-            // 見えている
-            if (!isAppear) { return; }
-        }
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
-
-        // 一定レベル以上なら即攻撃状態
-        if(soundSpawner.TotalSoundLevel > parameter.DirectDetectSoundLevel)
-        {
-            SetNextState(StateType.Fighting);
-        }
+        states[(int)currentState].OnHearNoiseAtDirectDetectRange(other.gameObject);
     }
 
     /// <summary>
-    /// プレイヤーを発見した！
+    /// 戦闘範囲内
     /// </summary>
-    /// <param name="other"></param>
-    public void OnDetectedPlayer(Collider other)
+    public void OnEnterFightingRange(Collider other)
+    {        
+        // ノイズのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
+        states[(int)currentState].OnHearNoiseAtFightingRange(other.gameObject);
+    }
+
+    /// <summary>
+    /// ビューレンジ入った
+    /// </summary>
+    public void OnEnterViewRange(Collider other)
     {
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-
-        // 戦闘状態に
-        SetNextState(StateType.Fighting);
-
-        // プレイヤーを移動目標位置に
-        agent.SetDestination(other.transform.position);
+        states[(int)currentState].OnDetectedPlayer(other.gameObject);
     }
 
     /// <summary>
-    /// プレイヤーを追いかける
-    /// </summary>
-    public void ChasePlayer(Collider other)
-    {
-        // 戦闘状態のみ
-        if (currentState != StateType.Fighting) { return; }
-        // プレイヤーのみ
-        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-
-        // プレイヤーを移動目標位置に
-        agent.SetDestination(other.transform.position);
-    }
-
-    /// <summary>
-    /// プレイヤーに攻撃！
+    /// ビューレンジ抜けた
     /// </summary>
     /// <param name="other"></param>
-    public void AttackPlayer(Collider other)
+    public void OnExitViewRange(Collider other)
     {
-        // 戦闘状態のみ
-        if (currentState != StateType.Fighting) { return; }
-
-        // 攻撃の種類をセット
-        animator.SetInteger("AttackConditionType", 0);
-        // 攻撃トリガーをセット
-        animator.SetTrigger("Attaking");
-        // ダメージイベント
-        damageEvent.Invoke(transform, parameter.Damage);
-        // 待機フラグを立てる
-        animator.SetBool("IsWaiting", true);
+        // プレイヤーのみ
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        states[(int)currentState].OnMissingPlayer(other.gameObject);
+    }
+    
+    /// <summary>
+    /// 攻撃範囲内
+    /// </summary>
+    public void OnEnterAttackRange(Collider other)
+    {
+        animator.SetBool("InAttackRange", true);
+    }
+    public void OnExitAttackRange(Collider other)
+    {
+        animator.SetBool("InAttackRange", false);
     }
 
 #if UNITY_EDITOR

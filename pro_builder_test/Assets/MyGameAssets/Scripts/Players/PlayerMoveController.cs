@@ -272,17 +272,17 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (length >= 1)
         {
-            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
+            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
             return 1;
         }
         else if (length > 0.5f)
         {
-            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
+            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.5f;
         }
         else if (length > 0.1f)
         {
-            soundAreaSpawner.AddSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
+            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.2f;
         }
 

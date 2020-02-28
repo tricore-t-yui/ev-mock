@@ -36,42 +36,37 @@ public class ShadowStateCaution : StateBase
                 // その場でしばらく待機
                 animator.SetBool("IsWaiting", true);
                 animator.SetBool("IsDetectedNoise", false);
+                waitCounter = 0;
                 isTouchaku = true;
             }
-            waitCounter += Time.deltaTime;
-            // しばらく待機したら
-            if (waitCounter > parameter.CautionWaitTime)
+            else
             {
-                // 待機フラグ解除
-                animator.SetBool("IsWaiting", false);
+                waitCounter += Time.deltaTime;
+                // しばらく待機したら
+                if (waitCounter > parameter.CautionWaitTime)
+                {
+                    // 待機フラグ解除
+                    animator.SetBool("IsWaiting", false);
 
-                 //初期位置まで距離が一定以上離れていたら
-                 if ((agent.transform.position - parameter.InitialPosition).magnitude > parameter.ReturnWarpDistance)
-                 {
-                     // 初期位置まで瞬間移動する
-                     agent.Warp(parameter.InitialPosition);
-                 }
-                 else
-                 {
-                    agent.SetDestination(parameter.InitialPosition);
-                 }
-                 if ((agent.transform.position - parameter.InitialPosition).magnitude < agent.stoppingDistance)
-                 {
-                    // 通常状態に戻る
-                    SetNextState((int)StateType.Normal);
-                    // 初期化
-                    waitCounter = 0;
+                    //初期位置まで距離が一定以上離れていたら
+                    if ((agent.transform.position - parameter.InitialPosition).magnitude > parameter.ReturnWarpDistance)
+                    {
+                        // 初期位置まで瞬間移動する
+                        agent.Warp(parameter.InitialPosition);
+                    }
+                    else
+                    {
+                        agent.SetDestination(parameter.InitialPosition);
+                    }
+                    if ((agent.transform.position - parameter.InitialPosition).magnitude < agent.stoppingDistance)
+                    {
+                        // 通常状態に戻る
+                        SetNextState((int)StateType.Normal);
+                        // 初期化
+                        waitCounter = 0;
+                    }
                 }
             }
-        }
-        // 待機中に新たに音を聞いた
-        else if (agent.remainingDistance > agent.stoppingDistance &&
-                (agent.destination - parameter.InitialPosition).magnitude > agent.stoppingDistance)
-        {
-            // 待機を解除する
-            animator.SetBool("IsWaiting", false);
-            waitCounter = 0;
-            isTouchaku = false;
         }
     }
 
@@ -85,5 +80,28 @@ public class ShadowStateCaution : StateBase
         // 音が聞こえなくなった
         animator.SetBool("IsDetectedNoise", false);
         isTouchaku = false;
+    }
+
+    /// <summary>
+    /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
+    /// </summary>
+    public override void OnHearNoise(GameObject noise)
+    {
+        //////////////////
+        // 警戒、通常共通
+        //////////////////
+        if (soundSpawner.TotalSoundLevel > 0)
+        {
+            // 移動目標位置を発信源に
+            agent.SetDestination(noise.transform.position);
+
+            // 音を聞いた
+            animator.SetBool("IsDetectedNoise", true);
+            animator.SetBool("IsWaiting", false);
+            waitCounter = 0;
+            isTouchaku = false;
+
+            Debug.Log("DetectNoise");
+        }
     }
 }
