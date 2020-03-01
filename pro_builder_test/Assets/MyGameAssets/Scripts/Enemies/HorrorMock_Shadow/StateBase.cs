@@ -93,7 +93,7 @@ public abstract class StateBase
         // 警戒、通常共通
         //////////////////
         // 一定レベル以上なら即攻撃状態
-        if (soundSpawner.TotalSoundLevel > parameter.DirectDetectSoundLevel)
+        if (soundSpawner.TotalSoundLevel >= parameter.DirectDetectSoundLevel)
         {
             SetNextState((int)StateType.Fighting);
 

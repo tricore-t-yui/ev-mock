@@ -330,6 +330,11 @@ public class EnemyParameter : MonoBehaviour
     public bool IsStaticState => isStaticState;
 
     [SerializeField]
+    [Tooltip("このフラグがONだと攻撃せずに意味もなくついてきます")]
+    bool dontAttack = false;
+    public bool DontAttack => dontAttack;
+
+    [SerializeField]
     [Tooltip("ゲーム開始時に自動でスポーンさせるか設定します。" +
         "\nオフの場合は自動では出現しなくなります。")]
     bool isInitialAutoSpawn = true;

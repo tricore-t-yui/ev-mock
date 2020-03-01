@@ -61,21 +61,27 @@ public class ShadowStateFighting : StateBase
     void UpdateRunState()
     {
         animator.SetBool("IsWaiting", false);
-        agent.updatePosition = true;
-        agent.updateRotation = true;
         UpdateViewTargetPos();
 
         // 攻撃目標位置についた
         if (agent.remainingDistance <= parameter.AttackRange)
         {
+            agent.isStopped = true;
             // 攻撃範囲内にいたら攻撃
             if (IsInAttackRange)
             {
-                // 攻撃トリガーをセット
-                animator.SetTrigger("Attaking");
-                state = State.ATTACK;
-                agent.updatePosition = false;
-                agent.updateRotation = true;
+                // 攻撃しない状態ならそのまま待機へ
+                if (parameter.DontAttack)
+                {
+                    state = State.ATTACK_WAIT;
+
+                }
+                else
+                {
+                    // 攻撃トリガーをセット
+                    animator.SetTrigger("Attaking");
+                    state = State.ATTACK;
+                }
             }
             else
             {
@@ -109,8 +115,6 @@ public class ShadowStateFighting : StateBase
         // 待機フラグを立てる
         animator.SetBool("IsWaiting", true);
 
-        agent.updatePosition = false;
-        agent.updateRotation = true;
         // 待機中
         UpdateViewTargetPos();  // 待機中もプレイヤーの位置の補足は更新し続ける
         waitCounter += Time.deltaTime;

@@ -49,8 +49,6 @@ public class ShadowStateCaution : StateBase
     void UpdateWait()
     {
         animator.SetBool("IsWaiting", true);
-        agent.updatePosition = false;
-        agent.updateRotation = true;
         waitCounter += Time.deltaTime;
         // しばらく待機したら
         if (waitCounter > parameter.CautionWaitTime)
@@ -93,8 +91,6 @@ public class ShadowStateCaution : StateBase
     void UpdateWalk()
     {
         animator.SetBool("IsWaiting", false);
-        agent.updatePosition = true;
-        agent.updateRotation = true;
         // 発信源についたよ
         if (agent.remainingDistance < agent.stoppingDistance)
         {
