@@ -21,6 +21,7 @@ public class ShadowStateCaution : StateBase
     {
         // 初期化
         waitCounter = 0;
+        ForceTransparentOff = false;
 
         // 移動速度を設定
         agent.speed = parameter.CautionMoveSpeed;

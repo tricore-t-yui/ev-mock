@@ -50,12 +50,6 @@ public class EnemyBase : MonoBehaviour
     // 攻撃の種類
     protected int attackTypeId = 0;
 
-    // 待機カウンター
-    float disappearWaitCounter = 0;
-
-    // 待機フラグ
-    bool isApproached = false;
-
     // プレイヤー
     protected GameObject player = default;
 
@@ -198,7 +192,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         // 出現フラグが起きた
-        if (!parameter.IsTransparencyByDistance)
+        if (!parameter.IsTransparencyByDistance || states[(int)currentState].ForceTransparentOff)
         {
             appearFadeCounter = 1;
         }
@@ -277,35 +271,7 @@ public class EnemyBase : MonoBehaviour
             // 影人間とプレイヤーとの距離が一定以内かどうか
             if ((player.transform.position - agent.transform.position).magnitude < parameter.DisappearDistance)
             {
-                if (!parameter.IsDisappearWait)
-                {
-                    disappearWaitCounter = parameter.DisappearWaitTime;
-                }
-
-                // 待機する
-                animator.SetBool("IsWaiting", parameter.IsDisappearWait ? true : false);
-                isApproached = true;
-            }
-
-            // 一定時間待機したら
-            if (isApproached)
-            {
-                // 待機する
-                animator.SetBool("IsWaiting", parameter.IsDisappearWait ? true : false);
-                disappearWaitCounter += Time.deltaTime;
-                if (disappearWaitCounter > parameter.DisappearWaitTime)
-                {
-                    isAppear = false;
-                    appearFadeCounter -= parameter.AppearFadeTime;
-                    if (appearFadeCounter < 0.001f)
-                    {
-                        // 待機解除
-                        agent.gameObject.SetActive(false);
-                        isApproached = false;
-                        animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
-                        disappearWaitCounter = 0;
-                    }
-                }
+                agent.gameObject.SetActive(false);
             }
         }
 

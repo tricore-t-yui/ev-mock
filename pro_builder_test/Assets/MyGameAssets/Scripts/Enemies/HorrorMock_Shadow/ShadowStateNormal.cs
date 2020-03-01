@@ -25,6 +25,7 @@ public class ShadowStateNormal : StateBase
         safeCounter = parameter.SafeTime;
         detectedNoiseLevel = 0;
         IsDetectedNoise = false;
+        ForceTransparentOff = false;
 
         // 移動速度を設定
         agent.speed = parameter.NormalMoveSpeed;

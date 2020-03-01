@@ -1835,7 +1835,7 @@ PrefabInstance:
       objectReference: {fileID: 5055980059918624240}
     - target: {fileID: 132313234, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: isUseController
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1294684738, guid: 9934758d5f9e944dcb23b97b7b23231b, type: 3}
       propertyPath: enemySpawn.Array.size
@@ -12399,6 +12399,31 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: spawnframe
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: breathController
+      value: 
+      objectReference: {fileID: 5055980060709287681}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: playerStateController
+      value: 
+      objectReference: {fileID: 911210257}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: playerHideController
+      value: 
+      objectReference: {fileID: 5311835439939355291}
+    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
+        type: 3}
+      propertyPath: playerEvents
+      value: 
+      objectReference: {fileID: 212977430}
     - target: {fileID: 4069015275153794679, guid: 3447c55d0811648f89060e4730a85357,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12454,31 +12479,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: spawnframe
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: breathController
-      value: 
-      objectReference: {fileID: 5055980060709287681}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: playerStateController
-      value: 
-      objectReference: {fileID: 911210257}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: playerHideController
-      value: 
-      objectReference: {fileID: 5311835439939355291}
-    - target: {fileID: 4069015275153794677, guid: 3447c55d0811648f89060e4730a85357,
-        type: 3}
-      propertyPath: playerEvents
-      value: 
-      objectReference: {fileID: 212977430}
     - target: {fileID: 89248814914946325, guid: 3447c55d0811648f89060e4730a85357,
         type: 3}
       propertyPath: m_Radius
@@ -21107,17 +21107,17 @@ PrefabInstance:
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: rangeParameter.isTransparencyByDistance
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: directDetectSoundLevel
-      value: 100
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: fightingMoveSpeed
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -21132,7 +21132,67 @@ PrefabInstance:
     - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
       propertyPath: cautionWaitTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: cautionMoveSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: rangeParameter.viewDistances.Array.data[1]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: rangeParameter.viewAngles.Array.data[1]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: attackedWaitTime
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: rangeParameter.appear
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: rangeParameter.attackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: rangeParameter.attackAngle
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: isAttackedDisappear
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: isApproachedDisappear
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: isRespawn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: disappearDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986616820252028064, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
+        type: 3}
+      propertyPath: isCameraFadeOutDisappear
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4280475228960441708, guid: 2f9bf28c00bb38d4089ff2c7f2b89e89,
         type: 3}
@@ -23734,6 +23794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3843493001073311935, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23894,10 +23958,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1410817393, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
-      propertyPath: m_Text
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1394909059, guid: e13c6f735bdda473d9317b5068cae389, type: 3}
       propertyPath: breathController
@@ -26695,6 +26755,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: stateController
+      value: 
+      objectReference: {fileID: 911210257}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: soundArea
+      value: 
+      objectReference: {fileID: 778975254}
+    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 1594144943}
     - target: {fileID: 1125087521836334049, guid: d9c93e799392d4a27b27c3528733220d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26824,18 +26896,10 @@ PrefabInstance:
       propertyPath: keyController
       value: 
       objectReference: {fileID: 1294684737}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: stateController
-      value: 
-      objectReference: {fileID: 911210257}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: soundArea
-      value: 
-      objectReference: {fileID: 778975254}
-    - target: {fileID: 648182769, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
-      propertyPath: sound
-      value: 
-      objectReference: {fileID: 1594144943}
+    - target: {fileID: 809868428, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: sensitivity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 603303258, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
       propertyPath: m_FOVAxisMode
       value: 1
@@ -26871,6 +26935,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3315339731598062244, guid: 37281b35464d7524eae5ccfc339e4580,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 3f324a31f3fce1e4897966dac24624b6, type: 3}
+    - target: {fileID: 3315339731598062244, guid: 37281b35464d7524eae5ccfc339e4580,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a825325fa416a1a44af78dd582162a3c, type: 2}
     - target: {fileID: 3315339731598062243, guid: 37281b35464d7524eae5ccfc339e4580,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27092,16 +27166,6 @@ PrefabInstance:
       propertyPath: disappearDistance
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 3315339731598062244, guid: 37281b35464d7524eae5ccfc339e4580,
-        type: 3}
-      propertyPath: m_Avatar
-      value: 
-      objectReference: {fileID: 9000000, guid: 3f324a31f3fce1e4897966dac24624b6, type: 3}
-    - target: {fileID: 3315339731598062244, guid: 37281b35464d7524eae5ccfc339e4580,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a825325fa416a1a44af78dd582162a3c, type: 2}
     - target: {fileID: 3123629697305880472, guid: 37281b35464d7524eae5ccfc339e4580,
         type: 3}
       propertyPath: distance

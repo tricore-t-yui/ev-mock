@@ -29,6 +29,9 @@ public class ShadowStateFighting : StateBase
         isDetectedPlayer = true;
         state = State.RUN;
 
+        // 見つかっているので強制不透明に
+        ForceTransparentOff = true;
+
         // 既にみつけているので、プレイヤーの位置を目標位置に設定済
         //agent.SetDestination(player.transform.position);
 
@@ -71,6 +74,8 @@ public class ShadowStateFighting : StateBase
                 // 攻撃トリガーをセット
                 animator.SetTrigger("Attaking");
                 state = State.ATTACK;
+                agent.updatePosition = false;
+                agent.updateRotation = true;
             }
             else
             {
@@ -137,6 +142,13 @@ public class ShadowStateFighting : StateBase
     public override void OnHearNoise(GameObject noise)
     {
         // 戦闘状態のほうにやらせるのでなにもしない
+    }
+    /// <summary>
+    /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
+    /// </summary>
+    public override void OnHearNoiseAtDirectDetectRange(GameObject noise)
+    {
+        // 既に戦闘状態なので何もしない
     }
 
     /// <summary>

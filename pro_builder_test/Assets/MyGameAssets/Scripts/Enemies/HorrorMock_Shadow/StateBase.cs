@@ -23,6 +23,9 @@ public abstract class StateBase
     public int NextStateId { get; private set; } = 0;
     protected bool IsInAttackRange { get; private set; }
 
+    // 強制不透明
+    public bool ForceTransparentOff { get; protected set; }
+
     /// <summary>
     /// 初期化
     /// </summary>
