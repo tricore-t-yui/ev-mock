@@ -42,7 +42,7 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;              // 息管理クラス
 
-    public bool IsBreathHold { get; set; }
+    public bool IsBreathHold{ get{ return playerAnimationContoller.IsBreathHold; } }
 
     /// <summary>
     /// 待機
@@ -55,7 +55,10 @@ public class PlayerEvents : MonoBehaviour
     {
         moveController.IsRootMotion(false, false);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        soundArea.SetSoundLevel(ActionSoundType.WAIT);
+        if(!IsBreathHold)
+        {
+            soundArea.SetSoundLevel(ActionSoundType.WAIT);
+        }
         statusController.StateUpdate(MoveType.WAIT, stateController.IsSquat);
     }
     /// <summary>
@@ -77,7 +80,7 @@ public class PlayerEvents : MonoBehaviour
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        moveController.Move();
+        moveController.Move(IsBreathHold);
         statusController.StateUpdate(MoveType.WALK, stateController.IsSquat);
     }
     /// <summary>
@@ -106,7 +109,7 @@ public class PlayerEvents : MonoBehaviour
         playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
         soundArea.SetSoundLevel(ActionSoundType.DASH);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        moveController.Move();
+        moveController.Move(false);
         statusController.StateUpdate(MoveType.DASH, stateController.IsSquat);
     }
     /// <summary>
@@ -129,7 +132,10 @@ public class PlayerEvents : MonoBehaviour
     {
         playerCollider.height = 0.4f;
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
-        soundArea.SetSoundLevel(ActionSoundType.SQUAT);
+        if (IsBreathHold)
+            soundArea.SetSoundLevel(ActionSoundType.BREATHHOLD_SQUAT);
+        else
+            soundArea.SetSoundLevel(ActionSoundType.SQUAT);
         moveCamera.Rotation(CameraType.NORMAL, false);
     }
     /// <summary>
@@ -147,14 +153,12 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BreathHoldStart()
     {
-        IsBreathHold = true;
     }
     /// <summary>
     /// 息止め
     /// </summary>
     public void BreathHold()
     {
-        IsBreathHold = true;
         cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLD, stateController.IsSquat);
@@ -165,7 +169,6 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BreathHoldEnd()
     {
-        IsBreathHold = false;
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
     }
@@ -174,27 +177,24 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BreathHoldMoveStart() 
     {
-        IsBreathHold = true;
     }
     /// <summary>
     /// 息止め移動
     /// </summary>
     public void BreathHoldMove()
     {
-        IsBreathHold = true;
         cameraAnimationController.AnimStart(CameraAnimType.BREATHHOLD);
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLDMOVE, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL, true);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.BREATHHOLD);
-        moveController.Move();
+        moveController.Move(IsBreathHold);
     }
     /// <summary>
     /// 息止め終了
     /// </summary>
     public void BreathHoldMoveEnd()
     {
-        IsBreathHold = false;
         playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
     }
@@ -297,7 +297,8 @@ public class PlayerEvents : MonoBehaviour
     {
         statusController.StateUpdate(MoveType.HIDE, stateController.IsSquat);
         hideController.EndHideAction(false);
-        soundArea.SetSoundLevel(ActionSoundType.HIDE);
+        if(!IsBreathHold)
+            soundArea.SetSoundLevel(ActionSoundType.HIDE);
         hideController.HideCameraMove();
 
         hideController.ChangeRootMotion();

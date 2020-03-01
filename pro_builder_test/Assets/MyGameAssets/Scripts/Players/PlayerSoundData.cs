@@ -9,9 +9,6 @@ using UnityEngine;
 public class PlayerSoundData : ScriptableObject
 {
     [SerializeField]
-    [Tooltip("息止め時減衰係数")]
-    float breathHoldFactor = 0.2f;
-    [SerializeField]
     [Tooltip("息が少し乱れているときの増加係数")]
     float breathSmallConfusionFactor = 1.5f;
     [SerializeField]
@@ -86,7 +83,6 @@ public class PlayerSoundData : ScriptableObject
     float stamina = 10;
 
     // 各値のプロパティ
-    public float BreathHoldFactor => breathHoldFactor;
     public float BreathSmallConfusionFactor => breathSmallConfusionFactor;
     public float BreathMediumConfusionFactor => breathMediumConfusionFactor;
     public float BreathLargeConfusionFactor => breathLargeConfusionFactor;

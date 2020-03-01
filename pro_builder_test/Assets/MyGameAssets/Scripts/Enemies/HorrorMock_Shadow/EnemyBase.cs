@@ -420,7 +420,6 @@ public class EnemyBase : MonoBehaviour
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnDetectedPlayer(other.gameObject);
-        Debug.Log("OnEnterViewRange");
     }
 
     /// <summary>
@@ -442,7 +441,6 @@ public class EnemyBase : MonoBehaviour
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnMissingPlayer(other.gameObject);
-        Debug.Log("OnExitViewRange");
     }
 
     /// <summary>
@@ -452,14 +450,12 @@ public class EnemyBase : MonoBehaviour
     {
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        Debug.Log("OnEnterAttackRange");
         states[(int)currentState].OnEnterAttackRange(other.gameObject);
     }
     public void OnExitAttackRange(Collider other)
     {
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        Debug.Log("OnExitAttackRange");
         states[(int)currentState].OnExitAttackRange(other.gameObject);
     }
 

@@ -130,18 +130,18 @@ public class PlayerMoveController : MonoBehaviour
     /// <summary>
     /// 移動
     /// </summary>
-    public void Move()
+    public void Move(bool isBreathHold)
     {
         IsRootMotion(false, false);
 
         //　移動速度計算
-        SpeedCalculation();
+        SpeedCalculation(isBreathHold);
     }
 
     /// <summary>
     /// 移動速度の計算
     /// </summary>
-    void SpeedCalculation()
+    void SpeedCalculation(bool isBreathHold)
     {
         // スティックの入力ベクトル取得
         Vector2 stick = new Vector2(keyController.GetStick(StickType.LEFTSTICK).x, keyController.GetStick(StickType.LEFTSTICK).y);
@@ -154,7 +154,7 @@ public class PlayerMoveController : MonoBehaviour
         if (keyController.GetKey(KeyType.MOVE))
         {
             dirTypeSpeedLimit = ChangeDirTypeSpeedLimit(stick);
-            stickSpeedLimit = ChangeStickSpeedLimit(length);
+            stickSpeedLimit = ChangeStickSpeedLimit(length, isBreathHold);
             moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit;
         }
 
@@ -268,21 +268,30 @@ public class PlayerMoveController : MonoBehaviour
     /// 入力ベクトルの長さによってスピード上限変更
     /// </summary>
     /// <param name="length">ベクトルの長さ</param>
-    float ChangeStickSpeedLimit(float length)
+    float ChangeStickSpeedLimit(float length, bool isBreathHold)
     {
         if (length >= 1)
         {
-            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
+            if (isBreathHold)
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.BREATHHOLD_WALK);
+            else
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.WALK);
             return 1;
         }
         else if (length > 0.5f)
         {
-            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
+            if (isBreathHold)
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.BREATHHOLD_STEALTH);
+            else
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.5f;
         }
         else if (length > 0.1f)
         {
-            soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
+            if (isBreathHold)
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.BREATHHOLD_STEALTH);
+            else
+                soundAreaSpawner.SetSoundLevel(SoundAreaSpawner.ActionSoundType.STEALTH);
             return 0.2f;
         }
 

@@ -66,7 +66,7 @@ public class SoundAreaSpawner : MonoBehaviour
     void Update()
     {
         // 音量レベルが変わるか、スポーンまでのフレーム数に達したら
-        if (TotalSoundLevel != soundLevel || spawnframeCount >= spawnframe)
+        if ((TotalSoundLevel != soundLevel || spawnframeCount >= spawnframe) && soundLevel != 0)
         {
             // スポーン
             Spawn();
@@ -165,7 +165,7 @@ public class SoundAreaSpawner : MonoBehaviour
         }
 
         // 係数計算
-        var confusionFactor = 0.0f;
+        var confusionFactor = 1.0f;
         switch(breathController.State) // 息切れレベル
         {
             case PlayerBreathController.BrethState.SMALLCONFUSION:
@@ -182,20 +182,18 @@ public class SoundAreaSpawner : MonoBehaviour
                 break;
         }
 
-        // 息止め中は、ブレスファクターによってゼロになるかどうか決める
-        if(playerEvents.IsBreathHold)
+        // 息止め中以外は、息切れレベルの騒音を掛け算
+        if(!playerEvents.IsBreathHold)
         {
-            setLevel *= soundData.BreathHoldFactor;
+            setLevel *= confusionFactor;
         }
 
         // 大きい音が鳴ったら大きい音優先
         if (setLevel > soundLevel)
         {
             soundLevel = setLevel;
+            Debug.Log("sound level:" + soundLevel + " increased:" + type + " playerStateController.IsBreathHold:" + playerEvents.IsBreathHold);
         }
-
-        //if (setLevel != 0)
-        //    Debug.Log("sound level:"+ soundLevel +" increased:" + type + " playerStateController.IsBreathHold:" + playerEvents.IsBreathHold);
     }
 
     /// <summary>

@@ -57,7 +57,7 @@ public class SoundAreaController : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        UnityEditor.Handles.color = new Color(0,1,0);
+        UnityEditor.Handles.color = new Color(1,0,1);
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, soundCollider.radius);
     }
 #endif
