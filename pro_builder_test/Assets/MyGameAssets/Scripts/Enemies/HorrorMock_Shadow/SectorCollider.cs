@@ -43,6 +43,8 @@ public class SectorCollider : MonoBehaviour
     [SerializeField]
     ColliderEvent visibleExit = default;
 
+    bool enter;
+
     void Start()
     {
         GameObject colliderObject = new GameObject("Collider");
@@ -90,17 +92,49 @@ public class SectorCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (IsVisibleObject(other))
+        if (other.gameObject.layer != targetLayer) { return; }
+
+        if (IsVisibleObject(other) && !enter)
         {
+            enter = true;
             visibleEnter.Invoke(other);
         }
     }
 
     void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.layer != targetLayer) { return; }
+
         if (IsVisibleObject(other))
         {
-            visibleStay.Invoke(other);
+            if (!enter)
+            {
+                enter = true;
+                visibleEnter.Invoke(other);
+            }
+            else
+            {
+                visibleStay.Invoke(other);
+            }
+        }
+        else
+        {
+            if(enter)
+            {
+                enter = false;
+                visibleExit.Invoke(other);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer != targetLayer) { return; }
+
+        if (enter)
+        {
+            enter = false;
+            visibleExit.Invoke(other);
         }
     }
 

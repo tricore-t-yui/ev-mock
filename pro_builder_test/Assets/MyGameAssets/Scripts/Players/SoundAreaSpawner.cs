@@ -165,21 +165,24 @@ public class SoundAreaSpawner : MonoBehaviour
         }
 
         // 係数計算
+        var confusionFactor = 0.0f;
         switch(breathController.State) // 息切れレベル
         {
             case PlayerBreathController.BrethState.SMALLCONFUSION:
-                setLevel *= soundData.BreathSmallConfusionFactor;
+                confusionFactor = soundData.BreathSmallConfusionFactor;
                 break;
             case PlayerBreathController.BrethState.MEDIUMCONFUSION:
-                setLevel *= soundData.BreathMediumConfusionFactor;
+                confusionFactor = soundData.BreathMediumConfusionFactor;
                 break;
             case PlayerBreathController.BrethState.LARGECONFUSION:
             case PlayerBreathController.BrethState.BREATHLESSNESS:
-                setLevel *= soundData.BreathLargeConfusionFactor;
+                confusionFactor = soundData.BreathLargeConfusionFactor;
                 break;
             default:
                 break;
         }
+
+        // 息止め中は、ブレスファクターによってゼロになるかどうか決める
         if(playerEvents.IsBreathHold)
         {
             setLevel *= soundData.BreathHoldFactor;

@@ -9,6 +9,8 @@ public class RangeParameter
     public float appear = 4;
     [Range(0.1f, 30), Tooltip("ベースの聴覚範囲")]
     public float noiseHear = 2.5f;
+    [Range(0, 10), Tooltip("ノイズを聞いたときに決定されるターゲットポジションの分布誤差（メートル）")]
+    public float noiseTargetPosRandomRange = 1.0f;
     [Range(0, 30), Tooltip("警戒状態時に加算延長される聴覚範囲")]
     public float noiseHearAddRangeCaution = 0.1f;
     [Range(0, 30), Tooltip("攻撃状態時に加算延長される聴覚範囲")]
@@ -79,7 +81,7 @@ public class RangeParameter
     [SerializeField]
     [Tooltip("攻撃ヒット範囲の距離を指定します。")]
     [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
-    public float attackDistance = 1.5f;
+    public float attackRange = 1.5f;
 }
 
 public class EnemyParameter : MonoBehaviour
@@ -209,6 +211,8 @@ public class EnemyParameter : MonoBehaviour
     public float AppearFadeTime => rangeParameter.appearFadeTime;
     public float TransparencyMin => rangeParameter.transparencyMin;
     public float TransparencyMax => rangeParameter.transparencyMax;
+    public float NoiseTargetPosRandomRange => rangeParameter.noiseTargetPosRandomRange;
+    public float AttackRange => rangeParameter.attackRange;
 
     [Tooltip("最初に音を聞いたときに、警戒に移行するまでの時間を設定します。" +
         "\nこの時間までに警戒範囲から離れれば気づかれません。")]
@@ -342,7 +346,7 @@ public class EnemyParameter : MonoBehaviour
         {
             viewRange.gameObject.SetActive(false);
         }
-        if (rangeParameter.attackAngle < 0.01f || rangeParameter.attackDistance < 0.01f)
+        if (rangeParameter.attackAngle < 0.01f || rangeParameter.attackRange < 0.01f)
         {
             attackRange.gameObject.SetActive(false);
         }
@@ -389,7 +393,7 @@ public class EnemyParameter : MonoBehaviour
         viewRange.Angle = rangeParameter.viewAngles[(int)type];
         viewRange.Distance = rangeParameter.viewDistances[(int)type];
         attackRange.Angle = rangeParameter.attackAngle;
-        attackRange.Distance = rangeParameter.attackDistance;
+        attackRange.Distance = rangeParameter.attackRange;
     }
 
 #if UNITY_EDITOR

@@ -21,6 +21,7 @@ public abstract class StateBase
 
     public bool IsSetedNextState { get; private set; } = false;
     public int NextStateId { get; private set; } = 0;
+    protected bool IsInAttackRange { get; private set; }
 
     /// <summary>
     /// 初期化
@@ -52,7 +53,9 @@ public abstract class StateBase
     /// <summary>
     /// 終了
     /// </summary>
-    public virtual void Exit() { }
+    public virtual void Exit() { 
+        ResetNextStateFlag();
+    }
 
     /// <summary>
     /// 次のステートのIDをセット
@@ -90,6 +93,11 @@ public abstract class StateBase
         if (soundSpawner.TotalSoundLevel > parameter.DirectDetectSoundLevel)
         {
             SetNextState((int)StateType.Fighting);
+
+            // 姿は見えていないので目標位置はノイズの位置
+            var randomRange = parameter.NoiseTargetPosRandomRange;
+            var noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
+            agent.SetDestination(noisePos);
         }
     }
 
@@ -114,7 +122,33 @@ public abstract class StateBase
     }
 
     /// <summary>
+    /// プレイヤーを発見している視線ループ
+    /// </summary>
+    public virtual void OnDetectPlayerStay(GameObject player) { }
+
+    /// <summary>
     ///  プレイヤーを見失った
     /// </summary>
     public virtual void OnMissingPlayer(GameObject player) { }
+
+    /// <summary>
+    /// 攻撃実行
+    /// </summary>
+    public virtual void OnAttack(){ }
+
+    /// <summary>
+    /// 攻撃範囲入った
+    /// </summary>
+    public void OnEnterAttackRange(GameObject player)
+    {
+        IsInAttackRange = true;
+    }
+
+    /// <summary>
+    /// 攻撃範囲抜けた
+    /// </summary>
+    public void OnExitAttackRange(GameObject player)
+    {
+        IsInAttackRange = false;
+    }
 }
