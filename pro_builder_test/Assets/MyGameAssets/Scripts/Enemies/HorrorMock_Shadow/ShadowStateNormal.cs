@@ -13,6 +13,8 @@ public class ShadowStateNormal : StateBase
     float detectedNoiseLevel = 0;
     Vector3 noisePos;
 
+    bool IsDetectedNoise = false;
+
     /// <summary>
     /// 開始
     /// </summary>
@@ -22,6 +24,8 @@ public class ShadowStateNormal : StateBase
         currentCheckPointId = 0;
         safeCounter = parameter.SafeTime;
         detectedNoiseLevel = 0;
+        IsDetectedNoise = false;
+        ForceTransparentOff = false;
 
         // 移動速度を設定
         agent.speed = parameter.NormalMoveSpeed;
@@ -39,8 +43,9 @@ public class ShadowStateNormal : StateBase
     /// </summary>
     public override void Update()
     {
+        if (IsSetedNextState) return;
         // 音を聞いている
-        if (animator.GetBool("IsDetectedNoise"))
+        if (IsDetectedNoise)
         {
             // 時間を減らしていく
             safeCounter -= Time.deltaTime;
@@ -114,9 +119,10 @@ public class ShadowStateNormal : StateBase
         //////////////////
         if (soundSpawner.TotalSoundLevel > 0)
         {
-            noisePos = noise.transform.position;
+            var randomRange = parameter.NoiseTargetPosRandomRange;
+            noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
             // 音を聞いた
-            animator.SetBool("IsDetectedNoise", true);
+            IsDetectedNoise = true;
         }
     }
 }

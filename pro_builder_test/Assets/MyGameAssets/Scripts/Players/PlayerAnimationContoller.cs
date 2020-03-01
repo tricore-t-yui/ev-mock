@@ -62,6 +62,7 @@ public class PlayerAnimationContoller : MonoBehaviour
     GameObject shoesArm = default;                              // 靴もっている腕
 
     public bool IsEndAnim { get; private set; } = true;         // アニメーションが終わったかどうか
+    public bool IsBreathHold { get { return animator.GetBool("Stealth"); } }
 
     /// <summary>
     /// 開始処理
