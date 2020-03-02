@@ -116,8 +116,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32000
   targetLayerName: Player
-  angle: 120
-  distance: 3
+  angle: 45
+  distance: 1.5
   borderColor: {r: 1, g: 0, b: 0, a: 1}
   visibleEnter:
     m_PersistentCalls:
@@ -543,11 +543,11 @@ MonoBehaviour:
   initialState: 0
   rangeParameter:
     appear: 3
-    noiseHear: 0.5
-    noiseTargetPosRandomRange: 0
+    noiseHear: 1
+    noiseTargetPosRandomRange: 1
     noiseHearAddRangeCaution: 2
     noiseHearAddRangeFighting: 2
-    directDetect: 0.5
+    directDetect: 0.1
     fighting: 4
     isTransparencyByDistance: 1
     appearFadeTime: 0.1
@@ -573,11 +573,11 @@ MonoBehaviour:
   directDetectSoundLevel: 4
   safeTime: 0
   isDetectNoiseToTransparent: 1
-  cautionMoveSpeed: 1.5
+  cautionMoveSpeed: 0.8
   cautionWaitTime: 1.5
   returnWarpDistance: 40
-  fightingMoveSpeed: 4
-  attackedWaitTime: 3
+  fightingMoveSpeed: 1.5
+  attackedWaitTime: 7
   damage: 1
   cryParameter:
     soundExpansionSpeed: 1
@@ -686,7 +686,7 @@ NavMeshAgent:
   m_Height: 1.4
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 1
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6378515810073243857
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,7 +990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0183d30a9ecc64d9d19d1a46231f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 4
+  radius: 3
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 256

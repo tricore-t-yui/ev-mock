@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimatorStateTypeIdChanger : StateMachineBehaviour
 {
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         animator.SetInteger("AnimatorStateTypeId", animator.GetInteger("NextStateTypeId"));
     }

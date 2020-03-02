@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// ツン。ほとんど見た目が変わった影人間
@@ -22,8 +23,11 @@ public class Tsun : EnemyBase
         Initialize(states);
     }
 
-    public void SetTargetPos(Vector3 pos)
+    /// <summary>
+    /// スポーンされたとき
+    /// </summary>
+    public void Spawned(Vector3 initializePos, ShadowHuman detectedShadowHuman, List<ShadowHuman> shadowHumans)
     {
-        agent.SetDestination(pos);
+        Spawn(EnemyParameter.StateType.Caution, detectedShadowHuman.transform.position, initializePos);
     }
 }
