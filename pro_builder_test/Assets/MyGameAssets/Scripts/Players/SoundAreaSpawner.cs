@@ -192,7 +192,7 @@ public class SoundAreaSpawner : MonoBehaviour
         if (setLevel > soundLevel)
         {
             soundLevel = setLevel;
-            Debug.Log("sound level:" + soundLevel + " increased:" + type + " playerStateController.IsBreathHold:" + playerEvents.IsBreathHold);
+            //Debug.Log("sound level:" + soundLevel + " increased:" + type + " playerStateController.IsBreathHold:" + playerEvents.IsBreathHold);
         }
     }
 
