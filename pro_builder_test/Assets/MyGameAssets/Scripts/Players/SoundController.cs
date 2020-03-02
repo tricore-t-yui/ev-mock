@@ -20,6 +20,10 @@ public class SoundController : MonoBehaviour
     PlayerBreathController breathController = default;  // 息管理クラス
     [SerializeField]
     PlayerStateController stateController = default;    // ステート管理クラスz
+    [SerializeField]
+    float walkVolume = 0.02f;
+    [SerializeField]
+    float runVolume = 0.03f;
 
     SoundType soundType = default;                      // 音のタイプ
 
@@ -29,6 +33,15 @@ public class SoundController : MonoBehaviour
     void OnEnable()
     {
         soundType = spawner.GetSoundType();
+        switch (soundType)
+        {
+            case SoundType.Breth: BreathVolume(); break;
+            case SoundType.HeartSound: HeartSoundVolume(); break;
+            case SoundType.Walk: WalkVolume(); break;
+            case SoundType.Dash: DashVolume(); break;
+            case SoundType.DamageObject: DamageObjectVolume(); break;
+            default: break;
+        }
         audioSource.clip = spawner.GetPlaySound();
         audioSource.loop = spawner.GetIsLoop();
         audioSource.Play();
@@ -39,16 +52,15 @@ public class SoundController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        switch(soundType)
+        switch (soundType)
         {
             case SoundType.Breth: BreathVolume(); break;
             case SoundType.HeartSound: HeartSoundVolume(); break;
-            case SoundType.Walk: WalkVolume();break;
-            case SoundType.Dash:DashVolume();break;
-            case SoundType.DamageObject: DamageObjectVolume();break;
-            default:break;
+            case SoundType.Walk: WalkVolume(); break;
+            case SoundType.Dash: DashVolume(); break;
+            case SoundType.DamageObject: DamageObjectVolume(); break;
+            default: break;
         }
-
         if (!audioSource.isPlaying || spawner.IsStopSound(audioSource.clip))
         {
             gameObject.SetActive(false);
@@ -90,11 +102,11 @@ public class SoundController : MonoBehaviour
     {
         if(stateController.IsSquat)
         {
-            audioSource.volume = 0.15f;
+            audioSource.volume = 0.04f * 0.5f;
         }
         else
         {
-            audioSource.volume = 0.35f;
+            audioSource.volume = 0.04f;
         }
     }
 
@@ -103,7 +115,7 @@ public class SoundController : MonoBehaviour
     /// </summary>
     void DashVolume()
     {
-        audioSource.volume = 0.5f + 0.1f * Random.Range(-1, 1);
+        audioSource.volume = 0.045f + 0.005f * Random.Range(-1, 1);
         audioSource.pitch = 1 + 0.05f * Random.Range(-1, 1);
     }
 
