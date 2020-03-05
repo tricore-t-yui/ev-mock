@@ -11,13 +11,18 @@ public class EventTrigger : MonoBehaviour
     {
         [LabelText("当たり判定")]
         Collide,
-        [LabelText("(未実装) 視線当たり判定")]
+        [LabelText("視線当たり判定")]
         ViewCollide,
         [LabelText("時間")]
         Time
     }
     [SerializeField, LabelText("発動種別")]
     TriggerKind kind = TriggerKind.Collide;
+    public bool IsViewCollide { get { return kind == TriggerKind.ViewCollide; } }
+
+    [SerializeField, Range(0.1f, 100.0f), EnableIf("kind", TriggerKind.ViewCollide), LabelText("視線レイの有効距離")]
+    float viewColideRange = 5.0f;
+    public float ViewColideRange => viewColideRange;
 
     [SerializeField, LabelText("発動に必要なスイッチ名")]
     string needSwitchName = "";
@@ -205,6 +210,11 @@ public class EventTrigger : MonoBehaviour
     /// </summary>
     public void OnViewEnter()
     {
-        // TODO: 実装
+        if (!isDoingEvent
+           && Time.timeSinceLevelLoad - lastEventEndTime >= triggerCoolDown
+           )
+        {
+            CheckAndExecuteEvent();
+        }
     }
 }
