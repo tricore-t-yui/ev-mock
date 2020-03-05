@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-[TypeInfoBox("時間発生、当たり発生、視線発生によって、直下のEventObjectをランダムで起動させる。")]
+[TypeInfoBox("時間発生、当たり発生、視線発生によって、直下のEventObjectをランダムで起動させる。" +
+"\nイベントオブジェクトはデフォルト非表示にすること")]
 public class EventTrigger : MonoBehaviour
 {
     enum TriggerKind
@@ -60,6 +61,7 @@ public class EventTrigger : MonoBehaviour
 
         foreach (var item in GetComponentsInChildren<EventObject>(true))
         {
+            item.gameObject.SetActive(false);
             eventObjectList.Add(item);
         }
         lastEventEndTime = Time.timeSinceLevelLoad;
@@ -188,6 +190,7 @@ public class EventTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player"
+        && other.gameObject.layer == LayerMask.NameToLayer("Player")
         && !isDoingEvent
         && kind == TriggerKind.Collide
         && Time.timeSinceLevelLoad - lastEventEndTime >= triggerCoolDown
