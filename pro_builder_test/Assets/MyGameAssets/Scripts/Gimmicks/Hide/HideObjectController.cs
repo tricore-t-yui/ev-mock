@@ -20,11 +20,7 @@ public class HideObjectController : MonoBehaviour
     [SerializeField]
     Animator lockerAnim = default;                  // ロッカーのアニメーション
     [SerializeField]
-    Transform player = default;                     // プレイヤー
-    [SerializeField]
     BoxCollider interactCollider = default;         // インタラクト可能エリア 
-    [SerializeField]
-    PlayerHideController hideController = default;  // 隠れるアクション管理クラス
     [SerializeField]
     BoxCollider[] objectCollider = default;         // コライダー
     [SerializeField]
@@ -36,11 +32,16 @@ public class HideObjectController : MonoBehaviour
     Vector3 rightForward = default;                 // 位置による向きタイプ変更の基準となる右前の角の座標
     Vector3 leftForward = default;                  // 位置による向きタイプ変更の基準となる左前の角の座標
 
+    Transform player = default;                     // プレイヤー
+    PlayerHideController hideController = default;  // 隠れるアクション管理クラス
+
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
+        player = PlayerHideController.Inst.transform;
+        hideController = PlayerHideController.Inst;
         rightForward = new Vector3(transform.position.x - transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
         leftForward = new Vector3(transform.position.x + transform.localScale.x / 2, transform.position.y, transform.position.z - transform.localScale.z / 2);
 

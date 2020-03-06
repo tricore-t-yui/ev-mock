@@ -10,6 +10,8 @@ using StickType = KeyController.StickType;
 /// </summary>
 public class PlayerDoorController : MonoBehaviour
 {
+    public static PlayerDoorController Inst { get; private set; }
+    private void Awake() { Inst = this; }
     /// <summary>
     /// 開けるタイプ
     /// </summary>

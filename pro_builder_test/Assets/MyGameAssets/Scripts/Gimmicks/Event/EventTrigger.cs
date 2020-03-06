@@ -16,6 +16,12 @@ public class EventTrigger : MonoBehaviour
         [LabelText("時間")]
         Time
     }
+
+#if DEBUG
+    [SerializeField, LabelText("デバッグ：トリガー範囲表示")]
+    bool debugDrawRange = true;
+#endif
+
     [SerializeField, LabelText("発動種別")]
     TriggerKind kind = TriggerKind.Collide;
     public bool IsViewCollide { get { return kind == TriggerKind.ViewCollide; } }
@@ -75,7 +81,6 @@ public class EventTrigger : MonoBehaviour
             lastEventEndTime -= triggerCoolDown;    // 初回はクールダウンなしで発生できるようにするため
         }
     }
-
     private void Update()
     {
         // 時間発動の場合はチェック
@@ -217,4 +222,33 @@ public class EventTrigger : MonoBehaviour
             CheckAndExecuteEvent();
         }
     }
+
+#if UNITY_EDITOR
+#if DEBUG
+    BoxCollider debugBox;
+    SphereCollider debugSphere;
+    bool debugGizmoCheck = false;
+    private void OnDrawGizmos()
+    {
+        if (!debugGizmoCheck)
+        {
+            debugBox = GetComponent<BoxCollider>();
+            debugSphere = GetComponent<SphereCollider>();
+            debugGizmoCheck = true;
+        }
+        if (debugDrawRange)
+        {
+            Gizmos.color = new Color(0.6f, 1.0f, 0.6f, 0.1f);
+            if (debugBox)
+            {
+                Gizmos.DrawCube(transform.position + debugBox.center, debugBox.size);
+            }
+            if (debugSphere)
+            {
+                Gizmos.DrawSphere(transform.position + debugSphere.center, debugSphere.radius);
+            }
+        }
+    }
+#endif
+#endif
 }
