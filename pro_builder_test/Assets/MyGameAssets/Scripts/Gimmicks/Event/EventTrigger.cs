@@ -238,14 +238,15 @@ public class EventTrigger : MonoBehaviour
         }
         if (debugDrawRange)
         {
-            Gizmos.color = new Color(0.6f, 1.0f, 0.6f, 0.1f);
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.color = new Color(0.6f, 1.0f, 0.6f, 1.0f);
             if (debugBox)
             {
-                Gizmos.DrawCube(transform.position + debugBox.center, debugBox.size);
+                Gizmos.DrawWireCube(debugBox.center, debugBox.size);
             }
             if (debugSphere)
             {
-                Gizmos.DrawSphere(transform.position + debugSphere.center, debugSphere.radius);
+                Gizmos.DrawWireSphere(debugSphere.center, debugSphere.radius);
             }
         }
     }
