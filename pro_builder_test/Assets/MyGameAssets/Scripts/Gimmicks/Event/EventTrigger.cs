@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-[TypeInfoBox("時間発生、当たり発生、視線発生によって、直下のEventObjectをランダムで起動させる。")]
+[TypeInfoBox("時間発生、当たり発生、視線発生によって、直下のEventObjectをランダムで起動させる。" +
+"\nイベントオブジェクトはデフォルト非表示にすること")]
 public class EventTrigger : MonoBehaviour
 {
     enum TriggerKind
     {
         [LabelText("当たり判定")]
         Collide,
-        [LabelText("(未実装) 視線当たり判定")]
+        [LabelText("視線当たり判定")]
         ViewCollide,
         [LabelText("時間")]
         Time
     }
     [SerializeField, LabelText("発動種別")]
     TriggerKind kind = TriggerKind.Collide;
+    public bool IsViewCollide { get { return kind == TriggerKind.ViewCollide; } }
+
+    [SerializeField, Range(0.1f, 100.0f), EnableIf("kind", TriggerKind.ViewCollide), LabelText("視線レイの有効距離")]
+    float viewColideRange = 5.0f;
+    public float ViewColideRange => viewColideRange;
 
     [SerializeField, LabelText("発動に必要なスイッチ名")]
     string needSwitchName = "";
@@ -60,6 +66,7 @@ public class EventTrigger : MonoBehaviour
 
         foreach (var item in GetComponentsInChildren<EventObject>(true))
         {
+            item.gameObject.SetActive(false);
             eventObjectList.Add(item);
         }
         lastEventEndTime = Time.timeSinceLevelLoad;
@@ -188,6 +195,7 @@ public class EventTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player"
+        && other.gameObject.layer == LayerMask.NameToLayer("Player")
         && !isDoingEvent
         && kind == TriggerKind.Collide
         && Time.timeSinceLevelLoad - lastEventEndTime >= triggerCoolDown
@@ -202,6 +210,11 @@ public class EventTrigger : MonoBehaviour
     /// </summary>
     public void OnViewEnter()
     {
-        // TODO: 実装
+        if (!isDoingEvent
+           && Time.timeSinceLevelLoad - lastEventEndTime >= triggerCoolDown
+           )
+        {
+            CheckAndExecuteEvent();
+        }
     }
 }
