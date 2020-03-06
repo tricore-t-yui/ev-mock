@@ -38,6 +38,10 @@ public class PlayerHideController : MonoBehaviour
     KeyController keyController = default;                      // キー操作クラス
     [SerializeField]
     SoundSpawner sound = default;                                   // 音生成クラス
+    [SerializeField]
+    Rigidbody playerRigidbody = default;                                   // リジッドボディ
+
+    Vector3 hidePosition = default;
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -163,6 +167,7 @@ public class PlayerHideController : MonoBehaviour
             case HideObjectType.BED:
                 IsHideBed = true; break;
         }
+        hidePosition = transform.position;
     }
 
     /// <summary>
@@ -202,6 +207,7 @@ public class PlayerHideController : MonoBehaviour
                     if (IsHideLocker)
                     {
                         moveController.IsRootMotion(false, false);
+                        transform.position = new Vector3(hidePosition.x, transform.position.y, hidePosition.z);
                     }
                     else
                     {
