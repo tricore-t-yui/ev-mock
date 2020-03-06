@@ -10,6 +10,9 @@ using KeyType = KeyController.KeyType;
 /// </summary>
 public class PlayerHideController : MonoBehaviour
 {
+    public static PlayerHideController Inst{ get; private set; }
+    private void Awake() { Inst = this; }
+
     /// <summary>
     /// オブジェクトタイプ
     /// </summary>
