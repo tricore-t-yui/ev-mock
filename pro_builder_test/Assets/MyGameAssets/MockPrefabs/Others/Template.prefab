@@ -2268,7 +2268,7 @@ MonoBehaviour:
   - 0.4
   - 1
   breathEndClip:
-  - {fileID: 8300000, guid: 8d42f0cfacf431d498f0dd0eea12aa8f, type: 3}
+  - {fileID: 8300000, guid: b36580dc891ea954cace0b9add9f075e, type: 3}
   - {fileID: 8300000, guid: 8d42f0cfacf431d498f0dd0eea12aa8f, type: 3}
   - {fileID: 8300000, guid: 927aa094107078a40a7cb8c3970fa255, type: 3}
   - {fileID: 8300000, guid: 606773b754a8c86448727bda1ddbc9b2, type: 3}
@@ -2279,11 +2279,33 @@ MonoBehaviour:
   - 1
   volumeEnd:
   - 0.2
-  - 0.1
+  - 0.17
   - 0.2
   - 1
+  deepClip: {fileID: 8300000, guid: 08b4b64d8aa12804db9fa35c39b5b171, type: 3}
+  deepPitch: 0.95
+  deepVolume:
+  - 0.2
+  - 0.2
+  - 0.4
+  - 0.6
+  deepEndClip:
+  - {fileID: 8300000, guid: 0c8cb359c1aa7a849bdcb212b01c6cc2, type: 3}
+  - {fileID: 8300000, guid: 0c8cb359c1aa7a849bdcb212b01c6cc2, type: 3}
+  - {fileID: 8300000, guid: e7b0fcd48f364544ab11072ad3192a65, type: 3}
+  - {fileID: 8300000, guid: e7b0fcd48f364544ab11072ad3192a65, type: 3}
+  pitchDeepEnd:
+  - 1
+  - 1
+  - 1
+  - 1
+  volumeDeepEnd:
+  - 0.2
+  - 0.2
+  - 0.4
+  - 0.6
   stateLoopClip:
-  - {fileID: 8300000, guid: 083936bf01260124480a9ef237bdadc5, type: 3}
+  - {fileID: 8300000, guid: b36580dc891ea954cace0b9add9f075e, type: 3}
   - {fileID: 8300000, guid: 083936bf01260124480a9ef237bdadc5, type: 3}
   - {fileID: 8300000, guid: 3eda4717094c40a4cbf8978cc01222ee, type: 3}
   - {fileID: 8300000, guid: e7f5a342aa84e1845adfa641a28ea7b2, type: 3}
@@ -2298,18 +2320,23 @@ MonoBehaviour:
   - 1.02
   - 1
   volumeLoop:
-  - 0
-  - 0.1
+  - 0.2
+  - 0.17
   - 0.17
   - 0.3
   breathEndWait:
-  - 0
-  - 1
-  - 0.7
+  - 2
+  - 2
+  - 1.5
   - 0.3
   pitchBand: 0.01
+  breathController: {fileID: 2733939781789183308}
+  staminaController: {fileID: 2733939781789183307}
+  playerEvent: {fileID: 3528424410311533378}
+  playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
   debugState: 0
   debugBreathHold: 0
+  debugDeepBreath: 0
 --- !u!1 &5527408832885074136
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,6 +3176,10 @@ PrefabInstance:
       propertyPath: heartSe
       value: 
       objectReference: {fileID: 1008716947756538460}
+    - target: {fileID: 1084558967, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9c93e799392d4a27b27c3528733220d, type: 3}
 --- !u!114 &2733939781530542364 stripped
@@ -4561,11 +4592,6 @@ PrefabInstance:
       propertyPath: soundAreaSpawner
       value: 
       objectReference: {fileID: 616835485917509354}
-    - target: {fileID: 197961341441321707, guid: e13c6f735bdda473d9317b5068cae389,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
         type: 3}
       propertyPath: m_AnchorMin.x

@@ -94,7 +94,9 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     float RecoveryMagnification()
     {
-        if (breathController.NowAmount <= playerData.MediumDisturbance)
+        if (breathController.NowAmount <= playerData.LargeDisturbance)
+            return playerData.StaminaConfusionLRecoveryFactor;
+        else if (breathController.NowAmount <= playerData.MediumDisturbance)
             return playerData.StaminaConfusionMRecoveryFactor;
         else if (breathController.NowAmount <= playerData.SmallDisturbance)
             return playerData.StaminaConfusionSRecoveryFactor;
@@ -108,6 +110,8 @@ public class playerStaminaController : MonoBehaviour
     float ConsumptionMagnification()
     {
         if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionLDecrementFactor;
+        else if (breathController.NowAmount <= playerData.MediumDisturbance)
             return playerData.StaminaConfusionMDecrementFactor;
         else if (breathController.NowAmount <= playerData.SmallDisturbance)
             return playerData.StaminaConfusionSDecrementFactor;

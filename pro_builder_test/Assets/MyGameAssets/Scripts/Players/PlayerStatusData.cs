@@ -41,6 +41,9 @@ public class PlayerStatusData : ScriptableObject
     [SerializeField]
     [LabelText("息の乱れ(中)の基準値")]
     float mediumDisturbance = 50;               // 息の乱れ(中)の基準値
+    [SerializeField]
+    [LabelText("息の乱れ(大)の基準値")]
+    float largeDisturbance = 25;               // 息の乱れ(大)の基準値
 
     // 体力
     [Header("体力系")]
@@ -71,16 +74,26 @@ public class PlayerStatusData : ScriptableObject
     [SerializeField]
     [LabelText("深呼吸時のスタミナの回復量")]
     float staminaDeepBreathRecovery = 0.5f;     // 深呼吸時のスタミナの回復量
-    [SerializeField, LabelText("息が乱れている時のスタミナ回復量(倍率)")]
+    [SerializeField, LabelText("息が少し乱れている時のスタミナ回復量(倍率)")]
     float staminaConfusionSRecoveryFactor = 0.5f;
-    [SerializeField, LabelText("息が大きく乱れている時のスタミナ回復量(倍率)")]
+    [SerializeField, LabelText("息が乱れている時のスタミナ回復量(倍率)")]
     float staminaConfusionMRecoveryFactor = 0.1f;
-    [SerializeField, LabelText("息が乱れている時のスタミナ消費量(倍率)")]
+    [SerializeField, LabelText("息が大きく乱れている時のスタミナ回復量(倍率)")]
+    float staminaConfusionLRecoveryFactor = 0.1f;
+    [SerializeField, LabelText("息が少し乱れている時のスタミナ消費量(倍率)")]
     float staminaConfusionSDecrementFactor = 1.5f; 
-    [SerializeField, LabelText("息が大きく乱れている時のスタミナ消費量(倍率)")]
+    [SerializeField, LabelText("息が乱れている時のスタミナ回復量(倍率)")]
     float staminaConfusionMDecrementFactor = 3.0f;
+    [SerializeField, LabelText("息が大きく乱れている時のスタミナ消費量(倍率)")]
+    float staminaConfusionLDecrementFactor = 3.0f;
     [SerializeField, LabelText("走りだせる最低スタミナ値")]
     float staminaDashMin = 10.0f;
+    [SerializeField, LabelText("息の乱れ(小)のスタミナ基準値")]
+    float smallStaminaDisturbance = 75;                // 息の乱れ(小)の基準値
+    [SerializeField, LabelText("息の乱れ(中)のスタミナ基準値")]
+    float mediumStaminaDisturbance = 50;               // 息の乱れ(中)の基準値
+    [SerializeField, LabelText("息の乱れ(大)のスタミナ基準値")]
+    float largeStaminaDisturbance = 25;               // 息の乱れ(大)の基準値
 
     // オブジェクトダメージ
     [Header("オブジェクトダメージ系")]
@@ -102,6 +115,7 @@ public class PlayerStatusData : ScriptableObject
     public float ButtonPatienceDecrement => buttonPatienceDecrement;
     public float SmallDisturbance => smallDisturbance;
     public float MediumDisturbance => mediumDisturbance;
+    public float LargeDisturbance => largeDisturbance;
 
     public float HealthRecoveryFrame => healthRecoveryFrame;
     public float HealthRecoveryAmount => healthRecoveryAmount;
@@ -109,13 +123,18 @@ public class PlayerStatusData : ScriptableObject
     public float StaminaDecrement => staminaDecrement;
     public float StaminaConfusionSDecrementFactor => staminaConfusionSDecrementFactor;
     public float StaminaConfusionMDecrementFactor => staminaConfusionMDecrementFactor;
+    public float StaminaConfusionLDecrementFactor => staminaConfusionLDecrementFactor;
     public float StaminaNormalRecovery => staminaNormalRecovery;
     public float StaminaConfusionSRecoveryFactor => staminaConfusionSRecoveryFactor;
     public float StaminaConfusionMRecoveryFactor => staminaConfusionMRecoveryFactor;
+    public float StaminaConfusionLRecoveryFactor => staminaConfusionLRecoveryFactor;
     public float StaminaWalkRecovery => staminaWalkRecovery;
     public float StaminaSquatRecovery => staminaSquatRecovery;
     public float StaminaDeepBreathRecovery => staminaDeepBreathRecovery;
     public float StaminaDashMin => staminaDashMin;
+    public float SmallStaminaDisturbance => smallStaminaDisturbance;
+    public float MediumStaminaDisturbance => mediumStaminaDisturbance;
+    public float LargeStaminaDisturbance => largeStaminaDisturbance;
 
     public float ObjectDamageAmount => objectDamageAmount;
     public float ObjectDamagedeepBreathRecovery => objectDamagedeepBreathRecovery;

@@ -41,6 +41,7 @@ public class PlayerEvents : MonoBehaviour
     PlayerBreathController breathController = default;              // 息管理クラス
 
     public bool IsBreathHold{ get{ return playerAnimationContoller.IsBreathHold; } }
+    public bool IsDeepBreath{ get; private set; }
 
     /// <summary>
     /// 待機
@@ -200,12 +201,16 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 深呼吸開始
     /// </summary>
-    public void DeepBreathStart() { }
+    public void DeepBreathStart() 
+    {
+        IsDeepBreath = true;
+    }
     /// <summary>
     /// 深呼吸
     /// </summary>
     public void DeepBreath()
     {
+        IsDeepBreath = true;
         SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
         soundArea.SetSoundLevel(ActionSoundType.DEEPBREATH);
@@ -218,6 +223,7 @@ public class PlayerEvents : MonoBehaviour
     public void DeepBreathEnd()
     {
         cameraAnimationController.AnimStop(CameraAnimType.DEEPBREATH);
+        IsDeepBreath = false;
     }
 
     /// <summary>
