@@ -16,6 +16,8 @@ public class HeartSe : MonoBehaviour
     float[] pitch = { 1.0f, 1.0f, 1.3f };
     [SerializeField]
     float[] volume = { 0, 0.1f, 0.3f };
+    [SerializeField]
+    float pitchBand = 0.02f;
 
     float prevPlayTime;
 
@@ -49,7 +51,7 @@ public class HeartSe : MonoBehaviour
 
     void PlayInternal(int i)
     {
-        source.pitch = pitch[i];
+        source.pitch = pitch[i] + Random.Range(-pitchBand, pitchBand);
         source.volume = volume[i];
         source.Play();
         prevPlayTime = Time.timeSinceLevelLoad;

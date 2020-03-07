@@ -95,7 +95,6 @@ public class PlayerBreathController : MonoBehaviour
             State = BrethState.NOTCONFUSION;
         }
         //breathSe.ChangeBreathState(State);
-        Debug.Log("Change:"+State);
     }
 
     /// <summary>

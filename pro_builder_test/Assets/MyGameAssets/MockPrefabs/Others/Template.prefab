@@ -1806,6 +1806,7 @@ MonoBehaviour:
   - 0
   - 0.3
   - 1
+  pitchBand: 0.02
 --- !u!1 &3871724203340042886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,29 +2260,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 2516053306612318284}
   currentState: 0
-  holdClip: {fileID: 0}
-  overClip: {fileID: 0}
-  endClip:
-  - {fileID: 0}
-  stateLoopClip: []
-  playTime:
+  holdClip: {fileID: 8300000, guid: 2f6b8fc13d5164843ba0a2b7365d8db3, type: 3}
+  holdPitch: 1
+  holdVolume:
+  - 0.2
+  - 0.2
+  - 0.4
+  - 1
+  breathEndClip:
+  - {fileID: 8300000, guid: 8d42f0cfacf431d498f0dd0eea12aa8f, type: 3}
+  - {fileID: 8300000, guid: 8d42f0cfacf431d498f0dd0eea12aa8f, type: 3}
+  - {fileID: 8300000, guid: 927aa094107078a40a7cb8c3970fa255, type: 3}
+  - {fileID: 8300000, guid: 606773b754a8c86448727bda1ddbc9b2, type: 3}
+  pitchEnd:
+  - 1
+  - 1
+  - 1
+  - 1
+  volumeEnd:
+  - 0.2
+  - 0.1
+  - 0.2
+  - 1
+  stateLoopClip:
+  - {fileID: 8300000, guid: 083936bf01260124480a9ef237bdadc5, type: 3}
+  - {fileID: 8300000, guid: 083936bf01260124480a9ef237bdadc5, type: 3}
+  - {fileID: 8300000, guid: 3eda4717094c40a4cbf8978cc01222ee, type: 3}
+  - {fileID: 8300000, guid: e7f5a342aa84e1845adfa641a28ea7b2, type: 3}
+  playTimeLoop:
   - 0
+  - 2.5
+  - 1.5
   - 1.2
-  - 1.2
-  - 1.2
-  - 0.5
-  pitch:
+  pitchLoop:
   - 1
   - 1
+  - 1.02
   - 1
-  - 1
-  - 1
-  volume:
+  volumeLoop:
   - 0
   - 0.1
-  - 0.1
-  - 0.1
+  - 0.17
   - 0.3
+  breathEndWait:
+  - 0
+  - 1
+  - 0.7
+  - 0.3
+  pitchBand: 0.01
   debugState: 0
   debugBreathHold: 0
 --- !u!1 &5527408832885074136
@@ -4539,6 +4565,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 226.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848611319803582294, guid: e13c6f735bdda473d9317b5068cae389,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e13c6f735bdda473d9317b5068cae389, type: 3}

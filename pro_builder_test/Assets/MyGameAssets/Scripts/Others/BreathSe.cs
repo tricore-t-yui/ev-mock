@@ -18,26 +18,29 @@ public class BreathSe : MonoBehaviour
     [SerializeField]
     State currentState = State.Normal;
 
-    [SerializeField] AudioClip holdClip;
-    [SerializeField] AudioClip overClip;
-    [SerializeField] AudioClip[] endClip;
+    [SerializeField] AudioClip   holdClip = default;
+    [SerializeField] float       holdPitch = default;
+    [SerializeField] float[]     holdVolume = { 0.2f, 0.5f, 0.5f, 0.5f };
+    [SerializeField] AudioClip[] breathEndClip = default;
+    [SerializeField] float[]     pitchEnd = { 1.0f, 1.0f, 1.0f, 1.0f };
+    [SerializeField] float[]     volumeEnd = { 0, 0.1f, 0.1f, 0.1f };
 
-    [SerializeField]
-    AudioClip[] stateLoopClip;
-    [SerializeField]
-    float[] playTime = { 0, 1.2f, 1.2f, 1.2f };
-    [SerializeField]
-    float[] pitch = { 1.0f, 1.0f, 1.0f, 1.0f };
-    [SerializeField]
-    float[] volume = { 0, 0.1f, 0.1f, 0.1f };
+    [SerializeField] AudioClip[] stateLoopClip = default;
+    [SerializeField] float[]     playTimeLoop = { 0, 1.2f, 1.2f, 1.2f };
+    [SerializeField] float[]     pitchLoop = { 1.0f, 1.0f, 1.0f, 1.0f };
+    [SerializeField] float[]     volumeLoop = { 0, 0.1f, 0.1f, 0.1f };
+    [SerializeField] float[]     breathEndWait = default;
+    [SerializeField] float       pitchBand = 0.02f;
 
+    State prevState = State.Normal;
     float prevPlayTime;
     bool isBreathHold;
 
 #if DEBUG
     [SerializeField] State debugState = State.Normal;
-    [SerializeField] bool debugBreathHold;
+    [SerializeField] bool debugBreathHold = false;
     bool debugPrevBreathHold;
+    State debugPrevState = State.Normal;
 #endif
 
     private void Start()
@@ -53,56 +56,158 @@ public class BreathSe : MonoBehaviour
         // 息残量で管理
         // 両方やって大きいほうを採用
         // 自分でステート作っちゃえ
-        //if (!isBreathHold && currentState != PlayerBreathController.BrethState.NOTCONFUSION)
-        //{
-        //    int i = (int)currentState;
-        //    if (Time.timeSinceLevelLoad - prevPlayTime > playTime[i])
-        //    {
-        //        PlayInternal();
-        //    }
-        //}
+        if (!isBreathHold && currentState != State.Normal && !source.isPlaying)
+        {
+            int i = (int)currentState;
+            if (Time.timeSinceLevelLoad - prevPlayTime > playTimeLoop[i])
+            {
+                PlayBreathLoopSound();
+            }
+        }
     }
 
-    public void ChangeBreathState(PlayerBreathController.BrethState state)
+    /// <summary>
+    /// ステート変更通知
+    /// </summary>
+    void ChangeState(State state)
     {
-        //currentState = state;
+        prevState = currentState;
+        currentState = state;
     }
 
+    /// <summary>
+    /// 通常時の状態変化時にサウンド再生
+    /// </summary>
+    void PlayStateChangeSound()
+    {
+        // 息止め時に読んでたらエラー
+        if(isBreathHold)
+        {
+            Debug.LogError("息止め中に呼ぶな");
+            return;
+        }
+        switch (currentState)
+        {
+            // 息が粗い状態から戻る場合は終了サウンド流す
+            case State.Normal:
+                if (prevState == State.Middle)
+                {
+                    PlayBreathHoldEndSound();   // 息止め終了と同じ音流す
+                    prevPlayTime = float.MaxValue;  // とりあえず再生まで無限に
+                }
+                break;
+
+            // それ以外はループサウンド流す。いったん状態変更時はウェイト無しで即流し
+            case State.Middle:
+            case State.High:
+            case State.VeryHigh:
+                PlayBreathLoopSound();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 息止め開始
+    /// </summary>
     public void OnStartBreathHold()
     {
         isBreathHold = true;
+        StartCoroutine(PlayBreathHoldStartSoundCoroutine());
     }
 
+    /// <summary>
+    /// 息止め終了
+    /// </summary>
     public void OnEndBreathHold()
     {
         prevPlayTime = Time.timeSinceLevelLoad;
         isBreathHold = false;
+        StartCoroutine(PlayBreathHoldEndSoundCoroutine());
     }
 
-    void PlayInternal()
+    /// <summary>
+    /// 息止め開始サウンド待ちコルーチン
+    /// </summary>
+    IEnumerator PlayBreathHoldStartSoundCoroutine()
+    {
+        prevPlayTime = float.MaxValue;  // とりあえず再生まで無限に
+        int i = (int)currentState;
+        source.clip = holdClip;
+        source.pitch = holdPitch + Random.Range(-pitchBand, pitchBand);
+        source.volume = holdVolume[i];
+        source.Play();
+        while(source.isPlaying)
+        {
+            yield return null;
+        }
+
+        // TODO:必要なら苦しそうな声
+    }
+
+    /// <summary>
+    /// 終了サウンドを流したのち息切れ再生開始するコルーチン
+    /// </summary>
+    IEnumerator PlayBreathHoldEndSoundCoroutine()
+    {
+        // まず息止め終了サウンド流す
+        PlayBreathHoldEndSound();
+        prevPlayTime = float.MaxValue;  // とりあえず再生まで無限に
+
+        while (source.isPlaying)
+        {
+            yield return null;
+        }
+
+        // 流し終わったら息切れサウンド再生開始
+        prevPlayTime = Time.timeSinceLevelLoad - playTimeLoop[(int)currentState] + breathEndWait[(int)currentState]; // 待ち時間固定
+    }
+
+    /// <summary>
+    /// 状況に応じてループ用サウンド流す
+    /// </summary>
+    void PlayBreathLoopSound()
     {
         int i = (int)currentState;
-        source.pitch = pitch[i];
-        source.volume = volume[i];
+        source.clip = stateLoopClip[i];
+        source.pitch = pitchLoop[i] + Random.Range(-pitchBand, pitchBand);
+        source.volume = volumeLoop[i];
         source.Play();
         prevPlayTime = Time.timeSinceLevelLoad;
+    }
+
+    /// <summary>
+    /// 状況に応じて息止め終了用サウンド流す
+    /// </summary>
+    void PlayBreathHoldEndSound()
+    {
+        int i = (int)currentState;
+        source.clip = breathEndClip[i];
+        source.pitch = pitchEnd[i] + Random.Range(-pitchBand, pitchBand);
+        source.volume = volumeEnd[i];
+        source.Play();
     }
 
 #if UNITY_EDITOR && DEBUG
     void OnValidate()
     {
-        if(currentState != debugState)
+        if(debugState != debugPrevState)
         {
-            //ChangeBreathState(debugState);
+            ChangeState(debugState);
+            debugPrevState = debugState;
+            if(!isBreathHold)
+            {
+                PlayStateChangeSound();
+            }
         }
-        if(debugBreathHold && !debugBreathHold)
+        if(!debugPrevBreathHold && debugBreathHold)
         {
             OnStartBreathHold();
         }
-        if (debugBreathHold && !debugBreathHold)
+        else if (debugPrevBreathHold && !debugBreathHold)
         {
             OnEndBreathHold();
         }
+        debugPrevBreathHold = debugBreathHold;
     }
 #endif
 }
