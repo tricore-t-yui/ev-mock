@@ -153,7 +153,7 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void HideObject()
     {
-        sound.Play(SoundSpawner.SoundType.HeartSound);
+        //sound.Play(SoundSpawner.SoundType.HeartSound);
 
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
         IsAnimRotation = false;
@@ -176,7 +176,7 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void ExitHideObject()
     {
-        sound.Stop(SoundSpawner.SoundType.HeartSound);
+        //sound.Stop(SoundSpawner.SoundType.HeartSound);
 
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
         switch (type)
@@ -249,7 +249,7 @@ public class PlayerHideController : MonoBehaviour
         if (flag && enabled)
         {
             keyInputStage = 0;
-            sound.Stop(SoundSpawner.SoundType.HeartSound);
+            //sound.Stop(SoundSpawner.SoundType.HeartSound);
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             hideObjectController.SetActiveCollider(true);
             IsHideLocker = false;

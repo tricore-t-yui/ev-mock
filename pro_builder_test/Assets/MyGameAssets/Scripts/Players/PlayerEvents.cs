@@ -32,8 +32,6 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                           // 音領域管理クラス
     [SerializeField]
-    SoundSpawner sound = default;                                   // 音生成クラス
-    [SerializeField]
     CameraAnimationController cameraAnimationController = default;  // カメラアニメーションクラス
     [SerializeField]
     PlayerStatusController statusController = default;              // ステータス管理クラス
