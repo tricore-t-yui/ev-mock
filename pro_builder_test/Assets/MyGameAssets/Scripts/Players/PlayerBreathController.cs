@@ -15,12 +15,12 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 息の状態
     /// </summary>
+    [System.Serializable]
     public enum BrethState
     {
         NOTCONFUSION,       // 乱れなし
         SMALLCONFUSION,     // 小さな乱れ
         MEDIUMCONFUSION,    // 乱れ
-        LARGECONFUSION,     // 大きな乱れ
         BREATHLESSNESS,     // 息切れ
     }
 
@@ -34,6 +34,8 @@ public class PlayerBreathController : MonoBehaviour
     KeyController keyController = default;                      // キー操作クラス
     [SerializeField]
     PlayerStatusData playerData = default;                            // プレイヤーデータのスクリプタブルオブジェクト
+    [SerializeField]
+    BreathSe breathSe = default;
 
     [SerializeField]
     int durationPlus = 5;                                       // 1回のボタンで追加される連打処理の継続フレームの値 (詳細は165行のNOTE)
@@ -59,12 +61,12 @@ public class PlayerBreathController : MonoBehaviour
     /// <summary>
     /// 息の残量による音の発生
     /// </summary>
-    void BreathSound(MoveType type)
+    void ChangeBreathState(MoveType type)
     {
         if (IsDisappear)
         {
             // 息切れ
-            soundArea.SetSoundLevel(ActionSoundType.BREATHLESSNESS);
+            //soundArea.SetSoundLevel(ActionSoundType.BREATHLESSNESS);
             State = BrethState.BREATHLESSNESS;
         }
         else if((type != MoveType.HIDE && type != MoveType.BREATHHOLD && type != MoveType.BREATHHOLDMOVE)
@@ -79,12 +81,6 @@ public class PlayerBreathController : MonoBehaviour
                 {
                     // 乱れ
                     State = BrethState.MEDIUMCONFUSION;
-
-                    if (NowAmount <= playerData.LargeDisturbance)
-                    {
-                        // 大きな乱れ
-                        State = BrethState.LARGECONFUSION;
-                    }
                 }
             }
             else
@@ -98,6 +94,8 @@ public class PlayerBreathController : MonoBehaviour
             // 乱れ無し
             State = BrethState.NOTCONFUSION;
         }
+        //breathSe.ChangeBreathState(State);
+        Debug.Log("Change:"+State);
     }
 
     /// <summary>
@@ -112,9 +110,9 @@ public class PlayerBreathController : MonoBehaviour
             {
                 case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
                 case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
-                case MoveType.DASH: if (!isUseStamina) { NowAmount -= playerData.StaminaDecrement; } break;
-                case MoveType.BREATHHOLD: NowAmount -= playerData.StealthDecrement; break;
-                case MoveType.BREATHHOLDMOVE: NowAmount -= playerData.StealthDecrement; break;
+                case MoveType.DASH: if (!isUseStamina) { NowAmount += playerData.StaminaDecrement; } break;
+                case MoveType.BREATHHOLD: NowAmount += playerData.StealthDecrement; break;
+                case MoveType.BREATHHOLDMOVE: NowAmount += playerData.StealthDecrement; break;
                 case MoveType.HIDE: ConsumeHideBreath(); break;
                 case MoveType.BREATHLESSNESS: NowAmount += playerData.BreathlessnessRecovery; break;
                 default: break;
@@ -135,7 +133,7 @@ public class PlayerBreathController : MonoBehaviour
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
 
         // 息の残量による音の発生
-        BreathSound(type);
+        ChangeBreathState(type);
     }
 
     /// <summary>
@@ -152,13 +150,13 @@ public class PlayerBreathController : MonoBehaviour
             // 連打処理の継続時間続いている間
             if (duration > 0)
             {
-                NowAmount -= playerData.ButtonPatienceDecrement;
+                NowAmount += playerData.ButtonPatienceDecrement;
             }
             // 連打していない場合
             else
             {
                 // 心音に合わせた息消費
-                NowAmount -= hideDecrement;
+                NowAmount += hideDecrement;
             }
         }
         else

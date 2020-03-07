@@ -39,7 +39,7 @@ public class playerStaminaController : MonoBehaviour
             // 各ステートに合わせた処理を実行
             switch (type)
             {
-                case MoveType.DASH: NowAmount -= playerData.StaminaDecrement * ConsumptionMagnification(); break;
+                case MoveType.DASH: NowAmount += playerData.StaminaDecrement * ConsumptionMagnification(); break;
                 default: NowAmount += playerData.StaminaNormalRecovery * RecoveryMagnification(); SquatRecovery(isSquat); break;
             }
         }
@@ -93,14 +93,12 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     float RecoveryMagnification()
     {
-        if(breathController.NowAmount >= 50)
-        {
-            return 1;
-        }
+        if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionMRecoveryFactor;
+        else if (breathController.NowAmount <= playerData.SmallDisturbance)
+            return playerData.StaminaConfusionSRecoveryFactor;
         else
-        {
-            return 0.3f;
-        }
+            return 1;
     }
 
     /// <summary>
@@ -108,14 +106,12 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     float ConsumptionMagnification()
     {
-        if (breathController.NowAmount >= 50)
-        {
-            return 1;
-        }
+        if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionMDecrementFactor;
+        else if (breathController.NowAmount <= playerData.SmallDisturbance)
+            return playerData.StaminaConfusionSDecrementFactor;
         else
-        {
-            return 1.7f;
-        }
+            return 1;
     }
 
     /// <summary>

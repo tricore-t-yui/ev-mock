@@ -21,6 +21,8 @@ public class HideStateController : MonoBehaviour
     CapsuleCollider playerCollider = default;               // プレイヤーのコライダー
     [SerializeField]
     PlayerBreathController breathController = default;      // 息管理クラス
+    [SerializeField]
+    HeartSe heartSe = default;
 
     bool isSafetyArea = false;                              // 安全地帯内にいないかどうか
     bool isLookEnemy = false;                               // 敵が見えているかどうか
@@ -198,5 +200,6 @@ public class HideStateController : MonoBehaviour
 
         // 心音の変更に合わせた処理
         breathController.ChangeHideDecrement(HeartSound);
+        heartSe.ChangeHeartSound(HeartSound);
     }
 }

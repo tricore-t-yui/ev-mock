@@ -174,9 +174,8 @@ public class SoundAreaSpawner : MonoBehaviour
             case PlayerBreathController.BrethState.MEDIUMCONFUSION:
                 confusionFactor = soundData.BreathMediumConfusionFactor;
                 break;
-            case PlayerBreathController.BrethState.LARGECONFUSION:
             case PlayerBreathController.BrethState.BREATHLESSNESS:
-                confusionFactor = soundData.BreathLargeConfusionFactor;
+                confusionFactor = soundData.BreathMediumConfusionFactor;
                 break;
             default:
                 break;
