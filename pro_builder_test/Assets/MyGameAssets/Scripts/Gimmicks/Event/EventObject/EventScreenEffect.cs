@@ -24,11 +24,14 @@ public class EventScreenEffect : EventObject
     {
         // 真下にCanvasがいる前提
         // HACK: yui-t mockじゃないときはスプライト指定が必要
-        image = GetComponentInChildren<Image>();
-        group = GetComponentInChildren<CanvasGroup>();
-        if (shakeRate > 0)
-            StartCoroutine(DoShake());
-        StartCoroutine(PlayInternal());
+        image = GetComponentInChildren<Image>(true);
+        group = GetComponentInChildren<CanvasGroup>(true);
+        if(gameObject.activeInHierarchy)
+        {
+            if (shakeRate > 0)
+                StartCoroutine(DoShake());
+            StartCoroutine(PlayInternal());
+        }
     }
 
     IEnumerator DoShake()
