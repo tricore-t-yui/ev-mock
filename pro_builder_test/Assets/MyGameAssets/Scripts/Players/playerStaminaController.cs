@@ -82,7 +82,8 @@ public class playerStaminaController : MonoBehaviour
         {
             IsDisappear = true;
         }
-        if (IsDisappear && NowAmount >= 100)
+        // 最低値より回復したら息切れ無効
+        if (IsDisappear && NowAmount >= playerData.StaminaDashMin)
         {
             IsDisappear = false;
         }

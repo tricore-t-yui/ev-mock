@@ -79,6 +79,8 @@ public class PlayerStatusData : ScriptableObject
     float staminaConfusionSDecrementFactor = 1.5f; 
     [SerializeField, LabelText("息が大きく乱れている時のスタミナ消費量(倍率)")]
     float staminaConfusionMDecrementFactor = 3.0f;
+    [SerializeField, LabelText("走りだせる最低スタミナ値")]
+    float staminaDashMin = 10.0f;
 
     // オブジェクトダメージ
     [Header("オブジェクトダメージ系")]
@@ -113,6 +115,7 @@ public class PlayerStatusData : ScriptableObject
     public float StaminaWalkRecovery => staminaWalkRecovery;
     public float StaminaSquatRecovery => staminaSquatRecovery;
     public float StaminaDeepBreathRecovery => staminaDeepBreathRecovery;
+    public float StaminaDashMin => staminaDashMin;
 
     public float ObjectDamageAmount => objectDamageAmount;
     public float ObjectDamagedeepBreathRecovery => objectDamagedeepBreathRecovery;

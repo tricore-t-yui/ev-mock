@@ -9,9 +9,16 @@ public class EventPlayAnimation : EventObject
     [SerializeField, LabelText("再生するアニメーション")]
     Animator playAnim = default;
 
+    [SerializeField, LabelText("セットするtriggerパラメータの名前")]
+    string triggerName = default;
+
     void OnEnable()
     {
         playAnim.enabled = true;
+        if(!string.IsNullOrEmpty(triggerName))
+        {
+            playAnim.SetTrigger(triggerName);
+        }
         onEndCallback?.Invoke();
     }
 }

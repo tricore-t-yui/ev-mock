@@ -278,7 +278,8 @@ public class PlayerStateController : MonoBehaviour
         if (breathController.IsDisappear)
         {
             EventStop();
-            State = ActionStateType.BREATHLESSNESS;
+            //State = ActionStateType.BREATHLESSNESS;
+            State = ActionStateType.WALK;   // 息切れではなく歩きに
             EventStart();
         }
     }
