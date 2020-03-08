@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5101124480643972915
+--- !u!1 &4197725001636902345
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,68 +8,68 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5101124480643972924}
-  - component: {fileID: 5101124480643972926}
-  - component: {fileID: 5101124480643972925}
+  - component: {fileID: 8824867627220698431}
+  - component: {fileID: 9088607317966222211}
+  - component: {fileID: 8787986755089018136}
   m_Layer: 0
-  m_Name: Animation TsunWatchingEnd L Trriger
+  m_Name: AnimationDoorOpenTrriger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5101124480643972924
+--- !u!4 &8824867627220698431
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5101124480643972915}
+  m_GameObject: {fileID: 4197725001636902345}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6039697, y: 1, z: 1}
   m_Children:
-  - {fileID: 5101124481984201073}
+  - {fileID: 6727124720532777236}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5101124480643972926
+--- !u!114 &9088607317966222211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5101124480643972915}
+  m_GameObject: {fileID: 4197725001636902345}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6f7672e98ba044f9ee05bdaa0365aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   debugDrawRange: 1
-  kind: 1
+  kind: 0
   viewColideRange: 5
-  needSwitchName: Watching
+  needSwitchName: 
   banSwitch: 
   enableSwitchName: 
   chanceNum: 0
   triggerNum: 0
-  triggerCoolDown: 10
+  triggerCoolDown: 3
   appearRate: 100
   addAppearRate: 0
---- !u!65 &5101124480643972925
+--- !u!65 &8787986755089018136
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5101124480643972915}
+  m_GameObject: {fileID: 4197725001636902345}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.15, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &5101124481984201072
+--- !u!1 &7817262648460177553
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,8 +77,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5101124481984201073}
-  - component: {fileID: 5101124481984201074}
+  - component: {fileID: 6727124720532777236}
+  - component: {fileID: 1197605449698718773}
   m_Layer: 0
   m_Name: EventObjectTargetAnimation
   m_TagString: Untagged
@@ -86,30 +86,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &5101124481984201073
+--- !u!4 &6727124720532777236
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5101124481984201072}
+  m_GameObject: {fileID: 7817262648460177553}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5101124480643972924}
+  m_Father: {fileID: 8824867627220698431}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5101124481984201074
+--- !u!114 &1197605449698718773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5101124481984201072}
+  m_GameObject: {fileID: 7817262648460177553}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8f054969eb011429a0b6e53ad1523f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playAnim: {fileID: 0}
+  triggerName: 
