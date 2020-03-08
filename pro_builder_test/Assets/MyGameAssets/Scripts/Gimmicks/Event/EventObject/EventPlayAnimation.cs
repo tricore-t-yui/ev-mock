@@ -19,6 +19,7 @@ public class EventPlayAnimation : EventObject
         {
             playAnim.SetTrigger(triggerName);
         }
+        gameObject.SetActive(false);
         onEndCallback?.Invoke();
     }
 }

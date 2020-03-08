@@ -16,6 +16,7 @@ public class EventTargetOnOff : EventObject
     void OnEnable()
     {
         targetObject.SetActive(onoff);
+        gameObject.SetActive(false);
         onEndCallback?.Invoke();
     }
 }

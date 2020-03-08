@@ -14,7 +14,9 @@ public class EventTrigger : MonoBehaviour
         [LabelText("視線当たり判定")]
         ViewCollide,
         [LabelText("時間")]
-        Time
+        Time,
+        [LabelText("インタラクト")]
+        Interact
     }
 
 #if DEBUG
@@ -141,8 +143,8 @@ public class EventTrigger : MonoBehaviour
                 triggerObject = eventObjectList[idx];
             }
             triggerObject.SetEndCallback(OnEndEventObject);
-            triggerObject.gameObject.SetActive(true);
             isDoingEvent = true;
+            triggerObject.gameObject.SetActive(true);
 
             // グループに起動通知
             group.OnTriggered(this);
@@ -202,7 +204,7 @@ public class EventTrigger : MonoBehaviour
         if (other.gameObject.tag == "Player"
         && other.gameObject.layer == LayerMask.NameToLayer("Player")
         && !isDoingEvent
-        && kind == TriggerKind.Collide
+        && (kind == TriggerKind.Collide || kind == TriggerKind.Interact)
         && Time.timeSinceLevelLoad - lastEventEndTime >= triggerCoolDown
         )
         {
