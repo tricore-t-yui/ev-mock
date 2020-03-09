@@ -163,6 +163,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        UpdateTransparent();
         if (parameter.IsStaticState) return;
 
         // ステートの更新
@@ -192,46 +193,6 @@ public class EnemyBase : MonoBehaviour
                 stateChangeTrigger = false;
             }
         }
-
-        // 出現フラグが起きた
-        if (!parameter.IsTransparencyByDistance || states[(int)currentState].ForceTransparentOff)
-        {
-            appearFadeCounter = 1;
-        }
-        else
-        {
-            if (!parameter.InverseTransparency)
-            {
-                // プレイヤーとの距離によって影人間の透明度を変える
-                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
-
-                // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
-                appearFadeCounter = (parameter.TransparencyMax - parameter.TransparencyMin) - dist;
-            }
-            else
-            {
-                // プレイヤーとの距離によって影人間の透明度を変える
-                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
-
-                // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
-                appearFadeCounter = parameter.TransparencyMin + dist;
-            }
-        }
-        // 現在の透明度が最小と最大を超えないように補正
-        if (parameter.IsTransparencyByDistance)
-        {
-            appearFadeCounter = Mathf.Clamp(appearFadeCounter, parameter.TransparencyMin, parameter.TransparencyMax);
-        }
-
-        // 透明度をメッシュに反映
-        Color result = new Color(
-                    meshRenderer.material.color.r,
-                    meshRenderer.material.color.g,
-                    meshRenderer.material.color.b,
-                    appearFadeCounter);
-        meshRenderer.material.color = result;
 
         // ナビメッシュの移動制御クラスの更新
         navMeshStopingSwitcher.Update();
@@ -311,6 +272,52 @@ public class EnemyBase : MonoBehaviour
         states[(int)currentState].Exit();
         currentState = type;
         states[(int)currentState].Entry();
+    }
+
+    /// <summary>
+    /// 透明度変更
+    /// </summary>
+    void UpdateTransparent()
+    {
+        // 出現フラグが起きた
+        if (!parameter.IsTransparencyByDistance || states[(int)currentState].ForceTransparentOff)
+        {
+            appearFadeCounter = 1;
+        }
+        else
+        {
+            if (!parameter.InverseTransparency)
+            {
+                // プレイヤーとの距離によって影人間の透明度を変える
+                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
+
+                // プレイヤーとの距離を０～１に丸め込む
+                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                appearFadeCounter = (parameter.TransparencyMax - parameter.TransparencyMin) - dist;
+            }
+            else
+            {
+                // プレイヤーとの距離によって影人間の透明度を変える
+                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
+
+                // プレイヤーとの距離を０～１に丸め込む
+                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
+                appearFadeCounter = parameter.TransparencyMin + dist;
+            }
+        }
+        // 現在の透明度が最小と最大を超えないように補正
+        if (parameter.IsTransparencyByDistance)
+        {
+            appearFadeCounter = Mathf.Clamp(appearFadeCounter, parameter.TransparencyMin, parameter.TransparencyMax);
+        }
+
+        // 透明度をメッシュに反映
+        Color result = new Color(
+                    meshRenderer.material.color.r,
+                    meshRenderer.material.color.g,
+                    meshRenderer.material.color.b,
+                    appearFadeCounter);
+        meshRenderer.material.color = result;
     }
 
     /// <summary>
