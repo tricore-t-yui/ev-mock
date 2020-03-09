@@ -12,15 +12,8 @@ Shader "Yuoni/ShadowHumanBody"
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Transparent"  "Queue" = "Geometry+0" "IgnoreProjector" = "True" }
+		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" }
 		Cull Back
-		Stencil
-		{
-			Ref 10
-			Comp Greater
-			Pass Replace
-			Fail Keep
-		}
 		CGINCLUDE
 		#include "UnityPBSLighting.cginc"
 		#include "Lighting.cginc"
@@ -31,21 +24,50 @@ Shader "Yuoni/ShadowHumanBody"
 			half filler;
 		};
 
+		struct SurfaceOutputCustomLightingCustom
+		{
+			half3 Albedo;
+			half3 Normal;
+			half3 Emission;
+			half Metallic;
+			half Smoothness;
+			half Occlusion;
+			half Alpha;
+			Input SurfInput;
+			UnityGIInput GIData;
+		};
+
 		UNITY_INSTANCING_BUFFER_START(YuoniShadowHumanBody)
 			UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
 #define _Color_arr YuoniShadowHumanBody
 		UNITY_INSTANCING_BUFFER_END(YuoniShadowHumanBody)
 
-		void surf( Input i , inout SurfaceOutputStandard o )
+		inline half4 LightingStandardCustomLighting( inout SurfaceOutputCustomLightingCustom s, half3 viewDir, UnityGI gi )
 		{
+			UnityGIInput data = s.GIData;
+			Input i = s.SurfInput;
+			half4 c = 0;
+			float4 _Color_Instance = UNITY_ACCESS_INSTANCED_PROP(_Color_arr, _Color);
+			c.rgb = _Color_Instance.rgb;
+			c.a = _Color_Instance.a;
+			return c;
+		}
+
+		inline void LightingStandardCustomLighting_GI( inout SurfaceOutputCustomLightingCustom s, UnityGIInput data, inout UnityGI gi )
+		{
+			s.GIData = data;
+		}
+
+		void surf( Input i , inout SurfaceOutputCustomLightingCustom o )
+		{
+			o.SurfInput = i;
 			float4 _Color_Instance = UNITY_ACCESS_INSTANCED_PROP(_Color_arr, _Color);
 			o.Albedo = _Color_Instance.rgb;
-			o.Alpha = _Color_Instance.a;
 		}
 
 		ENDCG
 		CGPROGRAM
-		#pragma surface surf Standard keepalpha fullforwardshadows 
+		#pragma surface surf StandardCustomLighting alpha:fade keepalpha fullforwardshadows 
 
 		ENDCG
 		Pass
@@ -73,12 +95,14 @@ Shader "Yuoni/ShadowHumanBody"
 				V2F_SHADOW_CASTER;
 				float3 worldPos : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
 			};
 			v2f vert( appdata_full v )
 			{
 				v2f o;
 				UNITY_SETUP_INSTANCE_ID( v );
 				UNITY_INITIALIZE_OUTPUT( v2f, o );
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				float3 worldPos = mul( unity_ObjectToWorld, v.vertex ).xyz;
 				half3 worldNormal = UnityObjectToWorldNormal( v.normal );
@@ -97,9 +121,12 @@ Shader "Yuoni/ShadowHumanBody"
 				UNITY_INITIALIZE_OUTPUT( Input, surfIN );
 				float3 worldPos = IN.worldPos;
 				half3 worldViewDir = normalize( UnityWorldSpaceViewDir( worldPos ) );
-				SurfaceOutputStandard o;
-				UNITY_INITIALIZE_OUTPUT( SurfaceOutputStandard, o )
+				SurfaceOutputCustomLightingCustom o;
+				UNITY_INITIALIZE_OUTPUT( SurfaceOutputCustomLightingCustom, o )
 				surf( surfIN, o );
+				UnityGI gi;
+				UNITY_INITIALIZE_OUTPUT( UnityGI, gi );
+				o.Alpha = LightingStandardCustomLighting( o, worldViewDir, gi ).a;
 				#if defined( CAN_SKIP_VPOS )
 				float2 vpos = IN.pos;
 				#endif
@@ -110,15 +137,16 @@ Shader "Yuoni/ShadowHumanBody"
 			ENDCG
 		}
 	}
-	Fallback "Standard"
+	Fallback "Diffuse"
 	CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
-Version=16700
-1536;-848;1920;1019;852.788;232.1732;1;True;True
-Node;AmplifyShaderEditor.ColorNode;2;-269.788,43.82678;Float;False;InstancedProperty;_Color;Color;1;0;Create;True;0;0;False;0;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;333,4;Float;False;True;2;Float;ASEMaterialInspector;0;0;Standard;Yuoni/ShadowHumanBody;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Custom;0.5;True;True;0;False;Transparent;;Geometry;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;0;False;-1;True;10;False;-1;255;False;-1;255;False;-1;1;False;-1;3;False;-1;1;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;0;5;False;-1;10;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;Standard;0;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;16;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
-WireConnection;0;0;2;0
-WireConnection;0;9;2;4
+Version=17700
+1536;-302;1920;1019;852.7897;232.1754;1;True;True
+Node;AmplifyShaderEditor.ColorNode;2;-411.788,32.82678;Float;False;InstancedProperty;_Color;Color;0;0;Create;True;0;0;False;0;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;6;335,5;Float;False;True;-1;2;ASEMaterialInspector;0;0;CustomLighting;Yuoni/ShadowHumanBody;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Transparent;0.5;True;True;0;False;Transparent;;Transparent;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;2;5;False;-1;10;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+WireConnection;6;0;2;0
+WireConnection;6;9;2;4
+WireConnection;6;13;2;0
 ASEEND*/
-//CHKSM=A711E45E0E9BCDC0061893CB4612ECF29A3EE113
+//CHKSM=EE9E8F22E1BE4391E96171F1488AE7CBD81A80C6

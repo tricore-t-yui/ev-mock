@@ -163,6 +163,9 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        UpdateTransparent();
+        if (parameter.IsStaticState) return;
+
         // ステートの更新
         states[(int)currentState].Update();
 
@@ -191,6 +194,91 @@ public class EnemyBase : MonoBehaviour
             }
         }
 
+        // ナビメッシュの移動制御クラスの更新
+        navMeshStopingSwitcher.Update();
+
+        // 特殊アクションの制御
+        ControlSpecialAction();
+
+        // 移動速度をパラメータに反映
+        animator.SetFloat("CurrentMoveSpeed", agent.speed);
+
+        // 戦闘状態時にサウンドスポナーをオンにする
+        if (crySoundSpawner != null)
+        {
+            if (currentState == StateType.Fighting)
+            {
+                if (!crySoundSpawner.gameObject.activeSelf)
+                {
+                    crySoundSpawner.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                if (crySoundSpawner.gameObject.activeSelf)
+                {
+                    crySoundSpawner.gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 特殊アクションの制御
+    /// </summary>
+    public void ControlSpecialAction()
+    {
+        if (parameter.IsStaticState) return;
+        // 一定距離近づいたら消える
+        if (parameter.IsApproachedDisappear)
+        {
+            // 影人間とプレイヤーとの距離が一定以内かどうか
+            if ((player.transform.position - agent.transform.position).magnitude < parameter.DisappearDistance)
+            {
+                agent.gameObject.SetActive(false);
+            }
+        }
+
+        // カメラからフェードアウトで消える
+        if (parameter.IsCameraFadeOutDisappear)
+        {
+            if (!meshRenderer.isVisible)
+            {
+                agent.gameObject.SetActive(false);
+                animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 次のステートをセット
+    /// </summary>
+    /// <param name="type"></param>
+    void SetNextState(StateType type)
+    {
+        if (parameter.IsStaticState) return;
+        animator.SetInteger("NextStateTypeId", (int)type);
+        nextStateId = (int)type;
+        stateChangeTrigger = true;
+    }
+
+    /// <summary>
+    /// 次のステートに変更
+    /// </summary>
+    /// <param name="state"></param>
+    void ChangeNextState(StateType type)
+    {
+        if (parameter.IsStaticState) return;
+        states[(int)currentState].Exit();
+        currentState = type;
+        states[(int)currentState].Entry();
+    }
+
+    /// <summary>
+    /// 透明度変更
+    /// </summary>
+    void UpdateTransparent()
+    {
         // 出現フラグが起きた
         if (!parameter.IsTransparencyByDistance || states[(int)currentState].ForceTransparentOff)
         {
@@ -230,82 +318,6 @@ public class EnemyBase : MonoBehaviour
                     meshRenderer.material.color.b,
                     appearFadeCounter);
         meshRenderer.material.color = result;
-
-        // ナビメッシュの移動制御クラスの更新
-        navMeshStopingSwitcher.Update();
-
-        // 特殊アクションの制御
-        ControlSpecialAction();
-
-        // 移動速度をパラメータに反映
-        animator.SetFloat("CurrentMoveSpeed", agent.speed);
-
-        // 戦闘状態時にサウンドスポナーをオンにする
-        if (crySoundSpawner != null)
-        {
-            if (currentState == StateType.Fighting)
-            {
-                if (!crySoundSpawner.gameObject.activeSelf)
-                {
-                    crySoundSpawner.gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                if (crySoundSpawner.gameObject.activeSelf)
-                {
-                    crySoundSpawner.gameObject.SetActive(false);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 特殊アクションの制御
-    /// </summary>
-    public void ControlSpecialAction()
-    {
-        // 一定距離近づいたら消える
-        if (parameter.IsApproachedDisappear)
-        {
-            // 影人間とプレイヤーとの距離が一定以内かどうか
-            if ((player.transform.position - agent.transform.position).magnitude < parameter.DisappearDistance)
-            {
-                agent.gameObject.SetActive(false);
-            }
-        }
-
-        // カメラからフェードアウトで消える
-        if (parameter.IsCameraFadeOutDisappear)
-        {
-            if (!meshRenderer.isVisible)
-            {
-                agent.gameObject.SetActive(false);
-                animator.gameObject.SetActive(parameter.IsRespawn ? true : false);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 次のステートをセット
-    /// </summary>
-    /// <param name="type"></param>
-    public void SetNextState(StateType type)
-    {
-        animator.SetInteger("NextStateTypeId", (int)type);
-        nextStateId = (int)type;
-        stateChangeTrigger = true;
-    }
-
-    /// <summary>
-    /// 次のステートに変更
-    /// </summary>
-    /// <param name="state"></param>
-    public void ChangeNextState(StateType type)
-    {
-        states[(int)currentState].Exit();
-        currentState = type;
-        states[(int)currentState].Entry();
     }
 
     /// <summary>
@@ -325,6 +337,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnPlayerEnterToAppearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // 通常状態のみ
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
@@ -339,6 +352,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnPlayerExitToAppearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // 通常状態のみ
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
@@ -353,6 +367,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterNoiseHearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoise(other.gameObject);
@@ -363,6 +378,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterDirectDetectRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtDirectDetectRange(other.gameObject);
@@ -373,6 +389,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterFightingRange(Collider other)
     {        
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtFightingRange(other.gameObject);
@@ -383,6 +400,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnDetectedPlayer(other.gameObject);
@@ -393,6 +411,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnStayViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnDetectPlayerStay(other.gameObject);
@@ -404,6 +423,7 @@ public class EnemyBase : MonoBehaviour
     /// <param name="other"></param>
     public void OnExitViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnMissingPlayer(other.gameObject);
@@ -414,12 +434,14 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterAttackRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnEnterAttackRange(other.gameObject);
     }
     public void OnExitAttackRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnExitAttackRange(other.gameObject);
