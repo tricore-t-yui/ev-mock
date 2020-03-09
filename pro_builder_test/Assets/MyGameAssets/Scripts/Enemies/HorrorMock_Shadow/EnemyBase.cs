@@ -163,6 +163,8 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        if (parameter.IsStaticState) return;
+
         // ステートの更新
         states[(int)currentState].Update();
 
@@ -265,6 +267,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void ControlSpecialAction()
     {
+        if (parameter.IsStaticState) return;
         // 一定距離近づいたら消える
         if (parameter.IsApproachedDisappear)
         {
@@ -290,8 +293,9 @@ public class EnemyBase : MonoBehaviour
     /// 次のステートをセット
     /// </summary>
     /// <param name="type"></param>
-    public void SetNextState(StateType type)
+    void SetNextState(StateType type)
     {
+        if (parameter.IsStaticState) return;
         animator.SetInteger("NextStateTypeId", (int)type);
         nextStateId = (int)type;
         stateChangeTrigger = true;
@@ -301,8 +305,9 @@ public class EnemyBase : MonoBehaviour
     /// 次のステートに変更
     /// </summary>
     /// <param name="state"></param>
-    public void ChangeNextState(StateType type)
+    void ChangeNextState(StateType type)
     {
+        if (parameter.IsStaticState) return;
         states[(int)currentState].Exit();
         currentState = type;
         states[(int)currentState].Entry();
@@ -325,6 +330,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnPlayerEnterToAppearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // 通常状態のみ
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
@@ -339,6 +345,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnPlayerExitToAppearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // 通常状態のみ
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
@@ -353,6 +360,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterNoiseHearRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoise(other.gameObject);
@@ -363,6 +371,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterDirectDetectRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtDirectDetectRange(other.gameObject);
@@ -373,6 +382,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterFightingRange(Collider other)
     {        
+        if (parameter.IsStaticState) return;
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtFightingRange(other.gameObject);
@@ -383,6 +393,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnDetectedPlayer(other.gameObject);
@@ -393,6 +404,7 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnStayViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnDetectPlayerStay(other.gameObject);
@@ -404,6 +416,7 @@ public class EnemyBase : MonoBehaviour
     /// <param name="other"></param>
     public void OnExitViewRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnMissingPlayer(other.gameObject);
@@ -414,12 +427,14 @@ public class EnemyBase : MonoBehaviour
     /// </summary>
     public void OnEnterAttackRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnEnterAttackRange(other.gameObject);
     }
     public void OnExitAttackRange(Collider other)
     {
+        if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         states[(int)currentState].OnExitAttackRange(other.gameObject);
