@@ -45,7 +45,7 @@ public class EnemyBase : MonoBehaviour
     // 出現フラグ
     protected bool isAppear = false;
     // 出現フェード
-    float appearFadeCounter = 0;
+    float appearAlpha = 0;
 
     // 攻撃の種類
     protected int attackTypeId = 0;
@@ -104,22 +104,13 @@ public class EnemyBase : MonoBehaviour
 
         if (parameter.IsTransparencyByDistance)
         {
-            if (!parameter.InverseTransparency)
-            {
-                // 出現フラグを倒す
-                isAppear = false;
-                appearFadeCounter = parameter.TransparencyMin;
-            }
-            else
-            {
-                // 出現フラグを倒す
-                isAppear = true;
-                appearFadeCounter = parameter.TransparencyMax;
-            }
+            // 出現フラグを倒す
+            isAppear = false;
+            appearAlpha = parameter.InverseTransparency ? 0 : 1;
         }
         else
         {
-            appearFadeCounter = 1;
+            appearAlpha = 1;
         }
 
         states[(int)currentState].Entry();
@@ -282,41 +273,37 @@ public class EnemyBase : MonoBehaviour
         // 出現フラグが起きた
         if (!parameter.IsTransparencyByDistance || states[(int)currentState].ForceTransparentOff)
         {
-            appearFadeCounter = 1;
+            appearAlpha = 1;
         }
         else
         {
-            if (!parameter.InverseTransparency)
-            {
-                // プレイヤーとの距離によって影人間の透明度を変える
-                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
+            // プレイヤーとの距離によって影人間の透明度を変える
+            float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
 
-                // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
-                appearFadeCounter = (parameter.TransparencyMax - parameter.TransparencyMin) - dist;
-            }
-            else
+            // 完全可視距離の距離レート
+            if (parameter.RangeParameter.fullAppear > parameter.RangeParameter.appear) Debug.LogError("完全可視距離が可視距離より大きいです");
+            float finalRate = 1.0f;
+            if (dist > parameter.RangeParameter.appear)
             {
-                // プレイヤーとの距離によって影人間の透明度を変える
-                float dist = (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position).magnitude;
-
-                // プレイヤーとの距離を０～１に丸め込む
-                dist = dist / parameter.RangeParameter.appear * ((parameter.TransparencyMax - parameter.TransparencyMin));
-                appearFadeCounter = parameter.TransparencyMin + dist;
+                finalRate = 0;
             }
+            else if(dist > parameter.RangeParameter.fullAppear)
+            {
+                // 完全可視距離をゼロとして0～1.0の距離でレート作成
+                var rate = (dist - parameter.RangeParameter.fullAppear) / (parameter.RangeParameter.appear - parameter.RangeParameter.fullAppear);
+                finalRate = 1.0f - rate;
+            }
+
+            appearAlpha = parameter.InverseTransparency ? -finalRate : finalRate;
         }
-        // 現在の透明度が最小と最大を超えないように補正
-        if (parameter.IsTransparencyByDistance)
-        {
-            appearFadeCounter = Mathf.Clamp(appearFadeCounter, parameter.TransparencyMin, parameter.TransparencyMax);
-        }
+        appearAlpha = Mathf.Clamp(appearAlpha, parameter.TransparencyMin, parameter.TransparencyMax);
 
         // 透明度をメッシュに反映
         Color result = new Color(
                     meshRenderer.material.color.r,
                     meshRenderer.material.color.g,
                     meshRenderer.material.color.b,
-                    appearFadeCounter);
+                    appearAlpha);
         meshRenderer.material.color = result;
     }
 

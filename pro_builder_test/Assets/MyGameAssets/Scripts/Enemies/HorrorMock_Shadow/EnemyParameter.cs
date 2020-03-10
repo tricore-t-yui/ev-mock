@@ -7,6 +7,8 @@ public class RangeParameter
 {
     [EnableIf("isTransparencyByDistance"), Range(0,100), Tooltip("透明状態から可視状態になる範囲")]
     public float appear = 4;
+    [EnableIf("isTransparencyByDistance"), Range(0, 100), Tooltip("完全可視状態になる範囲")]
+    public float fullAppear = 1;
     [Range(0.1f, 30), Tooltip("ベースの聴覚範囲")]
     public float noiseHear = 2.5f;
     [Range(0, 10), Tooltip("ノイズを聞いたときに決定されるターゲットポジションの分布誤差（メートル）")]
