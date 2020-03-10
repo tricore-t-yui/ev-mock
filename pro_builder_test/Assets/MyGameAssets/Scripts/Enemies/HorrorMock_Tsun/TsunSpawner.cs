@@ -7,7 +7,7 @@ using System.Linq;
 [System.Serializable]
 public class SpawnParameter
 {
-    public GameObject tsunPrefab = default;
+    public Tsun tsun = default;
     public float spawnDelayTime = 0;
     public List<Vector2> spawnPos = default;
     public List<ShadowHuman> shadowTrigger = default;
@@ -32,8 +32,6 @@ public class TsunSpawner : MonoBehaviour
 
     // ツンが感知した影人間
     ShadowHuman detectedShadowOfTsun = default;
-
-    Tsun spawnedTsun;
 
     /// <summary>
     /// 開始
@@ -70,8 +68,7 @@ public class TsunSpawner : MonoBehaviour
             if (spawnParameter.spawnCounter > spawnParameter.spawnDelayTime)
             {
                 // スポーンさせる
-                spawnedTsun = Instantiate(spawnParameter.tsunPrefab).GetComponent<Tsun>();
-                spawnedTsun.Spawned(LotterySpawnPos(), detectedShadowOfTsun, spawnParameter.shadowTrigger);
+                spawnParameter.tsun.Spawn(EnemyParameter.StateType.Caution, detectedShadowOfTsun.transform.position, LotterySpawnPos());
 
                 // スポーンステート変更
                 spawnParameter.spawnState = SpawnParameter.SpawnState.Spawn;
@@ -82,11 +79,10 @@ public class TsunSpawner : MonoBehaviour
         else if (spawnParameter.spawnState == SpawnParameter.SpawnState.Spawn)
         {
             // 通常状態に戻った
-            if (spawnedTsun.currentState == EnemyParameter.StateType.Normal)
+            if (spawnParameter.tsun.currentState == EnemyParameter.StateType.Normal)
             {
                 // デスポーン
-                Destroy(spawnedTsun.gameObject);
-                spawnedTsun = null;
+                spawnParameter.tsun.Spawn(EnemyParameter.StateType.Normal);
                 spawnParameter.spawnState = SpawnParameter.SpawnState.Not;
                 detectedShadowOfTsun = null;
             }
@@ -103,7 +99,7 @@ public class TsunSpawner : MonoBehaviour
         float minDist = float.MaxValue;
         foreach (var elem in spawnParameter.spawnPos)
         {
-            var spawnPosv3 = new Vector3(elem.x, transform.position.y, elem.y);
+            var spawnPosv3 = new Vector3(transform.position.x + elem.x, transform.position.y, transform.position.z + elem.y);
             var dist = (detectedShadowOfTsun.transform.position - spawnPosv3).sqrMagnitude;
             if (dist < minDist)
             {
@@ -115,22 +111,14 @@ public class TsunSpawner : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        // スポーンポジションと影人間を線で結ぶ
-        foreach(ShadowHuman shadow in spawnParameter.shadowTrigger)
+        // スポーンポジション設定していない状態ならスフィアだけ出す
+        foreach (var pos in spawnParameter.spawnPos)
         {
-            spawnParameter.spawnPos.ForEach(elem =>
-            {
-                if(shadow.isActiveAndEnabled)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawLine(shadow.transform.position, new Vector3(elem.x, transform.position.y, elem.y));
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawSphere(new Vector3(elem.x, transform.position.y, elem.y), 0.1f);
-                }
-            });
-        }
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(new Vector3(transform.position.x + pos.x, transform.position.y, transform.position.z + pos.y), 0.1f);
+        };
     }
 #endif
 }
