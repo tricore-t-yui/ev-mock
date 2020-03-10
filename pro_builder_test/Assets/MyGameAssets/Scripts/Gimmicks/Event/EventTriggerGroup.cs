@@ -6,8 +6,8 @@ using Sirenix.OdinInspector;
 [TypeInfoBox("複数のイベントをグループ化し、管理する。実行中は有効なスイッチリストが表示されます")]
 public class EventTriggerGroup : MonoBehaviour
 {
-    [LabelText("有効なスイッチリスト"), ReadOnly]
-    public List<string> EnabledSwitchList = new List<string>();
+    [SerializeField, LabelText("有効なスイッチリスト"), ReadOnly]
+    List<string> EnabledSwitchList = new List<string>();
 
     List<EventTrigger> eventTriggerList = new List<EventTrigger>();
 
@@ -27,9 +27,17 @@ public class EventTriggerGroup : MonoBehaviour
     public void OnTriggered(EventTrigger eventTrigger)
     {
         // スイッチ持ってたら有効化スイッチをON
-        if (!string.IsNullOrEmpty(eventTrigger.EnableSwitchName) && !EnabledSwitchList.Contains(eventTrigger.EnableSwitchName))
+        if (eventTrigger.EnableSwitchNameList.Length != 0)
         {
-            EnabledSwitchList.Add(eventTrigger.EnableSwitchName);
+            foreach (var item in eventTrigger.EnableSwitchNameList)
+            {
+                if(!EnabledSwitchList.Contains(item)) EnabledSwitchList.Add(item);
+            }
+        }
+        // 無効にするスイッチ持っていたら無効化
+        foreach (var item in eventTrigger.DisableSwitchNameList)
+        {
+            EnabledSwitchList.Remove(item);
         }
     }
 
@@ -39,5 +47,18 @@ public class EventTriggerGroup : MonoBehaviour
     public void OnTriggerDestroy(EventTrigger eventTrigger)
     {
         eventTriggerList.Remove(eventTrigger);
+    }
+
+    /// <summary>
+    /// スイッチが一致するかどうか
+    /// </summary>
+    public bool IsSwitchOn(string[] switchStringList)
+    {
+        foreach (var switchString in switchStringList)
+        {
+            if (EnabledSwitchList.Contains(switchString))
+                return true;
+        }
+        return false;
     }
 }
