@@ -32,16 +32,18 @@ public class EventTrigger : MonoBehaviour
     float viewColideRange = 5.0f;
     public float ViewColideRange => viewColideRange;
 
-    [SerializeField, LabelText("発動に必要なスイッチ名")]
+    [SerializeField, LabelText("発動に必要なスイッチ名(カンマ区切り複数可)")]
     string needSwitchName = "";
 
     [SerializeField, LabelText("発動できなくなるスイッチ名(マウスオーバーで詳細"), Tooltip("ここに記入されているスイッチがオンだと発動しなくなる。" +
-    "\n例：Soundと記入すると、他のトリガーによってSoundスイッチがONになった場合はこのトリガーが発動しなくなる")]
+    "\n例：Soundと記入すると、他のトリガーによってSoundスイッチがONになった場合はこのトリガーが発動しなくなる(カンマ区切り複数可)")]
     string banSwitch = "";
 
-    [SerializeField, LabelText("発動でONになるスイッチ名")]
+    [SerializeField, LabelText("発動でONになるスイッチ名(カンマ区切り複数可)")]
     string enableSwitchName = "";
-    public string EnableSwitchName => enableSwitchName;
+
+    [SerializeField, LabelText("発動でOFFになるスイッチ名(カンマ区切り複数可)")]
+    string disableSwitchName = "";
 
     [SerializeField, LabelText("発動チャンス回数(ゼロなら無限)")]
     int chanceNum = 0;
@@ -66,6 +68,23 @@ public class EventTrigger : MonoBehaviour
     EventTriggerGroup group;
     float lastEventEndTime;
     bool isDoingEvent;
+
+    string[] banSwitchNameList;
+    string[] needSwitchNameList;
+    public string[] EnableSwitchNameList    { get; private set; }
+    public string[] DisableSwitchNameList   { get; private set; }
+
+    private void Awake()
+    {
+        banSwitchNameList = new string[0];
+        needSwitchNameList = new string[0];
+        EnableSwitchNameList = new string[0];
+        DisableSwitchNameList = new string[0];
+        if (!string.IsNullOrEmpty(needSwitchName)) needSwitchNameList = needSwitchName.Split(',');
+        if (!string.IsNullOrEmpty(banSwitch)) banSwitchNameList = banSwitch.Split(',');
+        if (!string.IsNullOrEmpty(enableSwitchName)) EnableSwitchNameList = enableSwitchName.Split(',');
+        if (!string.IsNullOrEmpty(disableSwitchName)) DisableSwitchNameList = disableSwitchName.Split(',');
+    }
 
     void Start()
     {
@@ -109,9 +128,9 @@ public class EventTrigger : MonoBehaviour
     /// <returns></returns>
     bool IsEnableSwitch()
     {
-        if (string.IsNullOrEmpty(needSwitchName) || group.EnabledSwitchList.Contains(needSwitchName))
+        if (string.IsNullOrEmpty(needSwitchName) || group.IsSwitchOn(needSwitchNameList))
         {
-            if (string.IsNullOrEmpty(banSwitch) || !group.EnabledSwitchList.Contains(banSwitch))
+            if (string.IsNullOrEmpty(banSwitch) || !group.IsSwitchOn(banSwitchNameList))
             {
                 return true;
             }

@@ -6,6 +6,7 @@ using StateType = EnemyParameter.StateType;
 public class ShadowStateCaution : StateBase
 {
     float waitCounter = 0;
+    float waitTime;
 
     enum State
     {
@@ -21,6 +22,7 @@ public class ShadowStateCaution : StateBase
     {
         // 初期化
         waitCounter = 0;
+        waitTime = parameter.CautionStartWaitTime;
         ForceTransparentOff = false;
 
         // 移動速度を設定
@@ -51,14 +53,14 @@ public class ShadowStateCaution : StateBase
         animator.SetBool("IsWaiting", true);
         waitCounter += Time.deltaTime;
         // しばらく待機したら
-        if (waitCounter > parameter.CautionWaitTime)
+        if (waitCounter > waitTime)
         {
             // 目標位置まで距離があれば移動
             if (agent.remainingDistance > agent.stoppingDistance)
             {
                 state = State.WALK;
             }
-            // 目的地についてたら初期位置に戻るか通常状態に
+            // 目的地についてたら通常状態に
             else
             {
                 //初期位置まで距離が一定以上離れていたら
@@ -66,25 +68,9 @@ public class ShadowStateCaution : StateBase
                 {
                     // 初期位置まで瞬間移動する
                     agent.Warp(parameter.InitialPosition);
-                    // 通常状態に戻る
-                    SetNextState((int)StateType.Normal);
                 }
-                else
-                {
-                    // 初期位置を目指して歩く
-                    agent.SetDestination(parameter.InitialPosition);
-
-                    // 既に初期位置についていたら
-                    if ((agent.transform.position - parameter.InitialPosition).magnitude < agent.stoppingDistance)
-                    {
-                        // 通常状態に戻る
-                        SetNextState((int)StateType.Normal);
-                    }
-                    else
-                    {
-                        state = State.WALK;
-                    }
-                }
+                // 通常状態に戻る
+                SetNextState((int)StateType.Normal);
             }
         }
     }
@@ -96,6 +82,7 @@ public class ShadowStateCaution : StateBase
         {
             // 止まって待機
             waitCounter = 0;
+            waitTime = Random.Range(parameter.CautionEndWaitTimeMin, parameter.CautionEndWaitTimeMax);
             state = State.WAIT;
         }
     }

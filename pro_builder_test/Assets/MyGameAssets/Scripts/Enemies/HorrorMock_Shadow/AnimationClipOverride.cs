@@ -32,9 +32,8 @@ public class ClipParameter
 public class AnimationClipOverride : MonoBehaviour
 {
     // オーバーライドコントローラー
-    bool isActivate = false;
-    [EnableIf("isActivate")]
     [SerializeField]
+    Animator anim = default;
     AnimatorOverrideController overrideController = default;
 
     // クリップのパラメータリスト
@@ -46,10 +45,15 @@ public class AnimationClipOverride : MonoBehaviour
     /// </summary>
     void Start()
     {
-        foreach(ClipParameter parameter in clipParameters)
+        overrideController = new AnimatorOverrideController();
+        overrideController.name = "overrideController";
+        overrideController.runtimeAnimatorController = anim.runtimeAnimatorController;
+        anim.runtimeAnimatorController = overrideController;
+        foreach (ClipParameter parameter in clipParameters)
         {
             // アニメーションを置き換える
             overrideController[parameter.oldClipName] = parameter.newClip;
         }
+        anim.Update(0);
     }
 }

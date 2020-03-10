@@ -33,6 +33,7 @@ public class ShadowStateFighting : StateBase
         ForceTransparentOff = true;
 
         // 既にみつけているので、プレイヤーの位置を目標位置に設定済
+        playerPos = agent.destination;
         //agent.SetDestination(player.transform.position);
 
         // 移動速度を設定

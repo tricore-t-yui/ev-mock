@@ -7,6 +7,8 @@ public class RangeParameter
 {
     [EnableIf("isTransparencyByDistance"), Range(0,100), Tooltip("透明状態から可視状態になる範囲")]
     public float appear = 4;
+    [EnableIf("isTransparencyByDistance"), Range(0, 100), Tooltip("完全可視状態になる範囲")]
+    public float fullAppear = 1;
     [Range(0.1f, 30), Tooltip("ベースの聴覚範囲")]
     public float noiseHear = 2.5f;
     [Range(0, 10), Tooltip("ノイズを聞いたときに決定されるターゲットポジションの分布誤差（メートル）")]
@@ -235,11 +237,22 @@ public class EnemyParameter : MonoBehaviour
     float cautionMoveSpeed = 1;
     public float CautionMoveSpeed => cautionMoveSpeed;
 
-    [Tooltip("警戒状態時の待機時間を設定します。" +
+    [Tooltip("警戒状態時の発見時待機時間")]
+    [SerializeField]
+    float cautionStartWaitTime = 1;
+    public float CautionStartWaitTime => cautionStartWaitTime;
+
+    [Tooltip("警戒状態時の見失った際の待機時間：最低値" +
         "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
     [SerializeField]
-    float cautionWaitTime = 1;
-    public float CautionWaitTime => cautionWaitTime;
+    float cautionEndWaitTimeMin = 1;
+    public float CautionEndWaitTimeMin => cautionEndWaitTimeMin;
+
+    [Tooltip("警戒状態時の見失った際の待機時間：最大値" +
+        "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
+    [SerializeField]
+    float cautionEndWaitTimeMax = 4;
+    public float CautionEndWaitTimeMax => cautionEndWaitTimeMax;
 
     [SerializeField]
     [Tooltip("プレイヤーを見失ったり音を聞きとれなくなったときに、もとの徘徊ルートや待機位置に戻ります。" +
@@ -341,6 +354,7 @@ public class EnemyParameter : MonoBehaviour
 
     // 初期位置
     public Vector3 InitialPosition { get; private set; }
+    public Quaternion InitialRotation { get; private set; }
 
     /// <summary>
     /// 初期化
@@ -356,6 +370,7 @@ public class EnemyParameter : MonoBehaviour
             attackRange.gameObject.SetActive(false);
         }
         InitialPosition = transform.position;
+        InitialRotation = transform.rotation;
 
         if (routeCheckPoints != null)
         {
