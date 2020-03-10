@@ -129,7 +129,7 @@ public class EnemyBase : MonoBehaviour
         animator.SetInteger("NextStateTypeId", (int)type);
         animator.SetInteger("AnimatorStateTypeId", (int)type);
         // 初期位置にワープ
-        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); }
+        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); transform.rotation = parameter.InitialRotation; }
         else                     { agent.Warp(spawnPos); }
         if (target != default) { agent.SetDestination(target); }
         // スポーン時の処理を行う
@@ -142,7 +142,7 @@ public class EnemyBase : MonoBehaviour
         currentState = type;
         animator.SetInteger("NextStateTypeId", (int)type);
         animator.SetInteger("AnimatorStateTypeId", (int)type);
-        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); }
+        if (spawnPos == default) { agent.Warp(parameter.InitialPosition); transform.rotation = parameter.InitialRotation; }
         else                     { agent.Warp(spawnPos); }
         if (target != default) { agent.SetDestination(target); }
         // スポーン時の処理を行う

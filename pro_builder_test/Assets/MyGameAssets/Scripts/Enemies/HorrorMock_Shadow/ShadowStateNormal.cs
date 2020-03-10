@@ -36,6 +36,21 @@ public class ShadowStateNormal : StateBase
             // 次の移動目標位置を設定
             agent.SetDestination(GetNextTargetPoint());
         }
+        else if((agent.transform.position - parameter.InitialPosition).magnitude > 0.5f)
+        {
+            // 移動しない人で、初期位置から離れてたら次の移動目標位置は初期位置
+            agent.SetDestination(parameter.InitialPosition);
+            animator.SetBool("NormalWalkBack", true);
+        }
+    }
+
+    /// <summary>
+    /// 終わり
+    /// </summary>
+    public override void Exit()
+    {
+        base.Exit();
+        animator.SetBool("NormalWalkBack", false);
     }
 
     /// <summary>
@@ -84,6 +99,16 @@ public class ShadowStateNormal : StateBase
                 // 次の移動目標位置を設定
                 agent.SetDestination(GetNextTargetPoint());
             }
+        }
+        else
+        {
+            // 歩きアニメーションをやめる
+            if ((agent.transform.position - parameter.InitialPosition).magnitude < 0.5f)
+            {
+                animator.SetBool("NormalWalkBack", false);
+            }
+            // 初期回転に
+            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, parameter.InitialRotation, 0.1f);
         }
     }
 

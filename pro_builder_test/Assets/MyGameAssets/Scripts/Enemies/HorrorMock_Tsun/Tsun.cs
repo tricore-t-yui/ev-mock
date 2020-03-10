@@ -22,12 +22,4 @@ public class Tsun : EnemyBase
         // ステートマシンの初期化
         Initialize(states);
     }
-
-    /// <summary>
-    /// スポーンされたとき
-    /// </summary>
-    public void Spawned(Vector3 initializePos, ShadowHuman detectedShadowHuman, List<ShadowHuman> shadowHumans)
-    {
-        Spawn(EnemyParameter.StateType.Caution, detectedShadowHuman.transform.position, initializePos);
-    }
 }
