@@ -29,7 +29,7 @@ Transform:
   m_LocalPosition: {x: -2.81, y: 1.08, z: 1.74}
   m_LocalScale: {x: 1.4747514, y: 1, z: 1}
   m_Children:
-  - {fileID: 7693231045313104983}
+  - {fileID: 4309244704599368783}
   m_Father: {fileID: 8974143491205633766}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 97.4, z: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
   needSwitchName: 
   banSwitch: 
   enableSwitchName: Set
-  disableSwitchName: 
+  disableSwitchName: Looked,Tached
   chanceNum: 0
   triggerNum: 0
   triggerCoolDown: 0.1
@@ -70,7 +70,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &6058557343712833692
+--- !u!1 &2863502187931441937
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,43 +78,88 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7693231045313104983}
-  - component: {fileID: 8685665219933631330}
+  - component: {fileID: 6183470996224111602}
+  - component: {fileID: 6777302008829162759}
   m_Layer: 0
-  m_Name: EventObjectTargetAnimation
+  m_Name: EventObjectTargetOnOff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &7693231045313104983
+--- !u!4 &6183470996224111602
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6058557343712833692}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 2863502187931441937}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7922413263524053490}
-  m_RootOrder: 0
+  m_Father: {fileID: 8974143490926573857}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8685665219933631330
+--- !u!114 &6777302008829162759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6058557343712833692}
+  m_GameObject: {fileID: 2863502187931441937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8f054969eb011429a0b6e53ad1523f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6898a3aaad3bcea45a50be19b814e45a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playAnim: {fileID: 6078770567616393809}
-  triggerName: Look
+  targetObject: {fileID: 4561772576369793412}
+  onoff: 1
+--- !u!1 &8869002720672589235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4309244704599368783}
+  - component: {fileID: 7534846709157696437}
+  m_Layer: 0
+  m_Name: EventObjectTargetOnOff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4309244704599368783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8869002720672589235}
+  m_LocalRotation: {x: -0, y: -0.7057808, z: -0, w: 0.7084303}
+  m_LocalPosition: {x: -1.8592409, y: -1.08, z: 1.7010205}
+  m_LocalScale: {x: 0.5899975, y: 1, z: 0.64418083}
+  m_Children: []
+  m_Father: {fileID: 7922413263524053490}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7534846709157696437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8869002720672589235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6898a3aaad3bcea45a50be19b814e45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 4561772576369793412}
+  onoff: 0
 --- !u!1 &8974143490294791613
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,8 +210,8 @@ MonoBehaviour:
   viewColideRange: 0.5
   needSwitchName: Watching
   banSwitch: Looked
-  enableSwitchName: Tached,
-  disableSwitchName: Watching,Looked,Tached
+  enableSwitchName: Tached
+  disableSwitchName: Watching,Set
   chanceNum: 0
   triggerNum: 0
   triggerCoolDown: 0.1
@@ -281,7 +326,7 @@ MonoBehaviour:
   needSwitchName: Watching
   banSwitch: Tached
   enableSwitchName: Looked
-  disableSwitchName: Watching,Looked,Tached
+  disableSwitchName: Watching,Set
   chanceNum: 0
   triggerNum: 0
   triggerCoolDown: 0.1
@@ -295,7 +340,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8974143490527523344}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -375,6 +420,7 @@ Transform:
   m_LocalScale: {x: 0.59, y: 1, z: 0.95}
   m_Children:
   - {fileID: 8974143491915318881}
+  - {fileID: 6183470996224111602}
   m_Father: {fileID: 8974143491205633766}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 7.6150002, z: 0}
@@ -396,11 +442,11 @@ MonoBehaviour:
   needSwitchName: Set
   banSwitch: 
   enableSwitchName: Watching
-  disableSwitchName: Set
+  disableSwitchName: 
   chanceNum: 0
   triggerNum: 0
-  triggerCoolDown: 100
-  appearRate: 50
+  triggerCoolDown: 0.1
+  appearRate: 100
   addAppearRate: 20
 --- !u!65 &8974143490926573854
 BoxCollider:
@@ -516,16 +562,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8974143491205633766}
     m_Modifications:
-    - target: {fileID: 4883067514363260659, guid: f5b12cb41c745be4da69a9b87c0c6f83,
-        type: 3}
-      propertyPath: m_Name
-      value: Animation TsunWatching L OBJ
-      objectReference: {fileID: 0}
-    - target: {fileID: 4883067514363260659, guid: f5b12cb41c745be4da69a9b87c0c6f83,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4883067514363260658, guid: f5b12cb41c745be4da69a9b87c0c6f83,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -581,15 +617,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4883067514363260659, guid: f5b12cb41c745be4da69a9b87c0c6f83,
+        type: 3}
+      propertyPath: m_Name
+      value: Animation TsunWatching L OBJ
+      objectReference: {fileID: 0}
+    - target: {fileID: 4883067514363260659, guid: f5b12cb41c745be4da69a9b87c0c6f83,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2315534344364260660, guid: f5b12cb41c745be4da69a9b87c0c6f83,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2315534344364260660, guid: f5b12cb41c745be4da69a9b87c0c6f83,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.46
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1028476457531784187, guid: f5b12cb41c745be4da69a9b87c0c6f83,
         type: 3}
@@ -607,6 +653,12 @@ Animator:
 --- !u!4 &4561772576369793413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4883067514363260658, guid: f5b12cb41c745be4da69a9b87c0c6f83,
+    type: 3}
+  m_PrefabInstance: {fileID: 8974143491923572599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4561772576369793412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4883067514363260659, guid: f5b12cb41c745be4da69a9b87c0c6f83,
     type: 3}
   m_PrefabInstance: {fileID: 8974143491923572599}
   m_PrefabAsset: {fileID: 0}
