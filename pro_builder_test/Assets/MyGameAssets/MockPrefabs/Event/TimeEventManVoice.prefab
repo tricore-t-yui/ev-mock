@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5138689457516529929
+--- !u!1 &6117484601052553851
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2300172876901961215}
-  - component: {fileID: 3817126136694192488}
+  - component: {fileID: 3249058689711171641}
+  - component: {fileID: 568525832237829766}
   m_Layer: 0
-  m_Name: EventObjectScreenEffect
+  m_Name: EventObjecNormal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &2300172876901961215
+--- !u!4 &3249058689711171641
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5138689457516529929}
+  m_GameObject: {fileID: 6117484601052553851}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -192.22, y: 0.75, z: 8.599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7031307329682287611}
   m_Father: {fileID: 6764279248721825239}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3817126136694192488
+--- !u!114 &568525832237829766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5138689457516529929}
+  m_GameObject: {fileID: 6117484601052553851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0f058bb2d235704fae26fa303d05a14, type: 3}
+  m_Script: {fileID: 11500000, guid: bdbe86c885af722418b7691022d29efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showTime: 3
-  shakeRate: 100
-  fadeSpeedRate: 0.5
+  lifeTime: 2
 --- !u!1 &7489930768508442897
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,10 +70,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7489930768508442897}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 192.22, y: -0.75, z: -8.599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2300172876901961215}
+  m_Father: {fileID: 3249058689711171641}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &2839569542653511385
@@ -134,7 +132,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -203,7 +201,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2300172876901961215}
+  - {fileID: 3249058689711171641}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -220,11 +218,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugDrawRange: 1
-  kind: 0
+  kind: 2
   viewColideRange: 5
   needSwitchName: 
   banSwitch: 
   enableSwitchName: 
+  disableSwitchName: 
   chanceNum: 0
   triggerNum: 0
   triggerCoolDown: 20

@@ -66,11 +66,11 @@ public class SoundController : MonoBehaviour
     {
         if(stateController.IsSquat)
         {
-            audioSource.volume = 0.01f * 0.5f;
+            audioSource.volume = 0.02f * 0.5f;
         }
         else
         {
-            audioSource.volume = 0.01f;
+            audioSource.volume = 0.02f;
         }
         audioSource.pitch = 0.85f + 0.05f * Random.Range(-1, 1);
     }
