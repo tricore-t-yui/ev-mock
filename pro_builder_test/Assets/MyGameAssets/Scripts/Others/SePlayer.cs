@@ -10,12 +10,6 @@ public class SePlayer : MonoBehaviour
     [SerializeField]
     SpawnPool sePool = default;
 
-    [SerializeField]
-    AudioSource seCopySource2D = default;
-
-    [SerializeField]
-    AudioSource seCopySource3D = default;
-
     List<AudioSource> endWatchSeList = new List<AudioSource>();
 
     public static SePlayer Inst { get; private set; }
@@ -27,25 +21,37 @@ public class SePlayer : MonoBehaviour
     /// <summary>
     /// 再生.
     /// </summary>
-    public void PlaySe(AudioClip clip, float volume, float pitch, float volumeRandomRange = 0.0f, float pitchRandomRange = 0.0f)
-    {
-        PlaySeInternal(transform.position, seCopySource2D, clip, volume, pitch, volumeRandomRange, pitchRandomRange);
-    }
-    public void PlaySe3D(Vector3 pos, AudioClip clip, float volume, float pitch, float volumeRandomRange = 0.0f, float pitchRandomRange = 0.0f)
-    {
-        PlaySeInternal(pos, seCopySource3D, clip, volume, pitch, volumeRandomRange, pitchRandomRange);
-    }
-    void PlaySeInternal(Vector3 pos, AudioSource copySource, AudioClip clip, float volume, float pitch, float volumeRandomRange, float pitchRandomRange)
+    public void PlaySe(AudioSource copySource, float volumeRandomRange = 0.0f, float pitchRandomRange = 0.0f)
     {
         Transform spawnedSeTrans;
         spawnedSeTrans = sePool.Spawn(copySource.gameObject);
-        spawnedSeTrans.position = pos;
+        spawnedSeTrans.position = copySource.transform.position;
         AudioSource spawnedSe = spawnedSeTrans.GetComponent<AudioSource>();
+        spawnedSe.clip = copySource.clip;
+        spawnedSe.outputAudioMixerGroup = copySource.outputAudioMixerGroup;
+        spawnedSe.loop = copySource.loop;
+        spawnedSe.ignoreListenerVolume = copySource.ignoreListenerVolume;
+        spawnedSe.ignoreListenerPause = copySource.ignoreListenerPause;
+        spawnedSe.velocityUpdateMode = copySource.velocityUpdateMode;
+        spawnedSe.panStereo = copySource.panStereo;
+        spawnedSe.spatialBlend = copySource.spatialBlend;
+        spawnedSe.spatialize = copySource.spatialize;
+        spawnedSe.spatializePostEffects = copySource.spatializePostEffects;
+        spawnedSe.reverbZoneMix = copySource.reverbZoneMix;
+        spawnedSe.bypassEffects = copySource.bypassEffects;
+        spawnedSe.bypassListenerEffects = copySource.bypassListenerEffects;
+        spawnedSe.bypassReverbZones = copySource.bypassReverbZones;
+        spawnedSe.dopplerLevel = copySource.dopplerLevel;
+        spawnedSe.spread = copySource.spread;
+        spawnedSe.priority = copySource.priority;
+        spawnedSe.mute = copySource.mute;
+        spawnedSe.minDistance = copySource.minDistance;
+        spawnedSe.maxDistance = copySource.maxDistance;
+        spawnedSe.time = copySource.time;
 
         // 一つ目、二つ目のfloatパラメータをそれぞれボリュームとピッチに設定.
-        spawnedSe.volume = volume + Random.Range(-volumeRandomRange, volumeRandomRange);
-        spawnedSe.pitch = pitch + Random.Range(-pitchRandomRange, pitchRandomRange);
-        spawnedSe.clip = clip;
+        spawnedSe.volume = copySource.volume + Random.Range(-volumeRandomRange, volumeRandomRange);
+        spawnedSe.pitch = copySource.pitch + Random.Range(-pitchRandomRange, pitchRandomRange);
         spawnedSe.Play();
 
         endWatchSeList.Add(spawnedSe);

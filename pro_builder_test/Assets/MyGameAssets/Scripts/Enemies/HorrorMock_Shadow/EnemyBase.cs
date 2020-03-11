@@ -27,13 +27,6 @@ public class EnemyBase : MonoBehaviour
     // ナビメッシュの移動制御
     NavMeshStopingSwitcher navMeshStopingSwitcher = new NavMeshStopingSwitcher();
 
-    // サウンドスポナー
-    [SerializeField]
-    ShadowCrySoundSpawner crySoundSpawner = default;
-
-    [SerializeField]
-    EnemySoundPlayer soundPlayer = default;
-
     // 現在のステート
     public StateType currentState { get; protected set; } = StateType.Normal;
 
@@ -193,25 +186,6 @@ public class EnemyBase : MonoBehaviour
 
         // 移動速度をパラメータに反映
         animator.SetFloat("CurrentMoveSpeed", agent.speed);
-
-        // 戦闘状態時にサウンドスポナーをオンにする
-        if (crySoundSpawner != null)
-        {
-            if (currentState == StateType.Fighting)
-            {
-                if (!crySoundSpawner.gameObject.activeSelf)
-                {
-                    crySoundSpawner.gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                if (crySoundSpawner.gameObject.activeSelf)
-                {
-                    crySoundSpawner.gameObject.SetActive(false);
-                }
-            }
-        }
     }
 
     /// <summary>
