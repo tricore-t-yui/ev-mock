@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: ShadowHumanBody
   m_Shader: {fileID: 4800000, guid: 2ebe2983aeca33444bcae1ae7ab1e4d5, type: 3}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -51,6 +51,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _HazeMask:
+        m_Texture: {fileID: 2800000, guid: 2d2729bdd9d05ec4e9821ab81a922640, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HazeNormal:
+        m_Texture: {fileID: 2800000, guid: d3de8e37d10aad442b977001befd23e0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -60,6 +68,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 24e31ecbf813d9e49bf7a1e0d4034916, type: 3}
+        m_Scale: {x: 0.05, y: 0.05}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -76,7 +92,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample1:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d3de8e37d10aad442b977001befd23e0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample3:
@@ -110,18 +126,34 @@ Material:
     - _DistortionStrengthScaled: 0
     - _DistotionSpeed: 0.89
     - _DstBlend: 10
+    - _EdgeLength: 15
     - _EmissionEnabled: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _HazeHAmp: 0.1
+    - _HazeHAmp1: 0.005
+    - _HazeHFreq: 0.01
+    - _HazeHFreq1: 0.84
+    - _HazeMaskTickness: 1.475511
     - _HazeNormalIntensity: 0.1
+    - _HazeNormalScale: 0.059
+    - _HazeTickness: 1.38
+    - _HazeUSpeed: 0.1
+    - _HazeVSpeed: 0.2
+    - _HazeVSpeed1: 0.12
     - _LightingEnabled: 0
+    - _MaskTickness: 0.81
     - _Metallic: 0
     - _Mode: 3
+    - _NormalScale: 0.685
+    - _NormalScale2: 0
     - _OcclusionStrength: 1
     - _Opacity: 1
     - _Parallax: 0.02
+    - _ShadowClamp: 0.455
+    - _ShadowScale: 2.39
     - _ShieldRimPower1: 7.941176
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
@@ -147,19 +179,24 @@ Material:
     - _ZWrite: 0
     - __dirty: 0
     - _grabScreenLength: 0
-    - _grabScreenScale: 4.71
+    - _grabScreenScale: -0.57
+    - _normalAddTest: 0.31
+    - _normalAddWidth: 0
+    - _normalAddWidth2: 0
     - _outlineLen: 0.2
-    - _shadowClamp: 0.553
-    - _shadowScale: 2.77
+    - _shadowClamp: 0.625
+    - _shadowScale: 4.68
     - _shadowTransPow: 5.76
     m_Colors:
     - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 0.30588236}
     - _Color0: {r: 1, g: 0.68235296, b: 0.35294116, a: 0}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HanzeNormalTiling: {r: 1, g: 1, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
     - _Specular: {r: 0, g: 0, b: 0, a: 0}
     - _Tint: {r: 0, g: 0, b: 0, a: 0}
     - _UVOffset0: {r: 0.07, g: 0.1, b: 0.1, a: 0}
