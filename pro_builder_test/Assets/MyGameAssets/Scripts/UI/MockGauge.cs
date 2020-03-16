@@ -30,7 +30,7 @@ public class MockGauge : MonoBehaviour
 
         breathImage.rectTransform.localScale = new Vector3(nowBreath / 100, breathImage.rectTransform.localScale.y, breathImage.rectTransform.localScale.z);
         staminaImage.rectTransform.localScale = new Vector3(nowStamina / 100, staminaImage.rectTransform.localScale.y, staminaImage.rectTransform.localScale.z);
-        if (nowBreath == 100 && nowBreath == 100)
+        if (nowBreath == 100 && nowStamina == 100)
         {
             fullTimeCount += Time.deltaTime;
         }
@@ -38,7 +38,7 @@ public class MockGauge : MonoBehaviour
         {
             fullTimeCount = 0;
         }
-        if(fullTimeCount > 2.0f)
+        if(fullTimeCount > 0.8f)
         {
             aimAlpha = 0.0f;
         }
