@@ -417,7 +417,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3315339731598062243}
   - component: {fileID: 4128825655281897044}
-  - component: {fileID: 1379554814103543171}
   - component: {fileID: 1820468864057453119}
   - component: {fileID: 2558205288852106064}
   - component: {fileID: 992389763359369084}
@@ -466,6 +465,7 @@ MonoBehaviour:
   initialState: 0
   rangeParameter:
     appear: 3
+    fullAppear: 1
     noiseHear: 1
     noiseTargetPosRandomRange: 0
     noiseHearAddRangeCaution: 2
@@ -497,7 +497,9 @@ MonoBehaviour:
   safeTime: 0
   isDetectNoiseToTransparent: 1
   cautionMoveSpeed: 0.8
-  cautionWaitTime: 2.5
+  cautionStartWaitTime: 1
+  cautionEndWaitTimeMin: 1
+  cautionEndWaitTimeMax: 4
   returnWarpDistance: 40
   fightingMoveSpeed: 1.4
   attackedWaitTime: 3
@@ -517,41 +519,6 @@ MonoBehaviour:
   isStaticState: 0
   dontAttack: 0
   isInitialAutoSpawn: 0
---- !u!114 &1379554814103543171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3315339731598062247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4a302236f9f9e54285c4ef7e330a70c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 9143536505735512028}
-  clipParameters:
-  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u958B\u59CB"
-    oldClipName: knockStart
-    newClip: {fileID: 0}
-  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u30EB\u30FC\u30D7"
-    oldClipName: knockLoop
-    newClip: {fileID: 0}
-  - animationName: "\u901A\u5E38_\u5F85\u6A5F\u578B_\u5F85\u6A5F\u7D42\u4E86"
-    oldClipName: knockEnd
-    newClip: {fileID: 0}
-  - animationName: "\u6226\u95D8_\u5F85\u6A5F\u30EB\u30FC\u30D7"
-    oldClipName: attackWaitLoop
-    newClip: {fileID: 0}
-  - animationName: "\u6226\u95D8_\u8D70\u308A\u958B\u59CB"
-    oldClipName: attackRunStart
-    newClip: {fileID: 0}
-  - animationName: "\u6226\u95D8_\u8D70\u308A\u30EB\u30FC\u30D7"
-    oldClipName: attackRunLoop
-    newClip: {fileID: 0}
-  - animationName: "\u6226\u95D8_\u8D70\u308A\u7D42\u4E86"
-    oldClipName: attackRunEnd
-    newClip: {fileID: 0}
 --- !u!114 &1820468864057453119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,8 +553,6 @@ MonoBehaviour:
   animator: {fileID: 9143536505735512028}
   agent: {fileID: 992389763359369084}
   meshRenderer: {fileID: 560651997582818414}
-  crySoundSpawner: {fileID: 0}
-  soundPlayer: {fileID: 0}
 --- !u!195 &992389763359369084
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1032,11 +997,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3315339731598062243}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
-        type: 3}
-      propertyPath: m_Name
-      value: tsun01_body00
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1091,6 +1051,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
+        type: 3}
+      propertyPath: m_Name
+      value: tsun01_body00
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
         type: 3}
