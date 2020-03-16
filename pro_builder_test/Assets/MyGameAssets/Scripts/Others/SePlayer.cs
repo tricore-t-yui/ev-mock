@@ -10,6 +10,9 @@ public class SePlayer : MonoBehaviour
     [SerializeField]
     SpawnPool sePool = default;
 
+    [SerializeField]
+    AudioSource seObject;
+
     List<AudioSource> endWatchSeList = new List<AudioSource>();
 
     public static SePlayer Inst { get; private set; }
@@ -24,7 +27,7 @@ public class SePlayer : MonoBehaviour
     public void PlaySe(AudioSource copySource, float volumeRandomRange = 0.0f, float pitchRandomRange = 0.0f)
     {
         Transform spawnedSeTrans;
-        spawnedSeTrans = sePool.Spawn(copySource.gameObject);
+        spawnedSeTrans = sePool.Spawn(seObject.gameObject);
         spawnedSeTrans.position = copySource.transform.position;
         AudioSource spawnedSe = spawnedSeTrans.GetComponent<AudioSource>();
         spawnedSe.clip = copySource.clip;
