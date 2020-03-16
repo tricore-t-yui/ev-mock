@@ -51,6 +51,21 @@ public class SePlayer : MonoBehaviour
         spawnedSe.minDistance = copySource.minDistance;
         spawnedSe.maxDistance = copySource.maxDistance;
         spawnedSe.time = copySource.time;
+        spawnedSe.rolloffMode = copySource.rolloffMode;
+
+        //// Rolloffだけ対応
+        //var customCurve = copySource.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
+        //List<Keyframe> keys = new List<Keyframe>();
+        //foreach (var item in customCurve.keys)
+        //{
+        //    keys.Add(item);
+        //}
+        //spawnedSe.SetCustomCurve(AudioSourceCurveType.CustomRolloff, new AnimationCurve(keys.ToArray()));
+
+        spawnedSe.SetCustomCurve(AudioSourceCurveType.CustomRolloff, copySource.GetCustomCurve(AudioSourceCurveType.CustomRolloff));
+        spawnedSe.SetCustomCurve(AudioSourceCurveType.ReverbZoneMix, copySource.GetCustomCurve(AudioSourceCurveType.ReverbZoneMix));
+        spawnedSe.SetCustomCurve(AudioSourceCurveType.SpatialBlend, copySource.GetCustomCurve(AudioSourceCurveType.SpatialBlend));
+        spawnedSe.SetCustomCurve(AudioSourceCurveType.Spread, copySource.GetCustomCurve(AudioSourceCurveType.Spread));
 
         // 一つ目、二つ目のfloatパラメータをそれぞれボリュームとピッチに設定.
         spawnedSe.volume = copySource.volume + Random.Range(-volumeRandomRange, volumeRandomRange);
