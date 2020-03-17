@@ -145,7 +145,7 @@ public class EnemyBase : MonoBehaviour
     /// <summary>
     /// 更新
     /// </summary>
-    public void Update()
+    public virtual void Update()
     {
         UpdateTransparent();
         if (parameter.IsStaticState) return;
@@ -370,7 +370,7 @@ public class EnemyBase : MonoBehaviour
     /// <summary>
     /// ビューレンジ入った
     /// </summary>
-    public void OnEnterViewRange(Collider other)
+    public virtual void OnEnterViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
