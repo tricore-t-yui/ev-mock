@@ -10,7 +10,7 @@ public class TrapTunController : MonoBehaviour
     [SerializeField]
     Animator tunAnim = default;                         // アニメーター
     [SerializeField]
-    GameObject effect = default;                        // エフェクト
+    ParticleSystem effect = default;                        // エフェクト
 
     public bool IsEnd { get; private set; } = false;    // 終了フラグ
     public bool IsHit { get; private set; } = false;    // ヒットフラグ
@@ -50,7 +50,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     public void TrapOperate()
     {
-        effect.SetActive(false);
+        effect.Stop();
         tunAnim.SetTrigger("TrapOperate");
     }
 
@@ -59,7 +59,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     public void ResetTrapTun()
     {
-        effect.SetActive(true);
+        effect.Play();
         IsHit = false;
     }
 }
