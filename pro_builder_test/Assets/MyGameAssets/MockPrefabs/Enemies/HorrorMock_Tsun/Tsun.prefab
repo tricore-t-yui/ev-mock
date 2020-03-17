@@ -490,7 +490,7 @@ MonoBehaviour:
   normalMoveSpeed: 0.8
   normalStateType: 0
   wandererType: 0
-  routeCheckPoints: {fileID: 0}
+  routeCheckPoints: {fileID: 11400000, guid: a836fcd39f997f8498e076fbeaa77ab2, type: 2}
   randomRangeRadiusMin: 3
   randomRangeRadiusMax: 3.5
   directDetectSoundLevel: 4
@@ -503,7 +503,7 @@ MonoBehaviour:
   returnWarpDistance: 40
   fightingMoveSpeed: 1.4
   attackedWaitTime: 3
-  damage: 50
+  damage: 40
   cryParameter:
     soundExpansionSpeed: 1
     soundReductionSpeed: 1
@@ -535,8 +535,8 @@ MonoBehaviour:
   agent: {fileID: 992389763359369084}
   parameter: {fileID: 4128825655281897044}
   attackRange:
-  - 1
-  - 2
+  - 3
+  - 3
 --- !u!114 &2558205288852106064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -997,6 +997,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3315339731598062243}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
+        type: 3}
+      propertyPath: m_Name
+      value: tsun01_body00
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1052,11 +1057,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
+    - target: {fileID: -3255188785991121454, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
         type: 3}
-      propertyPath: m_Name
-      value: tsun01_body00
-      objectReference: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6b5f9ff15a50a44d9532793e8ee396d, type: 2}
+    - target: {fileID: -3255188785991121454, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 02f4116a226a4364a871c540fd76f239, type: 2}
     - target: {fileID: -6057140222963153312, guid: c4cdbbaafa49ddb44934f5cfd78d1d96,
         type: 3}
       propertyPath: m_Controller

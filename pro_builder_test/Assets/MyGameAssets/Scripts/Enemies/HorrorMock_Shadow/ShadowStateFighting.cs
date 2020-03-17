@@ -108,6 +108,7 @@ public class ShadowStateFighting : StateBase
 
             // NOTE: yui-t SetActive(false)じゃまずいけどモックだからいいか…
         }
+        waitCounter = 0;
         state = State.ATTACK_WAIT;
     }
 
