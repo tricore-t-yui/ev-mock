@@ -812,7 +812,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.05
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -3755,9 +3755,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 196ec7f51ead292498f594ed88d606e3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c4f3cdaffd5899e449a5b586ed8f7760, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.16
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3766,7 +3766,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1.5
-  MaxDistance: 6
+  MaxDistance: 8
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -3776,22 +3776,22 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.25
-      value: 1
-      inSlope: -4.0016
-      outSlope: -4.0016
+      time: 0.22819519
+      value: 1.0040131
+      inSlope: -0.48240116
+      outSlope: -0.48240116
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.2931932
     - serializedVersion: 3
-      time: 0.5046387
-      value: 0.23013306
-      inSlope: -1.0004
-      outSlope: -1.0004
+      time: 0.74168396
+      value: 0.45894623
+      inSlope: -3.228113
+      outSlope: -3.228113
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.09126013
       outWeight: 0
     - serializedVersion: 3
       time: 1
@@ -4053,8 +4053,8 @@ MonoBehaviour:
     - 120
     viewDistances:
     - 10
-    - 10
-    - 10
+    - 13
+    - 15
     attackAngle: 45
     attackRange: 2
   normalMoveSpeed: 0.7
@@ -4066,12 +4066,12 @@ MonoBehaviour:
   directDetectSoundLevel: 4
   safeTime: 0
   isDetectNoiseToTransparent: 1
-  cautionMoveSpeed: 0.7
+  cautionMoveSpeed: 1
   cautionStartWaitTime: 1
   cautionEndWaitTimeMin: 0
   cautionEndWaitTimeMax: 0
   returnWarpDistance: 40
-  fightingMoveSpeed: 0.7
+  fightingMoveSpeed: 1.5
   attackedWaitTime: 2.5
   damage: 60
   cryParameter:
