@@ -214,6 +214,8 @@ public class PlayerBreathController : MonoBehaviour
     public void DeepBreathRecovery()
     {
         NowAmount += playerData.DeepBreathRecovery;
+        if (NowAmount > 100)
+            NowAmount = 100;
     }
 
     /// <summary>
