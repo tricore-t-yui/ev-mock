@@ -67,8 +67,8 @@ public class EnemyHideObjectAccesser : MonoBehaviour
         if (hideController.HideObj.tag == "Locker") { hideType = HideType.Locker; }
         else if (hideController.HideObj.tag == "Bed") { hideType = HideType.Bed; }
 
-        // 警戒か戦闘のみ
-        if (animator.GetInteger("AnimatorStateTypeId") != 0)
+        // 警戒か戦闘のみで、隠れて息止めしていなかったら引きずり出す
+        if (animator.GetInteger("AnimatorStateTypeId") != 0 && (hideController.IsHideLocker || hideController.IsHideBed) && !hideController.IsHideStealth())
         {
             GameObject hide = hideController.HideObj;
             if ((hide.transform.position - transform.position).magnitude < attackRange[(int)hideType])
@@ -79,7 +79,7 @@ public class EnemyHideObjectAccesser : MonoBehaviour
                     anim.SetBool("DragOut", true);
                     anim.SetBool("DragOut", false);
                 }
-                damageEvent.Invoke(transform, parameter.Damage);
+                damageEvent.Invoke(transform, 0); // 引きずり出しはダメージゼロ
             }
         }
     }
