@@ -181,6 +181,13 @@ public class EnemyBase : MonoBehaviour
         // ナビメッシュの移動制御クラスの更新
         navMeshStopingSwitcher.Update();
 
+        // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完
+        var toTarget = agent.destination - transform.position;
+        if (toTarget.magnitude < 2.0f)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.1f);
+        }
+
         // 特殊アクションの制御
         ControlSpecialAction();
 
