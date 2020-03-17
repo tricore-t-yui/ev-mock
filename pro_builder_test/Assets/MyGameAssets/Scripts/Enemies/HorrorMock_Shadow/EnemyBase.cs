@@ -183,7 +183,8 @@ public class EnemyBase : MonoBehaviour
 
         // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完
         var toTarget = agent.destination - transform.position;
-        if (toTarget.magnitude < 2.0f && toTarget.magnitude > 0)
+        var toTargetMag = toTarget.magnitude;
+        if (toTargetMag < 2.0f && toTargetMag > float.Epsilon && toTarget.normalized.sqrMagnitude > 0)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.1f);
         }

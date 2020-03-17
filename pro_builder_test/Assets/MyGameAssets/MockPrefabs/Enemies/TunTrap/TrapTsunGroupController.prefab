@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2727462344412874307}
   - component: {fileID: 2727462344412874306}
   m_Layer: 0
-  m_Name: TrapTunGroupController
+  m_Name: TrapTsunGroupController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,11 +25,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2727462344412874304}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2727462344761661443}
+  - {fileID: 1516393629163760039}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -60,14 +60,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   tuns:
-  - {fileID: 2727462344761661445}
---- !u!1001 &3518062780278664762
+  - {fileID: 1516393629163760033}
+--- !u!1001 &2083856286
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 2727462344412874305}
     m_Modifications:
+    - target: {fileID: 1516393629496489528, guid: e0bb47ed20fe042869f34d98e7cdecc6,
+        type: 3}
+      propertyPath: m_Name
+      value: TrapTsun
+      objectReference: {fileID: 0}
     - target: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -76,7 +81,7 @@ PrefabInstance:
     - target: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.45
       objectReference: {fileID: 0}
     - target: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
@@ -123,34 +128,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1516393629496489528, guid: e0bb47ed20fe042869f34d98e7cdecc6,
+    - target: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
-      propertyPath: m_Name
-      value: Tun1
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3839544372746987925, guid: e0bb47ed20fe042869f34d98e7cdecc6,
+    - target: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569288061416185972, guid: e0bb47ed20fe042869f34d98e7cdecc6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.578
       objectReference: {fileID: 0}
     - target: {fileID: 2794185602880582091, guid: e0bb47ed20fe042869f34d98e7cdecc6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.299
+      value: 0.587
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0bb47ed20fe042869f34d98e7cdecc6, type: 3}
---- !u!4 &2727462344761661443 stripped
+--- !u!4 &1516393629163760039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1516393629496489529, guid: e0bb47ed20fe042869f34d98e7cdecc6,
     type: 3}
-  m_PrefabInstance: {fileID: 3518062780278664762}
+  m_PrefabInstance: {fileID: 2083856286}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2727462344761661445 stripped
+--- !u!114 &1516393629163760033 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1516393629496489535, guid: e0bb47ed20fe042869f34d98e7cdecc6,
     type: 3}
-  m_PrefabInstance: {fileID: 3518062780278664762}
+  m_PrefabInstance: {fileID: 2083856286}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
