@@ -102,10 +102,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 99061310}
-  - component: {fileID: 99061312}
   - component: {fileID: 99061311}
   m_Layer: 18
-  m_Name: HideSafetyArea
+  m_Name: HideStateController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,19 +124,6 @@ Transform:
   m_Father: {fileID: 1125087521836334049}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &99061312
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 99061309}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.25
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &99061311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,13 +131,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 99061309}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a95431317c2447ef9c7f7bc56e79925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerCollider: {fileID: 1125087521836334053}
   breathController: {fileID: 1084558973}
+  heartSe: {fileID: 0}
 --- !u!1 &266841882
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,6 +710,7 @@ MonoBehaviour:
   soundArea: {fileID: 0}
   keyController: {fileID: 0}
   playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
+  breathSe: {fileID: 0}
   durationPlus: 5
   isDebug: 0
 --- !u!114 &1084558971
@@ -1111,6 +1099,7 @@ MonoBehaviour:
   breathController: {fileID: 1084558973}
   keyController: {fileID: 0}
   sound: {fileID: 0}
+  playerRigidbody: {fileID: 0}
 --- !u!114 &733771168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,6 +1117,7 @@ MonoBehaviour:
   healthController: {fileID: 1084558971}
   playerHideController: {fileID: 1125087521836334055}
   playerData: {fileID: 11400000, guid: 0d8fdb4f7cc5a4e79a48d9ab305a7cd9, type: 2}
+  BlowawayPower: 4
 --- !u!114 &1873015058
 MonoBehaviour:
   m_ObjectHideFlags: 0
