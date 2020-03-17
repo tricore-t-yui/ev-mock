@@ -44,9 +44,12 @@ public class HeartSe : MonoBehaviour
     /// </summary>
     public void ChangeHeartSound(HideStateController.HeartSoundType state)
     {
-        currentState = state;
-        int i = (int)currentState;
-        PlayInternal(i);
+        if (currentState != state)
+        {
+            currentState = state;
+            int i = (int)currentState;
+            PlayInternal(i);
+        }
     }
 
     void PlayInternal(int i)

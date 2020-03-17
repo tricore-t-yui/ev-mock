@@ -69,6 +69,7 @@ public class TsunSpawner : MonoBehaviour
             {
                 // スポーンさせる
                 spawnParameter.tsun.Spawn(EnemyParameter.StateType.Caution, detectedShadowOfTsun.transform.position, LotterySpawnPos());
+                spawnParameter.tsun.OnSpawned();
 
                 // スポーンステート変更
                 spawnParameter.spawnState = SpawnParameter.SpawnState.Spawn;

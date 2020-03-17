@@ -26,147 +26,112 @@ public class HideStateController : MonoBehaviour
 
     bool isSafetyArea = false;                              // 安全地帯内にいないかどうか
     bool isLookEnemy = false;                               // 敵が見えているかどうか
-    List<GameObject> nearEnemy = new List<GameObject>();    // 安全距離内にいる敵のリスト
-    List<bool> visibleEnemy = new List<bool>();             // 見えている敵がいるかのリスト
     public HeartSoundType HeartSound { get; private set; } = HeartSoundType.NORMAL;      // 心音
 
-    /// <summary>
-    /// トリガーがヒットしたら
-    /// </summary>
-    void OnTriggerEnter(Collider other)
-    {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Kage" ||
-            LayerMask.LayerToName(other.gameObject.layer) == "Oni"||
-            LayerMask.LayerToName(other.gameObject.layer) == "Tsun")
-        {
-            nearEnemy.Add(other.gameObject);
-        }
-    }
+    List<int> enemyLayerId = new List<int>();
+    List<int> obstacleLayerId = new List<int>();
 
-    /// <summary>
-    /// トリガーが離れたら
-    /// </summary>
-    void OnTriggerExit(Collider other)
-    {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Kage" ||
-            LayerMask.LayerToName(other.gameObject.layer) == "Oni" ||
-            LayerMask.LayerToName(other.gameObject.layer) == "Tsun")
-        {
-            nearEnemy.Remove(other.gameObject);
-        }
-    }
+    //private void Awake()
+    //{
+    //    enemyLayerId.Add(LayerMask.NameToLayer("ShadowHuman"));
+    //    enemyLayerId.Add(LayerMask.NameToLayer("Tsun"));
+    //    enemyLayerId.Add(LayerMask.NameToLayer("Oni"));
+    //    obstacleLayerId.Add(LayerMask.NameToLayer("Door"));
+    //    obstacleLayerId.Add(LayerMask.NameToLayer("Bed"));
+    //    obstacleLayerId.Add(LayerMask.NameToLayer("Locker"));
+    //    obstacleLayerId.Add(LayerMask.NameToLayer("Stage"));
+    //    obstacleLayerId.Add(LayerMask.NameToLayer("Duct"));
+    //}
 
-    /// <summary>
-    /// 起動処理
-    /// </summary>
-    void OnEnable()
-    {
-        isSafetyArea = false;
-        isLookEnemy = false;
-    }
+    ///// <summary>
+    ///// 起動処理
+    ///// </summary>
+    //void OnEnable()
+    //{
+    //    isSafetyArea = false;
+    //    isLookEnemy = false;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    // 心音の変更に合わせた処理
+    //    HeartSound = HeartSoundType.NORMAL;
+    //    breathController.ChangeHideDecrement(HeartSound);
+    //    heartSe.ChangeHeartSound(HeartSound);
+    //}
 
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()
-    {
-        // ステートの変更
-        ChangeHideState();
+    //void Update()
+    //{
+    //    // スフィアキャストをして周囲に敵がいないか判定
+    //    Vector3 playerSpine = new Vector3(transform.position.x, transform.position.y + (playerCollider.height / 2), transform.position.z);
+    //    var ray = new Ray(playerSpine, transform.forward);
+    //    var hits = Physics.SphereCastAll(ray, 10.0f, 0.001f); // 最大範囲10mでとりあえず
+    //    isSafetyArea = true;
+    //    foreach (var item in hits)
+    //    {
+    //        if (enemyLayerId.Contains(item.collider.gameObject.layer))
+    //        {
+    //            // 警戒状態の敵が近くにいたら安全でないと判断
+    //            var hitEnemy = item.collider.GetComponent<EnemyBase>();
+    //            if (hitEnemy && hitEnemy.currentState != EnemyParameter.StateType.Normal)
+    //            {
+    //                isSafetyArea = false;
+    //                break;
+    //            }
+    //        }
+    //    }
 
-        // 心音の変更
-        ChangeHeartSound();
-    }
+    //    // レイキャストで視界内にエネミーがいるかどうか判定（範囲は敵が持つ）
+    //    // 最大範囲10mでとりあえず
+    //    ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+    //    hits = Physics.RaycastAll(ray, 10.0f); // 最大範囲10mでとりあえず
+    //    float nearestEnemy = float.MaxValue;
+    //    float nearestStage = float.MaxValue;
+    //    foreach (var item in hits)
+    //    {
+    //        // 障害物
+    //        if (obstacleLayerId.Contains(item.collider.gameObject.layer))
+    //        {
+    //            if (item.distance < nearestStage)
+    //            {
+    //                nearestStage = item.distance;
+    //            }
+    //        }
+    //        // 敵
+    //        else if (enemyLayerId.Contains(item.collider.gameObject.layer))
+    //        {
+    //            if (item.distance < nearestEnemy)
+    //            {
+    //                nearestEnemy = item.distance;
+    //            }
+    //        }
+    //    }
+    //    isLookEnemy = false;
+    //    if (nearestEnemy < nearestStage)
+    //    {
+    //        isLookEnemy = true;
+    //    }
 
-    /// <summary>
-    /// ステートの変更
-    /// </summary>
-    void ChangeHideState()
-    {
-        if (nearEnemy.Count > 0)
-        {
-            isSafetyArea = true;
-        }
-        else
-        {
-            isSafetyArea = false;
-        }
-        if (visibleEnemy.Contains(true))
-        {
-            isLookEnemy = true;
-        }
-        else
-        {
-            isLookEnemy = false;
-        }
-        visibleEnemy.Clear();
-    }
+    //    // 心音の変更
+    //    ChangeHeartSound();
+    //}
 
     /// <summary>
     /// 敵が見えているかどうか
     /// </summary>
     public void VisibleEnemy(Transform enemy, float height)
     {
-        if (VisibleEnemyRay(enemy, height))
-        {
-            visibleEnemy.Add(true);
-        }
-        else
-        {
-            visibleEnemy.Add(false);
-        }
-    }
-
-    /// <summary>
-    /// 敵が見えているかどうかのRaycast
-    /// </summary>
-    bool VisibleEnemyRay(Transform enemy, float height)
-    {
-        // 敵のそれぞれの座標
-        Vector3 enemyTop = new Vector3(enemy.position.x, enemy.position.y + height, enemy.position.z);
-        Vector3 enemyMiddle = new Vector3(enemy.position.x, enemy.position.y + (height / 2), enemy.position.z);
-        Vector3 enemyBottom = new Vector3(enemy.position.x, enemy.position.y + 0.1f, enemy.position.z);
-
-        // レイのスタート位置
-        Vector3 start = new Vector3(transform.position.x, transform.position.y + (playerCollider.height / 2), transform.position.z);
-
-        // レイの向き
-        Vector3 dir = Vector3.zero;
-
-        // レイの距離
-        float distance = 0.0f;
-
-        // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Locker") | 1 << LayerMask.NameToLayer("Bed") |
-            1 << LayerMask.NameToLayer("SafetyArea") | 1 << LayerMask.NameToLayer("Interact") | 1 << LayerMask.NameToLayer("LockerSide") | 1 << LayerMask.NameToLayer("Default");
-        layerMask = ~layerMask;
-
-        for (int i = 0; i < 3; i++)
-        {
-            // 処理回数によってレイの向きと距離を計算
-            switch(i)
-            {
-                case 0: dir = (enemyTop - start).normalized;    distance = (start - enemyTop).magnitude; break;
-                case 1: dir = (enemyMiddle - start).normalized; distance = (start - enemyMiddle).magnitude; break;
-                case 2: dir = (enemyBottom - start).normalized; distance = (start - enemyBottom).magnitude; break;
-            }
-
-            // レイ作成
-            Ray ray = new Ray(start, dir);
-            RaycastHit hit = default;
-
-            // レイに当たったらtrue、外れていたらfalse
-            if (Physics.Raycast(ray, out hit, distance, layerMask))
-            {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Kage") ||
-                    hit.collider.gameObject.layer == LayerMask.NameToLayer("Oni") ||
-                    hit.collider.gameObject.layer == LayerMask.NameToLayer("Tun"))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        //if (VisibleEnemyRay(enemy, height))
+        //{
+        //    visibleEnemy.Add(true);
+        //}
+        //else
+        //{
+        //    visibleEnemy.Add(false);
+        //}
     }
 
     /// <summary>
@@ -176,30 +141,30 @@ public class HideStateController : MonoBehaviour
     {
         if (isSafetyArea)
         {
-            // 安全地帯内に敵がいて、まだ敵が見えていない状態(消費中)
-            HeartSound = HeartSoundType.MEDIUM;
+            // 安全地帯内
+            HeartSound = HeartSoundType.NORMAL;
 
+            // 安全地帯内敵が見えている状態
             if (isLookEnemy)
             {
-                // 安全地帯内に敵がいて、敵が見えている状態(消費大)
-                HeartSound = HeartSoundType.LARGE;
+                HeartSound = HeartSoundType.MEDIUM;
             }
         }
         else
         {
             // 安全地帯内に敵がおらず、敵が見えていない状態(消費小)
-            HeartSound = HeartSoundType.NORMAL;
+            HeartSound = HeartSoundType.MEDIUM;
 
             // 安全地帯内に敵がおらず、敵が見えている状態
             if (isLookEnemy)
             {
                 // 安全地帯内に敵がいて姿を見ている状態(消費中)
-                HeartSound = HeartSoundType.MEDIUM;
+                HeartSound = HeartSoundType.LARGE;
             }
         }
 
         // 心音の変更に合わせた処理
-        breathController.ChangeHideDecrement(HeartSound);
-        heartSe.ChangeHeartSound(HeartSound);
+        //breathController.ChangeHideDecrement(HeartSound);
+       // heartSe.ChangeHeartSound(HeartSound);
     }
 }
