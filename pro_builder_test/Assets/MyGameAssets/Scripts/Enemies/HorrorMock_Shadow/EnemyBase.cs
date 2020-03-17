@@ -273,12 +273,15 @@ public class EnemyBase : MonoBehaviour
         appearAlpha = Mathf.Clamp(appearAlpha, parameter.TransparencyMin, parameter.TransparencyMax);
 
         // 透明度をメッシュに反映
-        Color result = new Color(
-                    meshRenderer.material.color.r,
-                    meshRenderer.material.color.g,
-                    meshRenderer.material.color.b,
-                    appearAlpha);
-        meshRenderer.material.color = result;
+        if(parameter.IsTransparencyByDistance)
+        {
+            Color result = new Color(
+                        meshRenderer.material.color.r,
+                        meshRenderer.material.color.g,
+                        meshRenderer.material.color.b,
+                        appearAlpha);
+            meshRenderer.material.color = result;
+        }
     }
 
     /// <summary>
