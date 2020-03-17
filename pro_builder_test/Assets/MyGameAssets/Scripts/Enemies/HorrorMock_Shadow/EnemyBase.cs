@@ -181,6 +181,13 @@ public class EnemyBase : MonoBehaviour
         // ナビメッシュの移動制御クラスの更新
         navMeshStopingSwitcher.Update();
 
+        // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完
+        var toTarget = agent.destination - transform.position;
+        if (toTarget.magnitude < 2.0f && toTarget.magnitude > 0)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.1f);
+        }
+
         // 特殊アクションの制御
         ControlSpecialAction();
 
@@ -273,12 +280,15 @@ public class EnemyBase : MonoBehaviour
         appearAlpha = Mathf.Clamp(appearAlpha, parameter.TransparencyMin, parameter.TransparencyMax);
 
         // 透明度をメッシュに反映
-        Color result = new Color(
-                    meshRenderer.material.color.r,
-                    meshRenderer.material.color.g,
-                    meshRenderer.material.color.b,
-                    appearAlpha);
-        meshRenderer.material.color = result;
+        if(parameter.IsTransparencyByDistance)
+        {
+            Color result = new Color(
+                        meshRenderer.material.color.r,
+                        meshRenderer.material.color.g,
+                        meshRenderer.material.color.b,
+                        appearAlpha);
+            meshRenderer.material.color = result;
+        }
     }
 
     /// <summary>
