@@ -110,8 +110,8 @@ public class PlayerBreathController : MonoBehaviour
                 case MoveType.WAIT: NowAmount += playerData.NormalRecovery; break;
                 case MoveType.WALK: NowAmount += playerData.NormalRecovery; break;
                 case MoveType.DASH: if (!isUseStamina) { NowAmount += playerData.StaminaDecrement; } break;
-                case MoveType.BREATHHOLD: NowAmount += playerData.StealthDecrement; break;
-                case MoveType.BREATHHOLDMOVE: NowAmount += playerData.StealthDecrement; break;
+                case MoveType.BREATHHOLD: NowAmount += playerData.StealthDecrement; StrikeButtonRepeatedly(); break;
+                case MoveType.BREATHHOLDMOVE: NowAmount += playerData.StealthDecrement; StrikeButtonRepeatedly(); break;
                 case MoveType.HIDE: ConsumeHideBreath(); break;
                 case MoveType.BREATHLESSNESS: NowAmount += playerData.BreathlessnessRecovery; break;
                 default: break;
@@ -123,7 +123,7 @@ public class PlayerBreathController : MonoBehaviour
         {
             IsDisappear = true;
         }
-        if(IsDisappear && NowAmount >= 100)
+        if(IsDisappear && NowAmount >= playerData.LargeDisturbance)
         {
             IsDisappear = false;
         }
@@ -177,15 +177,8 @@ public class PlayerBreathController : MonoBehaviour
         // 消費軽減キーを押したら
         if (keyController.GetKeyDown(KeyType.RIGHTENDUREBREATH) || keyController.GetKeyDown(KeyType.LEFTENDUREBREATH))
         {
-            // 連打処理の継続時間にプラス
-            duration += durationPlus;
+            NowAmount += playerData.ButtonPatienceDecrement;
         }
-
-        // 継続時間をマイナス
-        duration--;
-
-        // 値が0以下ににならないように補正
-        duration = Mathf.Clamp(duration, 0, 100);
     }
 
     /// <summary>
@@ -224,7 +217,7 @@ public class PlayerBreathController : MonoBehaviour
     /// </summary>
     public void BreathlessnessDamage()
     {
-        IsDisappear = false;
+        //IsDisappear = false;
     }
 
     /// <summary>

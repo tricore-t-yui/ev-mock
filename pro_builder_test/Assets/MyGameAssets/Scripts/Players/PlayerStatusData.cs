@@ -33,7 +33,7 @@ public class PlayerStatusData : ScriptableObject
     [LabelText("隠れる＋息止め時の息消費量(大)")]
     float hideLargeDecrement = 0.3f;            // 隠れる＋息止め時の息消費量(大)
     [SerializeField]
-    [LabelText("息我慢時(連打あり)の息消費量")]
+    [LabelText("連打時の息回復")]
     float buttonPatienceDecrement = 0.01f;      // 息我慢時(連打あり)の息消費量
     [SerializeField]
     [LabelText("息の乱れ(小)の基準値")]
