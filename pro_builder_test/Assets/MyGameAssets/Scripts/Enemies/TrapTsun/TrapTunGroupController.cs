@@ -89,7 +89,8 @@ public class TrapTunGroupController : MonoBehaviour
         isDemonHit = false;
         foreach (var item in tuns)
         {
-            item.ResetTrapTun();
+            if(item)
+                item.ResetTrapTun();
         }
     }
 }

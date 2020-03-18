@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c409c6a822467a4194dcf71c448891d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customInstanceID: 735900
+  customInstanceID: 524476
   particleData:
     newParticleBuffer: {fileID: 0}
     metaBuffer_1: {fileID: 0}
@@ -1721,7 +1721,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.59307855
+    seed: 0.62256294
   maxParticles: 4096
   startLifetime:
     showEditor: 0
@@ -1777,7 +1777,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.37638265
+    seed: 0.28146034
   startSize:
     showEditor: 1
     mode: 0
@@ -1832,7 +1832,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.091261625
+    seed: 0.4261337
   startSpeed:
     showEditor: 0
     mode: 0
@@ -1887,7 +1887,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.37505215
+    seed: 0.7059436
   startRotation:
     showEditor: 0
     mode: 0
@@ -1942,7 +1942,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.24776244
+    seed: 0.06542122
   useRotation: 0
   sizeOverLifetime:
     showEditor: 1
@@ -1990,7 +1990,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.8885983
+    seed: 0.9333478
     bezier1:
     - {x: 0, y: 0, z: 0.34025538, w: 0.22975549}
     - {x: 1.0207672, y: 0.009529114, z: 0.68051183, w: 1.4889523}
@@ -2040,7 +2040,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.4780231
+    seed: 0.6117644
     bezier1: []
     bezier2: []
   colorOverLifetime:
@@ -2107,7 +2107,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    seed: 0.38959366
+    seed: 0.037294626
   colorIntensityOverLifetime:
     showEditor: 0
     mode: 0
@@ -4925,12 +4925,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8c841820f9f154da7b8919cf089827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmo: 0
   baseTransform: {fileID: 4484567948180639831}
   rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   raycastMask:
     serializedVersion: 2
     m_Bits: 32000
-  targetLayerName: Player
+  targetTagName: Player
   angle: 45
   distance: 1.5
   borderColor: {r: 1, g: 0, b: 0, a: 1}
@@ -5176,12 +5177,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8c841820f9f154da7b8919cf089827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmo: 0
   baseTransform: {fileID: 4484567948180639831}
   rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   raycastMask:
     serializedVersion: 2
     m_Bits: 32000
-  targetLayerName: Player
+  targetTagName: Player
   angle: 5
   distance: 0.1
   borderColor: {r: 0, g: 1, b: 0.08090758, a: 1}
@@ -5551,10 +5553,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da6d1535f7e55641953cac041a258ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmo: 0
   parameter: {fileID: 2986616820252028064}
   animator: {fileID: 2799039856337123959}
   agent: {fileID: 4484567948180639825}
   meshRenderer: {fileID: 7451662967980022798}
+  playerState: {fileID: 0}
 --- !u!195 &4484567948180639825
 NavMeshAgent:
   m_ObjectHideFlags: 0
