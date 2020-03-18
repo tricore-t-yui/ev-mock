@@ -48,6 +48,8 @@ public class EnemyBase : MonoBehaviour
 
     // プレイヤー
     protected GameObject player = default;
+    [SerializeField] 
+    protected PlayerStateController playerState = default;
 
     // サウンドスポナー
     protected SoundAreaSpawner soundSpawner = default;
@@ -69,7 +71,7 @@ public class EnemyBase : MonoBehaviour
 
         // 各クラスのインスタンスを取得
         player = GameObject.FindGameObjectWithTag("Player");
-        damageEvent = GameObject.FindObjectOfType<PlayerDamageEvent>();
+         damageEvent = GameObject.FindObjectOfType<PlayerDamageEvent>();
 
         // インスタンスを取得
         this.states = states;
@@ -383,17 +385,21 @@ public class EnemyBase : MonoBehaviour
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        // 息止めしてたら無視
+        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnDetectedPlayer(other.gameObject);
     }
 
     /// <summary>
     /// ビューレンジ更新
     /// </summary>
-    public void OnStayViewRange(Collider other)
+    public virtual void OnStayViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        // 息止めしてたら無視
+        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnDetectPlayerStay(other.gameObject);
     }
 
@@ -401,11 +407,13 @@ public class EnemyBase : MonoBehaviour
     /// ビューレンジ抜けた
     /// </summary>
     /// <param name="other"></param>
-    public void OnExitViewRange(Collider other)
+    public virtual void OnExitViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        // 息止めしてたら無視
+        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnMissingPlayer(other.gameObject);
     }
 
@@ -438,6 +446,10 @@ public class EnemyBase : MonoBehaviour
             Gizmos.color = Color.magenta;
             Gizmos.DrawSphere(agent.destination, 0.2f);
         }
+    }
+
+    private class PlayerEvent
+    {
     }
 #endif
 }

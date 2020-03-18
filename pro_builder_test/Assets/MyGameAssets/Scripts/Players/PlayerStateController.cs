@@ -71,6 +71,7 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField]
     PlayerDamageEvent playerDamageEvent = default;
 
+    public bool IsBreathHold { get; private set; } = false; 
     public bool IsDashOpen { get; private set; } = false;   // ダッシュで開けたかどうか
     public bool IsShoes { get; private set; } = true;       // 靴を履いているかどうか
     public bool IsSquat { get; private set; } = false;      // しゃがんでいるかどうか
@@ -241,7 +242,12 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.BREATHHOLD;
+            IsBreathHold = true;
             EventStart();
+        }
+        else
+        {
+            IsBreathHold = false;
         }
     }
 
