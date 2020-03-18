@@ -237,7 +237,7 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckBreathHoldState()
     {
-        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS &&
+        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS && !breathController.IsDisappear &&
             (State != ActionStateType.BREATHHOLDMOVE || State == ActionStateType.BREATHHOLDMOVE && !keyController.GetKey(KeyType.MOVE)))
         {
             EventStop();

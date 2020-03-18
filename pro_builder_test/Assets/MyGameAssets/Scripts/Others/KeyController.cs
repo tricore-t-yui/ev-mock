@@ -162,9 +162,9 @@ public class KeyController : MonoBehaviour
             case KeyType.LOOKBACK: return "joystick button 8";
             case KeyType.INTERACT: return "joystick button 0";
             case KeyType.OPTION: return "joystick button 7";
-            case KeyType.SHOES: return "joystick button 2";
+            case KeyType.SHOES: return "joystick button 7";
             case KeyType.SQUAT: return "joystick button 1";
-            case KeyType.DEEPBREATH: return "joystick button 3";
+            case KeyType.DEEPBREATH: return "joystick button 2";
             case KeyType.SAVE: return "joystick button 6";
             case KeyType.LOOKINTO: return "joystick button 9";
             case KeyType.LEFTENDUREBREATH: return "joystick button 4";
