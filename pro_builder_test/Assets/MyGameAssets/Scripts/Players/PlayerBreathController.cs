@@ -143,20 +143,21 @@ public class PlayerBreathController : MonoBehaviour
         // 息を止めていなかったら
         if (hideController.IsHideStealth())
         {
-            // 連打処理
-            StrikeButtonRepeatedly();
+            //// 連打処理
+            //StrikeButtonRepeatedly();
 
-            // 連打処理の継続時間続いている間
-            if (duration > 0)
-            {
-                NowAmount += playerData.ButtonPatienceDecrement;
-            }
-            // 連打していない場合
-            else
-            {
-                // 心音に合わせた息消費
-                NowAmount += hideDecrement;
-            }
+            //// 連打処理の継続時間続いている間
+            //if (duration > 0)
+            //{
+            //    NowAmount += playerData.ButtonPatienceDecrement;
+            //}
+            //// 連打していない場合
+            //else
+            //{
+            //    // 心音に合わせた息消費
+            //    NowAmount += hideDecrement;
+            //}
+            NowAmount += playerData.StealthDecrement;
         }
         else
         {

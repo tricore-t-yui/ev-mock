@@ -49,6 +49,12 @@ public class ShadowStateFighting : StateBase
     public override void Update()
     {
         if (IsSetedNextState) return;
+        // 息止めされたら見失う
+        if(!parameter.IsAbleDetectBreathHoldPlayer && enemy.PlayerState.IsBreathHold)
+        {
+            isDetectedPlayer = false;
+        }
+
         UpdateRotation(currentTargetPos);
         agent.SetDestination(currentTargetPos);
 

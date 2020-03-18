@@ -50,6 +50,7 @@ public class EnemyBase : MonoBehaviour
     protected GameObject player = default;
     [SerializeField] 
     protected PlayerStateController playerState = default;
+    public PlayerStateController PlayerState => playerState;
 
     // サウンドスポナー
     protected SoundAreaSpawner soundSpawner = default;
@@ -324,6 +325,7 @@ public class EnemyBase : MonoBehaviour
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
 
         // 出現フラグを起こす
         isAppear = true;
@@ -335,6 +337,7 @@ public class EnemyBase : MonoBehaviour
     public void OnPlayerExitToAppearRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // 通常状態のみ
         //if (shadowStateMachine.currentState != StateType.Normal) { return; }
         // プレイヤーのみ
@@ -350,6 +353,7 @@ public class EnemyBase : MonoBehaviour
     public void OnEnterNoiseHearRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoise(other.gameObject);
@@ -361,6 +365,7 @@ public class EnemyBase : MonoBehaviour
     public void OnEnterDirectDetectRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtDirectDetectRange(other.gameObject);
@@ -372,6 +377,7 @@ public class EnemyBase : MonoBehaviour
     public void OnEnterFightingRange(Collider other)
     {        
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // ノイズのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Noise")) { return; }
         states[(int)currentState].OnHearNoiseAtFightingRange(other.gameObject);
@@ -383,10 +389,9 @@ public class EnemyBase : MonoBehaviour
     public virtual void OnEnterViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 息止めしてたら無視
-        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnDetectedPlayer(other.gameObject);
     }
 
@@ -396,10 +401,9 @@ public class EnemyBase : MonoBehaviour
     public virtual void OnStayViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 息止めしてたら無視
-        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnDetectPlayerStay(other.gameObject);
     }
 
@@ -410,10 +414,9 @@ public class EnemyBase : MonoBehaviour
     public virtual void OnExitViewRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        // 息止めしてたら無視
-        if (playerState.IsBreathHold) return;
         states[(int)currentState].OnMissingPlayer(other.gameObject);
     }
 
@@ -423,6 +426,7 @@ public class EnemyBase : MonoBehaviour
     public void OnEnterAttackRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         IsInAttackRange = true;
@@ -430,6 +434,7 @@ public class EnemyBase : MonoBehaviour
     public void OnExitAttackRange(Collider other)
     {
         if (parameter.IsStaticState) return;
+        if (!parameter.IsAbleDetectBreathHoldPlayer && playerState.IsBreathHold) return;    // 息止めで見つけられないものは無視
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
         IsInAttackRange = false;

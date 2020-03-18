@@ -242,12 +242,7 @@ public class PlayerStateController : MonoBehaviour
         {
             EventStop();
             State = ActionStateType.BREATHHOLD;
-            IsBreathHold = true;
             EventStart();
-        }
-        else
-        {
-            IsBreathHold = false;
         }
     }
 
@@ -606,8 +601,8 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
             case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
-            case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
-            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDMOVEEND); break;
+            case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); IsBreathHold = false; break;
+            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDMOVEEND); IsBreathHold = false; break;
             case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
             case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
@@ -627,8 +622,8 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WALKSTART); break;
             case ActionStateType.DASH: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
-            case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); break;
-            case ActionStateType.BREATHHOLDMOVE: eventStartCaller.Invoke(EventStartType.BREATHHOLDSMOVETART); break;
+            case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); IsBreathHold = true; break;
+            case ActionStateType.BREATHHOLDMOVE: eventStartCaller.Invoke(EventStartType.BREATHHOLDSMOVETART); IsBreathHold = true; break;
             case ActionStateType.DOOROPEN: eventStartCaller.Invoke(EventStartType.DOORSTART); break;
             case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
             case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;

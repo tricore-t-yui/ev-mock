@@ -137,6 +137,11 @@ public class EnemyParameter : MonoBehaviour
     [SerializeField]
     SectorCollider attackRange = default;
 
+    [LabelText("息止めの時に敵を見つけるか")]
+    [SerializeField]
+    bool isAbleDetectBreathHoldPlayer = false;
+    public bool IsAbleDetectBreathHoldPlayer => isAbleDetectBreathHoldPlayer;
+
     [SerializeField]
     [Tooltip("初期ステートを設定します。" +
         "\nこのステートから開始します。")]
