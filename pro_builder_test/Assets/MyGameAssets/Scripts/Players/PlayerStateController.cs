@@ -364,7 +364,15 @@ public class PlayerStateController : MonoBehaviour
                 else
                 {
                     EventStop();
-                    damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
+                    // イベント周りをいじるのが危険なので小数点第二位までの数値はスタミナダメージに
+                    if(damage > 1.0f)
+                    {
+                        damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
+                    }
+                    else
+                    {
+                        damageController.SetInfo(enemyPos, damage * 100.0f, PlayerDamageController.DamageType.STAMINA);
+                    }
                 }
                 State = ActionStateType.DAMAGE;
                 EventStart();
