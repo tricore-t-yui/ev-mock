@@ -237,17 +237,12 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     void CheckBreathHoldState()
     {
-        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS &&
+        if (!keyController.GetKey(KeyType.DASH) && keyController.GetKey(KeyType.HOLDBREATH) && State != ActionStateType.BREATHLESSNESS && !breathController.IsDisappear &&
             (State != ActionStateType.BREATHHOLDMOVE || State == ActionStateType.BREATHHOLDMOVE && !keyController.GetKey(KeyType.MOVE)))
         {
             EventStop();
             State = ActionStateType.BREATHHOLD;
-            IsBreathHold = true;
             EventStart();
-        }
-        else
-        {
-            IsBreathHold = false;
         }
     }
 
@@ -369,7 +364,15 @@ public class PlayerStateController : MonoBehaviour
                 else
                 {
                     EventStop();
-                    damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
+                    // イベント周りをいじるのが危険なので小数点第二位までの数値はスタミナダメージに
+                    if(damage > 1.0f)
+                    {
+                        damageController.SetInfo(enemyPos, damage, PlayerDamageController.DamageType.NORMAL);
+                    }
+                    else
+                    {
+                        damageController.SetInfo(enemyPos, damage * 100.0f, PlayerDamageController.DamageType.STAMINA);
+                    }
                 }
                 State = ActionStateType.DAMAGE;
                 EventStart();
@@ -606,8 +609,8 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventEndCaller.Invoke(EventEndType.WALKEND); break;
             case ActionStateType.DASH: eventEndCaller.Invoke(EventEndType.DASHEND); break;
-            case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); break;
-            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDMOVEEND); break;
+            case ActionStateType.BREATHHOLD: eventEndCaller.Invoke(EventEndType.BREATHHOLDEND); IsBreathHold = false; break;
+            case ActionStateType.BREATHHOLDMOVE: eventEndCaller.Invoke(EventEndType.BREATHHOLDMOVEEND); IsBreathHold = false; break;
             case ActionStateType.DOOROPEN: eventEndCaller.Invoke(EventEndType.DOOREND); break;
             case ActionStateType.HIDE: eventEndCaller.Invoke(EventEndType.HIDEEND); break;
             case ActionStateType.DEEPBREATH: eventEndCaller.Invoke(EventEndType.DEEPBREATHEND); break;
@@ -627,8 +630,8 @@ public class PlayerStateController : MonoBehaviour
         {
             case ActionStateType.WALK: eventStartCaller.Invoke(EventStartType.WALKSTART); break;
             case ActionStateType.DASH: eventStartCaller.Invoke(EventStartType.DASHSTART); break;
-            case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); break;
-            case ActionStateType.BREATHHOLDMOVE: eventStartCaller.Invoke(EventStartType.BREATHHOLDSMOVETART); break;
+            case ActionStateType.BREATHHOLD: eventStartCaller.Invoke(EventStartType.BREATHHOLDSTART); IsBreathHold = true; break;
+            case ActionStateType.BREATHHOLDMOVE: eventStartCaller.Invoke(EventStartType.BREATHHOLDSMOVETART); IsBreathHold = true; break;
             case ActionStateType.DOOROPEN: eventStartCaller.Invoke(EventStartType.DOORSTART); break;
             case ActionStateType.HIDE: eventStartCaller.Invoke(EventStartType.HIDESTART); break;
             case ActionStateType.DEEPBREATH: eventStartCaller.Invoke(EventStartType.DEEPBREATHSTART); break;

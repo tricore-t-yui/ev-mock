@@ -71,6 +71,17 @@ public class playerStaminaController : MonoBehaviour
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
+    }   
+    
+    /// <summary>
+    /// 深呼吸回復
+    /// </summary>
+    public void Damage(float damage)
+    {
+        NowAmount -= damage;
+
+        // 値補正
+        NowAmount = Mathf.Clamp(NowAmount, 0, 100);
     }
 
     /// <summary>

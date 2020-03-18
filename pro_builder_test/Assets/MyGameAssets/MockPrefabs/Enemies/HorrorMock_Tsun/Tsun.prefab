@@ -527,6 +527,7 @@ MonoBehaviour:
   directDetectRange: {fileID: 4530284329631602246}
   viewRange: {fileID: 3123629697305880472}
   attackRange: {fileID: 2601207460495203472}
+  isAbleDetectBreathHoldPlayer: 1
   initialState: 0
   rangeParameter:
     appear: 3
@@ -543,13 +544,13 @@ MonoBehaviour:
     transparencyMax: 1
     inverseTransparency: 0
     viewAngles:
-    - 80
+    - 60
     - 120
     - 120
     viewDistances:
-    - 10
-    - 12
-    - 15
+    - 5
+    - 7
+    - 7
     attackAngle: 45
     attackRange: 1.5
   normalMoveSpeed: 0.8
@@ -568,7 +569,7 @@ MonoBehaviour:
   returnWarpDistance: 40
   fightingMoveSpeed: 1.4
   attackedWaitTime: 3
-  damage: 40
+  damage: 48
   cryParameter:
     soundExpansionSpeed: 1
     soundReductionSpeed: 1
@@ -619,6 +620,7 @@ MonoBehaviour:
   animator: {fileID: 9143536505735512028}
   agent: {fileID: 992389763359369084}
   meshRenderer: {fileID: 560651997582818414}
+  playerState: {fileID: 0}
   detectedVoice: {fileID: 7812352498358806984}
   spawnedVoice: {fileID: 4356556072163042522}
   detectVoiceInterval: 15

@@ -49,6 +49,19 @@ public class ShadowStateFighting : StateBase
     public override void Update()
     {
         if (IsSetedNextState) return;
+        // 息止めされたら見失う
+        if(!parameter.IsAbleDetectBreathHoldPlayer && enemy.PlayerState.IsBreathHold)
+        {
+            isDetectedPlayer = false;
+
+            // ウェイト中なら即座にRUNに
+            if (state == State.ATTACK_WAIT)
+            {
+                state = State.RUN;
+                waitCounter = 0;
+            }
+        }
+
         UpdateRotation(currentTargetPos);
         agent.SetDestination(currentTargetPos);
 
@@ -77,13 +90,12 @@ public class ShadowStateFighting : StateBase
         {
             agent.isStopped = true;
             // 攻撃範囲内にいたら攻撃
-            if (enemy.IsInAttackRange)
+            if (enemy.IsInAttackRange && isDetectedPlayer)
             {
                 // 攻撃しない状態ならそのまま待機へ
                 if (parameter.DontAttack)
                 {
                     state = State.ATTACK_WAIT;
-
                 }
                 else
                 {
