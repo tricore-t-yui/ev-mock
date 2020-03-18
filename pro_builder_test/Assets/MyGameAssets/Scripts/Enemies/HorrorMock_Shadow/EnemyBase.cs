@@ -8,6 +8,10 @@ using NormalStateType = EnemyParameter.NormalStateType;
 /// </summary>
 public class EnemyBase : MonoBehaviour
 {
+#if DEBUG
+    public bool drawGizmo = false;
+#endif
+
     // 敵のパラメーター
     [SerializeField]
     protected EnemyParameter parameter = default;
@@ -18,12 +22,11 @@ public class EnemyBase : MonoBehaviour
 
     // ナビメッシュ
     [SerializeField]
-    protected NavMeshAgent agent = default;
+    NavMeshAgent agent = default;
 
     // メッシュレンダラー
     [SerializeField]
     protected SkinnedMeshRenderer meshRenderer = default;
-
     // ナビメッシュの移動制御
     NavMeshStopingSwitcher navMeshStopingSwitcher = new NavMeshStopingSwitcher();
 
@@ -54,6 +57,8 @@ public class EnemyBase : MonoBehaviour
 
     // ステート
     protected StateBase[] states;
+
+    public bool IsInAttackRange { get; private set; }
 
     /// <summary>
     /// 初期化
@@ -181,12 +186,15 @@ public class EnemyBase : MonoBehaviour
         // ナビメッシュの移動制御クラスの更新
         navMeshStopingSwitcher.Update();
 
-        // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完
-        var toTarget = agent.destination - transform.position;
-        var toTargetMag = toTarget.magnitude;
-        if (toTargetMag < 2.0f && toTargetMag > float.Epsilon && toTarget.normalized.sqrMagnitude > 0)
+        // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完(攻撃時は攻撃側で行う)
+        if(currentState != StateType.Fighting)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.1f);
+            var toTarget = agent.destination - transform.position;
+            var toTargetMag = toTarget.magnitude;
+            if (toTargetMag < 2.0f && toTargetMag > float.Epsilon && toTarget.normalized.sqrMagnitude > 0)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.1f);
+            }
         }
 
         // 特殊アクションの制御
@@ -409,24 +417,27 @@ public class EnemyBase : MonoBehaviour
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        states[(int)currentState].OnEnterAttackRange(other.gameObject);
+        IsInAttackRange = true;
     }
     public void OnExitAttackRange(Collider other)
     {
         if (parameter.IsStaticState) return;
         // プレイヤーのみ
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) { return; }
-        states[(int)currentState].OnExitAttackRange(other.gameObject);
+        IsInAttackRange = false;
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG
     private void OnDrawGizmos()
     {
-        parameter.ChangeRangeRadius(currentState);
-
-        // ターゲット
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawSphere(agent.destination, 0.2f);
+        parameter.DrawGizmo = drawGizmo;
+        if (drawGizmo)
+        {
+            parameter.ChangeRangeRadius(currentState);
+            // ターゲット
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(agent.destination, 0.2f);
+        }
     }
 #endif
 }
