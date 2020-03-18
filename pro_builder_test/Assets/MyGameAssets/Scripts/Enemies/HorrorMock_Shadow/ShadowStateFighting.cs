@@ -53,6 +53,13 @@ public class ShadowStateFighting : StateBase
         if(!parameter.IsAbleDetectBreathHoldPlayer && enemy.PlayerState.IsBreathHold)
         {
             isDetectedPlayer = false;
+
+            // ウェイト中なら即座にRUNに
+            if (state == State.ATTACK_WAIT)
+            {
+                state = State.RUN;
+                waitCounter = 0;
+            }
         }
 
         UpdateRotation(currentTargetPos);
@@ -83,13 +90,12 @@ public class ShadowStateFighting : StateBase
         {
             agent.isStopped = true;
             // 攻撃範囲内にいたら攻撃
-            if (enemy.IsInAttackRange)
+            if (enemy.IsInAttackRange && isDetectedPlayer)
             {
                 // 攻撃しない状態ならそのまま待機へ
                 if (parameter.DontAttack)
                 {
                     state = State.ATTACK_WAIT;
-
                 }
                 else
                 {
