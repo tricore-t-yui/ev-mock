@@ -14,10 +14,12 @@ public class ShadowStateFighting : StateBase
     {
         RUN,
         ATTACK,
-        ATTACK_WAIT
+        ATTACK_WAIT,
+        //ATTACK_POS_ADJUST,
     }
     State state = State.RUN;
     Vector3 playerPos;
+    Vector3 currentTargetPos;
 
     /// <summary>
     /// 開始
@@ -34,7 +36,8 @@ public class ShadowStateFighting : StateBase
 
         // 既にみつけているので、プレイヤーの位置を目標位置に設定済
         playerPos = agent.destination;
-        //agent.SetDestination(player.transform.position);
+        currentTargetPos = playerPos;
+        //SetSafeDestination(player.transform.position);
 
         // 移動速度を設定
         agent.speed = parameter.FightingMoveSpeed;
@@ -46,6 +49,9 @@ public class ShadowStateFighting : StateBase
     public override void Update()
     {
         if (IsSetedNextState) return;
+        UpdateRotation(currentTargetPos);
+        agent.SetDestination(currentTargetPos);
+
         switch (state)
         {
             case State.RUN:
@@ -56,20 +62,22 @@ public class ShadowStateFighting : StateBase
             case State.ATTACK_WAIT:
                 UpdateAttackWaitState();
                 break;
+            //case State.ATTACK_POS_ADJUST:
+            //    UpdateAttackPosAdjustState();
+            //    break;
         }
     }
 
     void UpdateRunState()
     {
         animator.SetBool("IsWaiting", false);
-        UpdateViewTargetPos();
 
         // 攻撃目標位置についた
         if (agent.remainingDistance <= parameter.AttackRange)
         {
             agent.isStopped = true;
             // 攻撃範囲内にいたら攻撃
-            if (IsInAttackRange)
+            if (enemy.IsInAttackRange)
             {
                 // 攻撃しない状態ならそのまま待機へ
                 if (parameter.DontAttack)
@@ -84,13 +92,76 @@ public class ShadowStateFighting : StateBase
                     state = State.ATTACK;
                 }
             }
-            else
+            else if(!isDetectedPlayer)
             {
-                // 更新して攻撃範囲にプレイヤーがいないということは見失っているので警戒に戻る
+                // 更新して攻撃範囲にプレイヤーがいなくて見失っているので警戒に戻る
                 SetNextState((int)StateType.Caution);
                 // 初期化
                 waitCounter = 0;
             }
+        }
+    }
+
+    //void UpdateAttackPosAdjustState()
+    //{
+    //    animator.SetBool("IsWaiting", false);
+    //    agent.SetDestination(currentTargetPos);
+
+    //    // 攻撃目標位置についた
+    //    if (agent.remainingDistance <= parameter.AttackRange)
+    //    {
+    //        agent.isStopped = true;
+    //        // 攻撃範囲内にいたら攻撃
+    //        if (enemy.IsInAttackRange)
+    //        {
+    //            // 攻撃しない状態ならそのまま待機へ
+    //            if (parameter.DontAttack)
+    //            {
+    //                state = State.ATTACK_WAIT;
+    //            }
+    //            else
+    //            {
+    //                // 攻撃トリガーをセット
+    //                animator.SetTrigger("Attaking");
+    //                state = State.ATTACK;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // 最後に見たプレイヤー位置に素早く向き直る
+    //            UpdateRotation(playerPos);
+    //            // 初期化
+    //            waitCounter = 0;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        UpdateRotation(agent.destination);
+    //    }
+    //}
+
+    void UpdateAttackWaitState()
+    {
+        // 待機フラグを立てる
+        animator.SetBool("IsWaiting", true);
+
+        // 待機中
+        waitCounter += Time.deltaTime;
+        // しばらく待機したら解除
+        if (waitCounter > parameter.AttackedWaitTime)
+        {
+            waitCounter = 0;
+            state = State.RUN;
+        }
+    }
+
+    void UpdateRotation(Vector3 target)
+    {
+        var toTarget = target - agent.transform.position;
+        var toTargetMag = toTarget.magnitude;
+        if (toTargetMag < 2.0f && toTargetMag > float.Epsilon && toTarget.normalized.sqrMagnitude > 0)
+        {
+            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, Quaternion.LookRotation(toTarget.normalized), 0.3f);
         }
     }
 
@@ -110,36 +181,6 @@ public class ShadowStateFighting : StateBase
         }
         waitCounter = 0;
         state = State.ATTACK_WAIT;
-    }
-
-    void UpdateAttackWaitState()
-    {
-        // 待機フラグを立てる
-        animator.SetBool("IsWaiting", true);
-
-        // 待機中
-        UpdateViewTargetPos();  // 待機中もプレイヤーの位置の補足は更新し続ける
-        waitCounter += Time.deltaTime;
-        // しばらく待機したら解除
-        if (waitCounter > parameter.AttackedWaitTime)
-        {
-            waitCounter = 0;
-            state = State.RUN;
-        }
-    }
-
-    /// <summary>
-    /// 視線情報によるターゲットポジション更新
-    /// </summary>
-    void UpdateViewTargetPos()
-    {
-        // プレイヤーを見つけていればプレイヤー位置
-        // 見失っていれば最後にプレイヤーを見た位置
-        // ノイズ位置はプレイヤーが見つかっていない状態で音を聞けば即座に更新される
-        if(isDetectedPlayer)
-        {
-            agent.SetDestination(playerPos);
-        }
     }
 
     /// <summary>
@@ -167,7 +208,7 @@ public class ShadowStateFighting : StateBase
         {
             var randomRange = parameter.NoiseTargetPosRandomRange;
             var noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
-            agent.SetDestination(noisePos);
+            currentTargetPos = noisePos;
         }
     }
 
@@ -178,6 +219,7 @@ public class ShadowStateFighting : StateBase
     {
         isDetectedPlayer = true;
         playerPos = player.transform.position;
+        currentTargetPos = playerPos;
     }
 
     /// <summary>
@@ -186,6 +228,7 @@ public class ShadowStateFighting : StateBase
     public override void OnDetectPlayerStay(GameObject player)
     {
         playerPos = player.transform.position;
+        currentTargetPos = playerPos;
     }
 
     /// <summary>
@@ -195,5 +238,60 @@ public class ShadowStateFighting : StateBase
     { 
         isDetectedPlayer = false;
         playerPos = player.transform.position;
+        currentTargetPos = playerPos;
     }
+
+    ///// <summary>
+    ///// 距離が近い場合に、ぴったりその目標地点に重ならないように目標を設定する
+    ///// </summary>
+    //void SetAttackDestination(Vector3 dest)
+    //{
+    //    agent.SetDestination(dest);
+
+    //    float limitDest = 1.4f;
+    //    var srcToDest = dest - agent.transform.position;
+    //    var mag = srcToDest.magnitude;
+    //    // 目標がほぼぴったり同じ位置にあったら、正面に目標位置設定
+    //    // ダメだったら周りのランダムな位置に目標指定
+    //    // ランダム半径は少しずつ広げる
+    //    // 移動距離が半径の二倍より大きい場合は適用しない
+    //    bool find = false;
+    //    if (mag < limitDest)
+    //    {
+    //        const int loopMax = 100;
+    //        int loopCount = 0;
+    //        Vector3 finalDest = dest;
+    //        float limitDestInterval = 0.5f;
+    //        const int randomCount = 5;
+    //        while (loopCount < loopMax && !find)
+    //        {
+    //            for (int i = 0; i < randomCount; i++)
+    //            {
+    //                Vector3 newDest;
+    //                if (i == 0)
+    //                {
+    //                    newDest = dest + (-srcToDest.normalized) * limitDest;
+    //                }
+    //                else
+    //                {
+    //                    var randomRangeDir = new Vector3(Mathf.Cos(Random.Range(0, Mathf.PI * 2)), 0, Mathf.Sin(Random.Range(0, Mathf.PI * 2)));
+    //                    newDest = dest + randomRangeDir * limitDest;
+    //                }
+    //                agent.SetDestination(newDest);
+    //                if (agent.remainingDistance < limitDest * 2)
+    //                {
+    //                    find = true;
+    //                    break;
+    //                }
+    //            }
+    //            ++loopCount;
+    //        }
+    //        limitDest += limitDestInterval;
+    //        if (!find)
+    //        {
+    //            agent.SetDestination(dest);
+    //            Debug.LogWarning("loop count over");
+    //        }
+    //    }
+    //}
 }

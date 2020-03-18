@@ -416,10 +416,12 @@ public class EnemyParameter : MonoBehaviour
         attackRange.Distance = rangeParameter.attackRange;
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG
+    public bool DrawGizmo { get; set; }
     StateType currentType = StateType.Normal;
     private void OnDrawGizmos()
     {
+        if (!DrawGizmo) return;
         UnityEditor.Handles.color = new Color(0,1,0,0.5f);
         UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.appear);
         UnityEditor.Handles.color = new Color(1, 1, 0.3f, 0.5f);

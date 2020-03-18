@@ -74,26 +74,26 @@ public class BedOutState : StateMachineBehaviour
 
         // 今プレイヤーが向いている向き
         Vector3 angle = animator.gameObject.transform.eulerAngles;
-        Debug.Log(angle.y);
+        //Debug.Log(angle.y);
         // 今プレイヤーが向いている方向から脱出方向をとり、その方向が壁とかぶっていないかを見る
         if ((angle.y >= 315 && angle.y <= 360) || (angle.y >= 0 && angle.y <= 45))
         {
-            Debug.Log("FORWARD");
+            //Debug.Log("FORWARD");
             exitDir = ChangeAvoidWallDir(angle, DirType.FORWARD);
         }
         else if (angle.y >= 135 && angle.y <= 225)
         {
-            Debug.Log("BACK");
+            //Debug.Log("BACK");
             exitDir = ChangeAvoidWallDir(angle, DirType.BACK);
         }
         else if(angle.y >= 180)
         {
-            Debug.Log("LEFT");
+            //Debug.Log("LEFT");
             exitDir = ChangeAvoidWallDir(angle, DirType.LEFT);
         }
         else
         {
-            Debug.Log("RIGHT");
+            //Debug.Log("RIGHT");
             exitDir = ChangeAvoidWallDir(angle, DirType.RIGHT);
         }
         Debug.Log(exitDir);

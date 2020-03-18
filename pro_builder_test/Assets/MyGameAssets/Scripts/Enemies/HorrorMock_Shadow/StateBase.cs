@@ -21,7 +21,6 @@ public abstract class StateBase
 
     public bool IsSetedNextState { get; private set; } = false;
     public int NextStateId { get; private set; } = 0;
-    protected bool IsInAttackRange { get; private set; }
 
     // 強制不透明
     public bool ForceTransparentOff { get; protected set; }
@@ -127,7 +126,17 @@ public abstract class StateBase
     /// <summary>
     /// プレイヤーを発見している視線ループ
     /// </summary>
-    public virtual void OnDetectPlayerStay(GameObject player) { }
+    public virtual void OnDetectPlayerStay(GameObject player)
+    {
+        //////////////////
+        // 警戒、通常共通
+        //////////////////
+        // 戦闘状態に
+        SetNextState((int)StateType.Fighting);
+
+        // プレイヤーを移動目標位置に
+        agent.SetDestination(player.transform.position);
+    }
 
     /// <summary>
     ///  プレイヤーを見失った
@@ -138,20 +147,4 @@ public abstract class StateBase
     /// 攻撃実行
     /// </summary>
     public virtual void OnAttack(){ }
-
-    /// <summary>
-    /// 攻撃範囲入った
-    /// </summary>
-    public void OnEnterAttackRange(GameObject player)
-    {
-        IsInAttackRange = true;
-    }
-
-    /// <summary>
-    /// 攻撃範囲抜けた
-    /// </summary>
-    public void OnExitAttackRange(GameObject player)
-    {
-        IsInAttackRange = false;
-    }
 }
