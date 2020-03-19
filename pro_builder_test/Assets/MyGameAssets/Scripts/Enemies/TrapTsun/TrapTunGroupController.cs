@@ -12,52 +12,11 @@ public class TrapTunGroupController : MonoBehaviour
     [SerializeField]
     TrapTunController[] tuns = default;                 // 罠ツン
 
-    bool isPlayerHit = false;                           // プレイヤーがエリア内に入ったかどうか
-    bool isDemonHit = false;                            // 鬼がエリア内に入ったかどうか
     bool isOperate = false;                             // グループの中の罠ツンが作動したかどうか
 
-    Transform player = default;
+    [SerializeField]
+    PlayerMoveController player = default;
 
-    /// <summary>
-    /// トリガーが当たったら
-    /// </summary>
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            isPlayerHit = true;
-            player = other.gameObject.transform;
-        }
-        if (other.gameObject.tag == "Oni")
-        {
-            isDemonHit = true;
-
-            foreach (var item in tuns)
-            {
-                item.Stop();
-            }
-        }
-    }
-
-    /// <summary>
-    /// トリガーから離れたら
-    /// </summary>
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            isPlayerHit = false;
-        }
-        if (other.gameObject.tag == "Oni")
-        {
-            isDemonHit = false;
-
-            foreach (var item in tuns)
-            {
-                item.ResetTrapTun();
-            }
-        }
-    }
 
     /// <summary>
     /// 開始処理
@@ -65,8 +24,6 @@ public class TrapTunGroupController : MonoBehaviour
     void Start()
     {
         isOperate = false;
-        isPlayerHit = false;
-        isDemonHit = false;
     }
 
     /// <summary>
@@ -74,12 +31,12 @@ public class TrapTunGroupController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (isPlayerHit && !isDemonHit && !isOperate)
+        if (!isOperate)
         {
             TrapTunController hit = null;
             foreach (var item in tuns)
             {
-                if (item.IsHit)
+                if (item.IsHit && !item.IsStop)
                 {
                     hit = item;
                     break;
@@ -91,7 +48,7 @@ public class TrapTunGroupController : MonoBehaviour
                 {
                     if (hit == item)
                     {
-                        item.transform.LookAt(new Vector3(player.position.x, item.gameObject.transform.position.y, player.position.z));
+                        item.transform.LookAt(new Vector3(player.transform.position.x, item.gameObject.transform.position.y, player.transform.position.z));
                         item.TrapOperate();
                         stateController.CheckTrapState(item.gameObject.transform);
                         isOperate = true;
@@ -111,8 +68,6 @@ public class TrapTunGroupController : MonoBehaviour
     public void ResetTrapTun()
     {
         isOperate = false;
-        isPlayerHit = false;
-        isDemonHit = false;
         foreach (var item in tuns)
         {
             if(item)

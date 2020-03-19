@@ -15,6 +15,8 @@ public class TrapTunController : MonoBehaviour
     public bool IsEnd { get; private set; } = false;    // 終了フラグ
     public bool IsHit { get; private set; } = false;    // ヒットフラグ
 
+    public bool IsStop { get; private set; }
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -32,6 +34,11 @@ public class TrapTunController : MonoBehaviour
         {
             IsHit = true;
         }
+        if (other.gameObject.tag == "Oni")
+        {
+            effect.Stop();
+            IsStop = true;
+        }
     }
 
     /// <summary>
@@ -42,6 +49,11 @@ public class TrapTunController : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             IsHit = false;
+        }
+        if (other.gameObject.tag == "Oni")
+        {
+            effect.Play();
+            IsStop = false;
         }
     }
 
