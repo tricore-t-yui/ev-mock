@@ -29,12 +29,16 @@ public class OniStateCaution : ShadowStateCaution
             agent.SetDestination(playerTrans.position);
             prevEnemyDesideTime = Time.timeSinceLevelLoad;
         }
+        else if (agent.desiredVelocity == Vector3.zero)
+        {
+            agent.SetDestination(playerTrans.position);
+        }
         //Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
 
         // 残り距離がインフィニってたら加速
         if (agent.remainingDistance > 8.0f)
         {
-            agent.speed += 0.01f;
+            agent.speed += 0.03f;
         }
         else
         {
