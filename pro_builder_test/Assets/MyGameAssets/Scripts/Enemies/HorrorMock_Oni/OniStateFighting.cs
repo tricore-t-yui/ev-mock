@@ -25,7 +25,7 @@ public class OniStateFighting : ShadowStateFighting
             prevEnemyDesideTime = Time.timeSinceLevelLoad;
             currentTargetPos = playerTrans.position;
         }
-        Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
+        //Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
 
         // 残り距離がインフィニってたら加速
         if (agent.remainingDistance > 8.0f)
