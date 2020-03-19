@@ -40,6 +40,8 @@ public class PlayerHideController : MonoBehaviour
     SoundSpawner sound = default;                                   // 音生成クラス
     [SerializeField]
     Rigidbody playerRigidbody = default;                                   // リジッドボディ
+    [SerializeField]
+    PlayerEvents playerEvent = default;
 
     Vector3 hidePosition = default;
 
@@ -67,6 +69,32 @@ public class PlayerHideController : MonoBehaviour
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
         keyInputStage = 1;
+    }
+
+    private void Update()
+    {
+        // 有効な時だけまわる
+        // なぜかStateControllerから独立してこいつだけ稼働しているので、
+        // 息止めはアニメーション駆動になっている
+        // 同じく深呼吸もこちらで管理する
+        if (!isStealth)
+        {
+            if (!IsDeepBreath())
+            {
+                if ( keyController.GetKeyDown(KeyType.DEEPBREATH))
+                {
+                    playerEvent.DeepBreathStart();
+                }
+            }
+            else 
+            {
+                playerEvent.DeepBreath();
+                if ( keyController.GetKeyUp(KeyType.DEEPBREATH))
+                {
+                    playerEvent.DeepBreathEnd();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -340,6 +368,10 @@ public class PlayerHideController : MonoBehaviour
     public bool IsBreathlessness()
     {
         return breathController.IsDisappear;
+    }
+    public bool IsDeepBreath()
+    {
+        return playerEvent.IsDeepBreath;
     }
 
     /// <summary>
