@@ -28,7 +28,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             IsHit = true;
         }
@@ -39,7 +39,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     void OnTriggerExit(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             IsHit = false;
         }
@@ -52,6 +52,11 @@ public class TrapTunController : MonoBehaviour
     {
         effect.Stop();
         tunAnim.SetTrigger("TrapOperate");
+    }
+
+    public void Stop()
+    {
+        effect.Stop();
     }
 
     /// <summary>

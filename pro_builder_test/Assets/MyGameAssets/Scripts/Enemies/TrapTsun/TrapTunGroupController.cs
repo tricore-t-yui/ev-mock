@@ -23,14 +23,19 @@ public class TrapTunGroupController : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             isPlayerHit = true;
             player = other.gameObject.transform;
         }
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Oni")
+        if (other.gameObject.tag == "Oni")
         {
             isDemonHit = true;
+
+            foreach (var item in tuns)
+            {
+                item.Stop();
+            }
         }
     }
 
@@ -39,13 +44,18 @@ public class TrapTunGroupController : MonoBehaviour
     /// </summary>
     void OnTriggerExit(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             isPlayerHit = false;
         }
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Oni")
+        if (other.gameObject.tag == "Oni")
         {
             isDemonHit = false;
+
+            foreach (var item in tuns)
+            {
+                item.ResetTrapTun();
+            }
         }
     }
 
@@ -66,14 +76,30 @@ public class TrapTunGroupController : MonoBehaviour
     {
         if (isPlayerHit && !isDemonHit && !isOperate)
         {
+            TrapTunController hit = null;
             foreach (var item in tuns)
             {
                 if (item.IsHit)
                 {
-                    item.transform.LookAt(new Vector3(player.position.x, item.gameObject.transform.position.y, player.position.z));
-                    item.TrapOperate();
-                    stateController.CheckTrapState(item.gameObject.transform);
-                    isOperate = true;
+                    hit = item;
+                    break;
+                }
+            }
+            if(hit != null)
+            {
+                foreach (var item in tuns)
+                {
+                    if (hit == item)
+                    {
+                        item.transform.LookAt(new Vector3(player.position.x, item.gameObject.transform.position.y, player.position.z));
+                        item.TrapOperate();
+                        stateController.CheckTrapState(item.gameObject.transform);
+                        isOperate = true;
+                    }
+                    else
+                    {
+                        item.Stop();
+                    }
                 }
             }
         }

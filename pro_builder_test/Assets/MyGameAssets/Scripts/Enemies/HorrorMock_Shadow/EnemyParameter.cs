@@ -209,7 +209,7 @@ public class EnemyParameter : MonoBehaviour
         return wandererType == WandererType.Route;
      }
 
-    [SerializeField, Range(0.1f, 100), Tooltip("直接攻撃状態に移行する音のレベル")]
+    [SerializeField, Range(0.1f, 100), LabelText("直接攻撃状態に移行する音のレベル")]
     float directDetectSoundLevel = 6;
     public float DirectDetectSoundLevel => directDetectSoundLevel;
 
