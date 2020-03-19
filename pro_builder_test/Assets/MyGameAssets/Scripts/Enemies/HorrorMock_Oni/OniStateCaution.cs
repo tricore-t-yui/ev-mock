@@ -29,7 +29,7 @@ public class OniStateCaution : ShadowStateCaution
             agent.SetDestination(playerTrans.position);
             prevEnemyDesideTime = Time.timeSinceLevelLoad;
         }
-        Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
+        //Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
 
         // 残り距離がインフィニってたら加速
         if (agent.remainingDistance > 8.0f)
