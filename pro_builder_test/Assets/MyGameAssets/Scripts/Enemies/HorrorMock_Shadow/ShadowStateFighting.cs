@@ -19,7 +19,7 @@ public class ShadowStateFighting : StateBase
     }
     State state = State.RUN;
     Vector3 playerPos;
-    Vector3 currentTargetPos;
+    protected Vector3 currentTargetPos;
 
     /// <summary>
     /// 開始

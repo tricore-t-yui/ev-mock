@@ -10,6 +10,31 @@ public class OniStateFighting : ShadowStateFighting
 
     public override void Update()
     {
+        UpdateEnemyDest();
+
         base.Update();
+    }
+
+    float prevEnemyDesideTime;
+    void UpdateEnemyDest()
+    {
+        // 常に隠れていないプレイヤーを目標に
+        if (!float.IsInfinity(agent.remainingDistance) && Time.timeSinceLevelLoad - prevEnemyDesideTime > 1.0f && playerState.State != PlayerStateController.ActionStateType.HIDE && !agent.pathPending)
+        {
+            agent.SetDestination(playerTrans.position);
+            prevEnemyDesideTime = Time.timeSinceLevelLoad;
+            currentTargetPos = playerTrans.position;
+        }
+        Debug.Log("agent.remainingDistance:" + agent.remainingDistance);
+
+        // 残り距離がインフィニってたら加速
+        if (agent.remainingDistance > 8.0f)
+        {
+            agent.speed += 0.01f;
+        }
+        else
+        {
+            agent.speed = parameter.FightingMoveSpeed;
+        }
     }
 }
