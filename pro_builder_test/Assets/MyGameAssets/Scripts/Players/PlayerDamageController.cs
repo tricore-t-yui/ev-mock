@@ -35,6 +35,15 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     PlayerStatusData playerData = default;                      // プレイヤーのデータのスクリプタブルオブジェクト
 
+    [SerializeField]
+    AudioSource DamageHitSoundHide = default;
+    [SerializeField]
+    AudioSource DamageHitSoundStamina = default;
+    [SerializeField]
+    AudioSource DamageHitSoundNormal = default;
+    [SerializeField]
+    AudioSource DamageSound = default;
+
     HideObjectController hideObjectController = null;           // 隠れているオブジェクト
 
     [SerializeField]
@@ -62,28 +71,34 @@ public class PlayerDamageController : MonoBehaviour
         Type = type;
         EnemyPos = enemyPos;
         //transform.LookAt(new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z));
+        DamageSound.Play();
 
         // ダメージによって吹き飛ばしてアニメーション開始
         switch (Type)
         {
             case DamageType.NORMAL:
                 animationContoller.AnimStart(AnimationType.DAMAGE);
+                DamageHitSoundNormal.Play();
                 break;
             case DamageType.HIDEBED:
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
                 playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse);
+                DamageHitSoundHide.Play();
                 break;
             case DamageType.HIDELOCKER:
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT); 
+                DamageHitSoundHide.Play();
                 break;
             case DamageType.DUCT:
                 animationContoller.AnimStart(AnimationType.DUCTDRAGOUT);
                 playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse);
+                DamageHitSoundHide.Play();
                 break;
             case DamageType.STAMINA:
                 StartCoroutine(DoShake(0.2f, 0.05f));
+                DamageHitSoundStamina.Play();
                 break;
         }
         if(type != DamageType.STAMINA)
