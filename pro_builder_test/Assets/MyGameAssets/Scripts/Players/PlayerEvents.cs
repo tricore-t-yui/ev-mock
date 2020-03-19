@@ -46,13 +46,15 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 待機
     /// </summary>
-    public void WaitStart() { }
+    public void WaitStart() { 
+        moveController.IsRootMotion(false, false);
+    }
     /// <summary>
     /// 待機
     /// </summary>
     public void Wait()
     {
-        moveController.IsRootMotion(false, false);
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         moveCamera.Rotation(CameraType.NORMAL, false);
         if(!IsBreathHold)
         {
@@ -69,7 +71,9 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 歩く開始
     /// </summary>
-    public void WalkStart() { }
+    public void WalkStart() { 
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+    }
     /// <summary>
     /// 歩く
     /// </summary>
@@ -194,7 +198,7 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void BreathHoldMoveEnd()
     {
-        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+        //playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
     }
 

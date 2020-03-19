@@ -158,6 +158,7 @@ public class PlayerBreathController : MonoBehaviour
             //    NowAmount += hideDecrement;
             //}
             NowAmount += playerData.StealthDecrement;
+            StrikeButtonRepeatedly();
         }
         else
         {
