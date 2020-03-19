@@ -215,7 +215,6 @@ public class PlayerEvents : MonoBehaviour
     public void DeepBreath()
     {
         IsDeepBreath = true;
-        SquatEnd();
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
         soundArea.SetSoundLevel(ActionSoundType.DEEPBREATH);
         moveCamera.Rotation(CameraType.NORMAL, false);
