@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: OmemeBody
-  m_Shader: {fileID: 4800000, guid: b7fcc4454c9adfe49b6daee13c03a995, type: 3}
+  m_Shader: {fileID: 4800000, guid: a365048061705f448a48e25f67055f0e, type: 3}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 15aacfca9b314d24a862afe2ecf78214, type: 3}
+        m_Scale: {x: 0.01, y: 0.01}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: c2f6910db685c904c8211b2d570e2ec7, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -43,9 +47,21 @@ Material:
         m_Texture: {fileID: 2800000, guid: 15aacfca9b314d24a862afe2ecf78214, type: 3}
         m_Scale: {x: 0.01, y: 0.01}
         m_Offset: {x: 0, y: 0}
+    - _Metallic:
+        m_Texture: {fileID: 2800000, guid: 1423d7f06799a2f48b3b20fa1fb44a4f, type: 3}
+        m_Scale: {x: 0.01, y: 0.01}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 2800000, guid: 1423d7f06799a2f48b3b20fa1fb44a4f, type: 3}
         m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normals:
+        m_Texture: {fileID: 2800000, guid: c2f6910db685c904c8211b2d570e2ec7, type: 3}
+        m_Scale: {x: 0.01, y: 0.01}
+        m_Offset: {x: 0, y: 0}
+    - _Occlusion:
+        m_Texture: {fileID: 2800000, guid: 94949bbf21483e2499ad51866ec6aa6d, type: 3}
+        m_Scale: {x: 0, y: 0.01}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 2800000, guid: 94949bbf21483e2499ad51866ec6aa6d, type: 3}
@@ -89,6 +105,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SensorId: 1
+    - _Smoothness: 0.8
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
@@ -101,6 +118,7 @@ Material:
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}

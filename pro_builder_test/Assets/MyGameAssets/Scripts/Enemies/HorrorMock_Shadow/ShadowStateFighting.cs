@@ -30,6 +30,7 @@ public class ShadowStateFighting : StateBase
         waitCounter = 0;
         isDetectedPlayer = true;
         state = State.RUN;
+        agent.isStopped = false;
 
         // 見つかっているので強制不透明に
         ForceTransparentOff = true;
@@ -58,6 +59,7 @@ public class ShadowStateFighting : StateBase
             if (state == State.ATTACK_WAIT)
             {
                 state = State.RUN;
+                agent.isStopped = false;
                 waitCounter = 0;
             }
         }
@@ -164,6 +166,7 @@ public class ShadowStateFighting : StateBase
         {
             waitCounter = 0;
             state = State.RUN;
+            agent.isStopped = false;
         }
     }
 

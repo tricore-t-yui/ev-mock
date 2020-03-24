@@ -41,5 +41,9 @@ public class OniStateFighting : ShadowStateFighting
         {
             agent.speed = parameter.FightingMoveSpeed;
         }
+        if(agent.speed > 4.0f)
+        {
+            agent.speed = 4.0f;
+        }
     }
 }

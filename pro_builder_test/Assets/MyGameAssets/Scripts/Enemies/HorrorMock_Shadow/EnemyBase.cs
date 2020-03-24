@@ -28,7 +28,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     protected SkinnedMeshRenderer meshRenderer = default;
     // ナビメッシュの移動制御
-    NavMeshStopingSwitcher navMeshStopingSwitcher = new NavMeshStopingSwitcher();
+   // NavMeshStopingSwitcher navMeshStopingSwitcher = new NavMeshStopingSwitcher();
 
     // 現在のステート
     public StateType currentState { get; protected set; } = StateType.Normal;
@@ -84,7 +84,7 @@ public class EnemyBase : MonoBehaviour
         parameter.Initialize();
 
         // ナビメッシュの移動制御クラスの初期化
-        navMeshStopingSwitcher.Initialize(animator, agent);
+        //navMeshStopingSwitcher.Initialize(animator, agent);
 
         // ステートの遷移を行うかどうか
         animator.SetBool("IsStaticState", parameter.IsStaticState);
@@ -120,7 +120,7 @@ public class EnemyBase : MonoBehaviour
         animator.SetBool("IsWander", (parameter.NormalState == NormalStateType.Wanderer) ? true : false);
 
         // ナビメッシュの移動制御クラスの開始処理
-        navMeshStopingSwitcher.Entry();
+        //navMeshStopingSwitcher.Entry();
     }
 
     public void Spawn(StateType type,Vector3 target = default, Vector3 spawnPos = default)
@@ -187,7 +187,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         // ナビメッシュの移動制御クラスの更新
-        navMeshStopingSwitcher.Update();
+        //navMeshStopingSwitcher.Update();
 
         // ナビメッシュのターゲットが一定以上近くにいたらローテーション補完(攻撃時は攻撃側で行う)
         if(currentState != StateType.Fighting)

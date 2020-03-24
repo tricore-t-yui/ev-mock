@@ -21,7 +21,7 @@ public class EnemyAttack : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         // 攻撃開始時に移動を止める
-        navMeshAgent.isStopped = true;
+        //navMeshAgent.isStopped = true;
     }
 
     /// <summary>
