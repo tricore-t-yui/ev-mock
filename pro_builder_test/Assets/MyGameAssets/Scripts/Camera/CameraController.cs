@@ -68,8 +68,8 @@ public class CameraController : MonoBehaviour
             sensitivity = controllerSensitivity;
         }
         // 回転量を求める
-        float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity;
-        float X_Rotation = keyController.GetStick(StickType.RIGHTSTICK).x * sensitivity;
+        float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity * Time.deltaTime * 100;
+        float X_Rotation = keyController.GetStick(StickType.RIGHTSTICK).x * sensitivity * Time.deltaTime * 100;
 
         switch (type)
         {

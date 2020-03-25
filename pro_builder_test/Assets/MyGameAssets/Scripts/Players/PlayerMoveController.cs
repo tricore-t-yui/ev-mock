@@ -155,23 +155,17 @@ public class PlayerMoveController : MonoBehaviour
         {
             dirTypeSpeedLimit = ChangeDirTypeSpeedLimit(stick);
             stickSpeedLimit = ChangeStickSpeedLimit(length, isBreathHold);
-            moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit;
+            moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit * moveTypeSpeedLimit * Time.deltaTime;
         }
 
         // 段差に当たったら上方向に力を加え登らせる
         if (DirectionRay(RayType.MOVEDIRECTION) && !DirectionRay(RayType.DIAGONALDIRECTION))
         {
-            moveSpeed += Vector3.up * moveData.StepUpPower;
+            moveSpeed += Vector3.up * moveData.StepUpPower * Time.deltaTime;
         }
         // 移動速度の設定
         float walkSpeed = new Vector3(moveSpeed.x, 0, moveSpeed.z).magnitude;
-        var velocity = Vector3.zero;
-        if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit * stickSpeedLimit)
-        {
-            velocity = moveSpeed;
-        }
-        velocity = (moveSpeed * moveData.SpeedMagnification);
-        playerRigidbody.velocity = velocity;
+        playerRigidbody.velocity = moveSpeed* moveData.SpeedMagnification;
     }
 
     /// <summary>
