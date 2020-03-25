@@ -31,16 +31,19 @@ public class ShadowStateNormal : StateBase
         agent.speed = parameter.NormalMoveSpeed;
 
         // 徘徊タイプの影人間である
+         agent.isStopped = true;
         if (parameter.NormalState == NormalStateType.Wanderer)
         {
             // 次の移動目標位置を設定
             agent.SetDestination(GetNextTargetPoint());
+            agent.isStopped = false;
         }
         else if((agent.transform.position - parameter.InitialPosition).magnitude > 0.5f)
         {
             // 移動しない人で、初期位置から離れてたら次の移動目標位置は初期位置
             agent.SetDestination(parameter.InitialPosition);
             animator.SetBool("NormalWalkBack", true);
+            agent.isStopped = false;
         }
     }
 
@@ -77,6 +80,7 @@ public class ShadowStateNormal : StateBase
             {
                 // 移動目標位置を発信源に
                 agent.SetDestination(noisePos);
+                agent.isStopped = false;
 
                 // 警戒に移行
                 SetNextState((int)StateType.Caution);
@@ -98,6 +102,7 @@ public class ShadowStateNormal : StateBase
             {
                 // 次の移動目標位置を設定
                 agent.SetDestination(GetNextTargetPoint());
+                agent.isStopped = false;
             }
         }
         else

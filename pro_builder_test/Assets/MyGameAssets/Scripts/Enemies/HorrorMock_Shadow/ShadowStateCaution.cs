@@ -29,6 +29,7 @@ public class ShadowStateCaution : StateBase
         agent.speed = parameter.CautionMoveSpeed;
 
         state = State.WAIT;
+        agent.isStopped = true;
     }
 
     /// <summary>
@@ -59,6 +60,7 @@ public class ShadowStateCaution : StateBase
             if (agent.remainingDistance > agent.stoppingDistance)
             {
                 state = State.WALK;
+                agent.isStopped = false;
             }
             // 目的地についてたら通常状態に
             else
@@ -84,6 +86,7 @@ public class ShadowStateCaution : StateBase
             waitCounter = 0;
             waitTime = Random.Range(parameter.CautionEndWaitTimeMin, parameter.CautionEndWaitTimeMax);
             state = State.WAIT;
+            agent.isStopped = true;
         }
     }
 
