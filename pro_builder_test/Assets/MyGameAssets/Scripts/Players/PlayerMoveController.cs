@@ -163,12 +163,15 @@ public class PlayerMoveController : MonoBehaviour
         {
             moveSpeed += Vector3.up * moveData.StepUpPower;
         }
-        // 移動速度の限界を超えるまで力をくわえ続ける
-        float walkSpeed = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z).magnitude;
+        // 移動速度の設定
+        float walkSpeed = new Vector3(moveSpeed.x, 0, moveSpeed.z).magnitude;
+        var velocity = Vector3.zero;
         if (walkSpeed <= dirTypeSpeedLimit * moveTypeSpeedLimit * stickSpeedLimit)
         {
-            playerRigidbody.AddForce(moveSpeed * moveData.SpeedMagnification);
+            velocity = moveSpeed;
         }
+        velocity = (moveSpeed * moveData.SpeedMagnification);
+        playerRigidbody.velocity = velocity;
     }
 
     /// <summary>

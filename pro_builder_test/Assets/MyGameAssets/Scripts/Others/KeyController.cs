@@ -35,7 +35,7 @@ public class KeyController : MonoBehaviour
         RIGHTSTICK,     // 右スティック
         LEFTSTICK,      // 左スティック
     }
-    bool isUseController = false;   // コントローラーを使うかどうか
+    public bool IsUseController { get; private set; }   // コントローラーを使うかどうか
 
     /// <summary>
     /// 開始処理
@@ -48,14 +48,15 @@ public class KeyController : MonoBehaviour
         // 一台もコントローラが接続されていなければエラー
         if (controllerNames[0] == "")
         {
-            isUseController = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            IsUseController = false;
             Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined;
         }
         else
         {
-            isUseController = true;
+            IsUseController = true;
             Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -65,7 +66,7 @@ public class KeyController : MonoBehaviour
     /// <param name="type">キーの種類</param>
     public bool GetKeyUp(KeyType type)
     {
-        if (isUseController)
+        if (IsUseController)
         {
             return Input.GetKeyUp(GetControllerButton(type));
         }
@@ -89,7 +90,7 @@ public class KeyController : MonoBehaviour
     /// <param name="type">キーの種類</param>
     public bool GetKey(KeyType type)
     {
-        if (isUseController)
+        if (IsUseController)
         {
             switch (type)
             {
@@ -119,7 +120,7 @@ public class KeyController : MonoBehaviour
     /// <param name="type">キーの種類</param>
     public bool GetKeyDown(KeyType type)
     {
-        if (isUseController)
+        if (IsUseController)
         {
             return Input.GetKeyDown(GetControllerButton(type));
         }
@@ -145,6 +146,8 @@ public class KeyController : MonoBehaviour
     {
         switch (type)
         {
+            case KeyType.SHOES: return KeyCode.Alpha0;
+            case KeyType.OPTION: return KeyCode.Alpha0;
             case KeyType.LOOKBACK: return KeyCode.Q;
             case KeyType.SQUAT: return KeyCode.C;
             case KeyType.DASH: return KeyCode.LeftShift;
@@ -154,7 +157,7 @@ public class KeyController : MonoBehaviour
             case KeyType.INTERACT: return KeyCode.E;
         }
 
-        Debug.Log("対象外のキー");
+        Debug.Log("対象外のキー:" + type);
         return default;
     }
 
@@ -178,7 +181,7 @@ public class KeyController : MonoBehaviour
             case KeyType.RIGHTENDUREBREATH: return "joystick button 5";
         }
 
-        Debug.Log("対象外のボタン");
+        Debug.Log("対象外のキー:" + type);
         return default;
     }
 
@@ -188,7 +191,7 @@ public class KeyController : MonoBehaviour
     /// <returns>方向キーのどれか１つが押されたかどうか</returns>
     public bool GetDirectionKey()
     {
-        if (isUseController)
+        if (IsUseController)
         {
             if (((Input.GetAxis("L_Stick_H") != 0) || (Input.GetAxis("L_Stick_V") != 0)) || ((Input.GetAxis("D_Pad_H") != 0) || (Input.GetAxis("D_Pad_V") != 0)))
             {
@@ -211,7 +214,7 @@ public class KeyController : MonoBehaviour
     /// </summary>
     public Vector2 GetStick(StickType type)
     {
-        if (isUseController)
+        if (IsUseController)
         {
             switch (type)
             {
@@ -275,6 +278,6 @@ public class KeyController : MonoBehaviour
     /// </summary>
     public bool GetIsUseController()
     {
-        return isUseController;
+        return IsUseController;
     }
 }
