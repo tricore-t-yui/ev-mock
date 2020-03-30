@@ -86,7 +86,11 @@ namespace AmplifyShaderEditor
 		public void SubShaderFillDataCollector( TemplateMultiPassMasterNode owner, ref MasterNodeDataCollector dataCollector )
 		{
 
-			TemplateMultiPassMasterNode targetNode = string.IsNullOrEmpty(m_options.Id) ? owner:owner.ContainerGraph.GetMasterNodeOfPass( m_options.Id , owner.LODIndex );
+			//TemplateMultiPassMasterNode targetNode = string.IsNullOrEmpty(m_options.Id) ? owner:owner.ContainerGraph.GetMasterNodeOfPass( m_options.Id , owner.LODIndex );
+			TemplateMultiPassMasterNode targetNode = string.IsNullOrEmpty( m_options.Id ) ?
+														owner.ContainerGraph.GetMainMasterNodeOfLOD( owner.LODIndex ) :
+														owner.ContainerGraph.GetMasterNodeOfPass( m_options.Id , owner.LODIndex );
+
 			InputPort port = null;
 			if( m_portId > -1 )
 			{

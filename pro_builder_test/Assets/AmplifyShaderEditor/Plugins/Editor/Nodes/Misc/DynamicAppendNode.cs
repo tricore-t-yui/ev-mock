@@ -22,7 +22,7 @@ namespace AmplifyShaderEditor
 	}
 
 	[Serializable]
-	[NodeAttributes( "Append", "Vector Operators", "Append channels to create a new component", null, KeyCode.V )]
+	[NodeAttributes( "Append", "Vector Operators", "Append channels to create a new component", null, KeyCode.V, tags: "combine" )]
 	public sealed class DynamicAppendNode : ParentNode
 	{
 		private const string OutputTypeStr = "Output type";

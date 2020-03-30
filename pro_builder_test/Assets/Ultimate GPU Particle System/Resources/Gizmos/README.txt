@@ -1,0 +1,1 @@
+Moves the texture "Icon_big" to Assets/Gizmos in order to make the UGS Gizmo work.

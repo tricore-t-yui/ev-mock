@@ -41,6 +41,7 @@ namespace AmplifyShaderEditor
 			m_textLabelWidth = 50;
 			m_autoWrapProperties = true;
 			m_hasLeftDropdown = true;
+			m_previewShaderGUID = "937c7bde062f0f942b600d9950d2ebb2";
 		}
 
 		public override void AfterCommonInit()
@@ -52,6 +53,12 @@ namespace AmplifyShaderEditor
 				if( PaddingTitleRight == 0 )
 					PaddingTitleRight = Constants.PropertyPickerWidth + Constants.IconsLeftRightMargin;
 			}
+		}
+
+		public override void SetPreviewInputs()
+		{
+			base.SetPreviewInputs();
+			m_previewMaterialPassId = (int)m_selectedType;
 		}
 
 		public override void Destroy()

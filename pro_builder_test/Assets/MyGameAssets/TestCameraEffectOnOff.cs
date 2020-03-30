@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using Aura2API;
 using Rewired;
 
 public class TestCameraEffectOnOff : MonoBehaviour
 {
-    [SerializeField]
-    AuraCamera auraCamera;
-
     [SerializeField]
     PostProcessVolume postProcessVolume;
 
@@ -27,10 +23,6 @@ public class TestCameraEffectOnOff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player.GetButtonDown("AuraToggle"))
-        {
-            auraCamera.enabled = !auraCamera.enabled;
-        }
         if (player.GetButtonDown("PostProcessToggle"))
         {
             ++offIndex;

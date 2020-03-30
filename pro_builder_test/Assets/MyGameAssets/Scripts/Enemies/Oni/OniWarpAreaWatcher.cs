@@ -93,6 +93,7 @@ public class OniWarpAreaWatcher : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     /// <summary>
     /// ギズモ
     /// </summary>
@@ -108,6 +109,7 @@ public class OniWarpAreaWatcher : MonoBehaviour
         // リスポーン位置に球体を表
         warpAreaParameter.ForEach(elem => { Gizmos.DrawSphere(transform.position + elem.respawnPosition, 0.3f); });
     }
+#endif
 
     /// <summary>
     /// コライダーに接触

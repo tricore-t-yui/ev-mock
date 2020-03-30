@@ -80,6 +80,7 @@ public class OniLoiteringRouteManager : MonoBehaviour
             DrawLineToTargetPos(route.CheckPoints);
         });
     }
+#endif
 
     /// <summary>
     /// 現在と次の目標位置を線でつなぐ
@@ -101,5 +102,4 @@ public class OniLoiteringRouteManager : MonoBehaviour
             }
         }
     }
-#endif
 }

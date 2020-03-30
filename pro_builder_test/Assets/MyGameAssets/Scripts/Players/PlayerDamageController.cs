@@ -18,6 +18,7 @@ public class PlayerDamageController : MonoBehaviour
         HIDELOCKER, // ロッカーから引き摺り出される時のダメージ
         DUCT,       // ダクト
         DEATH,      // トドメ
+        STAMINA,      // トドメ
     }
 
     [SerializeField]
@@ -27,13 +28,26 @@ public class PlayerDamageController : MonoBehaviour
     [SerializeField]
     PlayerHealthController healthController = default;          // 体力管理クラス
     [SerializeField]
+    playerStaminaController staminaController = default;          // スタミナ管理クラス
+    [SerializeField]
     PlayerHideController playerHideController = default;        // 隠れるアクションクラス
 
     [SerializeField]
     PlayerStatusData playerData = default;                      // プレイヤーのデータのスクリプタブルオブジェクト
 
+    [SerializeField]
+    AudioSource DamageHitSoundHide = default;
+    [SerializeField]
+    AudioSource DamageHitSoundStamina = default;
+    [SerializeField]
+    AudioSource DamageHitSoundNormal = default;
+    [SerializeField]
+    AudioSource DamageSound = default;
+
     HideObjectController hideObjectController = null;           // 隠れているオブジェクト
 
+    [SerializeField]
+    float BlowawayPower = 4;                                    // 吹き飛ばしのパワー
     public DamageType Type { get; private set; } = default;     // ダメージタイプ
     public Transform EnemyPos { get; private set; } = default;  // 敵のTransform
     public bool IsInvincible { get; private set; } = false;     // 無敵時間かどうか
@@ -54,29 +68,46 @@ public class PlayerDamageController : MonoBehaviour
     /// </summary>
     public void SetInfo(Transform enemyPos, float damage, DamageType type)
     {
-        // ダメージを食らう
-        healthController.Damage(damage);
         Type = type;
         EnemyPos = enemyPos;
-        transform.LookAt(new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z));
+        //transform.LookAt(new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z));
+        DamageSound.Play();
 
         // ダメージによって吹き飛ばしてアニメーション開始
         switch (Type)
         {
             case DamageType.NORMAL:
-                playerRigidbody.AddForce((EnemyPos.position - transform.position).normalized * -5, ForceMode.Impulse);
-                animationContoller.AnimStart(AnimationType.DAMAGE); break;
+                animationContoller.AnimStart(AnimationType.DAMAGE);
+                DamageHitSoundNormal.Play();
+                break;
             case DamageType.HIDEBED:
                 animationContoller.AnimStart(AnimationType.HIDEDRAGOUT);
                 hideObjectController = playerHideController.HideObj.GetComponent<HideObjectController>();
                 hideObjectController.SetActiveCollider(false);
-                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x,transform.position.y,EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse);
+                DamageHitSoundHide.Play();
+                break;
             case DamageType.HIDELOCKER:
-                animationContoller.AnimStart(AnimationType.HIDEDRAGOUT); break;
+                animationContoller.AnimStart(AnimationType.HIDEDRAGOUT); 
+                DamageHitSoundHide.Play();
+                break;
             case DamageType.DUCT:
                 animationContoller.AnimStart(AnimationType.DUCTDRAGOUT);
-                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * 8, ForceMode.Impulse); break;
-
+                playerRigidbody.AddForce((new Vector3(EnemyPos.position.x, transform.position.y, EnemyPos.position.z) - transform.position).normalized * BlowawayPower, ForceMode.Impulse);
+                DamageHitSoundHide.Play();
+                break;
+            case DamageType.STAMINA:
+                StartCoroutine(DoShake(0.2f, 0.05f));
+                DamageHitSoundStamina.Play();
+                break;
+        }
+        if(type != DamageType.STAMINA)
+        {
+            healthController.Damage(damage);
+        }
+        else
+        {
+            staminaController.Damage(damage);
         }
 
         // 処理開始
@@ -141,5 +172,29 @@ public class PlayerDamageController : MonoBehaviour
     {
         yield return new WaitForSeconds(playerData.InvincibleSecond);
         IsInvincible = false;
+    }
+
+    // カメラシェイクコルーチン
+    private IEnumerator DoShake(float duration, float magnitude)
+    {
+        var mainCam = Camera.main.transform;
+        var pos = mainCam.localPosition;
+
+        var elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            var x = pos.x + Random.Range(-1f, 1f) * magnitude;
+            var y = pos.y + Random.Range(-1f, 1f) * magnitude;
+
+            mainCam.localPosition = new Vector3(x, y, pos.z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        mainCam.localPosition = pos;
+        enabled = false;
     }
 }

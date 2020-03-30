@@ -9,11 +9,7 @@ using DirType = InteractFunction.DirType;
 public class DoorController : MonoBehaviour
 {
     [SerializeField]
-    Transform player = default;                     // プレイヤー
-    [SerializeField]
     Animator doorAnim = default;                    // ドアのアニメーター
-    [SerializeField]
-    PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
 
     // ドアを開けることができる部屋番号
     [SerializeField]
@@ -29,15 +25,18 @@ public class DoorController : MonoBehaviour
     bool isAutoClose = true;                        // 自動でドアを閉めるフラグ
     DirType type = default;                         // 現在のドアの開ける方向のタイプ
     DirType firstType = default;                    // 開始時のドアの開ける方向のタイプ
-
+    PlayerDoorController doorController = default;  // プレイヤーのドア開閉クラス
+    Transform player = default;                     // プレイヤー
 
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
+        doorController = PlayerDoorController.Inst;
+        player = PlayerDoorController.Inst.transform;
         // ドアの角度によって開けるタイプを決める
-        switch(transform.eulerAngles.y)
+        switch (transform.eulerAngles.y)
         {
             case 0: type = DirType.FORWARD; break;
             case 90: type = DirType.RIGHT; break;

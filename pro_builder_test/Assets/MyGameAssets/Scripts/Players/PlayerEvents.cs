@@ -32,8 +32,6 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     SoundAreaSpawner soundArea = default;                           // 音領域管理クラス
     [SerializeField]
-    SoundSpawner sound = default;                                   // 音生成クラス
-    [SerializeField]
     CameraAnimationController cameraAnimationController = default;  // カメラアニメーションクラス
     [SerializeField]
     PlayerStatusController statusController = default;              // ステータス管理クラス
@@ -42,18 +40,26 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField]
     PlayerBreathController breathController = default;              // 息管理クラス
 
+    public bool IsBreathHold{ get{ return playerAnimationContoller.IsBreathHold; } }
+    public bool IsDeepBreath{ get; private set; }
+
     /// <summary>
     /// 待機
     /// </summary>
-    public void WaitStart() { }
+    public void WaitStart() { 
+        moveController.IsRootMotion(false, false);
+    }
     /// <summary>
     /// 待機
     /// </summary>
     public void Wait()
     {
-        moveController.IsRootMotion(false, false);
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        soundArea.AddSoundLevel(ActionSoundType.WAIT);
+        if(!IsBreathHold)
+        {
+            soundArea.SetSoundLevel(ActionSoundType.WAIT);
+        }
         statusController.StateUpdate(MoveType.WAIT, stateController.IsSquat);
     }
     /// <summary>
@@ -65,7 +71,9 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 歩く開始
     /// </summary>
-    public void WalkStart() { }
+    public void WalkStart() { 
+        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+    }
     /// <summary>
     /// 歩く
     /// </summary>
@@ -75,7 +83,7 @@ public class PlayerEvents : MonoBehaviour
         playerAnimationContoller.AnimStart(PlayerAnimType.WALK);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.WALK);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        moveController.Move();
+        moveController.Move(IsBreathHold);
         statusController.StateUpdate(MoveType.WALK, stateController.IsSquat);
     }
     /// <summary>
@@ -102,9 +110,9 @@ public class PlayerEvents : MonoBehaviour
         cameraAnimationController.AnimStart(CameraAnimType.DASH);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.DASH);
         playerAnimationContoller.AnimStart(PlayerAnimType.DASH);
-        soundArea.AddSoundLevel(ActionSoundType.DASH);
+        soundArea.SetSoundLevel(ActionSoundType.DASH);
         moveCamera.Rotation(CameraType.NORMAL, false);
-        moveController.Move();
+        moveController.Move(false);
         statusController.StateUpdate(MoveType.DASH, stateController.IsSquat);
     }
     /// <summary>
@@ -127,7 +135,10 @@ public class PlayerEvents : MonoBehaviour
     {
         playerCollider.height = 0.4f;
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
-        soundArea.AddSoundLevel(ActionSoundType.SQUAT);
+        if (IsBreathHold)
+            soundArea.SetSoundLevel(ActionSoundType.BREATHHOLD_SQUAT);
+        else
+            soundArea.SetSoundLevel(ActionSoundType.SQUAT);
         moveCamera.Rotation(CameraType.NORMAL, false);
     }
     /// <summary>
@@ -143,7 +154,9 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め開始
     /// </summary>
-    public void BreathHoldStart() { }
+    public void BreathHoldStart()
+    {
+    }
     /// <summary>
     /// 息止め
     /// </summary>
@@ -153,7 +166,6 @@ public class PlayerEvents : MonoBehaviour
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLD, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL, true);
-        soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
     }
     /// <summary>
     /// 息止め終了
@@ -166,7 +178,9 @@ public class PlayerEvents : MonoBehaviour
     /// <summary>
     /// 息止め開始
     /// </summary>
-    public void BreathHoldMoveStart() { }
+    public void BreathHoldMoveStart() 
+    {
+    }
     /// <summary>
     /// 息止め移動
     /// </summary>
@@ -176,31 +190,33 @@ public class PlayerEvents : MonoBehaviour
         playerAnimationContoller.AnimStart(PlayerAnimType.BREATHHOLD);
         statusController.StateUpdate(MoveType.BREATHHOLDMOVE, stateController.IsSquat);
         moveCamera.Rotation(CameraType.NORMAL, true);
-        soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
         moveController.ChangeMoveTypeSpeedLimit(SpeedType.BREATHHOLD);
-        moveController.Move();
+        moveController.Move(IsBreathHold);
     }
     /// <summary>
     /// 息止め終了
     /// </summary>
     public void BreathHoldMoveEnd()
     {
-        playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
+        //playerAnimationContoller.AnimStop(PlayerAnimType.BREATHHOLD);
         cameraAnimationController.AnimStop(CameraAnimType.BREATHHOLD);
     }
 
     /// <summary>
     /// 深呼吸開始
     /// </summary>
-    public void DeepBreathStart() { }
+    public void DeepBreathStart() 
+    {
+        IsDeepBreath = true;
+    }
     /// <summary>
     /// 深呼吸
     /// </summary>
     public void DeepBreath()
     {
-        SquatEnd();
+        IsDeepBreath = true;
         cameraAnimationController.AnimStart(CameraAnimType.DEEPBREATH);
-        soundArea.AddSoundLevel(ActionSoundType.DEEPBREATH);
+        soundArea.SetSoundLevel(ActionSoundType.DEEPBREATH);
         moveCamera.Rotation(CameraType.NORMAL, false);
         statusController.DeepBreathRecovery();
     }
@@ -210,6 +226,7 @@ public class PlayerEvents : MonoBehaviour
     public void DeepBreathEnd()
     {
         cameraAnimationController.AnimStop(CameraAnimType.DEEPBREATH);
+        IsDeepBreath = false;
     }
 
     /// <summary>
@@ -256,11 +273,11 @@ public class PlayerEvents : MonoBehaviour
         doorController.EndDoorAction(false);
         if (stateController.IsDashOpen)
         {
-            soundArea.AddSoundLevel(ActionSoundType.DASHDOOROPEN);
+            soundArea.SetSoundLevel(ActionSoundType.DASHDOOROPEN);
         }
         else
         {
-            soundArea.AddSoundLevel(ActionSoundType.DOOROPEN);
+            soundArea.SetSoundLevel(ActionSoundType.DOOROPEN);
         }
     }
     /// <summary>
@@ -287,12 +304,9 @@ public class PlayerEvents : MonoBehaviour
     {
         statusController.StateUpdate(MoveType.HIDE, stateController.IsSquat);
         hideController.EndHideAction(false);
-        soundArea.AddSoundLevel(ActionSoundType.HIDE);
+        if(!IsBreathHold)
+            soundArea.SetSoundLevel(ActionSoundType.HIDE);
         hideController.HideCameraMove();
-        if (hideController.IsHideStealth())
-        {
-            soundArea.AddSoundLevel(ActionSoundType.BREATHHOLD);
-        }
 
         hideController.ChangeRootMotion();
     }
@@ -350,6 +364,7 @@ public class PlayerEvents : MonoBehaviour
     {
         playerAnimationContoller.AnimStart(PlayerAnimType.GETDOLL);
     }
+
     /// <summary>
     /// 人形ゲット
     /// </summary>
@@ -380,7 +395,7 @@ public class PlayerEvents : MonoBehaviour
     public void Barefoot()
     {
         playerAnimationContoller.BarefootRightArm();
-        soundArea.AddSoundLevel(ActionSoundType.BAREFOOT);
+        soundArea.SetSoundLevel(ActionSoundType.BAREFOOT);
     }
     /// <summary>
     /// 裸足終了

@@ -321,7 +321,7 @@ namespace PathologicalGames
 
             this._pools.Add(spawnPool.poolName, spawnPool);
 
-			Debug.Log(string.Format("Added pool '{0}'", spawnPool.poolName));
+			//Debug.Log(string.Format("Added pool '{0}'", spawnPool.poolName));
 
 			if (this.onCreatedDelegates.ContainsKey(spawnPool.poolName))
 				 this.onCreatedDelegates[spawnPool.poolName](spawnPool);

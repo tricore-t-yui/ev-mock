@@ -117,6 +117,7 @@ namespace AmplifyShaderEditor
 			else
 				m_currentSelectedInput = Mathf.Clamp( newValue, 0, m_maxAmountInputs - 1 );
 			m_outputPorts[ 0 ].ChangeType( m_inputPorts[ m_currentSelectedInput ].DataType, false );
+			PreviewIsDirty = true;
 			ChangeSignalPropagation();
 		}
 

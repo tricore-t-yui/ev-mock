@@ -1,25 +1,89 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
 [System.Serializable]
 public class RangeParameter
 {
-    public RangeParameter(EnemyParameter.StateType type)
-    {
-        stateType = type;
-    }
-
-    [EnableIf("isActivate")]
-    public EnemyParameter.StateType stateType = default;
-    bool isActivate = false;
-    [Range(0,100)]
+    [EnableIf("isTransparencyByDistance"), Range(0,100), Tooltip("透明状態から可視状態になる範囲")]
     public float appear = 4;
-    [Range(0.1f, 100)]
-    public float caution = 2.5f;
-    [Range(0.1f, 100)]
+    [EnableIf("isTransparencyByDistance"), Range(0, 100), Tooltip("完全可視状態になる範囲")]
+    public float fullAppear = 1;
+    [Range(0.1f, 30), Tooltip("ベースの聴覚範囲")]
+    public float noiseHear = 2.5f;
+    [Range(0, 10), Tooltip("ノイズを聞いたときに決定されるターゲットポジションの分布誤差（メートル）")]
+    public float noiseTargetPosRandomRange = 1.0f;
+    [Range(0, 30), Tooltip("警戒状態時に加算延長される聴覚範囲")]
+    public float noiseHearAddRangeCaution = 0.1f;
+    [Range(0, 30), Tooltip("攻撃状態時に加算延長される聴覚範囲")]
+    public float noiseHearAddRangeFighting = 0.1f;
+    [Range(0.1f, 30), Tooltip("一定以上の音が鳴った時に直接攻撃状態に移行する範囲")]
+    public float directDetect = 1;
+    [Range(0.1f, 30), Tooltip("攻撃状態で、音が聞こえる限り攻撃状態を保つ範囲")]
     public float fighting = 1;
+
+    [Space(10)]
+    [Tooltip("距離によって透明度を変えるかどうかを設定します。" +
+        "\nオフ：出現範囲に触れると指定の速度でじんわり現れる。" +
+        "\nオン：出現範囲に触れた状態からプレイヤーの距離によって透明度が変わる。")]
+    public bool isTransparencyByDistance = false;
+
+    [Tooltip("姿が現れるときの速度を設定します。" +
+        "\n値が小さいほど、ゆっくりじんわり現れます。")]
+    [ShowIf("isTransparencyByDistance")]
+    [Range(0, 1)]
+    public float appearFadeTime = 0.1f;
+
+    [Tooltip("透明度の最小値を設定します。" +
+        "\nどんなに離れてもこの値より透明にはなりません。")]
+    [ShowIf("isTransparencyByDistance")]
+    [Range(0, 1)]
+    public float transparencyMin = 0;
+
+    [Tooltip("透明度の最大値を設定します。" +
+        "\nどんなに近づいてもこの値よりは濃くなりません。")]
+    [ShowIf("isTransparencyByDistance")]
+    [Range(0, 1)]
+    public float transparencyMax = 1;
+
+    [Tooltip("フェードの反転を行うかどうかを設定します" +
+        "\nオフ：出現範囲に触れると現れて、離れると消える。" +
+        "\nオン：出現範囲に触れると消えて、離れると現れる。")]
+    [ShowIf("isTransparencyByDistance")]
+    public bool inverseTransparency = false;
+
+    [Header("View Range(視野範囲(緑扇形)の設定。ステートごとに設定。上から通常、警戒、戦闘)")]
+
+    [SerializeField]
+    [Tooltip("視野範囲の角度を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    public float[] viewAngles =
+    {
+        5,
+        25,
+        120,
+    };
+
+    [SerializeField]
+    [Tooltip("視野範囲の距離を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    public float[] viewDistances =
+    {
+        0.1f,
+        3,
+        20,
+    };
+
+    [SerializeField]
+    [Header("Attack Range(攻撃ヒット範囲(赤扇形)の設定)")]
+    [Tooltip("攻撃範囲の角度を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    public float attackAngle = 120.0f;
+
+    [SerializeField]
+    [Tooltip("攻撃ヒット範囲の距離を指定します。")]
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    public float attackRange = 1.5f;
 }
 
 public class EnemyParameter : MonoBehaviour
@@ -50,15 +114,19 @@ public class EnemyParameter : MonoBehaviour
 
     [EnableIf("isActivate")]
     [SerializeField]
-    StateColliderEvent appearRange = default;
+    TriggerEventDispatcher appearRange = default;
 
     [EnableIf("isActivate")]
     [SerializeField]
-    StateColliderEvent cautionRange = default;
+    TriggerEventDispatcher noiseHearRange = default;
 
     [EnableIf("isActivate")]
     [SerializeField]
-    StateColliderEvent fightingRange = default;
+    TriggerEventDispatcher fightingRange = default;
+
+    [EnableIf("isActivate")]
+    [SerializeField]
+    TriggerEventDispatcher directDetectRange = default;
 
     [EnableIf("isActivate")]
     [Space(5)]
@@ -69,46 +137,29 @@ public class EnemyParameter : MonoBehaviour
     [SerializeField]
     SectorCollider attackRange = default;
 
+    [LabelText("息止めの時に敵を見つけるか")]
+    [SerializeField]
+    bool isAbleDetectBreathHoldPlayer = false;
+    public bool IsAbleDetectBreathHoldPlayer => isAbleDetectBreathHoldPlayer;
+
     [SerializeField]
     [Tooltip("初期ステートを設定します。" +
         "\nこのステートから開始します。")]
     StateType initialState = StateType.Normal;
     public StateType InitialState => initialState;
 
+    /////////////////////////////////////////////////
     [Title("[Range Parameters(範囲系パラメータ)]")]
+    /////////////////////////////////////////////////
     [SerializeField]
-    [ListDrawerSettings(HideAddButton = true,HideRemoveButton = true,Expanded = true,ShowItemCount = false,ShowPaging = false,DraggableItems = false)]
-    RangeParameter[] stateRanges = new RangeParameter[3]
-    {
-        new RangeParameter(StateType.Normal),
-        new RangeParameter(StateType.Caution),
-        new RangeParameter(StateType.Fighting),
-    };
-    public RangeParameter[] StateRanges => stateRanges;
+    [ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, Expanded = true, ShowItemCount = false, ShowPaging = false, DraggableItems = false)]
+    RangeParameter rangeParameter;
+    public RangeParameter RangeParameter => rangeParameter;
 
-    [Header("View Range(視野範囲(緑扇形)の設定)")]
-    [Tooltip("視野範囲の角度を指定します。")]
-    [SerializeField]
-    float viewAngle = 120;
-    public float ViewAngle => viewAngle;
-    [Tooltip("視野範囲の距離を指定します。")]
-    [SerializeField]
-    float viewDistance = 1;
-    public float ViewDistance => viewDistance;
-
-    [Header("Attack Range(戦闘範囲(赤扇形)の設定)")]
-    [Tooltip("攻撃範囲の角度を指定します。")]
-    [SerializeField]
-    float attackAngle = 120;
-    public float AttackAngle => attackAngle;
-    [Tooltip("攻撃範囲の距離を指定します。")]
-    [SerializeField]
-    float attackDistance = 0.5f;
-    public float AttackDistance => attackDistance;
-
-
+    /////////////////////////////////////////////////
     [Space(15)]
     [Title("[State : Normal(通常状態)]")]
+    /////////////////////////////////////////////////
     [Tooltip("通常状態時の移動速度を設定します。")]
     [SerializeField]
     float normalMoveSpeed = 0.5f;
@@ -158,50 +209,17 @@ public class EnemyParameter : MonoBehaviour
         return wandererType == WandererType.Route;
      }
 
-    [Space(10)]
-    [SerializeField]
-    [Tooltip("フェードの反転を行うかどうかを設定します" +
-        "\nオフ：出現範囲に触れると現れて、離れると消える。" +
-        "\nオン：出現範囲に触れると消えて、離れると現れる。")]
-    bool inverse = false;
-    public bool Inverse => inverse;
+    [SerializeField, Range(0.1f, 100), LabelText("直接攻撃状態に移行する音のレベル")]
+    float directDetectSoundLevel = 6;
+    public float DirectDetectSoundLevel => directDetectSoundLevel;
 
-    [SerializeField]
-    [Tooltip("距離によって透明度を変えるかどうかを設定します。" +
-        "\nオフ：出現範囲に触れると指定の速度でじんわり現れる。" +
-        "\nオン：出現範囲に触れた状態からプレイヤーの距離によって透明度が変わる。")]
-    bool isTransparencyByDistance = false;
-    public bool IsTransparencyByDistance => isTransparencyByDistance;
-
-    [Tooltip("姿が現れるときの速度を設定します。" +
-        "\n値が小さいほど、ゆっくりじんわり現れます。")]
-    [HideIf("isTransparencyByDistance")]
-    [SerializeField]
-    [Range(0, 1)]
-    float appearFadeTime = 0.1f;
-    public float AppearFadeTime => appearFadeTime;
-
-    [SerializeField]
-    [Tooltip("透明度の最小値を設定します。" +
-        "\nどんなに離れてもこの値より透明にはなりません。")]
-    [ShowIf("isTransparencyByDistance")]
-    [Range(0, 1)]
-    float transparencyMin = 0;
-    public float TransparencyMin => transparencyMin;
-
-    [SerializeField]
-    [Tooltip("透明度の最大値を設定します。" +
-        "\nどんなに近づいてもこの値よりは濃くなりません。")]
-    [ShowIf("isTransparencyByDistance")]
-    [Range(0, 1)]
-    float transparencyMax = 1;
-    public float TransparencyMax => transparencyMax;
-
-    [Space(10)]
-    [Tooltip("最初に音を聞いたときに、この値よりも大きなレベルの音を鳴らすと即警戒に移行します。")]
-    [SerializeField]
-    float safeSoundLevelMax = 5;
-    public float SafeSoundLevelMax => safeSoundLevelMax;
+    public bool InverseTransparency => rangeParameter.inverseTransparency;
+    public bool IsTransparencyByDistance => rangeParameter.isTransparencyByDistance;
+    public float AppearFadeTime => rangeParameter.appearFadeTime;
+    public float TransparencyMin => rangeParameter.transparencyMin;
+    public float TransparencyMax => rangeParameter.transparencyMax;
+    public float NoiseTargetPosRandomRange => rangeParameter.noiseTargetPosRandomRange;
+    public float AttackRange => rangeParameter.attackRange;
 
     [Tooltip("最初に音を聞いたときに、警戒に移行するまでの時間を設定します。" +
         "\nこの時間までに警戒範囲から離れれば気づかれません。")]
@@ -214,20 +232,32 @@ public class EnemyParameter : MonoBehaviour
     bool isDetectNoiseToTransparent = false;
     public bool IsDetectNoiseToTransparent => isDetectNoiseToTransparent;
 
-
+    /////////////////////////////////////////////////
     [Space(15)]
     [Title("[State : Caution(警戒状態)]")]
-    [Tooltip("警戒状態時の待機時間を設定します。" +
-        "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
-    [SerializeField]
-    float cautionWaitTime = 1;
-    public float CautionWaitTime => cautionWaitTime;
-
+    /////////////////////////////////////////////////
     [SerializeField]
     [Tooltip("警戒状態時の移動速度を設定します。" +
         "\nプレイヤーが発した音を聞いたときはこの速度で近づいてきます。")]
     float cautionMoveSpeed = 1;
     public float CautionMoveSpeed => cautionMoveSpeed;
+
+    [Tooltip("警戒状態時の発見時待機時間")]
+    [SerializeField]
+    float cautionStartWaitTime = 1;
+    public float CautionStartWaitTime => cautionStartWaitTime;
+
+    [Tooltip("警戒状態時の見失った際の待機時間：最低値" +
+        "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
+    [SerializeField]
+    float cautionEndWaitTimeMin = 1;
+    public float CautionEndWaitTimeMin => cautionEndWaitTimeMin;
+
+    [Tooltip("警戒状態時の見失った際の待機時間：最大値" +
+        "\n音を聞いて近づいたが、結局プレイヤーを見つけられなかったときにこの時間でしばらく待機を行います。")]
+    [SerializeField]
+    float cautionEndWaitTimeMax = 4;
+    public float CautionEndWaitTimeMax => cautionEndWaitTimeMax;
 
     [SerializeField]
     [Tooltip("プレイヤーを見失ったり音を聞きとれなくなったときに、もとの徘徊ルートや待機位置に戻ります。" +
@@ -235,25 +265,21 @@ public class EnemyParameter : MonoBehaviour
     float returnWarpDistance = 10;
     public float ReturnWarpDistance => returnWarpDistance;
 
+    /////////////////////////////////////////////////
     [Space(15)]
     [Title("[State : Fighting(戦闘状態)]")]
+    /////////////////////////////////////////////////
     [SerializeField]
-    [Tooltip("戦闘状態時の待機時間を設定します。" +
-        "\nプレイヤーを途中で見失ったときにこの時間で待機を行います。")]
-    float fightingWaitTime = 0.5f;
-    public float FightingWaitTime => fightingWaitTime;
+    [Tooltip("戦闘状態時の移動速度を設定します。" +
+        "\nこの速度でプレイヤーを追いかけます。")]
+    float fightingMoveSpeed = 2;
+    public float FightingMoveSpeed => fightingMoveSpeed;
 
     [SerializeField]
     [Tooltip("攻撃後の待機時間を設定します。" +
         "\nプレイヤーを攻撃したあとはこの時間でしばらく待機します。")]
     float attackedWaitTime = 3;
     public float AttackedWaitTime => attackedWaitTime;
-
-    [SerializeField]
-    [Tooltip("戦闘状態時の移動速度を設定します。" +
-        "\nこの速度でプレイヤーを追いかけます。")]
-    float fightingMoveSpeed = 2;
-    public float FightingMoveSpeed => fightingMoveSpeed;    
 
     [SerializeField]
     [Range(0,100)]
@@ -266,10 +292,10 @@ public class EnemyParameter : MonoBehaviour
     CrySoundParameter cryParameter = default;
     public CrySoundParameter CryParameter => cryParameter;
 
-
+    /////////////////////////////////////////////////
     [Space(15)]
     [Title("[Special Action Settings(特殊アクション)]")]
-
+    /////////////////////////////////////////////////
     [SerializeField]
     [Tooltip("このフラグがオンの場合、攻撃してしばらく待機した後に消えます。")]
     bool isAttackedDisappear = false;
@@ -311,13 +337,20 @@ public class EnemyParameter : MonoBehaviour
     float disappearWaitTime = 2;
     public float DisappearWaitTime => disappearWaitTime;
 
+    /////////////////////////////////////////////////
     [Space(15)]
     [Title("[Other Settings(その他)]")]
+    /////////////////////////////////////////////////
     [SerializeField]
     [Tooltip("敵の状態遷移を行うかどうかを設定します。" +
         "\nこのフラグがオンの場合は状態遷移が一切行われなくなります。")]
     bool isStaticState = false;
     public bool IsStaticState => isStaticState;
+
+    [SerializeField]
+    [Tooltip("このフラグがONだと攻撃せずに意味もなくついてきます")]
+    bool dontAttack = false;
+    public bool DontAttack => dontAttack;
 
     [SerializeField]
     [Tooltip("ゲーム開始時に自動でスポーンさせるか設定します。" +
@@ -326,21 +359,23 @@ public class EnemyParameter : MonoBehaviour
 
     // 初期位置
     public Vector3 InitialPosition { get; private set; }
+    public Quaternion InitialRotation { get; private set; }
 
     /// <summary>
     /// 初期化
     /// </summary>
     public void Initialize()
     {
-        if (viewAngle < 0.01f || viewDistance < 0.01f)
+        if (rangeParameter.viewAngles[0] < 0.01f || rangeParameter.viewDistances[0] < 0.01f)
         {
             viewRange.gameObject.SetActive(false);
         }
-        if (attackAngle < 0.01f || attackDistance < 0.01f)
+        if (rangeParameter.attackAngle < 0.01f || rangeParameter.attackRange < 0.01f)
         {
             attackRange.gameObject.SetActive(false);
         }
         InitialPosition = transform.position;
+        InitialRotation = transform.rotation;
 
         if (routeCheckPoints != null)
         {
@@ -357,29 +392,55 @@ public class EnemyParameter : MonoBehaviour
     /// <summary>
     /// 範囲の変更
     /// </summary>
-    /// <param name="type"></param>
     public void ChangeRangeRadius(StateType type)
     {
-        RangeParameter rangeParameter = System.Array.Find(stateRanges, elem => elem.stateType == type);
-        appearRange.Radius = rangeParameter.appear;
-        cautionRange.Radius = rangeParameter.caution;
-        fightingRange.Radius = rangeParameter.fighting;
+        appearRange.Radius = RangeParameter.appear;
+        fightingRange.Radius = RangeParameter.fighting;
+        directDetectRange.Radius = RangeParameter.directDetect;
+
+        // 状態によって聴覚範囲のみレンジ加算を行う
+        if(type == StateType.Caution)
+        {
+            noiseHearRange.Radius = RangeParameter.noiseHear + RangeParameter.noiseHearAddRangeCaution;
+        }
+        else if (type == StateType.Fighting)
+        {
+            noiseHearRange.Radius = RangeParameter.noiseHear + RangeParameter.noiseHearAddRangeFighting;
+        }
+        else
+        {
+            noiseHearRange.Radius = RangeParameter.noiseHear;
+        }
+#if UNITY_EDITOR
+        currentType = type;
+#endif
+
+        viewRange.Angle = rangeParameter.viewAngles[(int)type];
+        viewRange.Distance = rangeParameter.viewDistances[(int)type];
+        attackRange.Angle = rangeParameter.attackAngle;
+        attackRange.Distance = rangeParameter.attackRange;
     }
 
+#if UNITY_EDITOR && DEBUG
+    public bool DrawGizmo { get; set; }
+    StateType currentType = StateType.Normal;
     private void OnDrawGizmos()
     {
+        if (!DrawGizmo) return;
         UnityEditor.Handles.color = new Color(0,1,0,0.5f);
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].appear);
+        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.appear);
+        UnityEditor.Handles.color = new Color(1, 1, 0.3f, 0.5f);
+        if(currentType == StateType.Caution)
+            UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.noiseHear + RangeParameter.noiseHearAddRangeCaution);
+        else if (currentType == StateType.Fighting)
+            UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.noiseHear + RangeParameter.noiseHearAddRangeFighting);
+        else
+            UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.noiseHear);
         UnityEditor.Handles.color = new Color(1, 1, 0, 0.5f);
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].caution);
+        UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, RangeParameter.directDetect);
         UnityEditor.Handles.color = new Color(1, 0, 0, 0.5f);
-        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, stateRanges[0].fighting);
+        UnityEditor.Handles.DrawWireDisc(transform.position,Vector3.up, RangeParameter.fighting);
         UnityEditor.Handles.color = Color.white;
-
-        viewRange.Angle      = viewAngle;
-        viewRange.Distance   = viewDistance;
-        attackRange.Angle    = attackAngle;
-        attackRange.Distance = attackDistance;
 
         // ルートを線で描画
         if (normalStateType == NormalStateType.Wanderer && wandererType == WandererType.Route)
@@ -425,4 +486,5 @@ public class EnemyParameter : MonoBehaviour
             Gizmos.color = Color.white;
         }
     }
+#endif
 }

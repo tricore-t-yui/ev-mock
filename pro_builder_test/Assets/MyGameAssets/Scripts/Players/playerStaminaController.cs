@@ -10,6 +10,8 @@ public class playerStaminaController : MonoBehaviour
 {
     [SerializeField]
     PlayerStatusData playerData = default;                        // プレイヤーのデータのスクリプタブルオブジェクト
+    [SerializeField]
+    PlayerBreathController breathController = default;            // 息クラス
 
     [SerializeField]
     bool isDebug = false;
@@ -33,12 +35,12 @@ public class playerStaminaController : MonoBehaviour
     {
         if (!isDebug)
         {
+            //Debug.Log(RecoveryMagnification());
             // 各ステートに合わせた処理を実行
             switch (type)
             {
-                case MoveType.WALK: NowAmount += playerData.StaminaWalkRecovery; SquatRecovery(isSquat); break;
-                case MoveType.DASH: NowAmount -= playerData.StaminaDecrement; break;
-                default: NowAmount += playerData.StaminaNormalRecovery; SquatRecovery(isSquat); break;
+                case MoveType.DASH: NowAmount += playerData.StaminaDecrement * ConsumptionMagnification(); break;
+                default: NowAmount += playerData.StaminaNormalRecovery * RecoveryMagnification(); SquatRecovery(isSquat); break;
             }
         }
 
@@ -56,7 +58,7 @@ public class playerStaminaController : MonoBehaviour
     {
         if (flag)
         {
-            NowAmount += playerData.StaminaSquatRecovery;
+            NowAmount += playerData.StaminaSquatRecovery * RecoveryMagnification();
         }
     }
 
@@ -65,7 +67,18 @@ public class playerStaminaController : MonoBehaviour
     /// </summary>
     public void DeepBreathRecovery()
     {
-        NowAmount += playerData.StaminaDeepBreathRecovery;
+        NowAmount += playerData.StaminaDeepBreathRecovery * RecoveryMagnification() ;
+
+        // 値補正
+        NowAmount = Mathf.Clamp(NowAmount, 0, 100);
+    }   
+    
+    /// <summary>
+    /// 深呼吸回復
+    /// </summary>
+    public void Damage(float damage)
+    {
+        NowAmount -= damage;
 
         // 値補正
         NowAmount = Mathf.Clamp(NowAmount, 0, 100);
@@ -80,10 +93,41 @@ public class playerStaminaController : MonoBehaviour
         {
             IsDisappear = true;
         }
-        if (IsDisappear && NowAmount >= 100)
+        // 最低値より回復したら息切れ無効
+        if (IsDisappear && NowAmount >= playerData.StaminaDashMin)
         {
             IsDisappear = false;
         }
+    }
+
+    /// <summary>
+    /// 息の状態による回復倍率
+    /// </summary>
+    float RecoveryMagnification()
+    {
+        if (breathController.NowAmount <= playerData.LargeDisturbance)
+            return playerData.StaminaConfusionLRecoveryFactor;
+        else if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionMRecoveryFactor;
+        else if (breathController.NowAmount <= playerData.SmallDisturbance)
+            return playerData.StaminaConfusionSRecoveryFactor;
+        else
+            return 1;
+    }
+
+    /// <summary>
+    /// 息の状態による消費倍率
+    /// </summary>
+    float ConsumptionMagnification()
+    {
+        if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionLDecrementFactor;
+        else if (breathController.NowAmount <= playerData.MediumDisturbance)
+            return playerData.StaminaConfusionMDecrementFactor;
+        else if (breathController.NowAmount <= playerData.SmallDisturbance)
+            return playerData.StaminaConfusionSDecrementFactor;
+        else
+            return 1;
     }
 
     /// <summary>

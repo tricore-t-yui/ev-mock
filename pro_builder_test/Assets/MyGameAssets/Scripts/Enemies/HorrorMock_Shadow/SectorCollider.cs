@@ -4,8 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 
+/// <summary>
+/// 扇形コライダ
+/// </summary>
 public class SectorCollider : MonoBehaviour
 {
+#if DEBUG
+    public bool drawGizmo = false;
+#endif
     // コライダー用のUnityEvent
     [System.Serializable]
     public class ColliderEvent : UnityEvent<Collider> { }
@@ -19,8 +25,7 @@ public class SectorCollider : MonoBehaviour
     [SerializeField]
     LayerMask raycastMask = default;
     [SerializeField]
-    string targetLayerName = null;
-    int targetLayer = 0;
+    string targetTagName = null;
 
     [SerializeField]
     float angle = 0;
@@ -40,6 +45,8 @@ public class SectorCollider : MonoBehaviour
     [SerializeField]
     ColliderEvent visibleExit = default;
 
+    bool enter;
+
     void Start()
     {
         GameObject colliderObject = new GameObject("Collider");
@@ -51,8 +58,6 @@ public class SectorCollider : MonoBehaviour
         sphereCollider = colliderObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = distance;
-
-        targetLayer = LayerMask.NameToLayer(targetLayerName);
     }
 
     private void Update()
@@ -69,16 +74,21 @@ public class SectorCollider : MonoBehaviour
         RaycastHit raycastHit;
         if (!Physics.Raycast(ray,out raycastHit,distance,raycastMask)) { return false; }
 
-        // 対象のオブジェクトの当たっている
-        if (raycastHit.collider.gameObject.layer == targetLayer)
+        if (raycastHit.collider.gameObject.tag == targetTagName)
         {
+            // 対象のオブジェクトの当たっている
             float dot = Vector3.Angle(transform.forward, ray.direction);
 
             // 扇形の範囲内に入っている
-            if (dot < (angle * 0.5f) && raycastHit.distance < distance)
+            if ((dot < (angle * 0.5f) && raycastHit.distance < distance))
             {
+#if DEBUG && UNITY_EDITOR
                 // デバッグ用の線を描画
-                Debug.DrawLine(transform.position, raycastHit.point,Color.yellow);
+                if (drawGizmo)
+                {
+                    Debug.DrawLine(transform.position, raycastHit.point, Color.yellow);
+                }
+#endif
                 return true;
             }
         }
@@ -87,30 +97,63 @@ public class SectorCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (IsVisibleObject(other))
+        if (other.gameObject.tag != targetTagName) { return; }
+
+        if (IsVisibleObject(other) && !enter)
         {
-            visibleEnter.Invoke(other);
+            EnterInvoke(other);
         }
     }
 
     void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag != targetTagName) { return; }
+
         if (IsVisibleObject(other))
         {
-            visibleStay.Invoke(other);
+            if (!enter)
+            {
+                EnterInvoke(other);
+            }
+            else
+            {
+                visibleStay.Invoke(other);
+            }
+        }
+        else
+        {
+            if(enter)
+            {
+                ExitInvoke(other);
+            }
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        if (IsVisibleObject(other))
+        if (other.gameObject.tag != targetTagName) { return; }
+
+        if (enter)
         {
-            visibleExit.Invoke(other);
+            ExitInvoke(other);
         }
     }
 
+    void EnterInvoke(Collider other)
+    {
+        enter = true;
+        visibleEnter.Invoke(other);
+    }
+    void ExitInvoke(Collider other)
+    {
+        enter = false;
+        visibleExit.Invoke(other);
+    }
+
+#if UNITY_EDITOR && DEBUG
     void OnDrawGizmos()
     {
+        if (!drawGizmo) return;
         // 左側の境界ベクトル
         Vector3 leftBorder = (Quaternion.AngleAxis(angle * 0.5f, transform.right * -1) * transform.forward) * distance;
         // 右側の境界ベクトル
@@ -126,4 +169,5 @@ public class SectorCollider : MonoBehaviour
         Debug.DrawRay(transform.position, upBorder, borderColor);
         Debug.DrawRay(transform.position, downBorder, borderColor);
     }
+#endif
 }

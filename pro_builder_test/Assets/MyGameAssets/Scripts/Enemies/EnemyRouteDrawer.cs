@@ -16,6 +16,7 @@ public class EnemyRouteDrawer : MonoBehaviour
     [SerializeField]
     NavMeshAgent navMeshAgent = default;
 
+#if UNITY_EDITOR
     /// <summary>
     /// デバッグ用表示
     /// </summary>
@@ -27,6 +28,7 @@ public class EnemyRouteDrawer : MonoBehaviour
             DrawLineToTargetPos(checkPoint);
         }
     }
+#endif
 
     /// <summary>
     /// 現在と次の目標位置を線でつなぐ

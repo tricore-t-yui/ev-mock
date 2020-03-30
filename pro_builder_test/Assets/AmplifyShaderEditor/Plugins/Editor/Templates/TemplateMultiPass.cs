@@ -1169,6 +1169,11 @@ namespace AmplifyShaderEditor
 					{
 						if( m_subShaders[ subShaderIdx ].Passes[ passIdx ].Modules.HasPassUniqueName )
 						{
+							if( m_passUniqueIdData.ContainsKey( m_subShaders[ subShaderIdx ].Passes[ passIdx ].Modules.PassUniqueName ) )
+							{
+								Debug.LogErrorFormat( "Found duplicate pass name '{0}' over template. Please fix template as it will result in multiple errors.", m_subShaders[ subShaderIdx ].Passes[ passIdx ].Modules.PassUniqueName );
+								return false;
+							}
 							m_passUniqueIdData.Add( m_subShaders[ subShaderIdx ].Passes[ passIdx ].Modules.PassUniqueName, new TemplateUniquePassData() { PassIdx = passIdx, SubShaderIdx = subShaderIdx } );
 						}
 					}

@@ -218,7 +218,7 @@ namespace AmplifyShaderEditor
 
 			//ALPHA TO MASK
 			{
-				Match alphaToMaskMatch = Regex.Match( subBody, TemplateHelperFunctions.ALphaToMaskPattern );
+				Match alphaToMaskMatch = Regex.Match( subBody, TemplateHelperFunctions.AlphaToMaskPattern );
 				if( alphaToMaskMatch.Success )
 				{
 					m_blendData.ValidAlphaToMask = true;

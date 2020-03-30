@@ -7,7 +7,7 @@ using System.Linq;
 [System.Serializable]
 public class SpawnParameter
 {
-    public Tsun spawnTsun = default;
+    public Tsun tsun = default;
     public float spawnDelayTime = 0;
     public List<Vector2> spawnPos = default;
     public List<ShadowHuman> shadowTrigger = default;
@@ -20,6 +20,7 @@ public class SpawnParameter
         Not,
         Start,
         Spawn,
+        Spawned,
     }
     public SpawnState spawnState = SpawnState.Not;
 }
@@ -27,7 +28,7 @@ public class SpawnParameter
 public class TsunSpawner : MonoBehaviour
 {
     [SerializeField]
-    List<SpawnParameter> spawnParameters = default;
+    SpawnParameter spawnParameter = default;
 
     // ツンが感知した影人間
     ShadowHuman detectedShadowOfTsun = default;
@@ -39,9 +40,6 @@ public class TsunSpawner : MonoBehaviour
     {
         // 乱数のシード値を設定
         Random.InitState((int)System.DateTime.Now.Ticks);
-
-        // 全てのツンをオフにする
-        spawnParameters.ForEach(elem => elem.spawnTsun.gameObject.SetActive(false));
     }
 
     /// <summary>
@@ -49,75 +47,45 @@ public class TsunSpawner : MonoBehaviour
     /// </summary>
     void Update()
     {
-        foreach(SpawnParameter parameter in spawnParameters)
+        if (spawnParameter.spawnState == SpawnParameter.SpawnState.Not)
         {
-            // 活動中のツンが１体でもいる場合は何もしない（自分以外）
-            if (spawnParameters.Exists(elem => elem.spawnState == SpawnParameter.SpawnState.Spawn &&
-                                               elem != parameter)) { continue; }
-
-            if (parameter.spawnState == SpawnParameter.SpawnState.Not)
+            // １体でも戦闘状態の影人間がいれば
+            if (spawnParameter.shadowTrigger.Exists(
+                elem => elem.currentState == EnemyParameter.StateType.Fighting))
             {
-                // １体でも戦闘状態の影人間がいれば
-                if (parameter.shadowTrigger.Exists(
-                    elem => elem.currentState == EnemyParameter.StateType.Fighting))
-                {
-                    // スポーンフラグをオン
-                    parameter.spawnState = SpawnParameter.SpawnState.Start;
+                // スポーンフラグをオン
+                spawnParameter.spawnState = SpawnParameter.SpawnState.Start;
 
-                    // おこている影人間を取得（複数いる場合は最後におこたやーつ）
-                    detectedShadowOfTsun = parameter.shadowTrigger.FindLast(elem => elem.currentState == EnemyParameter.StateType.Fighting);
-                }
-            }
-
-            // スポーン中
-            else if (parameter.spawnState == SpawnParameter.SpawnState.Spawn)
-            {
-                // 通常状態に戻った
-                if (parameter.spawnTsun.currentState == EnemyParameter.StateType.Normal)
-                {
-                    // デスポーン
-                    parameter.spawnTsun.gameObject.SetActive(false);
-                    parameter.spawnState = SpawnParameter.SpawnState.Not;
-                    detectedShadowOfTsun = null;
-                }
-            }
-
-            // カウントを回して一定時間後にスポーンさせる
-            else if (parameter.spawnState == SpawnParameter.SpawnState.Start)
-            {
-                parameter.spawnCounter += Time.deltaTime;
-                //一定時間経過した
-                if (parameter.spawnCounter > parameter.spawnDelayTime)
-                {
-                    // スポーンさせる
-                    parameter.spawnTsun.Spawn(EnemyParameter.StateType.Caution,detectedShadowOfTsun.transform.position, LotterySpawnPos(parameter));
-
-                    // スポーンステート変更
-                    parameter.spawnState = SpawnParameter.SpawnState.Spawn;
-                    parameter.spawnCounter = 0;
-                }
+                // おこている影人間を取得（複数いる場合は最後におこたやーつ）
+                detectedShadowOfTsun = spawnParameter.shadowTrigger.FindLast(elem => elem.currentState == EnemyParameter.StateType.Fighting);
             }
         }
-    }
-
-    void OnDrawGizmos()
-    {
-        // ツンと影人間を線で結ぶ
-        foreach(SpawnParameter parameter in spawnParameters)
+        // カウントを回して一定時間後にスポーンさせる
+        else if (spawnParameter.spawnState == SpawnParameter.SpawnState.Start)
         {
-            foreach(ShadowHuman shadow in parameter.shadowTrigger)
+            spawnParameter.spawnCounter += Time.deltaTime;
+            //一定時間経過した
+            if (spawnParameter.spawnCounter > spawnParameter.spawnDelayTime)
             {
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(parameter.spawnTsun.transform.position, shadow.transform.position);
-                Gizmos.color = Color.white;
+                // スポーンさせる
+                spawnParameter.tsun.Spawn(EnemyParameter.StateType.Caution, detectedShadowOfTsun.transform.position, LotterySpawnPos());
+                spawnParameter.tsun.OnSpawned();
 
-                parameter.spawnPos.ForEach(elem =>
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawLine(parameter.spawnTsun.transform.position,new Vector3(elem.x,parameter.spawnTsun.transform.position.y,elem.y));
-                    Gizmos.DrawSphere(new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y), 0.1f);
-                    Gizmos.color = Color.white;
-                });
+                // スポーンステート変更
+                spawnParameter.spawnState = SpawnParameter.SpawnState.Spawn;
+                spawnParameter.spawnCounter = 0;
+            }
+        }
+        // スポーン中
+        else if (spawnParameter.spawnState == SpawnParameter.SpawnState.Spawn)
+        {
+            // 通常状態に戻った
+            if (spawnParameter.tsun.currentState == EnemyParameter.StateType.Normal)
+            {
+                // デスポーン
+                spawnParameter.tsun.Spawn(EnemyParameter.StateType.Normal);
+                spawnParameter.spawnState = SpawnParameter.SpawnState.Not;
+                detectedShadowOfTsun = null;
             }
         }
     }
@@ -125,10 +93,33 @@ public class TsunSpawner : MonoBehaviour
     /// <summary>
     /// スポーン位置を抽選
     /// </summary>
-    /// <param name="parameter"></param>
     /// <returns></returns>
-    public Vector3 LotterySpawnPos(SpawnParameter parameter)
+    Vector3 LotterySpawnPos()
     {
-        return parameter.spawnPos.Min(elem => detectedShadowOfTsun.transform.position - new Vector3(elem.x, parameter.spawnTsun.transform.position.y, elem.y));
+        Vector3 ret = Vector3.zero;
+        float minDist = float.MaxValue;
+        foreach (var elem in spawnParameter.spawnPos)
+        {
+            var spawnPosv3 = new Vector3(transform.position.x + elem.x, transform.position.y, transform.position.z + elem.y);
+            var dist = (detectedShadowOfTsun.transform.position - spawnPosv3).sqrMagnitude;
+            if (dist < minDist)
+            {
+                ret = spawnPosv3;
+                minDist = dist;
+            }
+        }
+        return ret;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        // スポーンポジション設定していない状態ならスフィアだけ出す
+        foreach (var pos in spawnParameter.spawnPos)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(new Vector3(transform.position.x + pos.x, transform.position.y, transform.position.z + pos.y), 0.1f);
+        };
+    }
+#endif
 }

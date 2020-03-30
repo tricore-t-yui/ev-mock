@@ -224,6 +224,7 @@ namespace AmplifyShaderEditor
 		public readonly static string UnityAutoLightLib = "AutoLight.cginc";
 		public readonly static string UnityBRDFLib = "UnityStandardBRDF.cginc";
 		public readonly static string LocalValueDecWithoutIdent = "{0} {1} = {2};";
+		public readonly static string CustomTypeLocalValueDecWithoutIdent = "{0} {1} =({0}){2};";
 		public readonly static string LocalValueDefWithoutIdent = "{0} {1} {2};";
 		public readonly static string TilingOffsetFormat = "{0} * {1} + {2}";
 		public static string InvalidPostProcessDatapath = "__DELETED_GUID_Trash";
@@ -302,7 +303,7 @@ namespace AmplifyShaderEditor
 
 		public readonly static Color PortTextColor = new Color( 1f, 1f, 1f, 0.5f );
 		public readonly static Color PortLockedTextColor = new Color( 1f, 1f, 1f, 0.35f );
-		public readonly static Color BoxSelectionColor = new Color( 1f, 1f, 1f, 0.5f );
+		public readonly static Color BoxSelectionColor = new Color( 0.5f, 0.75f, 1f, 0.33f );
 		public readonly static Color SpecialRegisterLocalVarSelectionColor = new Color( 0.27f, 0.52f, 1.0f, 1f );
 		public readonly static Color SpecialGetLocalVarSelectionColor = new Color( 0.2f, 0.8f, 0.4f, 1f );
 		public readonly static Color NodeSelectedColor = new Color( 0.85f, 0.56f, 0f, 1f );

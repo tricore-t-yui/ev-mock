@@ -34,9 +34,16 @@ namespace AmplifyShaderEditor
 			base.SetPreviewInputs();
 
 			if( m_inputPorts[ 0 ].IsConnected )
-				m_previewMaterialPassId = 1;
+			{
+				if( m_normalSpace == ViewSpace.Tangent )
+					m_previewMaterialPassId = 1;
+				else
+					m_previewMaterialPassId = 2;
+			}
 			else
+			{
 				m_previewMaterialPassId = 0;
+			}
 
 			if( m_cachedIntensityId == -1 )
 				m_cachedIntensityId = Shader.PropertyToID( "_Intensity" );

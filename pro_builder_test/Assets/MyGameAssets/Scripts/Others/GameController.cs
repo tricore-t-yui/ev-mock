@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -52,12 +53,24 @@ public class GameController : MonoBehaviour
 
     public bool IsReturn { get; private set; } = false; // 帰りのシーンかどうか
 
+    ShadowHuman[] shadows = default;
+    ShadowHuman[] shadowGimmicks = default;
+    Tsun[] tsuns = default;
+
     /// <summary>
     /// 開始処理
     /// </summary>
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+
+        List<ShadowHuman> shadowHumens = FindObjectsOfType<ShadowHuman>().ToList();
+        shadows = shadowHumens.FindAll(elem => elem.tag == "ShadowHuman").ToArray();
+        shadowGimmicks = shadowHumens.FindAll(elem => elem.tag == "ShadowGimmick").ToArray();
+        foreach (ShadowHuman shadow in shadowGimmicks)
+        {
+            shadow.gameObject.SetActive(false);
+        }
 
         switch (returnTransitionMethod)
         {
@@ -119,7 +132,16 @@ public class GameController : MonoBehaviour
 
         if (!IsReturn)
         {
-            tutorialTriggerManager.TriggerReset();
+            //tutorialTriggerManager.TriggerReset();
+            foreach(ShadowHuman shadow in shadows)
+            {
+                shadow.gameObject.SetActive(false);
+                shadow.Spawn(EnemyParameter.StateType.Normal);
+            }
+            foreach(ShadowHuman shadow in shadowGimmicks)
+            {
+                shadow.gameObject.SetActive(false);
+            }
         }
     }
 

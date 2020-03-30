@@ -10,6 +10,9 @@ using KeyType = KeyController.KeyType;
 /// </summary>
 public class PlayerHideController : MonoBehaviour
 {
+    public static PlayerHideController Inst{ get; private set; }
+    private void Awake() { Inst = this; }
+
     /// <summary>
     /// オブジェクトタイプ
     /// </summary>
@@ -35,6 +38,12 @@ public class PlayerHideController : MonoBehaviour
     KeyController keyController = default;                      // キー操作クラス
     [SerializeField]
     SoundSpawner sound = default;                                   // 音生成クラス
+    [SerializeField]
+    Rigidbody playerRigidbody = default;                                   // リジッドボディ
+    [SerializeField]
+    PlayerEvents playerEvent = default;
+
+    Vector3 hidePosition = default;
 
     HideObjectController hideObjectController = default;        // 隠れるオブジェクトクラス
 
@@ -60,6 +69,32 @@ public class PlayerHideController : MonoBehaviour
         transform.position = interactController.InitPosition(hideObjectController.GetDirType(), transform, HideObj.transform);
         transform.rotation = interactController.InitRotation(hideObjectController.GetDirType());
         keyInputStage = 1;
+    }
+
+    private void Update()
+    {
+        // 有効な時だけまわる
+        // なぜかStateControllerから独立してこいつだけ稼働しているので、
+        // 息止めはアニメーション駆動になっている
+        // 同じく深呼吸もこちらで管理する
+        if (!isStealth)
+        {
+            if (!IsDeepBreath())
+            {
+                if ( keyController.GetKeyDown(KeyType.DEEPBREATH))
+                {
+                    playerEvent.DeepBreathStart();
+                }
+            }
+            else 
+            {
+                playerEvent.DeepBreath();
+                if ( keyController.GetKeyUp(KeyType.DEEPBREATH))
+                {
+                    playerEvent.DeepBreathEnd();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -146,7 +181,7 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void HideObject()
     {
-        sound.Play(SoundSpawner.SoundType.HeartSound);
+        //sound.Play(SoundSpawner.SoundType.HeartSound);
 
         // カメラの固定を解除し、オブジェクトに合わせたフラグを立てる
         IsAnimRotation = false;
@@ -160,6 +195,7 @@ public class PlayerHideController : MonoBehaviour
             case HideObjectType.BED:
                 IsHideBed = true; break;
         }
+        hidePosition = transform.position;
     }
 
     /// <summary>
@@ -168,7 +204,7 @@ public class PlayerHideController : MonoBehaviour
     /// NOTE:k.oishi アニメーションイベント用関数
     public void ExitHideObject()
     {
-        sound.Stop(SoundSpawner.SoundType.HeartSound);
+        //sound.Stop(SoundSpawner.SoundType.HeartSound);
 
         // カメラの固定し、オブジェクトに合わせたフラグを切り、オブジェクトから出る向きを求める
         switch (type)
@@ -199,6 +235,7 @@ public class PlayerHideController : MonoBehaviour
                     if (IsHideLocker)
                     {
                         moveController.IsRootMotion(false, false);
+                        transform.position = new Vector3(hidePosition.x, transform.position.y, hidePosition.z);
                     }
                     else
                     {
@@ -240,7 +277,7 @@ public class PlayerHideController : MonoBehaviour
         if (flag && enabled)
         {
             keyInputStage = 0;
-            sound.Stop(SoundSpawner.SoundType.HeartSound);
+            //sound.Stop(SoundSpawner.SoundType.HeartSound);
             animationContoller.SetEndAnimationFlag(PlayerAnimationContoller.EndAnimationType.HIDE);
             hideObjectController.SetActiveCollider(true);
             IsHideLocker = false;
@@ -271,6 +308,11 @@ public class PlayerHideController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public bool IsStealth()
+    {
+        return isStealth;
     }
 
     // NOTE:k.oishi
@@ -326,6 +368,10 @@ public class PlayerHideController : MonoBehaviour
     public bool IsBreathlessness()
     {
         return breathController.IsDisappear;
+    }
+    public bool IsDeepBreath()
+    {
+        return playerEvent.IsDeepBreath;
     }
 
     /// <summary>

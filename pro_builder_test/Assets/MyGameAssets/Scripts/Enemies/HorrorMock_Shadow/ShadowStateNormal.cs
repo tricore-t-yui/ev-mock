@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using StateType = EnemyParameter.StateType;
 using NormalStateType = EnemyParameter.NormalStateType;
 using WandererType = EnemyParameter.WandererType;
@@ -13,17 +11,9 @@ public class ShadowStateNormal : StateBase
     float safeCounter = 0;
     // 感知した音のレベル
     float detectedNoiseLevel = 0;
-    // サウンドスポナー
-    SoundAreaSpawner soundSpawner = default;
+    Vector3 noisePos;
 
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    /// <param name="sound"></param>
-    public ShadowStateNormal(SoundAreaSpawner sound)
-    {
-        soundSpawner = sound;
-    }
+    bool IsDetectedNoise = false;
 
     /// <summary>
     /// 開始
@@ -34,16 +24,36 @@ public class ShadowStateNormal : StateBase
         currentCheckPointId = 0;
         safeCounter = parameter.SafeTime;
         detectedNoiseLevel = 0;
+        IsDetectedNoise = false;
+        ForceTransparentOff = false;
 
         // 移動速度を設定
         agent.speed = parameter.NormalMoveSpeed;
 
         // 徘徊タイプの影人間である
+         agent.isStopped = true;
         if (parameter.NormalState == NormalStateType.Wanderer)
         {
             // 次の移動目標位置を設定
             agent.SetDestination(GetNextTargetPoint());
+            agent.isStopped = false;
         }
+        else if((agent.transform.position - parameter.InitialPosition).magnitude > 0.5f)
+        {
+            // 移動しない人で、初期位置から離れてたら次の移動目標位置は初期位置
+            agent.SetDestination(parameter.InitialPosition);
+            animator.SetBool("NormalWalkBack", true);
+            agent.isStopped = false;
+        }
+    }
+
+    /// <summary>
+    /// 終わり
+    /// </summary>
+    public override void Exit()
+    {
+        base.Exit();
+        animator.SetBool("NormalWalkBack", false);
     }
 
     /// <summary>
@@ -51,8 +61,9 @@ public class ShadowStateNormal : StateBase
     /// </summary>
     public override void Update()
     {
-        // 影人間が出現している
-        if (animator.GetBool("IsDetectedNoise"))
+        if (IsSetedNextState) return;
+        // 音を聞いている
+        if (IsDetectedNoise)
         {
             // 時間を減らしていく
             safeCounter -= Time.deltaTime;
@@ -61,24 +72,21 @@ public class ShadowStateNormal : StateBase
             detectedNoiseLevel = soundSpawner.TotalSoundLevel;
             // ０以下は０にする
             if (detectedNoiseLevel <= 0) { detectedNoiseLevel = 0; }
-
-            if (detectedNoiseLevel > parameter.SafeSoundLevelMax)
-            {
-                // 警戒に移行
-                SetNextState((int)StateType.Caution);
-            }
-
             // サウンドレベルを丸め込む
             safeCounter -= detectedNoiseLevel * 0.1f;
 
             // 猶予時間が０になったら
             if (safeCounter <= 0)
             {
+                // 移動目標位置を発信源に
+                agent.SetDestination(noisePos);
+                agent.isStopped = false;
+
                 // 警戒に移行
                 SetNextState((int)StateType.Caution);
             }
         }
-        // 出現していないよ
+        // 音を聞いていない
         else
         {
             // カウンターやレベルを初期化
@@ -94,16 +102,19 @@ public class ShadowStateNormal : StateBase
             {
                 // 次の移動目標位置を設定
                 agent.SetDestination(GetNextTargetPoint());
+                agent.isStopped = false;
             }
         }
-    }
-
-    /// <summary>
-    /// 終了
-    /// </summary>
-    public override void Exit()
-    {
-        
+        else
+        {
+            // 歩きアニメーションをやめる
+            if ((agent.transform.position - parameter.InitialPosition).magnitude < 0.5f)
+            {
+                animator.SetBool("NormalWalkBack", false);
+            }
+            // 初期回転に
+            agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, parameter.InitialRotation, 0.1f);
+        }
     }
 
     /// <summary>
@@ -125,6 +136,23 @@ public class ShadowStateNormal : StateBase
             float radius = Random.Range(parameter.RandomRangeRadiusMin, parameter.RandomRangeRadiusMax);
             float angle = Random.Range(0.0f, Mathf.PI * 2);
             return parameter.InitialPosition + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+        }
+    }
+    
+    /// <summary>
+     /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
+     /// </summary>
+    public override void OnHearNoise(GameObject noise)
+    {
+        //////////////////
+        // 警戒、通常共通
+        //////////////////
+        if (soundSpawner.TotalSoundLevel > 0)
+        {
+            var randomRange = parameter.NoiseTargetPosRandomRange;
+            noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
+            // 音を聞いた
+            IsDetectedNoise = true;
         }
     }
 }

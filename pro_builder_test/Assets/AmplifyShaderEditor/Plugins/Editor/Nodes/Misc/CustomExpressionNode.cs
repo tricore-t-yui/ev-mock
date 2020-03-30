@@ -1145,15 +1145,16 @@ namespace AmplifyShaderEditor
 					for( int i = m_firstAvailablePort; i < count; i++ )
 					{
 						string inputPortLocalVar = m_inputPorts[ i ].Name + OutputId;
-						string result = m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector );
 						int idx = i - m_firstAvailablePort;
 						if( m_inputPorts[ i ].DataType != WirePortDataType.OBJECT )
 						{
+							string result = m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector );
 							dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, m_inputPorts[ i ].DataType, inputPortLocalVar, result );
 						}
 						else
 						{
-							string inputLocalVar = string.Format( Constants.LocalValueDecWithoutIdent, m_items[ idx ].CustomType, inputPortLocalVar, result );
+							string result =( m_inputPorts[ i ].IsConnected )? m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector) : m_inputPorts[ i ].InternalData.ToString();
+							string inputLocalVar = string.Format( Constants.CustomTypeLocalValueDecWithoutIdent, m_items[ idx ].CustomType, inputPortLocalVar, result );
 							dataCollector.AddLocalVariable( UniqueId, inputLocalVar );
 						}
 
@@ -1252,10 +1253,21 @@ namespace AmplifyShaderEditor
 						string functionCall = expressionName + "( ";
 						for( int i = m_firstAvailablePort; i < count; i++ )
 						{
+							
 							string inputPortLocalVar = m_inputPorts[ i ].Name + OutputId;
-							string result = m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector );
-							dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, m_inputPorts[ i ].DataType, inputPortLocalVar, result );
 							int idx = i - m_firstAvailablePort;
+							if( m_inputPorts[ i ].DataType != WirePortDataType.OBJECT )
+							{
+								string result = m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector );
+								dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, m_inputPorts[ i ].DataType, inputPortLocalVar, result );
+							}
+							else
+							{
+								string result = ( m_inputPorts[ i ].IsConnected ) ? m_inputPorts[ i ].GeneratePortInstructions( ref dataCollector ) : m_inputPorts[ i ].InternalData.ToString();
+								string inputLocalVar = string.Format( Constants.CustomTypeLocalValueDecWithoutIdent, m_items[ idx ].CustomType, inputPortLocalVar, result );
+								dataCollector.AddLocalVariable( UniqueId, inputLocalVar );
+							}
+							
 							if( m_items[ idx ].Qualifier != VariableQualifiers.In )
 							{
 								OutputPort currOutputPort = GetOutputPortByUniqueId( CreateOutputId( m_inputPorts[ i ].PortId ) );

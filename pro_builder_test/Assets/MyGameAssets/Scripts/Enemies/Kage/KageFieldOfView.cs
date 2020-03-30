@@ -197,6 +197,7 @@ public class KageFieldOfView : MonoBehaviour
         return false;
     }
 
+#if UNITY_EDITOR
     /// <summary>
     /// Sceneビューのみに表示
     /// </summary>
@@ -210,4 +211,5 @@ public class KageFieldOfView : MonoBehaviour
         Debug.DrawRay(transform.position, upBorder, Color.green);
         Debug.DrawRay(transform.position, downBorder, Color.green);
     }
+#endif
 }

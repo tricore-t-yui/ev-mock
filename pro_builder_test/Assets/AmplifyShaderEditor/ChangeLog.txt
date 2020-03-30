@@ -1,4 +1,180 @@
 Release Notes:
+v1.7.7 rev 00:
+* Fixes:
+    * Fixed multiple connections on Wire node when Alt + dragging nodes from it
+    * Fixed issue with normal map usage over URP PBR
+
+* Improvements:
+    * Added new previews:
+        * Heightmap Texture Blend
+        * Parallax Offset
+        * Clip Planes
+        * Fog and Ambient Colors
+        * Fog Params
+        * Instance ID
+        * Object To Clip
+        * Object To View
+        * Shade Vertex Lights
+
+v1.7.6 rev 02:
+* Fixes:
+    * Assured latest fix for time related nodes over SRP is only applied on latest versions
+    * Fixed issue on declaring variables inside CBuffer that are already on native template
+
+v1.7.6 rev 01:
+* Fixes:
+    * Fixed usage of legacy variables over SRP on time related nodes
+        * Time
+        * Time Parameters
+        * Sin Time
+        * Cos Time
+    * Fixed issue on HD Unlit Vertex Offset input code not being set on all passes
+
+v1.7.6 rev 00:
+* New Shader Function:
+    * SRP Additional Light
+        * Returns SRP's additional lights information calculated with a selected lighting mode
+
+* Improvements:
+    * 'Light Attenuation' node on Lightweight/Universal now outputs only the attenuation of the main light
+        * Before it outputted the sum of all light attenuations which didn't have a practical use
+
+v1.7.5 rev 03:
+* New Templates:
+    * Universal Experimental 2D Lit
+    * Universal Experimental 2D Unlit
+
+* Fixes:
+    * Fixed issue on incorrectly setting a wrong instanced block name on non-main passes when using GPU Instancing over templates
+    * Added Safe Power option into both 'Power' and 'Fresnel' nodes
+        * Ensures base for power operation is always greater than zero to prevent NaN over the result
+    * Fixed 'Indirect Diffuse Light' and 'Indirect Specular Light' nodes preview when Normal Space option is set to World
+    * Fixed 'Fresnel' node preview as it wasn't showing the correct result when scale was different than 1
+    * Fixed Alpha Clip issue across multiple Unlit Lightweight and Universal template versions
+
+* Improvements:
+    * Improved mouse focus behavior when ASE is not focused
+    * Migrated Lightweight samples into Universal RP
+
+v1.7.5 rev 02:
+* Fixes:
+    * Fixed issue with incorrect _ST variable declaration on templates over 'Texture Array' node
+    * Fixed issue on 'Grab Screen Color' node creating a default Grab Pass when using the default grab name with Custom Grab Pass activated
+    * Fixed issue on 'Texture Transform' node giving incorrect values on certain connections
+    * Fixed node preview update for missing shader functions
+    * Fixed issue on 'Static Switch' node using in-existent keyword indices
+    * Fixed 'Static Switch' reordering issues when in Reference mode
+
+* Improvements:
+    * Added missing previews to nodes
+        * Ortho Param
+        * Projection Param
+        * Screen Param
+        * ZBuffer Param
+        * Clip
+        * Compute Screen Pos
+        * Texel Size
+        * Texture Transform
+    * Tweaked 'Texture Object' and 'Texture Sampler' node previews to avoid recent for AMD crashes
+
+v1.7.5 rev 01:
+* Fixes:
+    * Fixed 'Color Space Double' node issue in SRP
+    * Fixed 'Texture Array' node ordering issue in the material inspector when on Reference mode
+    * Fixed issue with references lost over 'Texture Sample' on shader functions
+    * Small fixes and optimizations to the URP unlit template
+    * Fixed texture fields not being modifiable on 'Texture Sample' nodes when ASE window was not focused
+
+* Improvements:
+    * Updated 'Flow' shader function to make Strength a Vector2 input
+    * Improved registered local variables usage on templates
+    * Removed hard-code directives declaration on LWRP and added them as Port options on templates
+
+v1.7.5 rev 00:
+* New Nodes:
+    * Inverse Projection Matrix
+    * Inverse View Projection Matrix
+
+* New Shader Functions:
+    * Noise Sine Wave
+        * Creates a sine wave from a given input with an added pseudo-random value
+    * Sawtooth Wave
+        * Creates a saw-tooth wave from a given input
+    * Square Wave
+        * Creates a square wave from a given input
+    * Triangle Wave
+        * Creates a triangle wave from a given input
+    * Checkerboard
+        * Created a checkerboard pattern with given colors where Frequency controls its tiling
+    * Ellipse
+        * Creates an ellipse based on given uv and dimensions
+    * Polygon
+        * Creates a polygon shape with a specified amount of sides
+    * Rectangle
+        * Creates a rectangle shape with a specified size
+    * Rounded Rectangle
+        * Creates a round rectangle shape from a given size and radius
+
+* Improvements:
+    * Added new Smooth toggle option to 'Voronoi' node
+        * Only available under the Cells Method
+    * Improved selection box inside the editor graph to match Unity's and not be version dependent
+    * Ported terrain sample to Universal Rendering Pipeline
+        * Packed inside Examples > Universal SRP Samples.unitypackage
+
+* Fixes:
+    * Fixed multiple issues regarding using instanced properties over 'Outline' node
+    * Fixed hard-crash when modifying pass amount over template (API)
+    * Fixed Native Directives display over Templates in Unity 2019.3
+    * Fixed GPU instancing on Particles Alpha Blended template
+    * Removed Clip from From option over 'Transform Position' and 'Transform Direction' nodes
+        * Transform matrix was incorrect and there's no viable replacement over those nodes context
+
+v1.7.4 rev 02:
+* New Shader Functions:
+    * Flow
+        * Creates a flow effect which can be given from a flow map.
+    * Twirl
+        * Sets a twirl effect to a given input UV. Created by The C.reator @cayou66
+    * Normal From Height
+        * Extrapolate a normal vector from an height value
+
+* New Sample:
+    * Scale Independent Tile
+
+* Improvements:
+    * Added new Rotation Independent Scale option into 'Object Scale' node
+    * Tweaked 'Remainder' node to always use the % operator on Unity 2018.1 and above
+
+* Fixes:
+    * Fixed issue on loading multipass multi visible master nodes losing their names
+    * Fixed issue with point lights not working with instanced terrain shaders
+    * Fixed issue on terrain getting black when drawn instanced
+    * Fixed alpha test issues over deprecated HDRP Lit
+    * Fixed issue where not setting pass name on port options lead to incorrect option behavior (API)
+    * Fixed previews not updating correctly in shader functions
+
+v1.7.4 rev 01:
+* New Template:
+    * Unlit for HD SRPv6.x.x
+
+* New Node:
+    * Luminance
+
+* Fixes:
+    * Fixed alpha-clip issues with legacy HD templates
+    * Fixed issue on incorrectly initializing custom type variables on 'Custom Expression' node
+    * Fixed nodes preview getting lost on loading scenes
+    * Fixed preview issue on 'Noise Generator' node
+    * Fixed preview issue on 'Panner' node
+    * Fixed preview issue on 'Rotator' node
+    * Fixed issue on ignored Passes over SubShader options appearing on both shader reload hot code reload
+    * Fixed issue with 'Parallax Occlusion Mapping' node when used on shader functions 
+    * Fixed issue with setting directly the property name over its textfield wouldn't trigger the duplicates prevention system
+
+* Improvements:
+    * Updated 6.9.2 Lightweight templates to includes the same options as URP templates
+
 v1.7.4 rev 00:
 * Fixes:
     * Fixed critical error where users could not create a surface shader if no ASE window was opened

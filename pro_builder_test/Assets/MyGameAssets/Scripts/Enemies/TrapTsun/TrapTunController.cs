@@ -10,10 +10,12 @@ public class TrapTunController : MonoBehaviour
     [SerializeField]
     Animator tunAnim = default;                         // アニメーター
     [SerializeField]
-    GameObject effect = default;                        // エフェクト
+    ParticleSystem effect = default;                        // エフェクト
 
     public bool IsEnd { get; private set; } = false;    // 終了フラグ
     public bool IsHit { get; private set; } = false;    // ヒットフラグ
+
+    public bool IsStop { get; private set; }
 
     /// <summary>
     /// 開始処理
@@ -28,9 +30,14 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             IsHit = true;
+        }
+        if (other.gameObject.tag == "Oni")
+        {
+            effect.Stop();
+            IsStop = true;
         }
     }
 
@@ -39,9 +46,14 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     void OnTriggerExit(Collider other)
     {
-        if (LayerMask.LayerToName(other.gameObject.layer) == "Player")
+        if (other.gameObject.tag == "Player")
         {
             IsHit = false;
+        }
+        if (other.gameObject.tag == "Oni")
+        {
+            effect.Play();
+            IsStop = false;
         }
     }
 
@@ -50,8 +62,13 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     public void TrapOperate()
     {
-        effect.SetActive(false);
+        effect.Stop();
         tunAnim.SetTrigger("TrapOperate");
+    }
+
+    public void Stop()
+    {
+        effect.Stop();
     }
 
     /// <summary>
@@ -59,7 +76,7 @@ public class TrapTunController : MonoBehaviour
     /// </summary>
     public void ResetTrapTun()
     {
-        effect.SetActive(true);
+        effect.Play();
         IsHit = false;
     }
 }

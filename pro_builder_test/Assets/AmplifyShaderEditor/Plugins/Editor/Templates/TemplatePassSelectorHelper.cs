@@ -144,6 +144,7 @@ namespace AmplifyShaderEditor
 				m_currentPassesDict[ passName ].Visible = visible;
 			}
 		}
+
 		public int LastActivePass
 		{
 			get
