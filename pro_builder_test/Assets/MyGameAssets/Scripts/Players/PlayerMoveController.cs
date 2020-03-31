@@ -155,7 +155,7 @@ public class PlayerMoveController : MonoBehaviour
         {
             dirTypeSpeedLimit = ChangeDirTypeSpeedLimit(stick);
             stickSpeedLimit = ChangeStickSpeedLimit(length, isBreathHold);
-            moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit * moveTypeSpeedLimit * Time.deltaTime;
+            moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit * moveTypeSpeedLimit;
         }
 
         // 段差に当たったら上方向に力を加え登らせる
@@ -165,7 +165,7 @@ public class PlayerMoveController : MonoBehaviour
         }
         // 移動速度の設定
         float walkSpeed = new Vector3(moveSpeed.x, 0, moveSpeed.z).magnitude;
-        playerRigidbody.velocity = moveSpeed* moveData.SpeedMagnification;
+        playerRigidbody.velocity = moveSpeed * moveData.SpeedMagnification;
     }
 
     /// <summary>
