@@ -17,7 +17,7 @@ public class MockStartScene : MonoBehaviour
         StartCoroutine(LoadCoroutine());
         // 一台もコントローラが接続されていなければエラー
         var controllerNames = Input.GetJoystickNames();
-        if (controllerNames[0] == "")
+        if (controllerNames.Length == 0 || controllerNames[0] == "")
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;

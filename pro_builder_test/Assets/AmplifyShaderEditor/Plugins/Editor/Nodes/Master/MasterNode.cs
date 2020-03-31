@@ -160,6 +160,20 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		public void SetMasterNodeCategoryFromGUID( string GUID )
+		{
+			if( m_availableCategories == null )
+				InitAvailableCategories();
+
+			m_masterNodeCategory = 0;
+			for( int i = 1; i < m_availableCategories.Length; i++ )
+			{
+				if( m_availableCategories[ i ].Name.Equals( GUID ) )
+					m_masterNodeCategory = i;
+			}
+
+		}
+
 		public override void SetupNodeCategories()
 		{
 			//base.SetupNodeCategories();

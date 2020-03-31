@@ -45,6 +45,9 @@ Of course, all updates of Beautify will be eventually available on the Asset Sto
 Version history
 ---------------
 
+Version 7.3.1
+- [Fix] Fixed Sun flares rendering issue with Single Pass Stereo on Oculus Quest
+
 Version 7.3
 - Added "Quality" slider when Ultra setting is enabled
 - Added "Camera Event" option under Bloom/DoF Layer Mask

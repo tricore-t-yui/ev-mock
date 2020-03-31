@@ -21,13 +21,13 @@ namespace AmplifyShaderEditor
 			"multi_compile _ _SHADOWS_SOFT"
 		};
 
-		private readonly string[] LightweightVertexInstructions =
-		{
-			/*local vertex position*/"VertexPositionInputs ase_vertexInput = GetVertexPositionInputs ({0});",
-			"#ifdef _MAIN_LIGHT_SHADOWS//ase_lightAtten_vert",
-			/*available interpolator*/"{0} = GetShadowCoord( ase_vertexInput );",
-			"#endif//ase_lightAtten_vert"
-		};
+		//private readonly string[] LightweightVertexInstructions =
+		//{
+		//	/*local vertex position*/"VertexPositionInputs ase_vertexInput = GetVertexPositionInputs ({0});",
+		//	"#ifdef _MAIN_LIGHT_SHADOWS//ase_lightAtten_vert",
+		//	/*available interpolator*/"{0} = GetShadowCoord( ase_vertexInput );",
+		//	"#endif//ase_lightAtten_vert"
+		//};
 		private const string LightweightLightAttenDecl = "float ase_lightAtten = 0;";
 		private readonly string[] LightweightFragmentInstructions =
 		{
@@ -51,7 +51,7 @@ namespace AmplifyShaderEditor
 			{
 				if( !dataCollector.IsSRP )
 				{
-					return dataCollector.TemplateDataCollectorInstance.GetLightAtten( UniqueId ); ;
+					return dataCollector.TemplateDataCollectorInstance.GetLightAtten( UniqueId );
 				}
 				else
 				{
@@ -64,23 +64,25 @@ namespace AmplifyShaderEditor
 						for( int i = 0; i < LightweightPragmaMultiCompiles.Length; i++ )
 							dataCollector.AddToPragmas( UniqueId, LightweightPragmaMultiCompiles[ i ] );
 
+						string shadowCoords = dataCollector.TemplateDataCollectorInstance.GetShadowCoords( UniqueId/*, false, dataCollector.PortCategory*/ );
+						//return shadowCoords;
 						// Vertex Instructions
-						TemplateVertexData shadowCoordsData = dataCollector.TemplateDataCollectorInstance.RequestNewInterpolator( WirePortDataType.FLOAT4, false );
-						string vertexInterpName = dataCollector.TemplateDataCollectorInstance.CurrentTemplateData.VertexFunctionData.OutVarName;
-						string vertexShadowCoords = vertexInterpName + "." + shadowCoordsData.VarNameWithSwizzle;
-						string vertexPos = dataCollector.TemplateDataCollectorInstance.GetVertexPosition( WirePortDataType.FLOAT3, PrecisionType.Float ,false,MasterNodePortCategory.Vertex );
+						//TemplateVertexData shadowCoordsData = dataCollector.TemplateDataCollectorInstance.RequestNewInterpolator( WirePortDataType.FLOAT4, false );
+						//string vertexInterpName = dataCollector.TemplateDataCollectorInstance.CurrentTemplateData.VertexFunctionData.OutVarName;
+						//string vertexShadowCoords = vertexInterpName + "." + shadowCoordsData.VarNameWithSwizzle;
+						//string vertexPos = dataCollector.TemplateDataCollectorInstance.GetVertexPosition( WirePortDataType.FLOAT3, PrecisionType.Float ,false,MasterNodePortCategory.Vertex );
 
-						dataCollector.AddToVertexLocalVariables( UniqueId, string.Format( LightweightVertexInstructions[ 0 ], vertexPos ));
-						dataCollector.AddToVertexLocalVariables( UniqueId, LightweightVertexInstructions[ 1 ]);
-						dataCollector.AddToVertexLocalVariables( UniqueId, string.Format( LightweightVertexInstructions[ 2 ], vertexShadowCoords ) );
-						dataCollector.AddToVertexLocalVariables( UniqueId, LightweightVertexInstructions[ 3 ]);
+						//dataCollector.AddToVertexLocalVariables( UniqueId, string.Format( LightweightVertexInstructions[ 0 ], vertexPos ));
+						//dataCollector.AddToVertexLocalVariables( UniqueId, LightweightVertexInstructions[ 1 ]);
+						//dataCollector.AddToVertexLocalVariables( UniqueId, string.Format( LightweightVertexInstructions[ 2 ], vertexShadowCoords ) );
+						//dataCollector.AddToVertexLocalVariables( UniqueId, LightweightVertexInstructions[ 3 ]);
 
 						// Fragment Instructions
-						string fragmentInterpName = dataCollector.TemplateDataCollectorInstance.CurrentTemplateData.FragmentFunctionData.InVarName;
-						string fragmentShadowCoords = fragmentInterpName + "." + shadowCoordsData.VarNameWithSwizzle;
+						//string fragmentInterpName = dataCollector.TemplateDataCollectorInstance.CurrentTemplateData.FragmentFunctionData.InVarName;
+						//string fragmentShadowCoords = fragmentInterpName + "." + shadowCoordsData.VarNameWithSwizzle;
 
 						dataCollector.AddLocalVariable( UniqueId, LightweightLightAttenDecl );
-						dataCollector.AddLocalVariable( UniqueId, string.Format( LightweightFragmentInstructions[ 0 ], fragmentShadowCoords ) );
+						dataCollector.AddLocalVariable( UniqueId, string.Format( LightweightFragmentInstructions[ 0 ], shadowCoords ) );
 						dataCollector.AddLocalVariable( UniqueId, LightweightFragmentInstructions[ 1 ] );
 						return ASEAttenVarName;
 					}
@@ -105,7 +107,7 @@ namespace AmplifyShaderEditor
 		public override void Draw( DrawInfo drawInfo )
 		{
 			base.Draw( drawInfo );
-			if( ContainerGraph.CurrentCanvasMode == NodeAvailability.TemplateShader )
+			if( ContainerGraph.CurrentCanvasMode == NodeAvailability.TemplateShader && ContainerGraph.CurrentSRPType != TemplateSRPType.Lightweight )
 			{
 				m_showErrorMessage = true;
 				m_errorMessageTypeIsError = NodeMessageType.Warning;

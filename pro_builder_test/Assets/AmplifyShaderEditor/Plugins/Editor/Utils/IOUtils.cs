@@ -62,6 +62,9 @@ namespace AmplifyShaderEditor
 
 	public static class IOUtils
 	{
+		public delegate void OnShaderAction( Shader shader, bool isTemplate, string type );
+		public static OnShaderAction OnShaderSavedEvent;
+		public static OnShaderAction OnShaderTypeChangedEvent;
 
 		public static readonly string ShaderCopywriteMessage = "// Made with Amplify Shader Editor\n// Available at the Unity Asset Store - http://u3d.as/y3X \n";
 		public static readonly string GrabPassEmpty = "\t\tGrabPass{ }\n";

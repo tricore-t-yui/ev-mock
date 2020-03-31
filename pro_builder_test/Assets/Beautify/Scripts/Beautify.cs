@@ -1,4 +1,4 @@
-﻿/// <summary>
+/// <summary>
 /// Copyright 2016-2019 Ramiro Oliva (Kronnect) - All rights reserved
 /// </summary>
 using UnityEngine;
@@ -2643,7 +2643,7 @@ namespace BeautifyEffect {
         List<string> shaderKeywords;
         Shader depthShader, dofExclusionShader;
         bool shouldUpdateMaterialProperties;
-        const string BEAUTIFY_BUILD_HINT = "BeautifyBuildHint73RC1";
+        const string BEAUTIFY_BUILD_HINT = "BeautifyBuildHint731RC1";
         float sunFlareCurrentIntensity;
         Vector4 sunLastScrPos;
         float sunLastRot;
@@ -2978,7 +2978,6 @@ namespace BeautifyEffect {
             bMat.SetTexture("_BloomSourceDepthRightEye", bloomSourceDepthTextureRightEye);
         }
 
-
         protected virtual void OnRenderImage(RenderTexture source, RenderTexture destination) {
 
             if (bMat == null || !enabled) {
@@ -3032,6 +3031,7 @@ namespace BeautifyEffect {
 
             RenderTexture rtPixelated = null;
             RenderTexture rtDoF = null;
+            RenderTexture rtSF = null;
 
             if (allowExtraEffects) {
                 // Pixelate
@@ -3295,16 +3295,16 @@ namespace BeautifyEffect {
                         bMat.SetVector("_SunPosRightEye", sunLastScrPos);
 #endif
                         RenderTextureDescriptor rtSFDescriptor = rtDescBase;
-                        rtSFDescriptor.width = currentCamera.pixelWidth / _sunFlaresDownsampling;
-                        rtSFDescriptor.height = currentCamera.pixelHeight / _sunFlaresDownsampling;
-                        RenderTexture rtSF = RenderTexture.GetTemporary(rtSFDescriptor);
+                        rtSFDescriptor.width /= _sunFlaresDownsampling;
+                        rtSFDescriptor.height /= _sunFlaresDownsampling;
+                        rtSF = RenderTexture.GetTemporary(rtSFDescriptor);
                         int sfRenderPass;
                         if (_quality == BEAUTIFY_QUALITY.BestQuality) {
                             sfRenderPass = rtBloom != null ? 21 : 20;
                         } else {
                             sfRenderPass = rtBloom != null ? 17 : 16;
                         }
-                        Graphics.Blit(rtBloom, rtSF, bMat, sfRenderPass);
+                        Graphics.Blit(rtBloom != null ? rtBloom : source, rtSF, bMat, sfRenderPass);
                         if (_lensDirt) {
                             if (_bloom) {
                                 rt[3].MarkRestoreExpected();
@@ -3312,7 +3312,6 @@ namespace BeautifyEffect {
                             }
                         }
                         rtBloom = rtSF;
-                        RenderTexture.ReleaseTemporary(rtSF);
                         if (!_bloom && !_anamorphicFlares) { // ensure _Bloom.x is 1 into the shader for sun flares to be visible if no bloom nor anamorphic flares are enabled
                             bMat.SetVector("_Bloom", Vector4.one);
                             if (!bMat.IsKeywordEnabled(SKW_BLOOM)) {
@@ -3443,6 +3442,9 @@ namespace BeautifyEffect {
             }
             if (rtPixelated != null) {
                 RenderTexture.ReleaseTemporary(rtPixelated);
+            }
+            if (rtSF != null) {
+                RenderTexture.ReleaseTemporary(rtSF);
             }
 
         }

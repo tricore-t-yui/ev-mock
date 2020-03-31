@@ -59,13 +59,14 @@ Shader "GPUParticles/GPUParticles"
 			#pragma fragment frag
 			#pragma target 3.0
 			#pragma shader_feature_local __ MAINTEX
-			#pragma shader_feature_local POINT TRIANGLE BILLBOARD H_BILLBORD V_BILLBOARD S_BILLBOARD TS_BILLBOARD MESH //ANIMATED_MESH
+			#pragma shader_feature_local POINT TRIANGLE BILLBOARD H_BILLBORD V_BILLBOARD S_BILLBOARD TS_BILLBOARD MESH TRAILS//ANIMATED_MESH
 			#pragma shader_feature_local __ TEXTUREEMITTER
 			#pragma shader_feature_local __ TEXTURESHEET TEXTURESHEET_BLENDED TEXTURESHEET_MOTIONVECTORS
 			#pragma shader_feature_local __ ROTATION
 			#pragma shader_feature_local __ LINEAR_SIZE SMOOTH_SIZE CURVE_SIZE RANDOM2CURVES_SIZE
 			#pragma shader_feature_local __ LINEAR_ROTATION SMOOTH_ROTATION CURVE_ROTATION RANDOM2CURVES_ROTATION
 			#pragma shader_feature_local __ RANDOMINDEX
+			#pragma shader_feature_local __ DISTRIBUTE
 
 			//#pragma exclude_renderers gles gles3 d3d9
 			//#pragma multi_compile_fwdbase
@@ -108,6 +109,13 @@ Shader "GPUParticles/GPUParticles"
 			
 			float4 _ForwardVector;
 			
+#ifdef DISTRIBUTE
+			sampler2D _EmitterPositions;
+			float4x4 _EmitterMatrix;
+			sampler2D _TargetPositions;
+			float4x4 _TargetMatrix;
+#endif
+
 			#if TEXTURESHEET_MOTIONVECTORS
 				sampler2D _MotionVectors;
 				float _MotionVectorStrength;
@@ -140,11 +148,11 @@ Shader "GPUParticles/GPUParticles"
 			v2f vert(appdata v)
 			{
 				v2f o = (v2f)0;
-				
+
 				float4 pos = tex2Dlod(_Position, float4(v.uv1, 0, 0));
 				float4 meta = tex2Dlod(_Meta, float4(v.uv1, 0, 0));
 				float4 vel = tex2Dlod(_Velocity, float4(v.uv1, 0, 0));
-
+				
 				float EndTime = meta.g - meta.r;
 				float Time = _CustomTime - meta.r;
 				float Progress = Time / EndTime;
@@ -328,9 +336,6 @@ Shader "GPUParticles/GPUParticles"
 
 						result1 = mul(UNITY_MATRIX_P, mul( UNITY_MATRIX_MV, float4(pos.xyz, 1.0) ) - BB);
 					#endif
-						
-						
-
 				#endif
 				
 				#ifdef H_BILLBORD
@@ -427,26 +432,14 @@ Shader "GPUParticles/GPUParticles"
 					result1 = UnityObjectToClipPos(v.vertex);
 				#endif
 
-				/*
-				#ifdef ANIMATED_MESH
-					//Vertex Animation
-					v.uv3.x = _CustomTime / _VALength + (pos.w * _AnimationVariance);
-					float4 vert = tex2Dlod(_Animation, float4(v.uv3,0,0));
-					vert.w = 1;
-					v.vertex.xyz += vert.xyz;
-					
-					//Rotate towards movement direction
-					float3 dest = normalize(vel.xyz);
-					float3 RotationAxis = normalize(cross(_ForwardVector.xyz,dest));
-					float Angle = acos(dot(_ForwardVector.xyz, dest));
-					v.vertex.xyz = RotateVertex(v.vertex.xyz, RotationAxis, Angle);
-					
-					//Scale and position update
-					v.vertex.xyz *= Scale;
-					v.vertex.xyz += pos.xyz;
-					result1 = UnityObjectToClipPos(v.vertex);
+				#ifdef TRAILS
+					float3 DirVector = normalize(vel.xyz);
+					float3 CamVector = UNITY_MATRIX_IT_MV[2].xyz;
+					float3 TangentVector = cross(DirVector, CamVector);
+
+					pos.xyz += (TangentVector * ((v.uv2.y - 0.5))) * Scale;
+					result1 = UnityObjectToClipPos(float4(pos.xyz, 1.0));
 				#endif
-				*/
 
 				//Transfer UVs
 				o.uv1 = v.uv1;
@@ -462,8 +455,7 @@ Shader "GPUParticles/GPUParticles"
 				o.vertex = lerp(result1, result2, IsAlive);
 
 				#if REFRACTION
-					o.viewDir.xyz = v.vertex.xyz - _WorldSpaceCameraPos.xyz;
-					
+					o.viewDir.xyz = v.vertex.xyz - _WorldSpaceCameraPos.xyz;					
 					o.screenPos = ComputeScreenPos(o.vertex);
 					o.screenPos.xy /= o.screenPos.w;
 				#endif
@@ -475,6 +467,7 @@ Shader "GPUParticles/GPUParticles"
 
 			float4 frag (v2f i) : SV_Target
 			{
+				//return float4(i.uv1.x,0,0,1);
 				float4 col = float4(1,1,1,1);
 				#if MAINTEX
 					#if TEXTUREEMITTER
@@ -579,6 +572,7 @@ Shader "GPUParticles/GPUParticles"
 				#endif
 
 				col.rgb *= i.color * _ColorIntensity;
+				col.rgb *= col.a;
 				return col;
 			}
 			ENDCG

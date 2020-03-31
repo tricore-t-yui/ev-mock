@@ -476,6 +476,7 @@ public partial class GPUParticleSystemEditor
                 param3.floatValue = EditorGUILayout.FloatField("Depth", param3.floatValue);
                 EditorGUI.BeginChangeCheck();
                 emitFromShell.boolValue = DrawOnOffToggle(emitFromShell.boolValue, "Emit from edge");
+
                 if (EditorGUI.EndChangeCheck())
                 {
                     serializedObject.ApplyModifiedProperties();
@@ -729,17 +730,23 @@ public partial class GPUParticleSystemEditor
                 }
                 EditorGUILayout.EndHorizontal();
                 break;
-				/*
-            case GPUParticleSystem.ParticleType.AnimatedMesh:
-                EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.PrefixLabel(new GUIContent("Mesh", "Choose a mesh that will be used as a particle."));
-                    meshParticle.objectReferenceValue = EditorGUILayout.ObjectField(meshParticle.objectReferenceValue, typeof(Mesh), false);
-                }
-                EditorGUILayout.EndHorizontal();
-                break;
-				*/
-        }
+
+			case GPUParticleSystem.ParticleType.Trails:
+				EditorGUILayout.BeginHorizontal();
+				{
+					EditorGUI.BeginChangeCheck();
+
+					followSpeed.floatValue = EditorGUILayout.FloatField(new GUIContent("Trail follow speed","The speed at which a segments follows a segments, that is in front of it."), followSpeed.floatValue);
+					
+					if (EditorGUI.EndChangeCheck())
+					{
+						serializedObject.ApplyModifiedProperties();
+						particleSystem.UpdateTrailValues();
+					}
+				}
+				EditorGUILayout.EndHorizontal();
+				break;
+		}
     }
 
     private bool DrawOnOffToggle(bool OnOff, string name)

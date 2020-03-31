@@ -3,6 +3,11 @@
 
 using UnityEditor;
 using UnityEngine;
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text.RegularExpressions;
+using Debug = UnityEngine.Debug;
 
 namespace AmplifyShaderEditor
 {

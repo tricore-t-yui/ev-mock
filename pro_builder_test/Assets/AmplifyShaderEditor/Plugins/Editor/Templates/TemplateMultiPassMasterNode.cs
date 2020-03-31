@@ -2079,7 +2079,7 @@ namespace AmplifyShaderEditor
 
 #if UNITY_2019_2_OR_NEWER
 			// Temporary hack
-			if( m_templateMultiPass.SRPtype == TemplateSRPType.HD && ASEPackageManagerHelper.CurrentHDVersion > ASESRPVersions.ASE_SRP_6_9_0 )
+			if( m_templateMultiPass.SRPtype != TemplateSRPType.BuiltIn && ASEPackageManagerHelper.CurrentHDVersion > ASESRPVersions.ASE_SRP_6_9_0 )
 			{
 				if( m_templateMultiPass.AvailableShaderProperties.Find( x => x.PropertyName.Equals( "_AlphaCutoff" ) ) == null )
 				{
@@ -2881,6 +2881,10 @@ namespace AmplifyShaderEditor
 				return;
 
 			base.RefreshExternalReferences();
+			if( IsLODMainMasterNode )
+			{
+				SetMasterNodeCategoryFromGUID( m_templateGUID );
+			}
 
 			CheckTemplateChanges();
 			if( m_templateMultiPass != null && m_templateMultiPass.SubShaders[ m_subShaderIdx ].Passes[ m_passIdx ].Modules.SRPIsPBRHD && UIUtils.CurrentShaderVersion() < 15410 )

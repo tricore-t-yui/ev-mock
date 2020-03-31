@@ -508,7 +508,104 @@ public static class GPUParticleSystemMeshUtility
         return MeshHolders;
     }
 
-    public static Vector4[] AnimationCurveToBezier(AnimationCurve Curve)
+	public static GameObject[] CreateTrails(int numSegmentsPerTrail, int numTrails, Material _Mat)
+	{
+		int numVertsPerTrail = numSegmentsPerTrail * 2;
+		int numTrailsPerMesh = Mathf.FloorToInt(65530f / (float)numVertsPerTrail);
+		int numMeshes = Mathf.CeilToInt((float)numTrails / (float)numTrailsPerMesh);
+
+		GameObject[] MeshHolders = new GameObject[numMeshes];
+		
+		Vector2 HalfTexelOffset = new Vector2((1f / (float)numSegmentsPerTrail) / 2f, (1f / (float)numTrails) / 2f);
+		
+		int index = 0;
+
+		for (int n = 0; n < numMeshes; n++)
+		{
+			int currentNumTrails = numTrailsPerMesh;
+
+			if (n == numMeshes - 1)
+			{
+				currentNumTrails = numTrails - n * numTrailsPerMesh;
+			}
+			
+			int vertCount = currentNumTrails * numSegmentsPerTrail * 2;
+			int triCount = currentNumTrails * (numSegmentsPerTrail - 1) * 6;
+			
+			Vertices = new Vector3[vertCount];
+			Normals = new Vector3[vertCount];
+			Tangents = new Vector4[vertCount];
+			Triangles = new int[triCount];
+			PosUV = new Vector2[vertCount];
+			UVs = new Vector2[vertCount];
+
+			int idx = 0;
+			for (int i = 0; i < currentNumTrails; i++)
+			{
+				for (int j = 0; j < numSegmentsPerTrail; j++)
+				{
+					for (int k = 0; k < 2; k++)
+					{
+						float y = (float)i / (float)(currentNumTrails);
+						float x = (float)j / (float)(numSegmentsPerTrail);
+
+						Vertices[idx] = Vector3.zero;
+						Normals[idx] = Vector3.back;
+						Tangents[idx] = Vector3.right;
+						PosUV[idx] = new Vector2(x, y) + HalfTexelOffset;
+
+						if (k % 2 == 0)
+						{
+							UVs[idx] = new Vector2(1f - x, 0f);
+						}
+						else {
+							UVs[idx] = new Vector2(1f - x, 1f);
+						}
+
+						idx++;
+					}
+				}
+			}
+
+			int triIndex = 0;
+
+			for (int y = 0; y < currentNumTrails; y++)
+			{
+				for (int x = 0; x < numSegmentsPerTrail - 1; x++)
+				{
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2);			
+					triIndex++;
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2) + 3;
+					triIndex++;
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2) + 1;
+					triIndex++;
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2);
+					triIndex++;
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2) + 2;
+					triIndex++;
+					Triangles[triIndex] = y * numVertsPerTrail + (x * 2) + 3;
+					triIndex++;
+				}
+			}
+
+			GameObject g = new GameObject("ParticleHolder_" + n.ToString());
+			Mesh mesh = new Mesh();
+			mesh.vertices = Vertices;
+			mesh.triangles = Triangles;
+			mesh.uv = PosUV;
+			mesh.uv2 = UVs;
+			mesh.normals = Normals;
+			mesh.tangents = Tangents;
+			g.AddComponent<MeshFilter>().mesh = mesh;
+			g.AddComponent<MeshRenderer>().sharedMaterial = _Mat;
+			g.hideFlags = HideFlags.HideAndDontSave;
+			MeshHolders[n] = g;
+		}
+
+		return MeshHolders;
+	}
+
+	public static Vector4[] AnimationCurveToBezier(AnimationCurve Curve)
     {
         Curve = CheckAnimationCurve(Curve);
 
@@ -585,7 +682,7 @@ public static class GPUParticleSystemMeshUtility
         P2C2.w = c2.y;
     }
 
-	public static Texture2D MeshToTexture(Mesh mesh, GPUParticleSystem.MeshBakeType bakeType, int size)
+	public static Texture2D MeshToPosition(Mesh mesh, GPUParticleSystem.MeshBakeType bakeType, int size)
 	{
 		int ArraySize = size * size;
 
@@ -628,7 +725,7 @@ public static class GPUParticleSystemMeshUtility
 		normalBuffer = mesh.normals;
 		triangleBuffer = mesh.triangles;
 		weightsBuffer = new float[mesh.triangles.Length / 3];
-
+		
 		CreateTextureColours(bakeType, ref vertexBuffer, ref normalBuffer, ref triangleBuffer, ref weightsBuffer, ArraySize);
 
 		positions.SetPixels(positionArray);
@@ -639,6 +736,7 @@ public static class GPUParticleSystemMeshUtility
 
 	private static void CreateTextureColours(GPUParticleSystem.MeshBakeType geometryType, ref Vector3[] vertices, ref Vector3[] normals, ref int[] tris, ref float[] weights, int arraySize)
 	{
+		Random.InitState(1234);
 		switch (geometryType)
 		{
 			case GPUParticleSystem.MeshBakeType.Vertex:
@@ -680,7 +778,6 @@ public static class GPUParticleSystemMeshUtility
 				break;
 
 			case GPUParticleSystem.MeshBakeType.Triangle:
-
 				float wholeMeshArea = 0.0f;
 				int triangleArea = 0;
 
@@ -698,6 +795,7 @@ public static class GPUParticleSystemMeshUtility
 
 	private static void CreateTextureColours(GPUParticleSystem.MeshBakeType geometryType, ref Vector3[] vertices, ref int[] tris, ref float[] weights, int arraySize)
 	{
+		Random.InitState(1234);
 		switch (geometryType)
 		{
 			case GPUParticleSystem.MeshBakeType.Vertex:

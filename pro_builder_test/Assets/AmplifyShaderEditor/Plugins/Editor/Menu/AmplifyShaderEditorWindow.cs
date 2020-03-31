@@ -1577,10 +1577,24 @@ namespace AmplifyShaderEditor
 					m_lastpath = ( material != null ) ? AssetDatabase.GetAssetPath( material ) : AssetDatabase.GetAssetPath( currShader );
 					EditorPrefs.SetString( IOUtils.LAST_OPENED_OBJ_ID, m_lastpath );
 					System.Threading.Thread.CurrentThread.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+					if( IOUtils.OnShaderSavedEvent != null )
+					{
+						string info = string.Empty;
+						if( !m_mainGraphInstance.IsStandardSurface )
+						{
+							TemplateMultiPassMasterNode masterNode = m_mainGraphInstance.GetMainMasterNodeOfLOD( -1 );
+							if( masterNode != null )
+							{
+								info = masterNode.CurrentTemplate.GUID;
+							}
+						}
+						IOUtils.OnShaderSavedEvent( currShader, !m_mainGraphInstance.IsStandardSurface, info );
+					}
 					return true;
 				}
 				else
 				{
+
 					string shaderName;
 					string pathName;
 					IOUtils.GetShaderName( out shaderName, out pathName, Constants.DefaultShaderName, UIUtils.LatestOpenedFolder );
@@ -5616,20 +5630,29 @@ namespace AmplifyShaderEditor
 					case AvailableShaderTypes.SurfaceShader:
 					{
 						SetStandardShader();
+						if( IOUtils.OnShaderTypeChangedEvent != null )
+						{
+							IOUtils.OnShaderTypeChangedEvent( m_mainGraphInstance.CurrentShader, false, string.Empty );
+						}
 					}
 					break;
 					case AvailableShaderTypes.Template:
 					{
 
+						TemplateDataParent templateData = m_templatesManager.GetTemplate( m_replaceMasterNodeData );
 						if( m_replaceMasterNodeDataFromCache )
 						{
-							TemplateDataParent templateData = m_templatesManager.GetTemplate( m_replaceMasterNodeData );
 							m_mainGraphInstance.CrossCheckTemplateNodes( templateData );
 							m_clipboard.GetMultiPassNodesFromClipboard( m_mainGraphInstance.MultiPassMasterNodes.NodesList );
 						}
 						else
 						{
 							SetTemplateShader( m_replaceMasterNodeData, false );
+						}
+
+						if( IOUtils.OnShaderTypeChangedEvent != null )
+						{
+							IOUtils.OnShaderTypeChangedEvent( m_mainGraphInstance.CurrentShader, true, templateData.GUID );
 						}
 					}
 					break;
