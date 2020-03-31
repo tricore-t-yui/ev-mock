@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using ActionSoundType = SoundAreaSpawner.ActionSoundType;
 
 /// <summary>
@@ -94,6 +95,7 @@ public class PlayerHealthController : MonoBehaviour
         if (NowAmount <= 0)
         {
             IsDeath = true;
+            SceneManager.LoadScene("MockStartScene");
         }
         // なっていないならダメージ所持状態フラグを立てる
         else

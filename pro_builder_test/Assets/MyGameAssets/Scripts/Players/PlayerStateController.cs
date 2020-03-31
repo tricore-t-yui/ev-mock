@@ -113,7 +113,6 @@ public class PlayerStateController : MonoBehaviour
         // シーン選択画面に戻る
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("Select");
         }
     }

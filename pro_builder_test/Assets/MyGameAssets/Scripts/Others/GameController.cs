@@ -62,8 +62,6 @@ public class GameController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
         List<ShadowHuman> shadowHumens = FindObjectsOfType<ShadowHuman>().ToList();
         shadows = shadowHumens.FindAll(elem => elem.tag == "ShadowHuman").ToArray();
         shadowGimmicks = shadowHumens.FindAll(elem => elem.tag == "ShadowGimmick").ToArray();

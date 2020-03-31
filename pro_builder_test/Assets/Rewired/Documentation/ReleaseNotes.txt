@@ -1,3 +1,150 @@
+1.1.32.0:
+
+    Changes:
+      - *** BREAKING CHANGE *** Changed additional time calculations to use doubles to avoid issues with time measurement precision loss when application runs for days or weeks. Some members were missed in 1.1.31.0 update and have been changed.
+      - Added additional information to Debug Information.
+
+    API Changes:
+      - Changed return type of the following to double:
+        - Player.GetButtonTimePressed
+        - Player.GetButtonTimeUnpressed
+        - Player.GetNegativeButtonTimePressed
+        - Player.GetNegativeButtonTimeUnpressed
+        - Player.GetAxisTimeActive
+        - Player.GetAxisTimeInactive
+        - Player.GetAxisRawTimeActive
+        - Player.GetAxisRawTimeInactive
+        - InputActionEventData.GetAxisTimeActive
+        - InputActionEventData.GetAxisTimeInactive
+        - InputActionEventData.GetAxisRawTimeActive
+        - InputActionEventData.GetAxisRawTimeInactive
+        - InputActionEventData.GetButtonTimePressed
+        - InputActionEventData.GetButtonTimeUnpressed
+        - InputActionEventData.GetNegativeButtonTimePressed
+        - InputActionEventData.GetNegativeButtonTimeUnpressed
+        
+    Behavior Designer Integration:
+      - Updated to reflect return value type change of time functions. Behavior Designer does not support double-precision values, so return values are cast to floats.
+      
+    PlayMaker Integration:
+      - Updated to reflect return value type change of time functions.
+
+1.1.31.0:
+
+    Changes:
+      - *** BREAKING CHANGE *** Changed all time calculations to use doubles to avoid issues with time measurement precision loss when application runs for days or weeks. All members that return time values now return a double value instead of a float value.
+      - RewiredStandaloneInputModule: Changed to use double precision time.
+      - Improved accuracy of identifying reconnected controllers on some platforms.
+    
+    API Changes:
+      - Changed return type of the following to double:
+        - Controller.GetButtonTimePressed
+        - Controller.GetButtonTimeUnpressed
+        - Controller.GetButtonLastTimePressed
+        - Controller.GetButtonLastTimeUnpressed
+        - Controller.GetButtonTimePressedById
+        - Controller.GetButtonTimeUnpressedById
+        - Controller.GetButtonLastTimePressedById
+        - Controller.GetButtonLastTimeUnpressedById
+        - Controller.GetLastTimeActive
+        - Controller.GetLastTimeAnyElementChanged
+        - Controller.GetLastTimeAnyButtonPressed
+        - Controller.GetLastTimeAnyButtonChanged
+        - Controller.Axis.lastTimeActive
+        - Controller.Axis.lastTimeActiveRaw
+        - Controller.Axis.lastTimeInactive
+        - Controller.Axis.lastTimeInactiveRaw
+        - Controller.Axis.lastTimeValueChanged
+        - Controller.Axis.lastTimeValueChangedRaw
+        - Controller.Axis.timeActive
+        - Controller.Axis.timeActiveRaw
+        - Controller.Axis.timeInactive
+        - Controller.Axis.timeInactiveRaw
+        - Controller.Button.timePressed
+        - Controller.Button.timeUnpressed
+        - Controller.Button.lastTimePressed
+        - Controller.Button.lastTimeUnpressed
+        - Controller.Button.lastTimeStateChanged
+        - ControllerWithAxes.GetAxisTimeActive
+        - ControllerWithAxes.GetAxisTimeInactive
+        - ControllerWithAxes.GetAxisLastTimeActive
+        - ControllerWithAxes.GetAxisLastTimeInactive
+        - ControllerWithAxes.GetAxisRawTimeActive
+        - ControllerWithAxes.GetAxisRawTimeInactive
+        - ControllerWithAxes.GetAxisRawLastTimeActive
+        - ControllerWithAxes.GetAxisRawLastTimeInactive
+        - ControllerWithAxes.GetAxisTimeActiveById
+        - ControllerWithAxes.GetAxisTimeInactiveById
+        - ControllerWithAxes.GetAxisLastTimeActiveById
+        - ControllerWithAxes.GetAxisLastTimeInactiveById
+        - ControllerWithAxes.GetAxisRawTimeActiveById
+        - ControllerWithAxes.GetAxisRawTimeInactiveById
+        - ControllerWithAxes.GetAxisRawLastTimeActiveById
+        - ControllerWithAxes.GetAxisRawLastTimeInactiveById
+        - ControllerWithAxes.GetLastTimeAnyAxisActive
+        - ControllerWithAxes.GetLastTimeAnyAxisChanged
+        - Keyboard.GetKeyTimePressed
+        - Keyboard.GetKeyTimeUnpressed
+        - Keyboard.GetModifierKeyTimePressed
+        - Keyboard.GetModifierKeyTimeUnpressed
+        - ReInput.TimeHelper.unscaledTime
+      
+    Behavior Designer Integration:
+      - Updated to reflect return value type change of time functions. Behavior Designer does not support double-precision values, so return values are cast to floats.
+      - Added RewiredGetKeyboard
+      - Added RewiredGetMouse
+      - Added RewiredPlayerSetHasKeyboard
+      
+    PlayMaker Integration:
+      - Updated to reflect return value type change of time functions.
+    
+    Corgi Engine Integration:
+      - Removed usage of InformationAttribute due to breaking change in later versions of Corgi Engine causing compiler errors.
+
+1.1.30.3:
+
+    Bug Fixes:
+      - OSX Native: Fixed bug causing joysticks created from HID devices with multiple logical sub devices to possibly shift around when another joystick device is connected or disconnected.
+
+1.1.30.2:
+
+    Changes:
+      - Input is no longer blocked when application is in full-screen mode and "Ignore Input When App Not In Focus" is disabled due to problems with Steam and VR games.
+      - OSX Native: Added support for HID devices with multiple logical sub devices (some multi-port controller adapters including Mayflash GameCube contorller adapters).
+
+1.1.30.1:
+
+    Changes:
+      - Rewired Editor: Tools -> Export Consts last saved path reverts to the project Assets folder if the last saved path was outside the current project.
+      - RewiredPointerInputModule: Disabling PlayerMouse by setting PlayerMouse.enabled to false or disabling the Component or GameObject if using the Component version now results in mouse exit events being sent when disabled if hovering over a Selectable.
+      - Windows Standalone, Raw Input / Direct Input + Native Keyboard Handling: Added workaround for Steam bug. Steam overlay blocks Raw Input key up events from reaching the application causing keys held when the overlay is opened to be stuck on when the overlay is closed with the mouse.
+    
+    Controller Definition Changes:
+      - Windows Fallback: Changed definitions for XInput controllers due to undocumented breaking change made in Unity 2018.3 causing both triggers to activate when either trigger is pressed. (Microsoft Xbox 360, Microsoft Xbox One, Logitech F310 (X), Logitech F710 (X), Zhidong V Plus (XI Mode).
+    
+    Bug Fixes:
+      - Control Mapper (Text MeshPro): Fixed Players and Controllers headers not loading values from language.
+
+1.1.30.0:
+
+    Changes:
+      - Windows Standalone: Added additional workarounds to prevent Raw Input mouse and keyboard registration from being reclaimed by Unity when making various sequences of calls to display and screen settings in Unity at runtime in a build.
+      - Windows Standalone, Raw Input / Direct Input + Native Keyboard Handling: Changed Shift key handling to prevent issues with the wrong Shift key being activated or deactivated by Shift key events generated by Windows when shifting number pad keys.
+      - Windows Standalone, Raw Input / Direct Input + Native Keyboard Handling: Changed Control key handling to filter out extranneous Control key events generated by other non-Control keys when using some non-US keyboard layouts.
+      - Corgi Engine integration:
+        - Updated minimum Unity version to 5.6.7f1.
+        - Fixed PrefabUtility.DisconnectPrefabInstance deprecation warning message in Unity 2018.3+.
+      - OSX Standalone, Native: Low-level joystick events are now discarded when the application loses focus and Unity Player -> Run in Background is disabled.
+
+    API Changes:
+       - Added Controller.Axis.pollingDeadZone property.
+       - Added ReInput.ConfigHelper.defaultAbsoluteAxisPollingDeadZone property.
+       - Added ReInput.ConfigHelper.defaultRelativeAxisPollingDeadZone property.
+
+    Bug Fixes:
+      - Gamepad Template: Removed duplicate Right Trigger mapping for Xbox 360 Controller.
+      - Fixed error in Debug Information possibly displaying a different Custom Controller than is assigned to the Player.
+
 1.1.29.4:
     
     Changes:
