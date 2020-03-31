@@ -474,7 +474,7 @@ namespace Rewired.Integration.UnityUI {
         #endregion
 
         [NonSerialized]
-        private float m_PrevActionTime;
+        private double m_PrevActionTime;
         [NonSerialized]
         Vector2 m_LastMoveVector;
         [NonSerialized]
@@ -748,7 +748,7 @@ namespace Rewired.Integration.UnityUI {
 
                 // Debug.Log("Pressed: " + newPressed);
 
-                float time = Time.unscaledTime;
+                double time = ReInput.time.unscaledTime;
 
                 if (newPressed == pointerEvent.lastPress) {
                     var diffTime = time - pointerEvent.clickTime;
@@ -757,7 +757,7 @@ namespace Rewired.Integration.UnityUI {
                     else
                         pointerEvent.clickCount = 1;
 
-                    pointerEvent.clickTime = time;
+                    pointerEvent.clickTime = (float)time;
                 } else {
                     pointerEvent.clickCount = 1;
                 }
@@ -765,7 +765,7 @@ namespace Rewired.Integration.UnityUI {
                 pointerEvent.pointerPress = newPressed;
                 pointerEvent.rawPointerPress = currentOverGo;
 
-                pointerEvent.clickTime = time;
+                pointerEvent.clickTime = (float)time;
 
                 // Save the drag handler as well
                 pointerEvent.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(currentOverGo);
@@ -894,7 +894,7 @@ namespace Rewired.Integration.UnityUI {
         private bool SendMoveEventToSelectedObject() {
             if (recompiling) return false; // never allow movement while recompiling
 
-            float time = Time.unscaledTime; // get the current time
+            double time = ReInput.time.unscaledTime; // get the current time
 
             // Check for zero movement and clear
             Vector2 movement = GetRawMoveVector();
@@ -908,7 +908,7 @@ namespace Rewired.Integration.UnityUI {
 
             // Check if a button/key/axis was just pressed this frame
             bool buttonDownHorizontal, buttonDownVertical;
-            CheckButtonOrKeyMovement(time, out buttonDownHorizontal, out buttonDownVertical);
+            CheckButtonOrKeyMovement(out buttonDownHorizontal, out buttonDownVertical);
 
             AxisEventData axisEventData = null;
 
@@ -964,7 +964,7 @@ namespace Rewired.Integration.UnityUI {
             return axisEventData.used;
         }
 
-        private void CheckButtonOrKeyMovement(float time, out bool downHorizontal, out bool downVertical) {
+        private void CheckButtonOrKeyMovement(out bool downHorizontal, out bool downVertical) {
             downHorizontal = false;
             downVertical = false;
 
@@ -1062,7 +1062,7 @@ namespace Rewired.Integration.UnityUI {
 
                 // Debug.Log("Pressed: " + newPressed);
 
-                float time = Time.unscaledTime;
+                double time = ReInput.time.unscaledTime;
 
                 if (newPressed == pointerEvent.lastPress) {
                     var diffTime = time - pointerEvent.clickTime;
@@ -1071,7 +1071,7 @@ namespace Rewired.Integration.UnityUI {
                     else
                         pointerEvent.clickCount = 1;
 
-                    pointerEvent.clickTime = time;
+                    pointerEvent.clickTime = (float)time;
                 } else {
                     pointerEvent.clickCount = 1;
                 }
@@ -1079,7 +1079,7 @@ namespace Rewired.Integration.UnityUI {
                 pointerEvent.pointerPress = newPressed;
                 pointerEvent.rawPointerPress = currentOverGo;
 
-                pointerEvent.clickTime = time;
+                pointerEvent.clickTime = (float)time;
 
                 // Save the drag handler as well
                 pointerEvent.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(currentOverGo);
