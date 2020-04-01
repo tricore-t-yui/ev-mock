@@ -1,4 +1,61 @@
 Release Notes:
+v1.7.8 rev 00:
+* Fixes:
+    * Fixed issues with 'Function Switch' node incorrectly displaying reference nodes and not properly ordering when in Reference mode
+
+v1.7.7 rev 06:
+* Fixes:
+    * Fixed 'Parallax Occlusion Mapping' node texture array sampling in LW/URP
+    * Fixed issue with 'Light Attenuation' node not taking into account vertex offset in URP templates
+
+* Improvements:
+    * Added extra pre pass option for Lightweight and Universal RP that allows for custom outline passes
+    * World position dependent nodes will now take vertex offset into account over LW templates
+
+v1.7.7 rev 05:
+* Fixes:
+    * Fixed issues when reading shader over updated template
+    * Fixed 'Light Attenuation' issue on URP 7.2.X which was causing rendering errors
+
+* Improvements:
+    * World position dependent nodes will now take vertex offset into account over default Unlit and URP templates
+    * Improved Diffusion Profile support in HDRP 7.2.X
+
+v1.7.7 rev 04:
+* Fixes:
+    * Fixed compatibility issues with HDRP v7.2.0 and above
+    * Fixed issue with 'Indirect Diffuse Light' node on Normal port not properly working over Lightweight RP
+
+v1.7.7 rev 03:
+* Fixes:
+    * Fixed issue on Unity ignoring Emission channel values set over Debug Port
+    * Fixed issue with multiple uses of 'Voronoi' node over a graph
+    * Fixed helper window colors in personal skin
+    * Fixed emission contribution on baked lighting
+    * Fixed GUID conflicts between Lightweight and Universal samples
+
+v1.7.7 rev 02:
+* Fixes:
+    * Fixed incorrect values given by time related nodes
+    * Fixed shadow compilation issue on HD Lit template
+    * Added null checks on updating shader over master node to prevent saving issues
+
+* Improvements:
+    * Decode Directional Lightmap shader function now compatible with all pipelines
+    * Added events that can be registered externally which indicate shader type change and shader save (API)
+        * IOUtils.OnShaderSavedEvent called when shader is saved
+        * IOUtils.OnShaderTypeChangedEvent called when shader 
+        * Registered functions must receive three arguments
+            * Shader shader: Current shader being modified 
+            * bool isTemplate: Current shader type is template based
+            * string type: GUID of template in use or string.empty if Standard Surface
+
+v1.7.7 rev 01:
+* Improvements:
+    * Some adjustments were made to the Decode Lightmap's Instructions port
+        * Port is set be only visible when on SRP
+        * ASE automatically sets Unity's default instruction values if no value is connected to it
+
 v1.7.7 rev 00:
 * Fixes:
     * Fixed multiple connections on Wire node when Alt + dragging nodes from it

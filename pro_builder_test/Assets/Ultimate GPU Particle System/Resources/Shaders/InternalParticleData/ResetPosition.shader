@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		//_Position ("Position", 2D) = "white" {}
+		_RandomValues ("Random Values", 2D) = "white" {}
 	}
 	SubShader
 	{
@@ -13,7 +13,8 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			
+			#pragma shader_feature_local __ TRAILS
+
 			#include "UnityCG.cginc"
 			#include "../Includes/GPUParticles.cginc"
 
@@ -37,13 +38,18 @@
 				return o;
 			}
 			
-			//sampler2D _Position;
+			sampler2D _RandomValues;
 
 			float4 frag (v2f i) : SV_Target
 			{
-				//float4 col = tex2D(_Position, i.uv);
-				//return float4(0,0,0,col.a);
-				return float4(0,0,0,Random(i.uv));
+				#ifdef TRAILS
+					i.uv.x = 0;
+					float randomValue = tex2D(_RandomValues, i.uv).r;
+				#else
+					float randomValue = tex2D(_RandomValues, i.uv).r;
+				#endif
+				
+				return float4(0,0,0,randomValue);
 			}
 			ENDCG
 		}

@@ -75,9 +75,14 @@ public partial class GPUParticleSystemEditor
         Vector3 InitialPos6 = particleSystem.transform.position + particleSystem.transform.rotation * (Vector3.back * SZ);
         Vector3 ScaledPos6 = Handles.Slider(InitialPos6, particleSystem.transform.forward, sliderSize, Handles.DotCap, 0f);
 
-        param1.floatValue = Vector3.Distance(ScaledPos1, ScaledPos2) / 2f;
-        param2.floatValue = Vector3.Distance(ScaledPos3, ScaledPos4) / 2f;
-        param3.floatValue = Vector3.Distance(ScaledPos5, ScaledPos6) / 2f;
+		if(Mathf.Abs(param1.floatValue - (Vector3.Distance(ScaledPos1, ScaledPos2) / 2f)) > 0.01f)
+			param1.floatValue = Vector3.Distance(ScaledPos1, ScaledPos2) / 2f;
+
+		if (Mathf.Abs(param2.floatValue - (Vector3.Distance(ScaledPos3, ScaledPos4) / 2f)) > 0.01f)
+			param2.floatValue = Vector3.Distance(ScaledPos3, ScaledPos4) / 2f;
+
+		if (Mathf.Abs(param3.floatValue - (Vector3.Distance(ScaledPos5, ScaledPos6) / 2f)) > 0.01f)
+			param3.floatValue = Vector3.Distance(ScaledPos5, ScaledPos6) / 2f;
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -111,7 +116,9 @@ public partial class GPUParticleSystemEditor
         float value2 = Vector3.Distance(ScaledPos3, ScaledPos4) / 2f;
         float value3 = Vector3.Distance(ScaledPos5, ScaledPos6) / 2f;
 
-        param1.floatValue = (value1 + value2 + value3) / 3f;
+		if (Mathf.Abs(param1.floatValue - ((value1 + value2 + value3) / 3f)) > 0.01f)
+			param1.floatValue = (value1 + value2 + value3) / 3f;
+
         serializedObject.ApplyModifiedProperties();
 
         Handles.DrawWireArc(particleSystem.transform.position, particleSystem.transform.forward, particleSystem.transform.right, 180f, param1.floatValue);
@@ -142,7 +149,11 @@ public partial class GPUParticleSystemEditor
         float value1 = Vector3.Distance(ScaledPos1, ScaledPos2) / 2f;
         float value3 = Vector3.Distance(ScaledPos5, ScaledPos6) / 2f;
 
-        param1.floatValue = (value1 + value3) / 2f;
+		if (Mathf.Abs(param1.floatValue - ((value1 + value3) / 2f)) > 0.01f)
+		{
+			param1.floatValue = (value1 + value3) / 2f;
+		}
+        
         serializedObject.ApplyModifiedProperties();
 
         Handles.color = new Color(0.717f, 0.929f, 1f, 1f);
@@ -166,7 +177,11 @@ public partial class GPUParticleSystemEditor
 
         Handles.DrawLine(ScaledPos1, ScaledPos2);
 
-        param1.floatValue = Vector3.Distance(ScaledPos1, ScaledPos2);
+		if (Mathf.Abs(param1.floatValue - Vector3.Distance(ScaledPos1, ScaledPos2)) > 0.01f)
+		{
+			param1.floatValue = Vector3.Distance(ScaledPos1, ScaledPos2);
+		}
+		
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -199,7 +214,12 @@ public partial class GPUParticleSystemEditor
         float value2 = Vector3.Distance(ScaledPos3, ScaledPos4) / 2f;
         float value3 = Vector3.Distance(ScaledPos5, ScaledPos6) / 2f;
 
-        param1.floatValue = (value1 + value2 + value3) / 3f;
+		
+		if (Mathf.Abs(param1.floatValue - ((value1 + value2 + value3) / 3f)) > 0.01f)
+		{
+			param1.floatValue = (value1 + value2 + value3) / 3f;
+		}
+		
         serializedObject.ApplyModifiedProperties();
 
         Handles.CircleCap(0, particleSystem.transform.position, particleSystem.transform.rotation, param1.floatValue);
@@ -260,14 +280,21 @@ public partial class GPUParticleSystemEditor
         float value1 = Vector3.Distance(ScaledPos1, ScaledPos2) / 2f;
         float value2 = Vector3.Distance(ScaledPos3, ScaledPos4) / 2f;
 
-        //float d = AngleOffset + Vector3.Distance(ScaledPos5,InitialPos5);
-        //float h = Mathf.Sqrt(Mathf.Pow(d, 2f) + Mathf.Pow(Length, 2f));
+		//float d = AngleOffset + Vector3.Distance(ScaledPos5,InitialPos5);
+		//float h = Mathf.Sqrt(Mathf.Pow(d, 2f) + Mathf.Pow(Length, 2f));
 
-        //Debug.Log(d + " " + AngleOffset + " " + h);
+		//Debug.Log(d + " " + AngleOffset + " " + h);
 
         param1.floatValue = (value1 + value2) / 2f;
-        //param2.floatValue = Mathf.Asin(d / h) * Mathf.Rad2Deg;
-        param3.floatValue = Vector3.Distance(ScaledPos9, particleSystem.transform.position);
+		//param2.floatValue = Mathf.Asin(d / h) * Mathf.Rad2Deg;
+
+		float dist = Vector3.Distance(ScaledPos9, particleSystem.transform.position);
+
+		if (Mathf.Abs(param3.floatValue - dist) > 0.01f)
+		{
+			param3.floatValue = dist;
+		}
+
         serializedObject.ApplyModifiedProperties();
 
 

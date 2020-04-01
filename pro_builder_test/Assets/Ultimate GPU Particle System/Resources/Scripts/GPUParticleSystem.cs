@@ -115,6 +115,8 @@ public partial class GPUParticleSystem : MonoBehaviour
 		}
 
 #if UNITY_EDITOR
+		CheckIfLayerChanged();
+
 		if (CollisionTab)
 		{
 			DrawPlanes();
@@ -130,7 +132,16 @@ public partial class GPUParticleSystem : MonoBehaviour
 		}
 		else
 		{
-			customDeltaTime = (Time.realtimeSinceStartup - previousFrameTime) * timeScale;
+			if (Application.isPlaying)
+			{
+				customDeltaTime = (Time.realtimeSinceStartup - previousFrameTime) * timeScale;
+			}
+			else
+			{
+				//Clamping delta time to make sure the particles don't go crazy
+				customDeltaTime = Mathf.Clamp((Time.realtimeSinceStartup - previousFrameTime) * timeScale,0f, 1f/60f);
+			}
+			
 			previousFrameTime = Time.realtimeSinceStartup;
 		}
 
@@ -161,8 +172,6 @@ public partial class GPUParticleSystem : MonoBehaviour
 					state = GPUParticleSystemState.Stopped;
 				}
 			}
-
-			
 		}
 	}
 

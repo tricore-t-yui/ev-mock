@@ -34,7 +34,7 @@ public partial class GPUParticleSystem
 	};
 
 	public enum ParticleType {
-        Point, Triangle, Billboard, HorizontalBillboard, VerticalBillboard, StretchedTail, StretchedBillboard, Mesh//, AnimatedMesh
+        Point, Triangle, Billboard, HorizontalBillboard, VerticalBillboard, StretchedTail, StretchedBillboard, Mesh, Trails
     };
 
     public enum TurbulenceType
@@ -99,6 +99,7 @@ public partial class GPUParticleSystem
     public float fixedDeltaTime = 0.016666666f;
 	private int burstNum = 0;
 	public ShaderVariantCollection shaderVariantCollection;
+	public int seed = 123456789;
     #endregion
 
     #region Spawning
@@ -195,6 +196,10 @@ public partial class GPUParticleSystem
     public Mesh meshParticle;
 	#endregion
 
+	#region Trails
+	public float followSpeed = 15f;
+	#endregion
+
 	#region Forces
 	public SingleFloatCurveBundle gravity = new SingleFloatCurveBundle(0f);
 	private Vector3 previousEmitterPosition = Vector3.zero;
@@ -225,6 +230,7 @@ public partial class GPUParticleSystem
 	public List<Attractor> attractors = new List<Attractor>();
 	public bool useMeshTarget = false;
 	public bool useMeshFilter = false;
+	public bool targetIsSameMeshAsEmitter = false;
 	public SingleFloatCurveBundle meshTargetStrength = new SingleFloatCurveBundle(1f);
 	public SingleFloatCurveBundle onTarget = new SingleFloatCurveBundle(0f);
 	public Mesh meshTarget;
@@ -296,6 +302,8 @@ public partial class GPUParticleSystem
 	public bool EditBounds = false;
 	public bool ShowWSBounds = false;
 	private Quaternion tempRotation;
+	private int previousLayer = 0;
+	private bool firstTimeSwitchedToTrails = false;
 
 	public void StartEditBB()
 	{
@@ -306,6 +314,15 @@ public partial class GPUParticleSystem
 	public void EndEditBB()
 	{
 		transform.rotation = tempRotation;
+	}
+
+	private void CheckIfLayerChanged()
+	{
+		if (previousLayer != gameObject.layer)
+		{
+			previousLayer = gameObject.layer;
+			SetLayer();
+		}
 	}
 #endif
 	#endregion

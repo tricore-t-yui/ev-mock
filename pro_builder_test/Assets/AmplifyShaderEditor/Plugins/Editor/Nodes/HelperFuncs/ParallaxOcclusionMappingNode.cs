@@ -352,7 +352,7 @@ namespace AmplifyShaderEditor
 			{
 				if( UIUtils.CurrentWindow.OutsideGraph.IsSRP )
 				{
-					textureArgs = "TEXTURE2D_ARRAY_PARAM(" + texture +" , "+"sampler##"+texture + ")";
+					textureArgs = "TEXTURE2D_ARRAY_ARGS( " + texture + ", sampler" + texture + ")";
 				}
 				else
 				{
@@ -401,7 +401,7 @@ namespace AmplifyShaderEditor
 				break;
 				case POMTexTypes.TextureArray:
 				if( UIUtils.CurrentWindow.OutsideGraph.IsSRP )
-					IOUtils.AddFunctionHeader( ref m_functionBody, "inline float2 POM( TEXTURE2D_ARRAY_ARGS(heightMap,sampler##heightMap), float2 uvs, float2 dx, float2 dy, float3 normalWorld, float3 viewWorld, float3 viewDirTan, int minSamples, int maxSamples, float parallax, float refPlane, float2 tilling, float2 curv, int index )" );
+					IOUtils.AddFunctionHeader( ref m_functionBody, "inline float2 POM( TEXTURE2D_ARRAY_PARAM(heightMap,samplerheightMap), float2 uvs, float2 dx, float2 dy, float3 normalWorld, float3 viewWorld, float3 viewDirTan, int minSamples, int maxSamples, float parallax, float refPlane, float2 tilling, float2 curv, int index )" );
 				else
 					IOUtils.AddFunctionHeader( ref m_functionBody, "inline float2 POM( UNITY_ARGS_TEX2DARRAY(heightMap), float2 uvs, float2 dx, float2 dy, float3 normalWorld, float3 viewWorld, float3 viewDirTan, int minSamples, int maxSamples, float parallax, float refPlane, float2 tilling, float2 curv, int index )" );
 				break;
@@ -474,7 +474,7 @@ namespace AmplifyShaderEditor
 					break;
 					case POMTexTypes.TextureArray:
 					if( UIUtils.CurrentWindow.OutsideGraph.IsSRP )
-						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap,sampler##heightMap, uvs + currTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + " * ( 1 - result.z );" );
+						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap,samplerheightMap, uvs + currTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + " * ( 1 - result.z );" );
 					else
 						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = ASE_SAMPLE_TEX2DARRAY_GRAD( heightMap, float3(uvs + currTexOffset,index), dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + " * ( 1 - result.z );" );
 					break;
@@ -512,7 +512,7 @@ namespace AmplifyShaderEditor
 					break;
 					case POMTexTypes.TextureArray:
 					if( UIUtils.CurrentWindow.OutsideGraph.IsSRP )
-						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap, sampler##heightMap, uvs + currTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
+						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap, samplerheightMap, uvs + currTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
 					else
 						IOUtils.AddFunctionLine( ref m_functionBody, "	currHeight = ASE_SAMPLE_TEX2DARRAY_GRAD( heightMap,  float3(uvs + currTexOffset,index), dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
 					break;
@@ -577,7 +577,7 @@ namespace AmplifyShaderEditor
 					break;
 					case POMTexTypes.TextureArray:
 					if( UIUtils.CurrentWindow.OutsideGraph.IsSRP )
-						IOUtils.AddFunctionLine( ref m_functionBody, "	newHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap, sampler##heightMap, uvs + finalTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
+						IOUtils.AddFunctionLine( ref m_functionBody, "	newHeight = SAMPLE_TEXTURE2D_ARRAY_GRAD( heightMap, samplerheightMap, uvs + finalTexOffset,index, dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
 					else
 						IOUtils.AddFunctionLine( ref m_functionBody, "	newHeight = ASE_SAMPLE_TEX2DARRAY_GRAD( heightMap, float3(uvs + finalTexOffset,index), dx, dy )." + m_channelTypeVal[ m_selectedChannelInt ] + ";" );
 					break;

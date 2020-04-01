@@ -210,22 +210,26 @@
    	
   	float4 fragSF (v2f i) : SV_Target {
 		UNITY_SETUP_INSTANCE_ID(i);
+        UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
    		return float4(sunflare(i.uvNonStereo), 1.0);
    	}  
 
   	float4 fragSFAdditive (v2f i) : SV_Target {
 		UNITY_SETUP_INSTANCE_ID(i);
+        UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
   		float4 p = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_MainTex, i.uv);
    		return p + float4(sunflare(i.uvNonStereo), 1.0);
    	}  
    	
   	float4 fragSFFast (v2f i) : SV_Target {
 		UNITY_SETUP_INSTANCE_ID(i);
+        UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
    		return float4(sunflareFast(i.uvNonStereo), 1.0);
    	}  
 
   	float4 fragSFFastAdditive (v2f i) : SV_Target {
 		UNITY_SETUP_INSTANCE_ID(i);
+        UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
   		float4 p = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_MainTex, i.uv);
    		return p + float4(sunflareFast(i.uvNonStereo), 1.0);
    	} 

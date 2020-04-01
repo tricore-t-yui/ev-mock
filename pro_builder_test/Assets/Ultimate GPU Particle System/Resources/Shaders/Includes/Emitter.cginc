@@ -134,7 +134,7 @@ float4 GetPointOnPlaneWorld(float2 uv, float4 _EmitterParam, float4x4 _EmitterMa
 
 float4 GetPointOnMeshWorld(sampler2D MeshPositions, float2 uv, float4x4 _EmitterMatrix)
 {
-	float3 Position = tex2D(MeshPositions, float2(Random(uv), Random(uv+.1)));
+	float3 Position = tex2D(MeshPositions, uv);
 	return  mul(_EmitterMatrix, float4(Position,1));
 }
 

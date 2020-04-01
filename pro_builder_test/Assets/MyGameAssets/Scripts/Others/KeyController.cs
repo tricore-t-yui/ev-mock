@@ -46,8 +46,8 @@ public class KeyController : MonoBehaviour
         var controllerNames = Input.GetJoystickNames();
 
         // 一台もコントローラが接続されていなければエラー
-        if (controllerNames[0] == "")
-        {
+        if (controllerNames.Length == 0 || controllerNames[0] == "")
+            {
             IsUseController = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;

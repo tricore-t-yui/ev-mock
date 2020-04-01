@@ -2693,7 +2693,13 @@ namespace AmplifyShaderEditor
 		public void UpdateShaderOnMasterNode( Shader newShader )
 		{
 			MasterNode mainMasterNode = ( GetNode( m_masterNodeId ) as MasterNode );
+			if( mainMasterNode == null )
+			{
+				Debug.LogError( "No Master Node was detected. Aborting update!" );
+				return;
+			}
 			mainMasterNode.UpdateFromShader( newShader );
+
 			if( HasLODs )
 			{
 				int passIdx = ( (TemplateMultiPassMasterNode)mainMasterNode ).PassIdx;
@@ -2701,7 +2707,15 @@ namespace AmplifyShaderEditor
 				{
 					if( m_lodMultiPassMasterNodes.Count != 0 && m_lodMultiPassMasterNodes[ i ].NodesList.Count > 0 )
 					{
-						m_lodMultiPassMasterNodes[ i ].NodesList[ passIdx ].UpdateFromShader( newShader );
+						if( m_lodMultiPassMasterNodes[ i ].NodesList[ passIdx ] != null )
+						{
+							m_lodMultiPassMasterNodes[ i ].NodesList[ passIdx ].UpdateFromShader( newShader );
+						}
+						else
+						{
+							Debug.LogError( "Null master node detected. Aborting update!" );
+							return;
+						}
 					}
 					else break;
 				}
@@ -3050,6 +3064,7 @@ namespace AmplifyShaderEditor
 			TemplateMultiPass multipassData = templateData as TemplateMultiPass;
 			m_currentSRPType = multipassData.SubShaders[ 0 ].Modules.SRPType;
 
+			bool sortTemplatesNodes = false;
 			Vector2 currentPosition = currMasterNode.Vec2Position;
 			for( int subShaderIdx = 0; subShaderIdx < multipassData.SubShaders.Count; subShaderIdx++ )
 			{
@@ -3074,6 +3089,7 @@ namespace AmplifyShaderEditor
 					}
 					else
 					{
+						sortTemplatesNodes = true;
 						TemplateMultiPassMasterNode masterNode = CreateNode( typeof( TemplateMultiPassMasterNode ), false ) as TemplateMultiPassMasterNode;
 						if( multipassData.SubShaders[ subShaderIdx ].Passes[ passIdx ].IsMainPass )
 						{
@@ -3100,6 +3116,11 @@ namespace AmplifyShaderEditor
 				newMasterNode.OnMaterialUpdatedEvent += OnMaterialUpdatedEvent;
 				newMasterNode.OnShaderUpdatedEvent += OnShaderUpdatedEvent;
 				newMasterNode.IsMainOutputNode = true;
+			}
+
+			if( sortTemplatesNodes )
+			{
+				m_multiPassMasterNodes.NodesList.Sort( ( x, y ) => ( x.PassIdx.CompareTo( y.PassIdx ) ) );
 			}
 		}
 

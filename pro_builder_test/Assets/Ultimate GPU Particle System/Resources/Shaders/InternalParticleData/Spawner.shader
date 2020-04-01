@@ -17,7 +17,9 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			
+			#pragma multi_compile __ TRAILS
+
+
 			#include "UnityCG.cginc"
 			#include "../Includes/GPUParticles.cginc"
 
@@ -48,6 +50,22 @@
 		
 			float frag(v2f i) : SV_Target
 			{
+#if TRAILS
+				int yCoord = i.uv.y * _MapHeight;
+				int index = floor(yCoord);
+
+				//Result 1 = Particle is new
+				//Result 2 = Particle is not new
+				float result1 = 0.0;
+				float result2 = 1.0;
+
+				float s1 = sign(_StartID - index);
+				float s2 = sign(index - (_EndID - 1));
+
+				float finalResult = lerp(result1, result2, s1);
+				finalResult = lerp(finalResult, result2, s2);
+				return finalResult;
+#else
 				int xCoord = i.uv.x * _MapWidth;
 				int yCoord = i.uv.y * _MapHeight;
 
@@ -58,12 +76,13 @@
 				float result1 = 0.0;
 				float result2 = 1.0;
 
-				float s1 = sign(_StartID-index);
-				float s2 = sign(index-(_EndID-1));
-				
+				float s1 = sign(_StartID - index);
+				float s2 = sign(index - (_EndID - 1));
+
 				float finalResult = lerp(result1, result2, s1);
 				finalResult = lerp(finalResult, result2, s2);
 				return finalResult;
+#endif
 			}
 			ENDCG
 		}

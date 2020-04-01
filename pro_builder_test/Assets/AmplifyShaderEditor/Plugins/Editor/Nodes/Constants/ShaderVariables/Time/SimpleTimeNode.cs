@@ -10,7 +10,7 @@ namespace AmplifyShaderEditor
 	{
 		private const string TimeStandard = "_Time.y";
 #if UNITY_2018_3_OR_NEWER
-		private const string TimeSRP = "_TimeParameters.y";
+		private const string TimeSRP = "_TimeParameters.x";
 #endif
 		protected override void CommonInit( int uniqueId )
 		{

@@ -39,6 +39,8 @@ namespace AmplifyShaderEditor
 		ASE_SRP_7_1_6 =		070106,
 		ASE_SRP_7_1_7 =		070107,
 		ASE_SRP_7_1_8 =		070108,
+		ASE_SRP_7_2_0 =		070200,
+		ASE_SRP_7_2_1 =		070201,
 		ASE_SRP_RECENT =	999999
 	}
 
@@ -157,7 +159,11 @@ namespace AmplifyShaderEditor
 			{"7.1.7",           ASESRPVersions.ASE_SRP_7_1_7},
 			{"7.1.7-preview",   ASESRPVersions.ASE_SRP_7_1_7},
 			{"7.1.8",           ASESRPVersions.ASE_SRP_7_1_8},
-			{"7.1.8-preview",   ASESRPVersions.ASE_SRP_7_1_8}
+			{"7.1.8-preview",   ASESRPVersions.ASE_SRP_7_1_8},
+			{"7.2.0",           ASESRPVersions.ASE_SRP_7_2_0},
+			{"7.2.0-preview",   ASESRPVersions.ASE_SRP_7_2_0},
+			{"7.2.1",           ASESRPVersions.ASE_SRP_7_2_1},
+			{"7.2.1-preview",   ASESRPVersions.ASE_SRP_7_2_1},
 		};
 
 
@@ -190,6 +196,8 @@ namespace AmplifyShaderEditor
 			{ASESRPVersions.ASE_SRP_7_1_6,  "57fcea0ed8b5eb347923c4c21fa31b57"},
 			{ASESRPVersions.ASE_SRP_7_1_7,  "57fcea0ed8b5eb347923c4c21fa31b57"},
 			{ASESRPVersions.ASE_SRP_7_1_8,  "57fcea0ed8b5eb347923c4c21fa31b57"},
+			{ASESRPVersions.ASE_SRP_7_2_0,  "57fcea0ed8b5eb347923c4c21fa31b57"},
+			{ASESRPVersions.ASE_SRP_7_2_1,  "57fcea0ed8b5eb347923c4c21fa31b57"},
 			{ASESRPVersions.ASE_SRP_RECENT, "57fcea0ed8b5eb347923c4c21fa31b57"}
 		};
 
@@ -221,6 +229,8 @@ namespace AmplifyShaderEditor
 			{ASESRPVersions.ASE_SRP_7_1_6,  "9a5e61a8b3421b944863d0946e32da0a"},
 			{ASESRPVersions.ASE_SRP_7_1_7,  "9a5e61a8b3421b944863d0946e32da0a"},
 			{ASESRPVersions.ASE_SRP_7_1_8,  "9a5e61a8b3421b944863d0946e32da0a"},
+			{ASESRPVersions.ASE_SRP_7_2_0,  "9a5e61a8b3421b944863d0946e32da0a"},
+			{ASESRPVersions.ASE_SRP_7_2_1,  "9a5e61a8b3421b944863d0946e32da0a"},
 			{ASESRPVersions.ASE_SRP_RECENT, "9a5e61a8b3421b944863d0946e32da0a"}
 		};
 

@@ -15,6 +15,7 @@ public class WelcomeWindow : EditorWindow
 	private static bool tab4 = false;
 	private static bool tab5 = false;
 	private static bool tab6 = false;
+	private static bool tab7 = false;
 
 	private static Texture2D image;
 
@@ -63,8 +64,8 @@ public class WelcomeWindow : EditorWindow
 		EditorGUILayout.BeginVertical("Box");
 		{
 			EditorStyles.label.wordWrap = true;
-			EditorGUILayout.LabelField("Ultimate GPU Particle System v1.0", EditorStyles.boldLabel);
-			EditorGUILayout.LabelField("Welcome to the Beta of GPUP. If you experience any bugs or have questions regarding the particle system, please contact me via support@maxproude.com. Below you can find some frequently asked questions, tips and tricks and notifications. The Beta will end early 2019.");
+			EditorGUILayout.LabelField("Ultimate GPU Particle System v1.1", EditorStyles.boldLabel);
+			EditorGUILayout.LabelField("Thank you very much for purchasing Ultimate GPU Particle System. If you experience any bugs or have questions regarding the particle system, please contact me via m4xproud@gmail.com. Below you can find some frequently asked questions, tips and tricks and notifications.");
 			//GUILayout.FlexibleSpace();
 
 			scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.Width(580f), GUILayout.Height(Screen.height-230f));
@@ -78,7 +79,7 @@ public class WelcomeWindow : EditorWindow
 
 					if (tab0)
 					{
-						EditorGUILayout.LabelField("Version 1.0 finally ends the beta phase and marks the start of a development ready tool, with new features and fixes: Refraction, Collision with depth, correct mesh emission along normals and correct duplication of GPU particle systems amongst others.There are still more features on the way. If you have any suggestion, don't hesitate to contact me and tell me what you would like to see in this tool.");
+						EditorGUILayout.LabelField("Version 1.1 comes with a variety of new features, fixes and improvements. The biggest new feature is the possibility to use GPU trails now. See the documentation for furterh info.");
 
 					}
 				}
@@ -94,6 +95,21 @@ public class WelcomeWindow : EditorWindow
 					if (tab1)
 					{
 						EditorGUILayout.LabelField("To create a new GPU particle system, go to the toolbar and click GameObject/Effects/GPU Particle System. This will add a new GPU Particle System to the scene and can be edited using the inspector very much like Shuriken.");
+
+					}
+				}
+				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginVertical("Box");
+				{
+					if (GUILayout.Button("Trails", gs))
+					{
+						tab7 = !tab7;
+					}
+
+					if (tab7)
+					{
+						EditorGUILayout.LabelField("Trails are stored in the Particle Buffer. That means, that the Particle width and heigth information changes to Num trails and Num segments. Each segment follows its preceding segment in the Position Buffer. By changing segment count or the follow speed setting in the rendering tab, you can make trails shorter or longer. The first element of a trail behaves just like a particle and is affected by forces and other manipulators. Please see the documentation for further details.");
 
 					}
 				}

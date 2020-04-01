@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c409c6a822467a4194dcf71c448891d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customInstanceID: 2184222
+  customInstanceID: 827578
   particleData:
     newParticleBuffer: {fileID: 0}
     metaBuffer_1: {fileID: 0}
@@ -1628,6 +1628,7 @@ MonoBehaviour:
     metaBuffer_2: {fileID: 0}
     positionBuffer_2: {fileID: 0}
     velocityBuffer_2: {fileID: 0}
+    randomBuffer: {fileID: 0}
   particleMaterial: {fileID: 0}
   renderQueue: 3000
   bufferWidth: 64
@@ -1635,7 +1636,9 @@ MonoBehaviour:
   precision: 0
   useFixedDeltaTime: 0
   fixedDeltaTime: 0.016666666
-  shaderVariantCollection: {fileID: 0}
+  shaderVariantCollection: {fileID: 20000000, guid: 4948249179f3a754cb5e6060e73721b4,
+    type: 2}
+  seed: 123456789
   playOnAwake: 1
   loop: 1
   emit: 1
@@ -1720,7 +1723,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.13955665
+    seed: 0.4389506
   maxParticles: 4096
   startLifetime:
     showEditor: 0
@@ -1776,7 +1779,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.05110407
+    seed: 0.45374352
   startSize:
     showEditor: 1
     mode: 0
@@ -1831,7 +1834,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.5121693
+    seed: 0.5508067
   startSpeed:
     showEditor: 0
     mode: 0
@@ -1886,7 +1889,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.24098277
+    seed: 0.30681592
   startRotation:
     showEditor: 0
     mode: 0
@@ -1941,7 +1944,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.61210424
+    seed: 0.7711179
   useRotation: 0
   sizeOverLifetime:
     showEditor: 1
@@ -1989,7 +1992,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.3005789
+    seed: 0.410896
     bezier1:
     - {x: 0, y: 0, z: 0.34025538, w: 0.22975549}
     - {x: 1.0207672, y: 0.009529114, z: 0.68051183, w: 1.4889523}
@@ -2039,7 +2042,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     minMax: {x: 0, y: 1}
-    seed: 0.027525306
+    seed: 0.07553434
     bezier1: []
     bezier2: []
   colorOverLifetime:
@@ -2106,7 +2109,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    seed: 0.1542455
+    seed: 0.96704197
   colorIntensityOverLifetime:
     showEditor: 0
     mode: 0
@@ -2170,6 +2173,7 @@ MonoBehaviour:
   useMaxVelocity: 0
   particleType: 2
   meshParticle: {fileID: 0}
+  followSpeed: 15
   gravity:
     showEditor: 1
     mode: 0
@@ -3178,6 +3182,7 @@ MonoBehaviour:
   attractors: []
   useMeshTarget: 0
   useMeshFilter: 0
+  targetIsSameMeshAsEmitter: 0
   meshTargetStrength:
     showEditor: 0
     mode: 0
@@ -5273,6 +5278,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10669,10 +10675,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4484567948180639831}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: e810ed7368f721a40a2e8b98e17a70d9,
+    - target: {fileID: -6057140222963153312, guid: e810ed7368f721a40a2e8b98e17a70d9,
         type: 3}
-      propertyPath: m_Name
-      value: shdw@model
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a825325fa416a1a44af78dd582162a3c, type: 2}
+    - target: {fileID: -6057140222963153312, guid: e810ed7368f721a40a2e8b98e17a70d9,
+        type: 3}
+      propertyPath: m_CullingMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e810ed7368f721a40a2e8b98e17a70d9,
         type: 3}
@@ -10729,6 +10740,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: e810ed7368f721a40a2e8b98e17a70d9,
+        type: 3}
+      propertyPath: m_Name
+      value: shdw@model
+      objectReference: {fileID: 0}
     - target: {fileID: 5496927959427890510, guid: e810ed7368f721a40a2e8b98e17a70d9,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -10743,16 +10759,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: e810ed7368f721a40a2e8b98e17a70d9,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a825325fa416a1a44af78dd582162a3c, type: 2}
-    - target: {fileID: -6057140222963153312, guid: e810ed7368f721a40a2e8b98e17a70d9,
-        type: 3}
-      propertyPath: m_CullingMode
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7656408646851403801, guid: e810ed7368f721a40a2e8b98e17a70d9,
         type: 3}

@@ -56,7 +56,7 @@ public class CameraController : MonoBehaviour
     float lookBackAngle = 0;                            // 振り返りのアングル
     [SerializeField]
     Transform playerArms = default;                     // プレイヤーの腕
-
+    
     /// <summary>
     /// カメラの回転
     /// </summary>
@@ -244,7 +244,7 @@ public class CameraController : MonoBehaviour
     public void CameraReset()
     {
         transform.position = animCamera.position;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-        playerArms.eulerAngles = new Vector3(0, playerArms.eulerAngles.y, 0);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, 0);
+        playerArms.eulerAngles = new Vector3(0, 0, 0);
     }
 }

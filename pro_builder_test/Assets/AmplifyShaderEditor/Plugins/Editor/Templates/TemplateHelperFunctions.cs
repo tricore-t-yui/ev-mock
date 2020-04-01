@@ -74,7 +74,8 @@ namespace AmplifyShaderEditor
 		RELATIVE_WORLD_POS,
 		INSTANCE_ID,
 		OTHER,
-		VFACE
+		VFACE,
+		SHADOWCOORDS
 	}
 
 	public enum TemplateShaderPropertiesIdx
@@ -605,7 +606,8 @@ namespace AmplifyShaderEditor
 			{"wvd"  ,TemplateInfoOnSematics.WORLD_VIEW_DIR},
 			{"wp"   ,TemplateInfoOnSematics.WORLD_POSITION},
 			{"rwp"  ,TemplateInfoOnSematics.RELATIVE_WORLD_POS},
-			{"vf"   ,TemplateInfoOnSematics.VFACE}
+			{"vf"   ,TemplateInfoOnSematics.VFACE},
+			{"sc"   ,TemplateInfoOnSematics.SHADOWCOORDS}
 		};
 
 		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToDefineFrag = new Dictionary<TemplateInfoOnSematics, string>
@@ -630,7 +632,8 @@ namespace AmplifyShaderEditor
 			{TemplateInfoOnSematics.WORLD_VIEW_DIR,"ASE_NEEDS_FRAG_WORLD_VIEW_DIR"},
 			{TemplateInfoOnSematics.WORLD_POSITION,"ASE_NEEDS_FRAG_WORLD_POSITION"},
 			{TemplateInfoOnSematics.RELATIVE_WORLD_POS,"ASE_NEEDS_FRAG_RELATIVE_WORLD_POS"},
-			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_FRAG_VFACE"}
+			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_FRAG_VFACE"},
+			{TemplateInfoOnSematics.SHADOWCOORDS,"ASE_NEEDS_FRAG_SHADOWCOORDS"}
 		};
 
 		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToDefineVertex = new Dictionary<TemplateInfoOnSematics, string>
@@ -655,7 +658,8 @@ namespace AmplifyShaderEditor
 			{TemplateInfoOnSematics.WORLD_VIEW_DIR,"ASE_NEEDS_VERT_WORLD_VIEW_DIR"},
 			{TemplateInfoOnSematics.WORLD_POSITION,"ASE_NEEDS_VERT_WORLD_POSITION"},
 			{TemplateInfoOnSematics.RELATIVE_WORLD_POS,"ASE_NEEDS_VERT_RELATIVE_WORLD_POS"},
-			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_VERT_VFACE"}
+			{TemplateInfoOnSematics.VFACE,"ASE_NEEDS_VERT_VFACE"},
+			{TemplateInfoOnSematics.SHADOWCOORDS,"ASE_NEEDS_VERT_SHADOWCOORDS"}
 		};
 
 		public static readonly Dictionary<TemplateInfoOnSematics, string> InfoToLocalVar = new Dictionary<TemplateInfoOnSematics, string>
@@ -677,7 +681,8 @@ namespace AmplifyShaderEditor
 			{TemplateInfoOnSematics.WORLD_VIEW_DIR, GeneratorUtils.WorldViewDirectionStr},
 			{TemplateInfoOnSematics.WORLD_POSITION, GeneratorUtils.WorldPositionStr},
 			{TemplateInfoOnSematics.RELATIVE_WORLD_POS, GeneratorUtils.RelativeWorldPositionStr},
-			{TemplateInfoOnSematics.VFACE, GeneratorUtils.VFaceStr}
+			{TemplateInfoOnSematics.VFACE, GeneratorUtils.VFaceStr},
+			{TemplateInfoOnSematics.SHADOWCOORDS, GeneratorUtils.ShadowCoordsStr}
 		};
 
 
@@ -701,6 +706,7 @@ namespace AmplifyShaderEditor
 			{TemplateInfoOnSematics.WORLD_POSITION, WirePortDataType.FLOAT3},
 			{TemplateInfoOnSematics.RELATIVE_WORLD_POS, WirePortDataType.FLOAT3},
 			{TemplateInfoOnSematics.VFACE, WirePortDataType.FLOAT},
+			{TemplateInfoOnSematics.SHADOWCOORDS, WirePortDataType.FLOAT4},
 		};
 		public static readonly Dictionary<int, TemplateInfoOnSematics> IntToUVChannelInfo = new Dictionary<int, TemplateInfoOnSematics>
 		{
