@@ -42,7 +42,9 @@ public class CameraController : MonoBehaviour
     KeyController keyController = default;              // キー操作クラス
 
     [SerializeField]
-    float sensitivity = 2;                              // カメラの感度
+    float mouseSensitivity = 6;                              // カメラの感度
+    [SerializeField]
+    float controllerSensitivity = 6;                    // カメラの感度
     [SerializeField]
     float lookbackSensitivity = 20;                     // 振り返りの感度
 
@@ -54,15 +56,20 @@ public class CameraController : MonoBehaviour
     float lookBackAngle = 0;                            // 振り返りのアングル
     [SerializeField]
     Transform playerArms = default;                     // プレイヤーの腕
-
+    
     /// <summary>
     /// カメラの回転
     /// </summary>
     public void Rotation(RotationType type, bool isBreathHold)
     {
+        float sensitivity = mouseSensitivity;
+        if(keyController.IsUseController)
+        {
+            sensitivity = controllerSensitivity;
+        }
         // 回転量を求める
-        float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity;
-        float X_Rotation = keyController.GetStick(StickType.RIGHTSTICK).x * sensitivity;
+        float Y_Rotation = keyController.GetStick(StickType.RIGHTSTICK).y * sensitivity * Time.deltaTime * 100;
+        float X_Rotation = keyController.GetStick(StickType.RIGHTSTICK).x * sensitivity * Time.deltaTime * 100;
 
         switch (type)
         {
@@ -237,7 +244,7 @@ public class CameraController : MonoBehaviour
     public void CameraReset()
     {
         transform.position = animCamera.position;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-        playerArms.eulerAngles = new Vector3(0, playerArms.eulerAngles.y, 0);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, 0);
+        playerArms.eulerAngles = new Vector3(0, 0, 0);
     }
 }

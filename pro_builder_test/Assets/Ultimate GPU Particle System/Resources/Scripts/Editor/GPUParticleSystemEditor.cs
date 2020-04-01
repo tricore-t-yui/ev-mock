@@ -6,40 +6,41 @@ using UnityEditorInternal;
 [CustomEditor(typeof(GPUParticleSystem))]
 public partial class GPUParticleSystemEditor : Editor
 {
-    GPUParticleSystem particleSystem;
+	GPUParticleSystem particleSystem;
 
 	#region Properties
 #pragma warning disable 414
 	SerializedProperty playOnAwake;
-    SerializedProperty loop;
-    SerializedProperty effectLength;
-    SerializedProperty maxParticles;
-    SerializedProperty bufferWidth;
-    SerializedProperty bufferHeight;
-    SerializedProperty useFixedDeltaTime;
+	SerializedProperty loop;
+	SerializedProperty effectLength;
+	SerializedProperty maxParticles;
+	SerializedProperty bufferWidth;
+	SerializedProperty bufferHeight;
+	SerializedProperty useFixedDeltaTime;
 	SerializedProperty fixedDeltaTime;
 	SerializedProperty timeScale;
+	SerializedProperty seed;
 
 	SerializedProperty param1;
-    SerializedProperty param2;
-    SerializedProperty param3;
-    SerializedProperty param4;
-    SerializedProperty randomness;
-    SerializedProperty emitFromShell;
-    SerializedProperty emitFromBase;
+	SerializedProperty param2;
+	SerializedProperty param3;
+	SerializedProperty param4;
+	SerializedProperty randomness;
+	SerializedProperty emitFromShell;
+	SerializedProperty emitFromBase;
 	SerializedProperty bursts;
 
 	SerializedProperty useRotation;
-    SerializedProperty useMaxVelocity;
-    SerializedProperty useCircularForce;
-    SerializedProperty circularForceCenter;
+	SerializedProperty useMaxVelocity;
+	SerializedProperty useCircularForce;
+	SerializedProperty circularForceCenter;
 	SerializedProperty useInheritVelocity;
 
 	SerializedProperty gravity;
-    SerializedProperty inheritVelocity;
-    SerializedProperty airResistance;
+	SerializedProperty inheritVelocity;
+	SerializedProperty airResistance;
 
-    SerializedProperty mainTexture;
+	SerializedProperty mainTexture;
 	SerializedProperty motionVectors;
 	SerializedProperty useZbuffer;
 	SerializedProperty textureSheetMode;
@@ -48,8 +49,8 @@ public partial class GPUParticleSystemEditor : Editor
 	SerializedProperty columns;
 
 	SerializedProperty fgaFile;
-    SerializedProperty vectorNoise;
-    SerializedProperty vectorField;
+	SerializedProperty vectorNoise;
+	SerializedProperty vectorField;
 
 	SerializedProperty collisionType;
 	SerializedProperty planePositions;
@@ -64,6 +65,7 @@ public partial class GPUParticleSystemEditor : Editor
 
 	SerializedProperty useMeshTarget;
 	SerializedProperty useMeshFilter;
+	SerializedProperty targetIsSameMeshAsEmitter;
 	SerializedProperty meshTarget;
 	SerializedProperty meshFilterTarget;
 	SerializedProperty meshTargetResolution;
@@ -82,6 +84,8 @@ public partial class GPUParticleSystemEditor : Editor
 	SerializedProperty motionVectorStrength;
 	SerializedProperty castShadows;
 	SerializedProperty receiveShadows;
+
+	SerializedProperty followSpeed;
 
 	//Enums
 	SerializedProperty particleType;
@@ -125,46 +129,47 @@ public partial class GPUParticleSystemEditor : Editor
 	#endregion
 
 	[MenuItem("GameObject/Effects/GPU Particle System", false, 2000)]
-    public static void NewGPUParticleSystem()
-    {
-        GameObject g = new GameObject("GPU Particle System");
-        g.AddComponent<GPUParticleSystem>();
-        g.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-    }
+	public static void NewGPUParticleSystem()
+	{
+		GameObject g = new GameObject("GPU Particle System");
+		g.AddComponent<GPUParticleSystem>();
+		g.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+	}
 
-    private void OnEnable()
-    {
-        playOnAwake = serializedObject.FindProperty("playOnAwake");
-        loop = serializedObject.FindProperty("loop");
-        effectLength = serializedObject.FindProperty("effectLength");
-        maxParticles = serializedObject.FindProperty("maxParticles");
-        bufferWidth = serializedObject.FindProperty("bufferWidth");
-        bufferHeight = serializedObject.FindProperty("bufferHeight");
-        useFixedDeltaTime = serializedObject.FindProperty("useFixedDeltaTime");
-        fixedDeltaTime = serializedObject.FindProperty("fixedDeltaTime");
+	private void OnEnable()
+	{
+		playOnAwake = serializedObject.FindProperty("playOnAwake");
+		loop = serializedObject.FindProperty("loop");
+		effectLength = serializedObject.FindProperty("effectLength");
+		maxParticles = serializedObject.FindProperty("maxParticles");
+		bufferWidth = serializedObject.FindProperty("bufferWidth");
+		bufferHeight = serializedObject.FindProperty("bufferHeight");
+		useFixedDeltaTime = serializedObject.FindProperty("useFixedDeltaTime");
+		fixedDeltaTime = serializedObject.FindProperty("fixedDeltaTime");
 		timeScale = serializedObject.FindProperty("timeScale");
+		seed = serializedObject.FindProperty("seed");
 
 		param1 = serializedObject.FindProperty("param1");
-        param2 = serializedObject.FindProperty("param2");
-        param3 = serializedObject.FindProperty("param3");
-        param4 = serializedObject.FindProperty("param4");
-        randomness = serializedObject.FindProperty("randomness");
-        emitFromShell = serializedObject.FindProperty("emitFromShell");
-        emitFromBase = serializedObject.FindProperty("emitFromBase");
+		param2 = serializedObject.FindProperty("param2");
+		param3 = serializedObject.FindProperty("param3");
+		param4 = serializedObject.FindProperty("param4");
+		randomness = serializedObject.FindProperty("randomness");
+		emitFromShell = serializedObject.FindProperty("emitFromShell");
+		emitFromBase = serializedObject.FindProperty("emitFromBase");
 		bursts = serializedObject.FindProperty("bursts");
 
 		useRotation = serializedObject.FindProperty("useRotation");
-        useMaxVelocity = serializedObject.FindProperty("useMaxVelocity");
-        useCircularForce = serializedObject.FindProperty("useCircularForce");
+		useMaxVelocity = serializedObject.FindProperty("useMaxVelocity");
+		useCircularForce = serializedObject.FindProperty("useCircularForce");
 		circularForceCenter = serializedObject.FindProperty("circularForceCenter");
 		useInheritVelocity = serializedObject.FindProperty("useInheritVelocity");
-		
-		gravity = serializedObject.FindProperty("gravity");
-        inheritVelocity = serializedObject.FindProperty("inheritVelocity");
-        airResistance = serializedObject.FindProperty("airResistance");
 
-        mainTexture = serializedObject.FindProperty("mainTexture");
-        useZbuffer = serializedObject.FindProperty("useZbuffer");
+		gravity = serializedObject.FindProperty("gravity");
+		inheritVelocity = serializedObject.FindProperty("inheritVelocity");
+		airResistance = serializedObject.FindProperty("airResistance");
+
+		mainTexture = serializedObject.FindProperty("mainTexture");
+		useZbuffer = serializedObject.FindProperty("useZbuffer");
 		motionVectors = serializedObject.FindProperty("motionVectors");
 		textureSheetMode = serializedObject.FindProperty("textureSheetMode");
 		textureSheetRandomIndex = serializedObject.FindProperty("textureSheetRandomIndex");
@@ -172,8 +177,8 @@ public partial class GPUParticleSystemEditor : Editor
 		columns = serializedObject.FindProperty("columns");
 
 		vectorNoise = serializedObject.FindProperty("vectorNoise");
-        fgaFile = serializedObject.FindProperty("fgaFile");
-        vectorField = serializedObject.FindProperty("vectorField");
+		fgaFile = serializedObject.FindProperty("fgaFile");
+		vectorField = serializedObject.FindProperty("vectorField");
 
 		collisionType = serializedObject.FindProperty("collisionType");
 		planePositions = serializedObject.FindProperty("planePositions");
@@ -226,6 +231,7 @@ public partial class GPUParticleSystemEditor : Editor
 		attractors = serializedObject.FindProperty("attractors");
 		useMeshTarget = serializedObject.FindProperty("useMeshTarget");
 		useMeshFilter = serializedObject.FindProperty("useMeshFilter");
+		targetIsSameMeshAsEmitter = serializedObject.FindProperty("targetIsSameMeshAsEmitter");
 		meshTarget = serializedObject.FindProperty("meshTarget");
 		meshFilterTarget = serializedObject.FindProperty("meshFilterTarget");
 		meshTargetResolution = serializedObject.FindProperty("meshTargetResolution");
@@ -242,6 +248,8 @@ public partial class GPUParticleSystemEditor : Editor
 		receiveShadows = serializedObject.FindProperty("receiveShadows");
 		renderQueue = serializedObject.FindProperty("renderQueue");
 
+		followSpeed = serializedObject.FindProperty("followSpeed");
+
 		image = new Texture2D(1, 1);
 		image.LoadImage(System.IO.File.ReadAllBytes(Application.dataPath + "/Ultimate GPU Particle System/Resources/Logo.png"));
 		image.Apply();
@@ -250,8 +258,8 @@ public partial class GPUParticleSystemEditor : Editor
 	private Texture2D image;
 
 	public override void OnInspectorGUI()
-    {
-        particleSystem = (GPUParticleSystem)target;
+	{
+		particleSystem = (GPUParticleSystem)target;
 
 		if (particleSystem.gameObject.scene.name == null)
 		{
@@ -299,9 +307,17 @@ public partial class GPUParticleSystemEditor : Editor
 				GUILayout.Space(15f);
 
 				EditorGUI.BeginChangeCheck();
-				bufferWidth.intValue = EditorGUILayout.DelayedIntField("Buffer Width", bufferWidth.intValue);
-				bufferHeight.intValue = EditorGUILayout.DelayedIntField("Buffer Height", bufferHeight.intValue);
-				EditorGUILayout.LabelField("Max Particles:", maxParticles.intValue.ToString());
+				if (particleSystem.particleType == GPUParticleSystem.ParticleType.Trails)
+				{
+					bufferHeight.intValue = EditorGUILayout.DelayedIntField("Num Trails", bufferHeight.intValue);
+					bufferWidth.intValue = EditorGUILayout.DelayedIntField("Num Segments", bufferWidth.intValue);
+				}
+				else
+				{
+					bufferWidth.intValue = EditorGUILayout.DelayedIntField("Buffer Width", bufferWidth.intValue);
+					bufferHeight.intValue = EditorGUILayout.DelayedIntField("Buffer Height", bufferHeight.intValue);
+					EditorGUILayout.LabelField("Max Particles:", maxParticles.intValue.ToString());
+				}
 
 				if (EditorGUI.EndChangeCheck())
 				{
@@ -326,7 +342,14 @@ public partial class GPUParticleSystemEditor : Editor
 				EditorGUI.EndDisabledGroup();
 
 				timeScale.floatValue = EditorGUILayout.FloatField("Time Scale", timeScale.floatValue);
-				//DrawSingleFloatCurveToggleBundelSimple(particleSystem.timeScale, "timeScale", "Time Scale");
+
+				EditorGUI.BeginChangeCheck();
+				seed.intValue = EditorGUILayout.DelayedIntField("Seed", seed.intValue);
+				if (EditorGUI.EndChangeCheck())
+				{
+					serializedObject.ApplyModifiedProperties();
+					particleSystem.ResetSeed();
+				}
 
 				EditorGUILayout.BeginVertical("Box");
 				{
@@ -419,7 +442,7 @@ public partial class GPUParticleSystemEditor : Editor
 					{
 						particleSystem.DeactivateSkinnedMeshEmitter();
 					}
-					
+
 				}
 
 				DrawEmitterOptions(particleSystem.emitterShape);
@@ -535,7 +558,7 @@ public partial class GPUParticleSystemEditor : Editor
 						particleSystem.SetRotationKeyword();
 					}
 
-					if(useRotation.boolValue)
+					if (useRotation.boolValue)
 					{
 						DrawFloatCurveBundel(particleSystem.startRotation, "startRotation", "Start rotation");
 					}
@@ -605,29 +628,29 @@ public partial class GPUParticleSystemEditor : Editor
 				}
 
 				GUILayout.Space(5f);
-				
+
+				EditorGUI.BeginChangeCheck();
+				useMaxVelocity.boolValue = DrawOnOffToggleBundle(useMaxVelocity.boolValue, "Enable max velocity");
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					serializedObject.ApplyModifiedProperties();
+					particleSystem.SetLimitVelocity();
+				}
+
+				EditorGUI.BeginDisabledGroup(!useMaxVelocity.boolValue);
+				{
 					EditorGUI.BeginChangeCheck();
-					useMaxVelocity.boolValue = DrawOnOffToggleBundle(useMaxVelocity.boolValue, "Enable max velocity");
+					DrawSingleFloatCurveBundel(particleSystem.maxVelocity, "maxVelocity", "Max velocity");
 
 					if (EditorGUI.EndChangeCheck())
 					{
 						serializedObject.ApplyModifiedProperties();
-						particleSystem.SetLimitVelocity();
+						particleSystem.UpdateMaxVelocityOverLifetime();
 					}
-				
-					EditorGUI.BeginDisabledGroup(!useMaxVelocity.boolValue);
-					{
-						EditorGUI.BeginChangeCheck();
-						DrawSingleFloatCurveBundel(particleSystem.maxVelocity, "maxVelocity", "Max velocity");
+				}
+				EditorGUI.EndDisabledGroup();
 
-						if (EditorGUI.EndChangeCheck())
-						{
-							serializedObject.ApplyModifiedProperties();
-							particleSystem.UpdateMaxVelocityOverLifetime();
-						}
-					}
-					EditorGUI.EndDisabledGroup();
-				
 			}
 			EditorGUILayout.EndHorizontal();
 		}
@@ -952,6 +975,11 @@ public partial class GPUParticleSystemEditor : Editor
 				{
 					useMeshFilter.boolValue = DrawOnOffToggle(useMeshFilter.boolValue, "Use Mesh Filter");
 
+					if (particleSystem.emitterShape == GPUParticleSystem.EmitterShape.Mesh || particleSystem.emitterShape == GPUParticleSystem.EmitterShape.Mesh)
+					{
+						targetIsSameMeshAsEmitter.boolValue = DrawOnOffToggle(targetIsSameMeshAsEmitter.boolValue, "Use Mesh Emitter");
+					}
+
 					if (!useMeshFilter.boolValue)
 					{
 						EditorGUI.BeginChangeCheck();
@@ -963,14 +991,18 @@ public partial class GPUParticleSystemEditor : Editor
 						}
 						EditorGUILayout.EndHorizontal();
 
-						EditorGUILayout.PropertyField(meshTargetBakeTyp);
-
-						EditorGUILayout.BeginHorizontal();
+						EditorGUI.BeginDisabledGroup(targetIsSameMeshAsEmitter.boolValue);
 						{
-							EditorGUILayout.PrefixLabel("Resolution");
-							meshTargetResolution.intValue = EditorGUILayout.IntSlider(meshTargetResolution.intValue, 8, 256);
+							EditorGUILayout.PropertyField(meshTargetBakeTyp);
+
+							EditorGUILayout.BeginHorizontal();
+							{
+								EditorGUILayout.PrefixLabel("Resolution");
+								meshTargetResolution.intValue = EditorGUILayout.IntSlider(meshTargetResolution.intValue, 8, 256);
+							}
+							EditorGUILayout.EndHorizontal();
 						}
-						EditorGUILayout.EndHorizontal();
+						EditorGUI.EndDisabledGroup();
 
 						if (EditorGUI.EndChangeCheck())
 						{
@@ -999,14 +1031,18 @@ public partial class GPUParticleSystemEditor : Editor
 						}
 						EditorGUILayout.EndHorizontal();
 
-						EditorGUILayout.PropertyField(meshTargetBakeTyp);
-
-						EditorGUILayout.BeginHorizontal();
+						EditorGUI.BeginDisabledGroup(targetIsSameMeshAsEmitter.boolValue);
 						{
-							EditorGUILayout.PrefixLabel("Resolution");
-							meshTargetResolution.intValue = EditorGUILayout.IntSlider(meshTargetResolution.intValue, 8, 256);
+							EditorGUILayout.PropertyField(meshTargetBakeTyp);
+
+							EditorGUILayout.BeginHorizontal();
+							{
+								EditorGUILayout.PrefixLabel("Resolution");
+								meshTargetResolution.intValue = EditorGUILayout.IntSlider(meshTargetResolution.intValue, 8, 256);
+							}
+							EditorGUILayout.EndHorizontal();
 						}
-						EditorGUILayout.EndHorizontal();
+						EditorGUI.EndDisabledGroup();
 
 						if (EditorGUI.EndChangeCheck())
 						{
@@ -1023,6 +1059,12 @@ public partial class GPUParticleSystemEditor : Editor
 							serializedObject.ApplyModifiedProperties();
 							particleSystem.UpdateMeshTargetParameters();
 						}
+					}
+
+					if (GUILayout.Button("Update"))
+					{
+						serializedObject.ApplyModifiedProperties();
+						particleSystem.UpdateMeshTargetTexture();
 					}
 				}
 
@@ -1146,7 +1188,11 @@ public partial class GPUParticleSystemEditor : Editor
 				{
 					serializedObject.ApplyModifiedProperties();
 					particleSystem.ForceRecreateParticles();
+					particleSystem.UpdateParticleTypeKeywords();
 					particleSystem.SetParticleTypeKeyword(particleSystem.particleType);
+					particleSystem.ClearParticleData();
+					particleSystem.PrepareParticleData();
+					particleSystem.ForceRecreateParticles();
 				}
 
 				DrawParticleTypeOptions(particleSystem.particleType);
@@ -1372,6 +1418,7 @@ public partial class GPUParticleSystemEditor : Editor
 							serializedObject.ApplyModifiedProperties();
 							particleSystem.SetShadowSettings();
 						}
+
 						break;
 
 					case (int)GPUParticleSystem.LightMode.Refraction:

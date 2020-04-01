@@ -34,6 +34,12 @@
 		_ForceOverLifetime("Force over lifetime", vector) = (0,0,0,0)
 		_CircularForceOverLifetime("Circular force over lifetime", vector) = (0,0,0,0)
 		_CircularForceCenter("Center point of circular force", vector) = (0,0,0,0)
+
+		//Trails
+		_FollowSegment("Follow Segment", float) = 1
+		_FollowSpeed("Follow Speed", float) = 15
+
+			_MeshTarget("Mesh Target Points", 2D) = "white" {}
 	}
 		SubShader
 		{
@@ -53,6 +59,7 @@
 				#pragma shader_feature_local __ LIMITVELOCITY
 				#pragma shader_feature_local __ TEXTURE VECTORFIELDS
 				#pragma shader_feature_local __ CIRCULAR_FORCE
+				#pragma shader_feature_local __ TRAILS
 
 				#include "UnityCG.cginc"
 				#include "../Includes/GPUParticles.cginc"
@@ -112,32 +119,27 @@
 				float4x4 _WorldToLocalMatrix;
 				float4x4 _CameraToWorldMatrix;
 				float4x4 _MVP;
-				float4x4 _ViewProjectInverse;/////////////////
 				float4 _FarClippingPlane;
 				float4 _CameraPosition;
 				float _PositionDamping;
 				float _DampingRandomness;
 				float _CollisionDistance;
-				float3 _TL;
-				float3 _TR;
-				float3 _BL;
-				float3 _BR;
-				sampler2D _FCP;
-				float4x4 _InverseProjMatrix;
+
+				float _TexelWidth;
+				float _FollowSegment;
+				float _FollowSpeed;
 
 				struct appdata
 				{
 					float4 vertex : POSITION;
 					float2 uv : TEXCOORD0;
-					float4 ray : TEXCOORD1;
 				};
 
 				struct v2f
 				{
 					float4 vertex : SV_POSITION;
 					float2 uv : TEXCOORD0;
-					float4 ray : TEXCOORD1;
-					float4 gravity : TEXCOORD2;
+					float4 gravity : TEXCOORD1;
 				};
 
 				v2f vert (appdata v)
@@ -146,13 +148,12 @@
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					o.gravity = float4(0,1,0,0) * _Gravity;
 					o.uv = v.uv;
-					o.ray = v.ray;
 					return o;
 				}
 		
 			float4 frag (v2f i) : SV_Target
 			{
-				fixed particle = tex2D(_NewParticle, i.uv).r;
+				fixed isNew = tex2D(_NewParticle, i.uv).r;
 				float4 meta = tex2D(_Meta, i.uv);
 				float4 vel = tex2D(_Velocity, i.uv);
 				float4 pos = tex2D(_Position, i.uv);
@@ -165,6 +166,11 @@
 				float4 result0 = float4(0,0,0,0);//Particle is new
 				float4 result1 = float4(0,0,0,0);//Particle is not new and it is alive
 				float4 result2 = float4(0,0,0,0);//Particle is dead
+
+				#if TRAILS
+					//result1 = lerp(vel, tex2D(_Velocity, i.uv - float2(_FollowSegment, 0.0)), _FollowSpeed * _CustomDeltaTime);
+					//i.uv.x = _FollowSegment;
+				#endif
 
 				#ifdef LOCALSIM
 					//Local Simulation
@@ -235,7 +241,7 @@
 						result0 =  GetRandomVelocity(i.uv, StartSpeed) + _EmitterVelocity;
 					#endif
 				#endif
-								
+
 				float4 turb3D = float4(0,0,0,0);
 
 				#ifdef VECTORFIELDS
@@ -278,7 +284,7 @@
 					vel.xyz = lerp(vel.xyz, vel.xyz + error, _OnTarget);
 				#endif
 
-				float Damping = 1-(_AirResistance * _CustomDeltaTime);
+				float Damping = 1 - (_AirResistance * _CustomDeltaTime);
 				
 				#ifdef LIMITVELOCITY
 					#ifdef VECTORFIELDS
@@ -288,7 +294,7 @@
 					#endif
 				#else
 					#ifdef VECTORFIELDS
-						result1 = ((vel* _Tightness) + (turb3D * _CustomDeltaTime) - (i.gravity * _CustomDeltaTime)) * Damping;//Add Air resistance
+						result1 = ((vel * _Tightness) + (turb3D * _CustomDeltaTime) - (i.gravity * _CustomDeltaTime)) * Damping;//Add Air resistance
 					#else
 						result1 = (vel + (turb2D * _CustomDeltaTime) - (i.gravity * _CustomDeltaTime)) * Damping;//Add Air resistance
 					#endif
@@ -365,10 +371,19 @@
 						}
 					}
 				#endif
+					
+				#if TRAILS
+					if (i.uv.x > _FollowSegment)
+					{
+						result0 = float4(0, 0, 0, 0);
+						result1 = lerp(vel, tex2D(_Velocity, i.uv - float2(_FollowSegment, 0.0)), clamp(_FollowSpeed * _CustomDeltaTime,0.01,1));
+					}
+				#endif
 
 				int isAlive = (sign(_CustomTime - meta.g) + 1.0) / 2.0;
+
 				float4 finalResult = lerp(result1, result2, isAlive);
-				finalResult = lerp(result0, finalResult, particle);
+				finalResult = lerp(result0, finalResult, isNew);
 				return finalResult;
 			}
 			ENDCG

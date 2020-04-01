@@ -11,10 +11,10 @@ namespace AmplifyShaderEditor
 #if UNITY_2018_3_OR_NEWER
 		private readonly string[] SRPTime =
 		{
-			"( _TimeParameters.y * 0.05 )",
-			"( _TimeParameters.y )",
-			"( _TimeParameters.y * 2 )",
-			"( _TimeParameters.y * 3 )",
+			"( _TimeParameters.x * 0.05 )",
+			"( _TimeParameters.x )",
+			"( _TimeParameters.x * 2 )",
+			"( _TimeParameters.x * 3 )",
 		};
 #endif
 		protected override void CommonInit( int uniqueId )

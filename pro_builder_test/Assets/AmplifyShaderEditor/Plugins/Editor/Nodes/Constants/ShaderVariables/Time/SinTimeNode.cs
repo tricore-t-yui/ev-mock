@@ -14,10 +14,10 @@ namespace AmplifyShaderEditor
 #if UNITY_2018_3_OR_NEWER
 		private readonly string[] SRPTime =
 		{
-			"sin( _TimeParameters.y * 0.125 )",
-			"sin( _TimeParameters.y * 0.25 )",
-			"sin( _TimeParameters.y * 0.5 )",
-			"sin( _TimeParameters.y )",
+			"sin( _TimeParameters.x * 0.125 )",
+			"sin( _TimeParameters.x * 0.25 )",
+			"sin( _TimeParameters.x * 0.5 )",
+			"_TimeParameters.y",
 		};
 #endif
 		protected override void CommonInit( int uniqueId )

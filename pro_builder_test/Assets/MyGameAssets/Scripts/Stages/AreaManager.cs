@@ -38,9 +38,6 @@ public class AreaManager : MonoBehaviour
                 areaEnterWatcher.SetOnExitDelegate(OnExit);
             }
         }
-
-        // マウスカーソルロック
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>

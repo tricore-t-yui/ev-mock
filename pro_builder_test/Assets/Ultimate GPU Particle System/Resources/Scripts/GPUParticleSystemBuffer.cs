@@ -27,6 +27,8 @@ public class GPUParticleSystemBuffer
     public RenderTexture positionBuffer_2;
     public RenderTexture velocityBuffer_2;
 
+	public Texture2D randomBuffer;
+
 	private Vector4 vector;
 	private Vector4[] vec;
 	private float[] stren;
@@ -42,7 +44,7 @@ public class GPUParticleSystemBuffer
 	#endregion
 
 	#region Functions
-	public GPUParticleSystemBuffer(int width, int height, RenderTextureFormat precision)
+	public GPUParticleSystemBuffer(int width, int height, RenderTextureFormat precision, GPUParticleSystem.ParticleType particleType, int seed)
     {
         newParticleBuffer = new RenderTexture(width, height, 0, RenderTextureFormat.R8);
  
@@ -53,8 +55,8 @@ public class GPUParticleSystemBuffer
         metaBuffer_2 = new RenderTexture(width, height, 0, precision);
         positionBuffer_2 = new RenderTexture(width, height, 0, precision);
         velocityBuffer_2 = new RenderTexture(width, height, 0, precision);
-        
-        newParticleBuffer.name = "New Particles";
+		
+		newParticleBuffer.name = "New Particles";
 
         metaBuffer_1.name = "Meta 1";
         positionBuffer_1.name = "Position 1";
@@ -64,6 +66,8 @@ public class GPUParticleSystemBuffer
         positionBuffer_2.name = "Position 2";
         velocityBuffer_2.name = "Velocity 2";
 
+		newParticleBuffer.name = "Random Buffer";
+
         newParticleBuffer.filterMode = FilterMode.Point;
         metaBuffer_1.filterMode = FilterMode.Point;
         positionBuffer_1.filterMode = FilterMode.Point;
@@ -71,6 +75,7 @@ public class GPUParticleSystemBuffer
         metaBuffer_2.filterMode = FilterMode.Point;
         positionBuffer_2.filterMode = FilterMode.Point;
         velocityBuffer_2.filterMode = FilterMode.Point;
+		newParticleBuffer.filterMode = FilterMode.Point;
 
 		metaBuffer_1.autoGenerateMips = false;
         positionBuffer_1.autoGenerateMips = false;
@@ -78,6 +83,7 @@ public class GPUParticleSystemBuffer
         metaBuffer_2.autoGenerateMips = false;
         positionBuffer_2.autoGenerateMips = false;
         velocityBuffer_2.autoGenerateMips = false;
+		newParticleBuffer.autoGenerateMips = false;
 
         metaBuffer_1.Create();
         positionBuffer_1.Create();
@@ -86,6 +92,8 @@ public class GPUParticleSystemBuffer
         metaBuffer_2.Create();
         positionBuffer_2.Create();
         velocityBuffer_2.Create();
+
+		newParticleBuffer.Create();
 		
 		if (calculateSpawn == null)
 		{
@@ -117,6 +125,15 @@ public class GPUParticleSystemBuffer
 			resetPosition = new Material(Shader.Find("GPUParticles/Internal/ResetPositionBuffer"));
 		}
 
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			resetPosition.EnableKeyword("TRAILS");
+		}
+		else
+		{
+			resetPosition.DisableKeyword("TRAILS");
+		}
+
         calculateMeta.SetTexture("_NewParticle", newParticleBuffer);
         calculateMeta.SetTexture("_Meta", metaBuffer_1);
         calculateMeta.SetTexture("_Position", positionBuffer_1);
@@ -131,53 +148,67 @@ public class GPUParticleSystemBuffer
         calculatePosition.SetTexture("_Velocity", velocityBuffer_1);
         calculatePosition.SetTexture("_Position", positionBuffer_1);
 
-		//Set up Position Buffer with Random Value
-        Texture2D TextureBuffer1 = new Texture2D(width, height, TextureFormat.RGBAFloat, false);
-        TextureBuffer1.filterMode = FilterMode.Point;
+		ResetSeed(seed, width, height);
 
-        Color[] c = new Color[width * height];
+		//Set randomness
+		Graphics.Blit(positionBuffer_1, positionBuffer_2, resetPosition);
+		Graphics.CopyTexture(positionBuffer_2, positionBuffer_1);
 
-        for (int i = 0; i < c.Length; i++)
-        {
-            c[i] = new Color(
-                0f,
-                0f,
-                0f,
-                Random.Range(0.0f, 1.0f));
-        }
-
-        TextureBuffer1.SetPixels(c);
-        TextureBuffer1.Apply(false);
-
-        Graphics.Blit(TextureBuffer1, positionBuffer_1);
-        
-		//Graphics.Blit(null, positionBuffer_1, resetPosition);
-		Setup(width, height);
+		Setup(width, height, particleType);
     }
 
     public void Reset()
     {
-        Graphics.Blit(metaBuffer_1, metaBuffer_1, resetMeta, 0);
+		Graphics.Blit(metaBuffer_1, metaBuffer_1, resetMeta, 0);
         Graphics.Blit(velocityBuffer_1, velocityBuffer_1, resetMeta);
-		//Graphics.Blit(null, positionBuffer_1, resetPosition);
-		//Graphics.Blit(null, positionBuffer_2, resetPosition);
-		Graphics.Blit(positionBuffer_1, positionBuffer_2, resetPosition);
-		Graphics.CopyTexture(positionBuffer_2, positionBuffer_1);
+
+		if (positionBuffer_1 != null && positionBuffer_2 != null)
+		{
+			Graphics.Blit(positionBuffer_1, positionBuffer_2, resetPosition);
+			Graphics.CopyTexture(positionBuffer_2, positionBuffer_1);
+		}
+	}
+
+	public void ResetSeed(int seed, int width, int height)
+	{
+		Random.InitState(seed);
+		int num = width * height;
+		Color[] c = new Color[num];
+
+		for (int i = 0; i < num; i++)
+		{
+			c[i] = new Color(Random.Range(0f, 1f), 0f, 0f, 0f);
+		}
+
+		randomBuffer = new Texture2D(width, height, TextureFormat.RFloat, false);
+		randomBuffer.filterMode = FilterMode.Point;
+		randomBuffer.SetPixels(c, 0);
+		randomBuffer.Apply(false);
+		resetPosition.SetTexture("_RandomValues", randomBuffer);
 	}
 	#endregion
 
 	#region Setup
-	private void Setup(int width, int height)
+	private void Setup(int width, int height, GPUParticleSystem.ParticleType particleType)
     {
-        SetUpSpawnMaterial(width, height);
+        SetUpSpawnMaterial(width, height, particleType);
         SetUpMetaMaterial();
-        SetUpVelocityMaterial();
-        SetUpPositionMaterial();
+        SetUpVelocityMaterial(particleType, width);
+        SetUpPositionMaterial(particleType, width);
         SetUpResetPositionMaterial();
     }
 
-    private void SetUpSpawnMaterial(int width, int height)
+    private void SetUpSpawnMaterial(int width, int height, GPUParticleSystem.ParticleType particleType)
     {
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			calculateSpawn.EnableKeyword("TRAILS");
+		}
+		else
+		{
+			calculateSpawn.DisableKeyword("TRAILS");
+		}
+
         calculateSpawn.SetInt("_MapWidth", width);
         calculateSpawn.SetInt("_MapHeight", height);
     }
@@ -189,17 +220,37 @@ public class GPUParticleSystemBuffer
         calculateMeta.SetTexture("_Position", positionBuffer_1);
     }
 
-    private void SetUpVelocityMaterial()
+    private void SetUpVelocityMaterial(GPUParticleSystem.ParticleType particleType, int width)
     {
-        calculateVelocity.SetTexture("_NewParticle", newParticleBuffer);
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			calculateVelocity.EnableKeyword("TRAILS");
+			calculateVelocity.SetFloat("_FollowSegment", 1f / (float)width);
+		}
+		else
+		{
+			calculateVelocity.DisableKeyword("TRAILS");
+		}
+
+		calculateVelocity.SetTexture("_NewParticle", newParticleBuffer);
         calculateVelocity.SetTexture("_Meta", metaBuffer_1);
         calculateVelocity.SetTexture("_Position", positionBuffer_1);
         calculateVelocity.SetTexture("_Velocity", velocityBuffer_1);
     }
 
-    private void SetUpPositionMaterial()
+	private void SetUpPositionMaterial(GPUParticleSystem.ParticleType particleType, float width)
     {
-        calculatePosition.SetTexture("_NewParticle", newParticleBuffer);
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			calculatePosition.EnableKeyword("TRAILS");
+			calculatePosition.SetFloat("_FollowSegment", 1f / (float)width);
+		}
+		else
+		{
+			calculatePosition.DisableKeyword("TRAILS");
+		}
+
+		calculatePosition.SetTexture("_NewParticle", newParticleBuffer);
         calculatePosition.SetTexture("_Meta", metaBuffer_1);
         calculatePosition.SetTexture("_Position", positionBuffer_1);
         calculatePosition.SetTexture("_Velocity", velocityBuffer_1);
@@ -212,6 +263,39 @@ public class GPUParticleSystemBuffer
 	#endregion
 
 	#region Updates
+	public void UpdateParticleTypeKeywords(GPUParticleSystem.ParticleType particleType, int width)
+	{
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			calculatePosition.EnableKeyword("TRAILS");
+			calculateVelocity.SetFloat("_FollowSegment", (1f / (float)width) / 2f);
+		}
+		else
+		{
+			calculatePosition.DisableKeyword("TRAILS");
+		}
+
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			calculateVelocity.EnableKeyword("TRAILS");
+			calculateVelocity.SetFloat("_FollowSegment", (1f / (float)width) / 2f);
+		}
+		else
+		{
+			calculateVelocity.DisableKeyword("TRAILS");
+		}
+
+		if (particleType == GPUParticleSystem.ParticleType.Trails)
+		{
+			resetPosition.EnableKeyword("TRAILS");
+		}
+		else
+		{
+			resetPosition.DisableKeyword("TRAILS");
+		}
+	}
+
+
 	public void UpdateDepthCollisionParameters(float colDist, float damping, float randomness)
 	{
 		calculateVelocity.SetFloat("_CollisionDistance", colDist);
@@ -288,7 +372,13 @@ public class GPUParticleSystemBuffer
         Graphics.Blit(positionBuffer_2, positionBuffer_1);
     }
 
-    public void UpdateGravity(float gravity)
+	public void UpdateTrailValues(float followSpeed)
+	{
+		calculateVelocity.SetFloat("_FollowSpeed", followSpeed);
+		calculatePosition.SetFloat("_FollowSpeed", followSpeed);
+	}
+
+	public void UpdateGravity(float gravity)
     {
         calculateVelocity.SetFloat("_Gravity", gravity);
     }

@@ -1267,7 +1267,7 @@ namespace AmplifyShaderEditor
 			return vertexInstructions;
 		}
 
-		public void CreateInstructionsForPort( InputPort port, string portName, bool addCustomDelimiters = false, string customDelimiterIn = null, string customDelimiterOut = null, bool ignoreLocalVar = false, bool normalIsConnected = false )
+		public void CreateInstructionsForPort( InputPort port, string portName, bool addCustomDelimiters = false, string customDelimiterIn = null, string customDelimiterOut = null, bool ignoreLocalVar = false, bool normalIsConnected = false , bool isDebugPort = false )
 		{
 			WireReference connection = port.GetConnection();
 			ParentNode node = UIUtils.GetNode( connection.NodeId );
@@ -1292,10 +1292,10 @@ namespace AmplifyShaderEditor
 				m_currentDataCollector.DirtyNormal = true;
 				m_currentDataCollector.ForceNormal = false;
 			}
-
+			
 			m_currentDataCollector.AddInstructions( addCustomDelimiters ? customDelimiterIn : ( "\t\t\t" + portName + " = " ) );
 			m_currentDataCollector.AddInstructions( newInstruction );
-			m_currentDataCollector.AddInstructions( addCustomDelimiters ? customDelimiterOut : ";\n" );
+			m_currentDataCollector.AddInstructions( addCustomDelimiters ? customDelimiterOut :((isDebugPort)?" + 1E-5;\n":";\n") );
 		}
 
 		public string CreateInstructionStringForPort( InputPort port, bool ignoreLocalVar = false )
@@ -1511,7 +1511,7 @@ namespace AmplifyShaderEditor
 				}
 				else
 				{
-					CreateInstructionsForPort( debugPort, Constants.OutputVarStr + ".Emission", false, null, null, false, false );
+					CreateInstructionsForPort( debugPort, Constants.OutputVarStr + ".Emission", false, null, null, false, false,true );
 				}
 			}
 			else

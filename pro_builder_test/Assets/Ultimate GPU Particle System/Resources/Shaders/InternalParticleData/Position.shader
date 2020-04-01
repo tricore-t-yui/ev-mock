@@ -21,6 +21,9 @@
 		_Frequency("Frequency", vector) = (0,0,0,0)
 		_Amplitude("Amplitude", vector) = (0,0,0,0)
 		_Offset("Offset", vector) = (0,0,0,0)
+
+		_FollowSegment("Follow Segment", float) = 1
+		_FollowSpeed("Follow Speed", float) = 0.1
 	}
 	SubShader
 	{
@@ -36,6 +39,7 @@
 			#pragma shader_feature_local __ LOCALSIM
 			#pragma shader_feature_local __ EMITFROMSHELL
 			#pragma shader_feature_local __ EMITFROMBASE
+			#pragma shader_feature_local __ TRAILS
 
 			#include "UnityCG.cginc"
 			#include "../Includes/GPUParticles.cginc"
@@ -76,15 +80,25 @@
 			float _CustomTime;
 			float _CustomDeltaTime;
 
+			float _TexelWidth;
+			float _FollowSegment;
+			float _FollowSpeed;
+
 			float4 frag (v2f i) : SV_Target
 			{
-				fixed particle = tex2D(_NewParticle, i.uv).r;
+				fixed isNew = tex2D(_NewParticle, i.uv).r;
 				float4 meta = tex2D(_Meta, i.uv);
 				float4 vel = tex2D(_Velocity, i.uv);
 				float4 pos = tex2D(_Position, i.uv);
 
-				float4 result0 = float4(10000,0,0,pos.a);				//Particle is dead; Reset position to 0
+				float4 result0 = float4(10000,0,0,pos.a);				//Particle is dead; Reset position 
 				float4 result1 = pos;									//Particle is alive; Set original position for further calculations
+
+				
+				#if TRAILS	
+					float2 ouv = i.uv;
+					i.uv.x = _FollowSegment;
+				#endif
 
 				#ifdef LOCALSIM
 					//Local Simulation
@@ -203,13 +217,25 @@
 					#ifdef POINT
 						result0.xyz = _EmitterPosition.xyz;
 					#endif
-				#endif	
-				
-				result1.xyz += vel.xyz * _CustomDeltaTime;
+				#endif
+					
+				#if TRAILS	
+						
+					if (ouv.x > _FollowSegment)
+					{
+						result1 = lerp(pos, tex2D(_Position, ouv - float2(_FollowSegment, 0.0)), clamp(_FollowSpeed * _CustomDeltaTime, 0.01, 1));
+					}
+					else {
+						result1.xyz += vel.xyz * _CustomDeltaTime;
+					}
+				#else
+					result1.xyz += vel.xyz * _CustomDeltaTime;
+				#endif
+
 				int isAlive = (sign(meta.g-_CustomTime) + 1.0) / 2.0;
 
 				float4 finalResult = lerp(result0, result1, isAlive);
-				finalResult = lerp(result0, finalResult, particle);
+				finalResult = lerp(result0, finalResult, isNew);
 				return finalResult;
 			}
 			ENDCG

@@ -11,11 +11,11 @@ public partial class GPUParticleSystem
 
 		if (precision == RenderTexturePrecision.Half)
 		{
-			particleData = new GPUParticleSystemBuffer(bufferWidth, bufferHeight, RenderTextureFormat.ARGBHalf);
+			particleData = new GPUParticleSystemBuffer(bufferWidth, bufferHeight, RenderTextureFormat.ARGBHalf, particleType, seed);
 		}
 		else
 		{
-			particleData = new GPUParticleSystemBuffer(bufferWidth, bufferHeight, RenderTextureFormat.ARGBFloat);
+			particleData = new GPUParticleSystemBuffer(bufferWidth, bufferHeight, RenderTextureFormat.ARGBFloat, particleType, seed);
 		}
 
 		SetLightMode();
@@ -37,28 +37,56 @@ public partial class GPUParticleSystem
 
     private void InternalEmit()
     {
-        if (startID >= maxParticles)
-        {
-			startID = 0f;
-            endID = 0f;
-        }
-
-        if (emit)
-        {
-            float cEmission = GPUParticleSystemEvaluationHelper.EvaluateFloatCurveBundle(emissionRate, progress);
-            endID += burstNum + cEmission * customDeltaTime;
-			burstNum = 0;
-
-			if (endID >= startID + 1)
-            {
-				particleData.Emit(startID, endID);
-				startID = endID;
+		if (particleType == ParticleType.Trails)
+		{
+			if (startID >= bufferHeight)
+			{
+				startID = 0f;
+				endID = 0f;
 			}
-            else
-            {
-                particleData.Emit(0f, 0f);
-            }
-        }
+
+			if (emit)
+			{
+				float cEmission = GPUParticleSystemEvaluationHelper.EvaluateFloatCurveBundle(emissionRate, progress);
+				endID += burstNum + cEmission * customDeltaTime;
+				burstNum = 0;
+
+				if (endID >= startID + 1)
+				{
+					particleData.Emit(startID, endID);
+					startID = endID;
+				}
+				else
+				{
+					particleData.Emit(0f, 0f);
+				}
+			}
+		}
+		else
+		{
+			if (startID >= maxParticles)
+			{
+				startID = 0f;
+				endID = 0f;
+			}
+
+			if (emit)
+			{
+				float cEmission = GPUParticleSystemEvaluationHelper.EvaluateFloatCurveBundle(emissionRate, progress);
+				endID += burstNum + cEmission * customDeltaTime;
+				burstNum = 0;
+
+				if (endID >= startID + 1)
+				{
+					particleData.Emit(startID, endID);
+					startID = endID;
+				}
+				else
+				{
+					particleData.Emit(0f, 0f);
+				}
+			}
+		}
     }
 
 	private void InternalEvaluateBurst()
@@ -109,6 +137,7 @@ public partial class GPUParticleSystem
 		UpdateEmitterTexture();
 		UpdateMeshTargetTexture();
 		UpdateMeshTargetParameters();
+		SetLayer();
 
 		if (emitterShape == EmitterShape.SkinnedMeshRenderer)
 		{
@@ -169,6 +198,7 @@ public partial class GPUParticleSystem
 		UpdateMotionVectorStrength();
 		UpdateAspectRatio();
 		UpdatePositionOffset();
+		UpdateDistributionMatrices();
 
 		if (meshTarget != null)
 		{
@@ -214,7 +244,7 @@ public partial class GPUParticleSystem
 			UpdateCollisionMatrices();
 		}
 
-		//Debug.Log(skinnedMeshEmitterCam.cullingMask);
+		particleData.UpdateTrailValues(followSpeed);
 	}
 
     public void EmitNumParticles(int numParticles)
@@ -256,20 +286,13 @@ public partial class GPUParticleSystem
 					particleMeshes = GPUParticleSystemMeshUtility.CreateMeshParticles(meshParticle, bufferWidth, bufferHeight, particleMaterial, true);
 				}
 				break;
-			/*
-			case ParticleType.AnimatedMesh:
-				if (meshParticle == null)
-				{
-					Debug.LogWarning("[GPUP] No particles created, assign a Mesh!");
-				}
-				else
-				{
-					particleMeshes = GPUParticleSystemMeshUtility.CreateMeshParticles(meshParticle, bufferWidth, bufferHeight, particleMaterial, true);
-				}
-				break;
-			*/
+
 			case ParticleType.StretchedTail:
 				particleMeshes = GPUParticleSystemMeshUtility.CreateParticlesDoubleQuad(bufferWidth, bufferHeight, particleMaterial);
+				break;
+
+			case ParticleType.Trails:
+				particleMeshes = GPUParticleSystemMeshUtility.CreateTrails(bufferWidth, bufferHeight, particleMaterial);
 				break;
 
 			default:
@@ -331,6 +354,27 @@ public partial class GPUParticleSystem
 	#endregion
 
 	#region MaterialManagement
+	public void UpdateParticleTypeKeywords()
+	{
+#if UNITY_EDITOR
+		if (!firstTimeSwitchedToTrails)
+		{
+			bufferWidth = 32;
+			bufferHeight = 256;
+			emissionRate.value1 = 15f;
+			startLifetime.value1 = 5f;
+			firstTimeSwitchedToTrails = true;
+		}
+#endif
+
+		particleData.UpdateParticleTypeKeywords(particleType, bufferWidth);
+	}
+
+	public void UpdateTrailValues()
+	{
+		particleData.UpdateTrailValues(followSpeed);
+	}
+
 	public void UpdatePositionOffset()
 	{
 		particleMaterial.SetVector("_PositionOffset", offset);
@@ -513,6 +557,12 @@ public partial class GPUParticleSystem
 		UpdateskinnedMeshEmitterPositionTexture();
 	}
 
+	public void UpdateDistributionMatrices()
+	{
+			
+	}
+
+
 	public void DeactivateSkinnedMeshEmitter()
 	{
 		if (skinnedMeshEmitterCam != null)
@@ -628,34 +678,63 @@ public partial class GPUParticleSystem
 	{
 		if (!useMeshFilter)
 		{
-			if (meshTarget == null)
+			if (emitterShape == EmitterShape.Mesh || emitterShape == EmitterShape.MeshFilter && targetIsSameMeshAsEmitter)
 			{
-				return;
-			}
+				if (meshTargetPositionTexture != null)
+				{
+					DestroyImmediate(meshTargetPositionTexture);
+				}
 
-			meshTargetPositionTexture = GPUParticleSystemMeshUtility.MeshToTexture(meshTarget, targetBakeType, meshTargetResolution);
-			particleData.UpdateMeshTargetTexture(meshTargetPositionTexture);
+				particleData.UpdateMeshTargetTexture(meshEmitterPositionTexture);
+			}
+			else
+			{
+				if (meshTarget == null)
+				{
+					return;
+				}
+
+				meshTargetPositionTexture = GPUParticleSystemMeshUtility.MeshToPosition(meshTarget, targetBakeType, meshTargetResolution);
+				particleData.UpdateMeshTargetTexture(meshTargetPositionTexture);
+			}
+			
 		}
 		else
 		{
-			if (meshFilterTarget == null)
+			if ((emitterShape == EmitterShape.Mesh || emitterShape == EmitterShape.MeshFilter) && targetIsSameMeshAsEmitter)
 			{
-				//Debug.Log("Please assign a mesh filter.");
-				return;
+				if (meshTargetPositionTexture != null)
+				{
+					DestroyImmediate(meshTargetPositionTexture);
+				}
+
+				particleData.UpdateMeshTargetTexture(meshEmitterPositionTexture);
 			}
-
-			meshTarget = meshFilterTarget.sharedMesh;
-
-			if (meshTarget == null)
+			else
 			{
-				//Debug.Log("Mesh filter does not have a mesh.");
-				return;
-			}
+				if (meshFilterTarget == null)
+				{
+					Debug.LogWarning("Please assign a mesh filter.");
+					return;
+				}
 
-			meshTargetPositionTexture = GPUParticleSystemMeshUtility.MeshToTexture(meshTarget, targetBakeType, meshTargetResolution);
-			//meshTargetPositionTexture.name = "Mesh target positions";
-			particleData.UpdateMeshTargetTexture(meshTargetPositionTexture);
+				meshTarget = meshFilterTarget.sharedMesh;
+
+				if (meshTarget == null)
+				{
+					Debug.LogWarning("Mesh filter does not have a mesh.");
+					return;
+				}
+
+				meshTargetPositionTexture = GPUParticleSystemMeshUtility.MeshToPosition(meshTarget, targetBakeType, meshTargetResolution);
+				particleData.UpdateMeshTargetTexture(meshTargetPositionTexture);
+			}
 		}
+	}
+
+	public void ResetSeed()
+	{
+		particleData.ResetSeed(seed, bufferWidth, bufferHeight);
 	}
 
 	public void UpdateMeshTargetParameters()
@@ -1251,10 +1330,6 @@ public partial class GPUParticleSystem
             case ParticleType.Mesh:
                 particleMaterial.EnableKeyword("MESH");
                 break;
-
-			//case ParticleType.AnimatedMesh:
-			//    particleMaterial.EnableKeyword("ANIMATED_MESH");
-			//    break;
 		}
 	}
 
@@ -1471,10 +1546,20 @@ public partial class GPUParticleSystem
 					break;
 			}
 		}
-		
+
+
+		if (particleType == ParticleType.Trails)
+		{
+			particleMaterial.EnableKeyword("TRAILS");
+		}
+		else
+		{
+			particleMaterial.DisableKeyword("TRAILS");
+		}
+
 	}
 
-    public void SetBlendMode()
+	public void SetBlendMode()
     {
         switch (blendMode)
         {
@@ -1576,6 +1661,14 @@ public partial class GPUParticleSystem
                 break;
         }
     }
+
+	public void SetLayer()
+	{
+		for (int i = 0; i < particleMeshes.Length; i++)
+		{
+			particleMeshes[i].layer = gameObject.layer;
+		}
+	}
 
     public void SetZBuffer()
     {
