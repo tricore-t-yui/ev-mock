@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3032300207041409029}
   - component: {fileID: 6447134026487542092}
   - component: {fileID: 2627340818071056542}
+  - component: {fileID: 3989310904343771105}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -143,10 +145,21 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  m_SelectedVertices: 0000000001000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
+--- !u!65 &3989310904343771105
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110957649094746478}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.017752111, y: 3.5210917, z: 4.25}
+  m_Center: {x: -0.09012419, y: 0.65054595, z: 0.73}
 --- !u!1 &2945668490532603852
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,6 +205,7 @@ GameObject:
   - component: {fileID: 6340974681007517504}
   - component: {fileID: 3321768301471280712}
   - component: {fileID: 3851662277935798759}
+  - component: {fileID: 8499858331642740708}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -235,6 +249,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -323,10 +338,21 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 2
-    b: 3
-  m_SelectedVertices: 0200000003000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
+--- !u!65 &8499858331642740708
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779243639865553477}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.013167471, y: 3.5210915, z: 4.71}
+  m_Center: {x: 0.22341649, y: 0.9415459, z: -0.27}
 --- !u!1001 &5618244303987501258
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -334,11 +360,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 997337096348083075}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0be227e73be63394887fdfdcc21b886a,
-        type: 3}
-      propertyPath: m_Name
-      value: wall2_d
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0be227e73be63394887fdfdcc21b886a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -393,6 +414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0be227e73be63394887fdfdcc21b886a,
+        type: 3}
+      propertyPath: m_Name
+      value: wall2_d
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0be227e73be63394887fdfdcc21b886a, type: 3}
