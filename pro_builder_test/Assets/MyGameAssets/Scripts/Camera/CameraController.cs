@@ -46,7 +46,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     float controllerSensitivity = 6;                    // カメラの感度
     [SerializeField]
-    float lookbackSensitivity = 20;                     // 振り返りの感度
+    float lookbackSensitivity = 750;                     // 振り返りの感度
 
     [SerializeField]
     float lookIntoPositionShift = 0.75f;                // 覗き込み時の位置ずらし
@@ -78,9 +78,8 @@ public class CameraController : MonoBehaviour
                 transform.position = animCamera.position;
                 transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
 
-
                 // 振り返り
-                LookBack(keyController.GetKey(KeyType.LOOKBACK));
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, LookBack(transform.localEulerAngles), transform.localEulerAngles.z);
 
                 // 覗き込み
                 if (!keyController.GetKey(KeyType.LOOKBACK) && keyController.GetKey(KeyType.LOOKINTO))
@@ -208,19 +207,14 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 振り返り
     /// </summary>
-    void LookBack(bool flag)
+    float LookBack(Vector3 angle)
     {
         // 振り返り
-        if (flag)
+        if (keyController.GetKey(KeyType.LOOKBACK))
         {
             if (lookBackAngle < 180)
             {
-                lookBackAngle += lookbackSensitivity;
-                transform.Rotate(0, lookbackSensitivity, 0);
-                if (lookBackAngle > 180)
-                {
-                    lookBackAngle = 180;
-                }
+                lookBackAngle += lookbackSensitivity * Time.deltaTime;
             }
         }
         // 正面
@@ -228,14 +222,11 @@ public class CameraController : MonoBehaviour
         {
             if (lookBackAngle > 0)
             {
-                lookBackAngle -= lookbackSensitivity;
-                transform.Rotate(0, -lookbackSensitivity, 0);
-                if (lookBackAngle < 0)
-                {
-                    lookBackAngle = 0;
-                }
+                lookBackAngle -= lookbackSensitivity * Time.deltaTime;
             }
         }
+
+        return Mathf.Clamp(lookBackAngle, 0, 180);
     }
 
     /// <summary>
