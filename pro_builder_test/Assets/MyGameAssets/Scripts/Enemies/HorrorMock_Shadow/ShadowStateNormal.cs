@@ -80,7 +80,6 @@ public class ShadowStateNormal : StateBase
             {
                 // 移動目標位置を発信源に
                 agent.SetDestination(noisePos);
-                agent.isStopped = false;
 
                 // 警戒に移行
                 SetNextState((int)StateType.Caution);
@@ -138,15 +137,53 @@ public class ShadowStateNormal : StateBase
             return parameter.InitialPosition + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
         }
     }
-    
+
     /// <summary>
-     /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
-     /// </summary>
+    /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
+    /// </summary>
+    public override void OnHearNoiseAtDirectDetectRange(GameObject noise)
+    {
+        // 一定レベル以上なら即攻撃状態
+        if (soundSpawner.TotalSoundLevel >= parameter.DirectDetectSoundLevel)
+        {
+            SetNextState((int)StateType.Fighting);
+
+            // 姿は見えていないので目標位置はノイズの位置
+            var randomRange = parameter.NoiseTargetPosRandomRange;
+            var noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
+            agent.SetDestination(noisePos);
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーを発見した
+    /// </summary>
+    public override void OnDetectedPlayer(GameObject player)
+    {
+        // 戦闘状態に
+        SetNextState((int)StateType.Fighting);
+
+        // プレイヤーを移動目標位置に
+        agent.SetDestination(player.transform.position);
+    }
+
+    /// <summary>
+    /// プレイヤーを発見している視線ループ
+    /// </summary>
+    public override void OnDetectPlayerStay(GameObject player)
+    {
+        // 戦闘状態に
+        SetNextState((int)StateType.Fighting);
+
+        // プレイヤーを移動目標位置に
+        agent.SetDestination(player.transform.position);
+    }
+
+    /// <summary>
+    /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
+    /// </summary>
     public override void OnHearNoise(GameObject noise)
     {
-        //////////////////
-        // 警戒、通常共通
-        //////////////////
         if (soundSpawner.TotalSoundLevel > 0)
         {
             var randomRange = parameter.NoiseTargetPosRandomRange;
