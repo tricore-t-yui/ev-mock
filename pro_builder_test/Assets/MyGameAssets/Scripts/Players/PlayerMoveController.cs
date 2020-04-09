@@ -157,65 +157,69 @@ public class PlayerMoveController : MonoBehaviour
             stickSpeedLimit = ChangeStickSpeedLimit(length, isBreathHold);
             moveSpeed = Vector3.Scale(transform.forward * stick.y + transform.right * stick.x, new Vector3(1, 0, 1)).normalized * stickSpeedLimit * moveTypeSpeedLimit;
         }
+        else
+        {
+            moveSpeed = Vector3.zero;
+        }
 
         // 段差に当たったら上方向に力を加え登らせる
-        if (DirectionRay(RayType.MOVEDIRECTION) && !DirectionRay(RayType.DIAGONALDIRECTION))
-        {
-            moveSpeed += Vector3.up * moveData.StepUpPower * Time.deltaTime;
-        }
+        //if (DirectionRay(RayType.MOVEDIRECTION) && !DirectionRay(RayType.DIAGONALDIRECTION))
+        //{
+        //    moveSpeed += Vector3.up * moveData.StepUpPower * Time.deltaTime;
+        //}
         // 移動速度の設定
         float walkSpeed = new Vector3(moveSpeed.x, 0, moveSpeed.z).magnitude;
         playerRigidbody.velocity = moveSpeed * moveData.SpeedMagnification;
     }
 
-    /// <summary>
-    /// 移動方向のRayTypeに対応した向きのRaycast
-    /// </summary>
-    /// <returns>オブジェクトに当たっているかどうか</returns>
-    bool DirectionRay(RayType type)
-    {
-        // レイのスタート位置
-        Vector3 start = Vector3.zero;
+    ///// <summary>
+    ///// 移動方向のRayTypeに対応した向きのRaycast
+    ///// </summary>
+    ///// <returns>オブジェクトに当たっているかどうか</returns>
+    //bool DirectionRay(RayType type)
+    //{
+    //    // レイのスタート位置
+    //    Vector3 start = Vector3.zero;
 
-        // レイの向き
-        Vector3 dir = Vector3.zero;
+    //    // レイの向き
+    //    Vector3 dir = Vector3.zero;
 
-        // レイの距離
-        float distance = playerCollider.radius * 2f;
+    //    // レイの距離
+    //    float distance = playerCollider.radius * 2f;
 
-        // レイヤーマスク(プレイヤーからレイが伸びているので除外)
-        int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
-        layerMask = ~layerMask;
+    //    // レイヤーマスク(プレイヤーからレイが伸びているので除外)
+    //    int layerMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("SafetyArea");
+    //    layerMask = ~layerMask;
 
-        // レイのタイプによって向き変更
-        switch (type)
-        {
-            case RayType.MOVEDIRECTION:
-                // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
-                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
-                dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
-            case RayType.DIAGONALDIRECTION:
-                start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.2f)), transform.position.z);
-                dir = new Vector3(moveSpeed.normalized.x, moveData.StepAngle / 100, moveSpeed.normalized.z); break;
-        }
+    //    // レイのタイプによって向き変更
+    //    switch (type)
+    //    {
+    //        case RayType.MOVEDIRECTION:
+    //            // NOTE:k.oishi startの高さに0.01f足しているのは斜めのレイと始点を被らせないようにするため(始点がかぶると反応しなくなる)
+    //            start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.1f)), transform.position.z);
+    //            dir = new Vector3(moveSpeed.x, 0, moveSpeed.z); break;
+    //        case RayType.DIAGONALDIRECTION:
+    //            start = new Vector3(transform.position.x, transform.position.y - (playerCollider.height / (2 + 0.2f)), transform.position.z);
+    //            dir = new Vector3(moveSpeed.normalized.x, moveData.StepAngle / 100, moveSpeed.normalized.z); break;
+    //    }
 
-        // レイ作成
-        Ray ray = new Ray(start, dir);
-        RaycastHit hit = default;
+    //    // レイ作成
+    //    Ray ray = new Ray(start, dir);
+    //    RaycastHit hit = default;
 
-        // デバック用ライン
-        Debug.DrawLine(start, start + (dir * distance), Color.red);
+    //    // デバック用ライン
+    //    Debug.DrawLine(start, start + (dir * distance), Color.red);
 
-        // レイに当たったらtrue、外れていたらfalse
-        if (Physics.Raycast(ray, out hit, distance, layerMask))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //    // レイに当たったらtrue、外れていたらfalse
+    //    if (Physics.Raycast(ray, out hit, distance, layerMask))
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 
     /// <summary>
     /// 移動タイプによって移動速度上限の変更
