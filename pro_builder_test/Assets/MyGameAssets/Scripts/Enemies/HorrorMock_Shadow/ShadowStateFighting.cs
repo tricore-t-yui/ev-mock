@@ -70,6 +70,7 @@ public class ShadowStateFighting : StateBase
         switch (state)
         {
             case State.RUN:
+                agent.isStopped = false;
                 UpdateRunState();
                 break;
             case State.ATTACK:
@@ -116,44 +117,6 @@ public class ShadowStateFighting : StateBase
         }
     }
 
-    //void UpdateAttackPosAdjustState()
-    //{
-    //    animator.SetBool("IsWaiting", false);
-    //    agent.SetDestination(currentTargetPos);
-
-    //    // 攻撃目標位置についた
-    //    if (agent.remainingDistance <= parameter.AttackRange)
-    //    {
-    //        agent.isStopped = true;
-    //        // 攻撃範囲内にいたら攻撃
-    //        if (enemy.IsInAttackRange)
-    //        {
-    //            // 攻撃しない状態ならそのまま待機へ
-    //            if (parameter.DontAttack)
-    //            {
-    //                state = State.ATTACK_WAIT;
-    //            }
-    //            else
-    //            {
-    //                // 攻撃トリガーをセット
-    //                animator.SetTrigger("Attaking");
-    //                state = State.ATTACK;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // 最後に見たプレイヤー位置に素早く向き直る
-    //            UpdateRotation(playerPos);
-    //            // 初期化
-    //            waitCounter = 0;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        UpdateRotation(agent.destination);
-    //    }
-    //}
-
     void UpdateAttackWaitState()
     {
         // 待機フラグを立てる
@@ -199,21 +162,6 @@ public class ShadowStateFighting : StateBase
     }
 
     /// <summary>
-    /// 音を聞いた(状態によって範囲が変わる、通常の聴覚範囲)
-    /// </summary>
-    public override void OnHearNoise(GameObject noise)
-    {
-        // 戦闘状態のほうにやらせるのでなにもしない
-    }
-    /// <summary>
-    /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
-    /// </summary>
-    public override void OnHearNoiseAtDirectDetectRange(GameObject noise)
-    {
-        // 既に戦闘状態なので何もしない
-    }
-
-    /// <summary>
     /// 戦闘範囲で音を聞いた（状態によって変わらない）
     /// </summary>
     public override void OnHearNoiseAtFightingRange(GameObject noise)
@@ -232,6 +180,7 @@ public class ShadowStateFighting : StateBase
     /// </summary>
     public override void OnDetectedPlayer(GameObject player)
     {
+        Debug.Log("detect");
         isDetectedPlayer = true;
         playerPos = player.transform.position;
         currentTargetPos = playerPos;
@@ -251,6 +200,7 @@ public class ShadowStateFighting : StateBase
     /// </summary>
     public override void OnMissingPlayer(GameObject player)
     { 
+        Debug.Log("miss");
         isDetectedPlayer = false;
         playerPos = player.transform.position;
         currentTargetPos = playerPos;

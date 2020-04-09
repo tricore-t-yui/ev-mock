@@ -86,22 +86,7 @@ public abstract class StateBase
     /// <summary>
     /// 直接感知範囲で音を聞いた（状態によって変わらない、この範囲で一定以上の音を聞くと即座に攻撃に移動する範囲。通常の聴覚範囲より優先される）
     /// </summary>
-    public virtual void OnHearNoiseAtDirectDetectRange(GameObject noise)
-    {
-        //////////////////
-        // 警戒、通常共通
-        //////////////////
-        // 一定レベル以上なら即攻撃状態
-        if (soundSpawner.TotalSoundLevel >= parameter.DirectDetectSoundLevel)
-        {
-            SetNextState((int)StateType.Fighting);
-
-            // 姿は見えていないので目標位置はノイズの位置
-            var randomRange = parameter.NoiseTargetPosRandomRange;
-            var noisePos = noise.transform.position + new Vector3(Random.Range(0, randomRange), 0, Random.Range(0, randomRange));
-            agent.SetDestination(noisePos);
-        }
-    }
+    public virtual void OnHearNoiseAtDirectDetectRange(GameObject noise) { }
 
     /// <summary>
     /// 戦闘範囲で音を聞いた（状態によって変わらない）
@@ -111,32 +96,12 @@ public abstract class StateBase
     /// <summary>
     /// プレイヤーを発見した
     /// </summary>
-    public virtual void OnDetectedPlayer(GameObject player)
-    {
-        //////////////////
-        // 警戒、通常共通
-        //////////////////
-        // 戦闘状態に
-        SetNextState((int)StateType.Fighting);
-
-        // プレイヤーを移動目標位置に
-        agent.SetDestination(player.transform.position);
-    }
+    public virtual void OnDetectedPlayer(GameObject player) { }
 
     /// <summary>
     /// プレイヤーを発見している視線ループ
     /// </summary>
-    public virtual void OnDetectPlayerStay(GameObject player)
-    {
-        //////////////////
-        // 警戒、通常共通
-        //////////////////
-        // 戦闘状態に
-        SetNextState((int)StateType.Fighting);
-
-        // プレイヤーを移動目標位置に
-        agent.SetDestination(player.transform.position);
-    }
+    public virtual void OnDetectPlayerStay(GameObject player) { }
 
     /// <summary>
     ///  プレイヤーを見失った
