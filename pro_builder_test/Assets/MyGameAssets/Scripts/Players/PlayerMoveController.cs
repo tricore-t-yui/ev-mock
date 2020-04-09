@@ -78,6 +78,12 @@ public class PlayerMoveController : MonoBehaviour
 
     public bool IsDuct { get; private set; } = false;   // ダクトないかどうか
 
+    private void Awake()
+    {
+        // mock処理。身長の高さに設定
+        transform.position = new Vector3(transform.position.x, 0.7f, transform.position.z);
+    }
+
     /// <summary>
     /// アニメーション中の移動方法
     /// </summary>
