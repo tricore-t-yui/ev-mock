@@ -343,7 +343,7 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: bf816d630e9c145408e2790d40f5c6d9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6871fc6a5c2654f4db61657ff7c627f5, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.61
   m_Pitch: 1
@@ -550,6 +550,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.15, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &2388871625272616567
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8758248743040013406}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.462, y: 0.99500006, z: 0.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.002, y: 1.005, z: 0.075}
+  m_TimeToStationary: 0.5
 --- !u!95 &7012116686749259638
 Animator:
   serializedVersion: 3
@@ -569,22 +585,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!208 &2388871625272616567
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8758248743040013406}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.462, y: 0.99500006, z: 0.09}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.002, y: 1.005, z: 0.075}
-  m_TimeToStationary: 0.5
 --- !u!1001 &545983388550029136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -667,6 +667,31 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4686785787012251950, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686785787012251950, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686785787012251950, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: MinDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686785787012251950, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686785787012251950, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: rolloffMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5129853240655780306, guid: af37c9edaa9c2ff478a014ee315afa37,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -686,6 +711,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825013427471697856, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825013427471697856, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825013427471697856, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: MinDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825013427471697856, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825013427471697856, guid: af37c9edaa9c2ff478a014ee315afa37,
+        type: 3}
+      propertyPath: rolloffMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9083919108572332198, guid: af37c9edaa9c2ff478a014ee315afa37,
         type: 3}
