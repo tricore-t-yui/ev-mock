@@ -95,7 +95,7 @@ public class PlayerHealthController : MonoBehaviour
         if (NowAmount <= 0)
         {
             IsDeath = true;
-            SceneManager.LoadScene("MockStartScene");
+            SceneManager.LoadScene("Stage_01_Start");
         }
         // なっていないならダメージ所持状態フラグを立てる
         else
