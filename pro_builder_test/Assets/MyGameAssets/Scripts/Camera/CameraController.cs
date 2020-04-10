@@ -94,17 +94,13 @@ public class CameraController : MonoBehaviour
 
                     // 回転制限
                     transform.localEulerAngles = NormalAngleLimit();
+                    playerArms.localEulerAngles = NormalAngleLimit();
 
-                    if(isBreathHold)
-                    {
-                        playerArms.eulerAngles = new Vector3(playerArms.eulerAngles.x, playerArms.eulerAngles.y, 0);
-                        playerArms.Rotate(-Y_Rotation, 0, 0);
-                        playerArms.localEulerAngles = NormalAngleLimit();
-                    }
-                    else
-                    {
-                        playerArms.eulerAngles = new Vector3(0, playerArms.eulerAngles.y, 0);
-                    }
+                    //if (isBreathHold)
+                    //{
+                    //    playerArms.eulerAngles = new Vector3(playerArms.eulerAngles.x, 0, 0);
+                    //    //playerArms.Rotate(-Y_Rotation, 0, 0);
+                    //}
                 }
                 break;
             case RotationType.HIDEBED:
@@ -113,8 +109,8 @@ public class CameraController : MonoBehaviour
             case RotationType.HIDELOCKER:
                 player.Rotate(0, X_Rotation, 0);
 
-                // 回転制限
-                player.localEulerAngles = HideAngleLimit();
+                //// 回転制限
+                //player.localEulerAngles = HideAngleLimit();
                 break;
             case RotationType.DEATH:
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((damageController.EnemyPos.position - transform.position).normalized), Time.deltaTime);
@@ -144,65 +140,64 @@ public class CameraController : MonoBehaviour
         return angle;
     }
 
-    /// <summary>
-    /// 隠れている時のカメラの回転制限
-    /// </summary>
-    Vector3 HideAngleLimit()
-    {
-        // 回転値
-        Vector3 angle = player.localEulerAngles;
+    ///// <summary>
+    ///// 隠れている時のカメラの回転制限
+    ///// </summary>
+    //Vector3 HideAngleLimit()
+    //{
+    //    // 回転値
+    //    Vector3 angle = player.localEulerAngles;
+    //    switch (hideController.HideObjDir)
+    //    {
+    //        case DirType.FORWARD:
+    //            // 上限設定
+    //            if (player.localEulerAngles.y >= 200)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 200, player.localEulerAngles.z);
+    //            }
+    //            if (player.localEulerAngles.y <= 160)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 160, player.localEulerAngles.z);
+    //            }
+    //            break;
+    //        case DirType.BACK:
+    //            // 上限設定
+    //            if (player.localEulerAngles.y >= 20 && player.localEulerAngles.y <= 180)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 20, player.localEulerAngles.z);
+    //            }
+    //            if (player.localEulerAngles.y <= 340 && player.localEulerAngles.y >= 180)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 340, player.localEulerAngles.z);
+    //            }
+    //            break;
+    //        case DirType.RIGHT:
+    //            // 上限設定
+    //            if (player.localEulerAngles.y >= 290)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 290, player.localEulerAngles.z);
+    //            }
+    //            if (player.localEulerAngles.y <= 250)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 250, player.localEulerAngles.z);
+    //            }
 
-        switch (hideController.HideObjDir)
-        {
-            case DirType.FORWARD:
-                // 上限設定
-                if (player.localEulerAngles.y >= 200)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 200, player.localEulerAngles.z);
-                }
-                if (player.localEulerAngles.y <= 160)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 160, player.localEulerAngles.z);
-                }
-                break;
-            case DirType.BACK:
-                // 上限設定
-                if (player.localEulerAngles.y >= 20 && player.localEulerAngles.y <= 180)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 20, player.localEulerAngles.z);
-                }
-                if (player.localEulerAngles.y <= 340 && player.localEulerAngles.y >= 180)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 340, player.localEulerAngles.z);
-                }
-                break;
-            case DirType.RIGHT:
-                // 上限設定
-                if (player.localEulerAngles.y >= 290)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 290, player.localEulerAngles.z);
-                }
-                if (player.localEulerAngles.y <= 250)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 250, player.localEulerAngles.z);
-                }
+    //            break;
+    //        case DirType.LEFT:
+    //            // 上限設定
+    //            if (player.localEulerAngles.y >= 110)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 110, player.localEulerAngles.z);
+    //            }
+    //            if (player.localEulerAngles.y <= 70)
+    //            {
+    //                angle = new Vector3(player.localEulerAngles.x, 70, player.localEulerAngles.z);
+    //            }
+    //            break;
+    //    }
 
-                break;
-            case DirType.LEFT:
-                // 上限設定
-                if (player.localEulerAngles.y >= 110)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 110, player.localEulerAngles.z);
-                }
-                if (player.localEulerAngles.y <= 70)
-                {
-                    angle = new Vector3(player.localEulerAngles.x, 70, player.localEulerAngles.z);
-                }
-                break;
-        }
-
-        return angle;
-    }
+    //    return angle;
+    //}
 
     /// <summary>
     /// 振り返り
@@ -235,7 +230,7 @@ public class CameraController : MonoBehaviour
     public void CameraReset()
     {
         transform.position = animCamera.position;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, 0);
+        transform.eulerAngles = new Vector3(0, 0, 0);
         playerArms.eulerAngles = new Vector3(0, 0, 0);
     }
 }

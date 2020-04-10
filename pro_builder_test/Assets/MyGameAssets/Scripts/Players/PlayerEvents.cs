@@ -60,6 +60,7 @@ public class PlayerEvents : MonoBehaviour
         {
             soundArea.SetSoundLevel(ActionSoundType.WAIT);
         }
+        moveController.Move(IsBreathHold);
         statusController.StateUpdate(MoveType.WAIT, stateController.IsSquat);
     }
     /// <summary>
@@ -133,7 +134,14 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void Squat()
     {
-        playerCollider.height = 0.4f;
+        var posY = 0.2f;
+        if(hideController.IsHide())
+        {
+            posY = 0.7f;
+        }
+        playerCollider.height = 0.2f;
+        var playerTrans = playerCollider.transform;
+        playerTrans.position = Vector3.Lerp(playerTrans.position, new Vector3(playerTrans.position.x, posY, playerTrans.position.z), 0.3f);
         playerAnimationContoller.AnimStart(PlayerAnimType.SQUAT);
         if (IsBreathHold)
             soundArea.SetSoundLevel(ActionSoundType.BREATHHOLD_SQUAT);
@@ -146,8 +154,15 @@ public class PlayerEvents : MonoBehaviour
     /// </summary>
     public void SquatEnd()
     {
+        var posY = 0.7f;
+        if (hideController.IsHide())
+        {
+            posY = 1.045f;
+        }
         stateController.SquatEnd();
-        playerCollider.height = 1.4f;
+        playerCollider.height = 1.0f;
+        var playerTrans = playerCollider.transform;
+        playerTrans.position = Vector3.Lerp(playerTrans.position, new Vector3(playerTrans.position.x, posY, playerTrans.position.z), 0.45f);
         playerAnimationContoller.AnimStop(PlayerAnimType.SQUAT);
     }
 

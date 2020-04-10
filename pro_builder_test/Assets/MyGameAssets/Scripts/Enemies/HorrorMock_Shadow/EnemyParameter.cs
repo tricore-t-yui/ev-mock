@@ -108,6 +108,7 @@ public class EnemyParameter : MonoBehaviour
     {
         Route,      // ルート
         Random,     // ランダム
+        RouteWarp,     // 複数ルートワープ
     }
 
     bool isActivate = false;
