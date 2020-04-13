@@ -125,9 +125,17 @@ public class ShadowStateNormal : StateBase
         // ルート
         if (parameter.Wanderer == WandererType.Route)
         {
-            currentCheckPointId++;
-            if (currentCheckPointId > parameter.RouteCheckPoints.Count - 1) { currentCheckPointId = 0; }
-            return parameter.RouteCheckPoints[currentCheckPointId];
+            if (parameter.RouteCheckPoints == null || parameter.RouteCheckPoints.Count == 0)
+            {
+                Debug.LogError(agent.name + " にルートが設定されていません");
+                return agent.transform.position;
+            }
+            else
+            {
+                currentCheckPointId++;
+                if (currentCheckPointId > parameter.RouteCheckPoints.Count - 1) { currentCheckPointId = 0; }
+                return parameter.RouteCheckPoints[currentCheckPointId];
+            }
         }
         // ランダム
         else
