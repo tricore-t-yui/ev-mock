@@ -17,8 +17,8 @@ public class OrderingName : Editor
 
         for (int i = 0; i < count; i++)
         {
-            name = Regex.Replace(name, @"_(\d)+$", "");
-            Selection.objects[i].name = name + "_" + i.ToString().PadLeft(d, '0');
+            name = Regex.Replace(name, @"(\d)+$", "");
+            Selection.objects[i].name = name + string.Format("{0:00}", i);
         }
     }
 }
